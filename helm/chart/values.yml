@@ -4,7 +4,7 @@
 
 php:
   image:
-    repository: "ghcr.io/RustineLibre/rustinelibre-php"
+    repository: "ghcr.io/rustinelibre/rustinelibre-php"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
@@ -51,7 +51,7 @@ php:
 
 pwa:
   image:
-    repository: "ghcr.io/RustineLibre/rustinelibre-pwa"
+    repository: "ghcr.io/rustinelibre/rustinelibre-pwa"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
@@ -73,7 +73,7 @@ consumer:
 
 caddy:
   image:
-    repository: "ghcr.io/RustineLibre/rustinelibre-caddy"
+    repository: "ghcr.io/rustinelibre/rustinelibre-caddy"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
