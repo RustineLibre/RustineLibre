@@ -20,7 +20,7 @@ jobs:
         BUILD_CONTEXT: api
         BUILD_TARGET: app_php
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+        IMAGE_REPOSITORY: ghcr.io/RustineLibre
 
   build-push-caddypreprod:
     # If it has no release tag, it's preprod
@@ -37,7 +37,7 @@ jobs:
         BUILD_CONTEXT: api
         BUILD_TARGET: app_caddypreprod
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+        IMAGE_REPOSITORY: ghcr.io/RustineLibre
 
   build-push-caddy:
     # If it has a release tag, it's prod
@@ -54,7 +54,7 @@ jobs:
         BUILD_CONTEXT: api
         BUILD_TARGET: app_caddy
         REGISTRY_JSON_KEY: ${{ secrets.GITHUB_TOKEN }}
-        IMAGE_REPOSITORY: ghcr.io/cooptilleuls
+        IMAGE_REPOSITORY: ghcr.io/RustineLibre
        
   build-push-pwa:
     runs-on: ubuntu-latest
