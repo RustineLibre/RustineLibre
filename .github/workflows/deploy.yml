@@ -79,9 +79,7 @@ jobs:
     timeout-minutes: 15
     environment:
       name: ${{ needs.meta.outputs.environment }}
-    env:
-      PROD_STORAGE_BUCKET: ${{ inputs.prod-storage-bucket }}
-      NONPROD_STORAGE_BUCKET: ${{ inputs.nonprod-storage-bucket }}
+    needs: [meta]
     #permissions:
     #  contents: 'read'
     #  id-token: 'write'
