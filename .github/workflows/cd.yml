@@ -10,6 +10,12 @@ on:
   pull_request:
     types: [ opened, reopened, synchronize, labeled ]
 
+permissions:
+  pull-requests: write
+  id-token: write
+  contents: read
+  packages: write
+  
 jobs:
   remove-deploy-label:
     name: Remove deploy label
