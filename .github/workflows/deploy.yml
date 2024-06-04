@@ -40,9 +40,7 @@ on:
         required: true
       fb-universe-domain:
         required: true
-      nonprod-database-url:
-        required: true
-      prod-database-url:
+      database-url:
         required: true
       project-id:
         description: GCP project ID
@@ -128,13 +126,11 @@ jobs:
               URL=${{ secrets.domain }};
               STORAGE_KEY=${{ secrets.prod-storage-key }}
               STORAGE_SECRET=${{ secrets.prod-storage-secret }}
-              DATABASE_URL=${{ secrets.prod-database-url}}
           else
               CONTEXT=nonprod
               IMAGE_TAG=sha-${GITHUB_SHA::7}
               STORAGE_KEY=${{ secrets.nonprod-storage-key }}
               STORAGE_SECRET=${{ secrets.nonprod-storage-secret }}
-              DATABASE_URL=${{ secrets.nonprod-database-url}}
               if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
                   RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
                   URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
@@ -196,7 +192,7 @@ jobs:
             --set=php.firebase.authProvider="${{ secrets.fb-auth-provider }}" \
             --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
-            --set=postgresql.url="${DATABASE_URL}" \
+            --set=postgresql.url="${{ secrets.database-url }}" \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-${CONTEXT}.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
