@@ -10,6 +10,12 @@ on:
   pull_request:
     types: [ opened, reopened, synchronize, labeled ]
 
+permissions:
+  pull-requests: write
+  id-token: write
+  contents: read
+  packages: write
+  
 jobs:
   remove-deploy-label:
     name: Remove deploy label
@@ -41,11 +47,9 @@ jobs:
     needs: [ build ]
     uses: ./.github/workflows/deploy.yml
     concurrency: ${{ github.ref }}-deploy
-    with:
-      nonprod-storage-bucket: ${{ vars.NONPROD_STORAGE_BUCKET }}
-      prod-storage-bucket: ${{ vars.PROD_STORAGE_BUCKET }}
     secrets:
-      kubeconfig: ${{ secrets.KUBECONFIG }}
+      project-id: ${{ secrets.PROJECT_ID }}
+      workload-identity-provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
       domain: ${{ secrets.DOMAIN }}
       mailer-dsn: ${{ secrets.MAILER_DSN }}
       nonprod-storage-key: ${{ secrets.NONPROD_STORAGE_KEY }}
@@ -62,5 +66,5 @@ jobs:
       fb-auth-provider: ${{ secrets.FIREBASE_AUTH_PROVIDER }}
       fb-client-cert-url: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
       fb-universe-domain: ${{ secrets.FIREBASE_UNIVERSE_DOMAIN }}
-      nonprod-database-url: ${{ secrets.NONPROD_DATABASE_URL }}
-      prod-database-url: ${{ secrets.PROD_DATABASE_URL }}
+      database-url: ${{ secrets.DATABASE_URL }}
+      storage-bucket: ${{ secrets.STORAGE_BUCKET_NAME }}

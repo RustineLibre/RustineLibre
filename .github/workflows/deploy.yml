@@ -2,19 +2,7 @@ name: Deploy
 
 on:
   workflow_call:
-    inputs:
-      prod-storage-bucket:
-        description: prod storage bucket name
-        required: true
-        type: string
-      nonprod-storage-bucket:
-        description: nonprod storage bucket name
-        required: true
-        type: string
     secrets:
-      kubeconfig:
-        description: kubeconfig stored as a base64 encrypted secret
-        required: true
       domain:
         description: Main project deploy domain used in URLs
         required: true
@@ -52,18 +40,44 @@ on:
         required: true
       fb-universe-domain:
         required: true
-      nonprod-database-url:
+      database-url:
         required: true
-      prod-database-url:
+      project-id:
+        description: GCP project ID
+        required: true
+      workload-identity-provider:
+        description: GCP workload identity provider
+        required: true
+      storage-bucket:
+        description: GCP storage bucket
         required: true
 jobs:
+  meta:
+    name: Meta
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.meta.outputs.environment }}
+    steps:
+      - name: Generate metadata
+        id: meta
+        run: |
+          set -xo pipefail
+          if [[ "${{ github.ref }}" == *"tag"* ]]; then
+            # Tags are deployed in prod
+            ENVIRONMENT=prod
+
+          else
+            ENVIRONMENT=nonprod
+          fi
+              echo "environment=${ENVIRONMENT}" >> $GITHUB_OUTPUT
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    env:
-      PROD_STORAGE_BUCKET: ${{ inputs.prod-storage-bucket }}
-      NONPROD_STORAGE_BUCKET: ${{ inputs.nonprod-storage-bucket }}
+    environment:
+      name: ${{ needs.meta.outputs.environment }}
+    needs: [meta]
     #permissions:
     #  contents: 'read'
     #  id-token: 'write'
@@ -71,10 +85,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set kubeconfig
+      - name: GKE Auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: '${{ secrets.project-id }}'
+          workload_identity_provider: '${{ secrets.workload-identity-provider }}'
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.project-id }}
+
+      - name: Connect cluster
         run: |
-          mkdir ~/.kube
-          echo ${{ secrets.kubeconfig }} | base64 -d > ~/.kube/config
+          gcloud components install gke-gcloud-auth-plugin
+          gcloud auth login --cred-file=$CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE
+          gcloud container clusters get-credentials ${{ vars.CLUSTER_NAME }} --region europe-west1 --project ${{ secrets.project-id }}
           kubectl config view
 
       # https://github.com/helm/helm/issues/8036
@@ -91,23 +117,20 @@ jobs:
         id: deploy
         run: |
           set -o pipefail
+          PROJECT=rustinelibre
           if [[ "${{ github.ref }}" == *"tag"* ]]; then
               # Tags are deployed in prod
               CONTEXT=prod
               IMAGE_TAG=${{ github.ref_name }}
               RELEASE_NAME=prod
               URL=${{ secrets.domain }};
-              STORAGE_NAME=${PROD_STORAGE_BUCKET}
               STORAGE_KEY=${{ secrets.prod-storage-key }}
               STORAGE_SECRET=${{ secrets.prod-storage-secret }}
-              DATABASE_URL=${{ secrets.prod-database-url}}
           else
               CONTEXT=nonprod
               IMAGE_TAG=sha-${GITHUB_SHA::7}
               STORAGE_KEY=${{ secrets.nonprod-storage-key }}
               STORAGE_SECRET=${{ secrets.nonprod-storage-secret }}
-              STORAGE_NAME=${NONPROD_STORAGE_BUCKET}
-              DATABASE_URL=${{ secrets.nonprod-database-url}}
               if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
                   RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
                   URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
@@ -116,6 +139,7 @@ jobs:
                   RELEASE_NAME=${{ github.ref_name }}
               fi
           fi
+          export NAMESPACE=${CONTEXT}-${PROJECT}
           export APP_APP_JWT_PUBLIC_KEY=$(openssl rand -base64 32)
           export APP_JWT_PASSPHRASE=$(openssl rand -base64 32)
           export APP_JWT_SECRET_KEY=$(openssl genpkey -pass file:<(echo "$APP_APP_JWT_PUBLIC_KEY") -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096)
@@ -130,7 +154,7 @@ jobs:
           helm upgrade --install $RELEASE_NAME ./helm/chart \
             --atomic \
             --debug \
-            --kube-context $CONTEXT \
+            --namespace $NAMESPACE \
             --set=php.image.tag=${IMAGE_TAG} \
             --set=caddy.image.tag=${IMAGE_TAG} \
             --set=pwa.image.tag=${IMAGE_TAG} \
@@ -152,7 +176,7 @@ jobs:
             --set=mercure.publicUrl=https://${URL}/.well-known/mercure \
             --set=mercure.jwtSecret="${MERCURE_JWT_PUBLIC_KEY}" \
             --set=mercure.extraDirectives="${MERCURE_EXTRA_DIRECTIVES}" \
-            --set=php.storage.bucket="${STORAGE_NAME}" \
+            --set=php.storage.bucket="${{ secrets.storage-bucket }}" \
             --set=php.storage.endpoint="https://storage.googleapis.com" \
             --set=php.storage.region="eu-west-1" \
             --set=php.storage.usePathStyleEndpoint=true \
@@ -168,7 +192,7 @@ jobs:
             --set=php.firebase.authProvider="${{ secrets.fb-auth-provider }}" \
             --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
-            --set=postgresql.url="${DATABASE_URL}" \
+            --set=postgresql.url="${{ secrets.database-url }}" \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-${CONTEXT}.yml \
             | sed --unbuffered '/USER-SUPPLIED VALUES/,$d'
