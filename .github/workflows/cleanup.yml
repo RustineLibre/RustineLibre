@@ -64,7 +64,7 @@ jobs:
         id: uninstall_helm_release
         run: |
           export RELEASE_NAME=pr-$(jq --raw-output .pull_request.number $GITHUB_EVENT_PATH)
-          echo "Uninstalling release ${{ needs.meta.outputs.release_name }}"
+          echo "Uninstalling release $RELEASE_NAME "
           if ! helm uninstall $RELEASE_NAME --namespace ${{ needs.meta.outputs.namespace }} --wait ; then
             echo "HELM Uninstall has failed !"
             echo "Please ask the SRE team to manually clean remaining objects"
@@ -72,4 +72,4 @@ jobs:
           fi
           echo "HELM uninstall successfull"
           echo "Cleaning remaining PVC..."
-          kubectl delete pvc -l app.kubernetes.io/instance=${{ needs.meta.outputs.release_name }} --namespace ${{ needs.meta.outputs.namespace }}
+          kubectl delete pvc -l app.kubernetes.io/instance=$RELEASE_NAME --namespace ${{ needs.meta.outputs.namespace }}
