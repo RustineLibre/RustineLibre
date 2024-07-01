@@ -131,7 +131,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     return allRepairers.slice(startIndex, endIndex);
   };
 
-  const fetchRepairers = useCallback(async (searchRadiusSelected): Promise<void> => {
+  const fetchRepairers = useCallback(async (searchRadiusSelected: string|undefined): Promise<void> => {
     if (!selectedBike || !city || isLoading) {
       return;
     }
