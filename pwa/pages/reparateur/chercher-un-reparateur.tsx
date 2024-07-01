@@ -131,7 +131,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     return allRepairers.slice(startIndex, endIndex);
   };
 
-  const fetchRepairers = useCallback(async (searchRadiusSelected: string|null = undefined): Promise<void> => {
+  const fetchRepairers = useCallback(async (searchRadiusSelected: string|null = null): Promise<void> => {
     if (!selectedBike || !city || isLoading) {
       return;
     }
@@ -152,7 +152,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
     if (city) {
       const aroundFilterKey: string = `around[${city.name}]`;
-      params[aroundFilterKey] = `${city.lat},${city.lon},${searchRadiusSelected !== undefined ? searchRadiusSelected : searchRadius}`;
+      params[aroundFilterKey] = `${city.lat},${city.lon},${searchRadiusSelected !== null ? searchRadiusSelected : searchRadius}`;
     }
 
     if (orderBy && filterBy) {
