@@ -13,10 +13,8 @@ import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import {ENTRYPOINT} from '@config/entrypoint';
 import FullLoading from '@components/common/FullLoading';
 
-const RepairersList: NextPageWithLayout = ({
-  repairersFetch = [],
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const [repairers, setRepairers] = useState<Repairer[]>(repairersFetch);
+const RepairersList: NextPageWithLayout = ({}) => {
+  const [repairers, setRepairers] = useState<Repairer[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
   const {setSelectedRepairer} = useContext(SearchRepairerContext);
 
@@ -109,23 +107,3 @@ const RepairersList: NextPageWithLayout = ({
 };
 
 export default RepairersList;
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
-
-  const response = await repairerResource.getAll(false, {
-    pagination: 'false',
-    sort: 'random',
-    enabled: 'true',
-  });
-
-  return {
-    props: {
-      repairersFetch: response['hydra:member'],
-    },
-  };
-};
