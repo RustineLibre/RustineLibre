@@ -10,7 +10,7 @@ class AroundFilterTest extends AbstractTestCase
 {
     public function testAroundFilter5Km(): void
     {
-        $response = static::createClient()->request('GET', '/repairers?around[lille]=50.621917,3.063398');
+        $response = static::createClient()->request('GET', '/repairers?around[lille]=50.621917,3.063398,5000:wq');
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
@@ -19,7 +19,7 @@ class AroundFilterTest extends AbstractTestCase
 
     public function testCityLommeAroundFilter5Km(): void
     {
-        $response = static::createClient()->request('GET', '/repairers?around[lomme]=50.643554,2.988918');
+        $response = static::createClient()->request('GET', '/repairers?around[lomme]=50.643554,2.988918,5000');
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
@@ -28,10 +28,19 @@ class AroundFilterTest extends AbstractTestCase
 
     public function testCityHellemesAroundFilter5Km(): void
     {
-        $response = static::createClient()->request('GET', '/repairers?around[hellemes]=50.626699,3.111498');
+        $response = static::createClient()->request('GET', '/repairers?around[hellemes]=50.626699,3.111498,5000');
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         $this->assertEquals(10, $response->toArray()['hydra:totalItems']);
+    }
+
+    public function testCityHellemesAroundFilter30Km(): void
+    {
+        $response = static::createClient()->request('GET', '/repairers?around[hellemes]=50.626699,3.111498,30000');
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+
+        $this->assertEquals(25, $response->toArray()['hydra:totalItems']);
     }
 }

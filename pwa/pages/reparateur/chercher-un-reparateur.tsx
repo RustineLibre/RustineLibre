@@ -80,6 +80,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setCity,
     selectedBike,
     setSelectedBike,
+    searchRadius,
+    setSearchRadius,
     repairers,
     allRepairers,
     setRepairers,
@@ -129,8 +131,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     return allRepairers.slice(startIndex, endIndex);
   };
 
-  const fetchRepairers = useCallback(async (): Promise<void> => {
-    if (!selectedBike || !city) {
+  const fetchRepairers = useCallback(async (searchRadiusSelected): Promise<void> => {
+    if (!selectedBike || !city || isLoading) {
       return;
     }
 
@@ -147,9 +149,10 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       enabled: 'true',
     };
 
+
     if (city) {
       const aroundFilterKey: string = `around[${city.name}]`;
-      params[aroundFilterKey] = `${city.lat},${city.lon}`;
+      params[aroundFilterKey] = `${city.lat},${city.lon},${searchRadiusSelected !== undefined ? searchRadiusSelected : searchRadius}`;
     }
 
     if (orderBy && filterBy) {
@@ -245,6 +248,10 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setSelectedBike(selectedBikeType ? selectedBikeType : null);
   };
 
+  const handleRadiusChange = (event: SelectChangeEvent): void => {
+    setSearchRadius(event.target.value);
+  };
+
   const handleSubmit = async (
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -254,7 +261,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       setIsLoading(false);
       return;
     }
-    await fetchRepairers();
+
+    await fetchRepairers(searchRadius);
   };
 
   const handlePageChange = (pageNumber: number): void => {
@@ -335,7 +343,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
         <Box display="flex" flexDirection="column">
           <Box
             position="fixed"
-            top={{xs: '56px', sm: '64px', md: '80px'}}
+            top={{xs: '56px', sm: '64px', md: '100px'}}
             width="100%"
             bgcolor="white"
             paddingY="10px"
@@ -353,7 +361,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                 <Box
                   mt={2}
                   mx="auto"
-                  width={{xs: '100%', md: '600px'}}
+                  width={{xs: '100%', md: '800px'}}
                   display="flex"
                   flexDirection={{xs: 'column', md: 'row'}}
                   justifyContent="space-between"
@@ -415,6 +423,47 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                         />
                       )}
                     />
+                  </Box>
+                  <Divider
+                    orientation="vertical"
+                    variant="middle"
+                    flexItem
+                    sx={{
+                      mx: 2,
+                      my: {xs: 1, md: 0},
+                      orientation: {xs: 'horizontal', md: 'vertical'},
+                    }}
+                  />
+                  <Box width={{xs: '100%', md: '50%'}}>
+                    <FormControl required fullWidth size="small">
+                      <InputLabel id="bikeType-label">Rayon de recherche</InputLabel>
+                      <Select
+                          label="Rayon de recherche"
+                          value={searchRadius}
+                          onChange={handleRadiusChange}>
+                        <MenuItem disabled value="">
+                          <em>Rayon de recherche</em>
+                        </MenuItem>
+                        <MenuItem key="5000" value="5000">
+                          5 km
+                        </MenuItem>
+                        <MenuItem key="10000" value="10000">
+                          10 km
+                        </MenuItem>
+                        <MenuItem key="15000" value="15000">
+                          15 km
+                        </MenuItem>
+                        <MenuItem key="20000" value="20000">
+                          20 km
+                        </MenuItem>
+                        <MenuItem key="30000" value="30000">
+                          30 km
+                        </MenuItem>
+                        <MenuItem key="40000" value="40000">
+                          40 km
+                        </MenuItem>
+                      </Select>
+                    </FormControl>
                   </Box>
                   <Box
                     display={{xs: 'none', md: 'flex'}}

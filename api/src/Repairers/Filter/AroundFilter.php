@@ -49,7 +49,7 @@ final class AroundFilter extends AbstractFilter
                 )', 'true'));
         $queryBuilder->setParameter('around_latitude', $coordinates[0]);
         $queryBuilder->setParameter('around_longitude', $coordinates[1]);
-        $queryBuilder->setParameter('around_distance', '5000');
+        $queryBuilder->setParameter('around_distance', (int) $coordinates[2]);
         $queryBuilder->setParameter('searchCity', $city);
     }
 
@@ -64,9 +64,9 @@ final class AroundFilter extends AbstractFilter
             $description['around'] = [
                 'type' => Type::BUILTIN_TYPE_STRING,
                 'required' => false,
-                'description' => 'Filter to get points around given GPS coordinates.',
+                'description' => 'Filter to get points around given GPS coordinates and radius in meters.',
                 'openapi' => [
-                    'example' => '/repairers?around[city]=latitude,longitude',
+                    'example' => '/repairers?around[city]=latitude,longitude,radius',
                     'allowReserved' => false,
                     'allowEmptyValue' => true,
                     'explode' => false,
