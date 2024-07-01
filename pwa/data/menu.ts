@@ -12,7 +12,7 @@ export const menuNotLogged = [
     link: '/faq',
   },
   {
-    name: 'Devenir réparateur',
+    name: 'Vous êtes réparateur ?',
     link: '/reparateur/inscription',
   },
 ];
