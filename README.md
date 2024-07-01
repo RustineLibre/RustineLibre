@@ -1,12 +1,11 @@
-# Bikelib
+# Rustine libre
 
 Plateforme de mise en relation avec des réparateurs de vélos
 
 ## Liens utiles
 
-- [Dépôt du projet](https://github.com/coopTilleuls/bikelib)
-- [Gestionnaire de tâches](https://github.com/orgs/coopTilleuls/projects/28/views/2?filterQuery=)
-- [Prototype](https://www.figma.com/file/91BAjXJqYT4Ecj12xECtlz/Untitled?node-id=336-484)
+- [Dépôt du projet](https://github.com/RustineLibre/RustineLibre)
+- [Gestionnaire de tâches](https://github.com/RustineLibre/RustineLibre/issues)
 
 ## Déploiement en production
 - [via Kubernetes](./DEPLOY.md)
@@ -28,8 +27,8 @@ Les tags/releases sont déployées sur [demo.bikelib.preprod-tilleuls.ovh](https
 ## Installation / utilisation du projet
 
 ```shell
-git clone git@github.com:coopTilleuls/bikelib.git   # Clone du projet
-cd bikelib              # Se place dans le dossier du projet
+git clone git@github.com:RustineLibre/RustineLibre.git   # Clone du projet
+cd RustineLibre              # Se place dans le dossier du projet
 docker-compose build    # Installation du projet
 docker-compose up -d    # Lance les containers
 docker-compose exec php sh  # "Entrer" dans le container PHP
