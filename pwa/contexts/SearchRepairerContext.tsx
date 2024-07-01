@@ -18,6 +18,7 @@ interface SearchRepairerContext {
   cityInput: string;
   showMap: boolean;
   selectedBike: BikeType | null;
+  searchRadius: string;
   selectedRepairer: string;
   city: City | null;
   currentPage: number;
@@ -31,6 +32,7 @@ interface SearchRepairerContext {
   setCityInput: (value: string) => void;
   setShowMap: (value: boolean) => void;
   setSelectedBike: (value: BikeType | null) => void;
+  setSearchRadius: (value: string) => void;
   setSelectedRepairer: (value: string) => void;
   setCurrentPage: (value: number) => void;
   setCity: (value: City | null) => void;
@@ -48,6 +50,7 @@ const initialValue = {
   selectedRepairer: '',
   city: null,
   selectedBike: null,
+  searchRadius: '5000',
   showMap: false,
   currentPage: 1,
   repairerTypeSelected: [],
@@ -60,6 +63,7 @@ const initialValue = {
   setCityInput: () => null,
   setShowMap: () => false,
   setSelectedBike: () => null,
+  setSearchRadius: () => null,
   setSelectedRepairer: () => null,
   setCity: () => null,
   setCurrentPage: () => null,
@@ -80,6 +84,7 @@ export const SearchRepairerProvider = ({
   const [selectedRepairer, setSelectedRepairer] = useState<string>('');
   const [city, setCity] = useState<City | null>(null);
   const [selectedBike, setSelectedBike] = useState<BikeType | null>(null);
+  const [searchRadius, setSearchRadius] = useState<string>('5000');
   const [showMap, setShowMap] = useState<boolean>(false);
   const [repairers, setRepairers] = useState<Repairer[]>([]);
   const [allRepairers, setAllRepairers] = useState<Repairer[]>([]);
@@ -99,6 +104,7 @@ export const SearchRepairerProvider = ({
         selectedRepairer,
         city,
         selectedBike,
+        searchRadius,
         showMap,
         repairers,
         allRepairers,
@@ -113,6 +119,7 @@ export const SearchRepairerProvider = ({
         setCityInput,
         setShowMap,
         setSelectedBike,
+        setSearchRadius,
         setSelectedRepairer,
         setCity,
         setCurrentPage,
