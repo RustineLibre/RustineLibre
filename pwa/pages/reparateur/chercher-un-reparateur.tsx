@@ -409,7 +409,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                       renderInput={(params) => (
                         <TextField
                           required
-                          label="Ville"
+                          label="Ville ou code postal"
                           {...params}
                           size="small"
                         />

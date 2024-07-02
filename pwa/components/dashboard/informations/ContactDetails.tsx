@@ -214,7 +214,7 @@ export const ContactDetails = ({
             handleCityChange(value);
           }}
           renderInput={(params) => (
-            <TextField required label="Ville" {...params} size="medium" />
+            <TextField required label="Ville ou code postal" {...params} size="medium" />
           )}
         />
       </div>
