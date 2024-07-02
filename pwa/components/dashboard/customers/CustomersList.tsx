@@ -33,8 +33,8 @@ export const CustomersList = (): JSX.Element => {
   const {user} = useAccount({});
 
   const downloadCsv = async () => {
-      await customerResource.customersCsv(user?.repairer?.id ?? null);
-  }
+    await customerResource.customersCsv(user?.repairer?.id ?? null);
+  };
 
   const fetchCustomers = async () => {
     setLoadingList(true);
