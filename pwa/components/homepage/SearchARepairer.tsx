@@ -267,55 +267,55 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                   ))}
                 </Select>
               </FormControl>
-                <Divider
-                    orientation="vertical"
-                    variant="middle"
-                    flexItem
-                    sx={{
-                        mx: 1,
-                        my: 0,
-                        orientation: 'vertical',
-                        bgcolor: 'primary.main',
-                    }}
-                />
+              <Divider
+                orientation="vertical"
+                variant="middle"
+                flexItem
+                sx={{
+                  mx: 1,
+                  my: 0,
+                  orientation: 'vertical',
+                  bgcolor: 'primary.main',
+                }}
+              />
               <FormControl
-                  required
-                  sx={{width: '20%', mr: 2}}
-                  variant="standard">
+                required
+                sx={{width: '20%', mr: 2}}
+                variant="standard">
                 <InputLabel id="radius-label" shrink>
                   Rayon de recherche
                 </InputLabel>
                 <Select
-                    disableUnderline
-                    sx={{
-                      color: searchRadius ? '' : 'grey.500',
-                    }}
-                    displayEmpty
-                    label="Rayon de recherche"
-                    labelId="radius-label"
-                    value={searchRadius}
-                    onChange={handleRadiusChange}>
+                  disableUnderline
+                  sx={{
+                    color: searchRadius ? '' : 'grey.500',
+                  }}
+                  displayEmpty
+                  label="Rayon de recherche"
+                  labelId="radius-label"
+                  value={searchRadius}
+                  onChange={handleRadiusChange}>
                   <MenuItem disabled value="">
                     Rayon de recherche
                   </MenuItem>
-                    <MenuItem key="5000" value="5000">
-                        5 km
-                    </MenuItem>
-                    <MenuItem key="10000" value="10000">
-                        10 km
-                    </MenuItem>
-                    <MenuItem key="15000" value="15000">
-                        15 km
-                    </MenuItem>
-                    <MenuItem key="20000" value="20000">
-                        20 km
-                    </MenuItem>
-                    <MenuItem key="30000" value="30000">
-                        30 km
-                    </MenuItem>
-                    <MenuItem key="40000" value="40000">
-                        40 km
-                    </MenuItem>
+                  <MenuItem key="5000" value="5000">
+                    5 km
+                  </MenuItem>
+                  <MenuItem key="10000" value="10000">
+                    10 km
+                  </MenuItem>
+                  <MenuItem key="15000" value="15000">
+                    15 km
+                  </MenuItem>
+                  <MenuItem key="20000" value="20000">
+                    20 km
+                  </MenuItem>
+                  <MenuItem key="30000" value="30000">
+                    30 km
+                  </MenuItem>
+                  <MenuItem key="40000" value="40000">
+                    40 km
+                  </MenuItem>
                 </Select>
               </FormControl>
               <IconButton
