@@ -211,7 +211,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                   <TextField
                     placeholder="Dans quelle ville ?"
                     required
-                    label="Ville"
+                    label="Ville ou code postal"
                     {...params}
                     variant="standard"
                     InputLabelProps={{

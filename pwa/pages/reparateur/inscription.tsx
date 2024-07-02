@@ -419,7 +419,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       onChange={(event, value) => setCity(value as City)}
                       renderInput={(params) => (
                         <TextField
-                          label="Ville"
+                          label="Ville ou code postal"
                           required
                           {...params}
                           value={cityInput}

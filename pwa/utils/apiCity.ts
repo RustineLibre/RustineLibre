@@ -26,7 +26,7 @@ const gouvCities = async (search: string) => {
 
   try {
     const response = await fetch(
-      `https://api-address-09a561047853.herokuapp.com/api/cities?nom_commune_complet_formatte=${search}`
+      `https://api-address-09a561047853.herokuapp.com/api/cities?nom_commune_ou_code_postal=${search}`
     );
 
     const data = await response.json();

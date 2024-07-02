@@ -123,7 +123,7 @@ const PinMap = ({
         onChange={(event, value) => setCity(value as City)}
         renderInput={(params) => (
           <TextField
-            label="Ville"
+            label="Ville ou code postal"
             required
             {...params}
             value={cityInput}
@@ -139,7 +139,8 @@ const PinMap = ({
           value={street}
           options={streetList.filter(
             (address) =>
-              address.postcode.slice(0, 2) === city.postcode &&
+              city.postcode !== undefined &&
+              address.postcode.slice(0, 2) === city.postcode.slice(0, 2) &&
               address.city === city.name
           )}
           getOptionLabel={(streetObject) =>
