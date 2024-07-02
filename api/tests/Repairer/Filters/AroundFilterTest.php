@@ -10,7 +10,7 @@ class AroundFilterTest extends AbstractTestCase
 {
     public function testAroundFilter5Km(): void
     {
-        $response = static::createClient()->request('GET', '/repairers?around[lille]=50.621917,3.063398,5000:wq');
+        $response = static::createClient()->request('GET', '/repairers?around[lille]=50.621917,3.063398,5000');
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
