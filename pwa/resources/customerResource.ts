@@ -13,7 +13,6 @@ class CustomerResource extends AbstractResource<User> {
     const apiUrl = this.getUrl(`/export_customers_csv/${repairerId}`);
 
     const currentToken = getToken();
-
     const response = await fetch(apiUrl, {
       headers: {
         ...headers,
@@ -37,7 +36,9 @@ class CustomerResource extends AbstractResource<User> {
     link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();
-    link.parentNode.removeChild(link);
+    if (link.parentNode) {
+      link.parentNode.removeChild(link);
+    }
   }
 }
 

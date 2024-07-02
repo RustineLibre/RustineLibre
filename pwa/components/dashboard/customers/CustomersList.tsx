@@ -33,30 +33,8 @@ export const CustomersList = (): JSX.Element => {
   const {user} = useAccount({});
 
   const downloadCsv = async () => {
-    try {
-      const response = await customerResource.customersCsv(
-        user?.repairer?.id ?? null
-      );
-
-      // const response = await fetch('/export_customers_csv/'+user?.repairer?.id, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'text/csv',
-      //   },
-      // });
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(new Blob([blob]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'customers.csv'); // or any other file name
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-    } catch (error) {
-      console.error('Error downloading the file:', error);
-    }
-  };
+      await customerResource.customersCsv(user?.repairer?.id ?? null);
+  }
 
   const fetchCustomers = async () => {
     setLoadingList(true);
