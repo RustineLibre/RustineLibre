@@ -6,7 +6,7 @@ import {Box, Button, Container, Typography} from '@mui/material';
 import SearchARepairer from '@components/homepage/SearchARepairer';
 import CreateMaintenanceBooklet from '@components/homepage/CreateMaintenanceBooklet';
 import JoinTheCollective from '@components/homepage/JoinTheCollective';
-import FavoriteRepairers from '@componeunts/homepage/FavoriteRepairers';
+import FavoriteRepairers from '@components/homepage/FavoriteRepairers';
 import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 import Grid from '@mui/material/Unstable_Grid2';
 import Arg1 from '@public/img/arg1.webP';
