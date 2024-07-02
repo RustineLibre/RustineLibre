@@ -93,4 +93,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         return $queryBuilder;
     }
+
+    public function getCustomersInfosInQbIdsByRepairer(QueryBuilder $idsQb, Repairer $repairer)
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder
+            ->select('u.id as Id', 'u.firstName as Prenom', 'u.lastName as Nom', 'u.email as Email', 'u.street as Adresse', 'u.city as Ville')
+            ->where($queryBuilder->expr()->in('u.id', $idsQb->getDQL()))
+            ->setParameter('repairer', $repairer)
+        ;
+
+        return $queryBuilder;
+    }
 }
