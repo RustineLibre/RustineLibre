@@ -59,7 +59,6 @@ const PinMap = ({
     const adresseSearch = event.target.value;
     if (adresseSearch.length >= 3) {
       const streetApiResponse = await searchStreet(adresseSearch, city);
-      console.log(city, streetApiResponse);
       setStreetList(streetApiResponse);
     }
   };
