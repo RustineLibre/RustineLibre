@@ -11,7 +11,7 @@ import {
 import Grid2 from '@mui/material/Unstable_Grid2';
 import repairers from '@public/img/repairers.webP';
 import autoRepairers from '@public/img/auto-repairers.webP';
-import repairerSalute from '@public/img/repairer-salute.jpg';
+import repairerSalute from '@public/img/repairer-salute.webP';
 import Image from 'next/image';
 
 const args = [
