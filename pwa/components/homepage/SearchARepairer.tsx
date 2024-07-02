@@ -372,7 +372,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
               <Image
                 fill
                 alt=""
-                src="/img/rustine-libre-reparateur.webP"
+                src="/img/rustine-libre-reparateur.webp"
                 style={{
                   objectFit: 'cover',
                 }}

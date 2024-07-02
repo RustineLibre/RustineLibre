@@ -139,7 +139,7 @@ const EditBike: NextPageWithLayout = ({}) => {
                   position="relative">
                   <Image
                     src={
-                      bike.picture?.contentUrl || '/img/placeholder-bike.webP'
+                      bike.picture?.contentUrl || '/img/placeholder-bike.webp'
                     }
                     style={{objectFit: 'cover'}}
                     fill

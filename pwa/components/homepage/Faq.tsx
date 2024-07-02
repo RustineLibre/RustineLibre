@@ -159,7 +159,7 @@ const Faq = () => {
                 <Image
                   fill
                   alt=""
-                  src="/img/faq.webP"
+                  src="/img/faq.webp"
                   style={{
                     objectFit: 'cover',
                   }}

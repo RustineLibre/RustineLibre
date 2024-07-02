@@ -9,9 +9,9 @@ import {
   CardContent,
 } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import repairers from '@public/img/repairers.webP';
-import autoRepairers from '@public/img/auto-repairers.webP';
-import repairerSalute from '@public/img/repairer-salute.webP';
+import repairers from '@public/img/repairers.webp';
+import autoRepairers from '@public/img/auto-repairers.webp';
+import repairerSalute from '@public/img/repairer-salute.webp';
 import Image from 'next/image';
 
 const args = [

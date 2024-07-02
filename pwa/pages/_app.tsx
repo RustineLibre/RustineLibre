@@ -67,7 +67,7 @@ function MyApp({
                 content="Rustine Libre, la réparation de vos vélos sur Lille Métropole"
               />
               <meta property="og:url" content="https://rustinelibre.fr" />
-              <meta property="og:image" content="img/og-image.webP" />
+              <meta property="og:image" content="img/og-image.webp" />
               <meta property="og:site_name" content="Rustine Libre" />
               <link rel="manifest" href="/manifest.json"></link>
               <link
