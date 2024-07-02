@@ -49,7 +49,7 @@ final class AroundFilter extends AbstractFilter
                 )', 'true'));
         $queryBuilder->setParameter('around_latitude', $coordinates[0]);
         $queryBuilder->setParameter('around_longitude', $coordinates[1]);
-        $queryBuilder->setParameter('around_distance', $coordinates[2] ?? '5000');
+        $queryBuilder->setParameter('around_distance', array_key_exists(2, $coordinates) ? (int) $coordinates[2] : 5000);
         $queryBuilder->setParameter('searchCity', $city);
     }
 
