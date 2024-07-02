@@ -21,7 +21,7 @@ class CustomersCsvControllerTest extends AbstractTestCase
         $this->repairerRepository = self::getContainer()->get(RepairerRepository::class);
     }
 
-    public function testSetReadMessage(): void
+    public function testExportCsv(): void
     {
         /** @var Repairer $repairer */
         $repairer = $this->repairerRepository->findOneBy([]);
