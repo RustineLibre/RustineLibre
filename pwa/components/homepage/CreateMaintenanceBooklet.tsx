@@ -26,7 +26,7 @@ const CreateMaintenanceBooklet = () => {
           sx={{transform: {xs: 'none', md: 'translateX(-10%)'}}}>
           <Shape color="lightprimary" />
           <Image
-            src="/img/phones.png"
+            src="/img/phones.webP"
             fill
             style={{objectFit: 'contain'}}
             alt=""

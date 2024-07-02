@@ -9,8 +9,8 @@ import {
   CardContent,
 } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import repairers from '@public/img/repairers.jpg';
-import autoRepairers from '@public/img/auto-repairers.jpg';
+import repairers from '@public/img/repairers.webP';
+import autoRepairers from '@public/img/auto-repairers.webP';
 import repairerSalute from '@public/img/repairer-salute.jpg';
 import Image from 'next/image';
 
