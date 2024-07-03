@@ -1,3 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /media_objects/
+Disallow: /users/
+Disallow: /appointments/
+Disallow: /bikes/
+Disallow: https://mail.rustinelibre.fr/

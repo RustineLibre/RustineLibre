@@ -192,6 +192,7 @@ const Registration: NextPageWithLayout = ({}) => {
                         <Link
                           style={{textDecoration: 'none', fontSize: 14}}
                           href="/cgu"
+                          rel="canonical"
                           target="_blank">
                           conditions d’utilisation
                         </Link>{' '}
@@ -210,7 +211,7 @@ const Registration: NextPageWithLayout = ({}) => {
                       <CircularProgress size={20} sx={{color: 'white'}} />
                     )}
                   </Button>
-                  <Link href="/login" legacyBehavior passHref>
+                  <Link rel="canonical" href="/login" legacyBehavior passHref>
                     <Typography
                       fontSize={14}
                       color="primary"
