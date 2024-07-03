@@ -231,14 +231,16 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (cityInput && selectedBike) {
+    if (city && selectedBike && searchRadius) {
       fetchRepairers();
     }
   }, [
-    cityInput,
+    searchRadius,
+    city,
     fetchRepairers,
     selectedBike,
     setCity,
+    setSearchRadius,
     setCityInput,
     setSelectedBike,
   ]);
