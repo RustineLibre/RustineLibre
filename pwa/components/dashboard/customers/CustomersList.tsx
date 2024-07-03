@@ -10,6 +10,7 @@ import {
   CircularProgress,
   TextField,
   IconButton,
+  Button,
 } from '@mui/material';
 import {customerResource} from '@resources/customerResource';
 import Link from 'next/link';
@@ -20,6 +21,8 @@ import Stack from '@mui/material/Stack';
 import {Customer} from '@interfaces/Customer';
 import SearchIcon from '@mui/icons-material/Search';
 import {InputAdornment} from '@mui/material';
+import {useAccount} from '@contexts/AuthContext';
+import {discussionResource} from '@resources/discussionResource';
 
 export const CustomersList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -27,6 +30,11 @@ export const CustomersList = (): JSX.Element => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const {user} = useAccount({});
+
+  const downloadCsv = async () => {
+    await customerResource.customersCsv(user?.repairer?.id ?? null);
+  };
 
   const fetchCustomers = async () => {
     setLoadingList(true);
@@ -87,6 +95,9 @@ export const CustomersList = (): JSX.Element => {
           ),
         }}
       />{' '}
+      <Button onClick={downloadCsv} variant="contained" sx={{float: 'right'}}>
+        Télécharger au format CSV
+      </Button>
       {loadingList && (
         <Box display="flex" justifyContent="center" my={2}>
           <CircularProgress />
