@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Customers;
 
-use App\Entity\Discussion;
 use App\Entity\Repairer;
-use App\Repository\DiscussionMessageRepository;
-use App\Repository\DiscussionRepository;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 

@@ -15,6 +15,7 @@ interface UserFormContext {
   passwordInfo: string;
   street: string;
   city: string;
+  telephone: string;
   setFirstName: (value: string) => void;
   setLastName: (value: string) => void;
   setEmail: (value: string) => void;
@@ -25,6 +26,7 @@ interface UserFormContext {
   setPasswordInfo: (value: string) => void;
   setStreet: (value: string) => void;
   setCity: (value: string) => void;
+  setTelephone: (value: string) => void;
 }
 
 const initialValue = {
@@ -38,6 +40,7 @@ const initialValue = {
   passwordInfo: '',
   street: '',
   city: '',
+  telephone: '',
   setFirstName: () => null,
   setLastName: () => null,
   setEmail: () => null,
@@ -48,6 +51,7 @@ const initialValue = {
   setPasswordInfo: () => null,
   setStreet: () => null,
   setCity: () => null,
+  setTelephone: () => null,
 };
 
 export const UserFormContext = createContext<UserFormContext>(initialValue);
@@ -63,6 +67,7 @@ export const UserFormProvider = ({children}: ProviderProps): JSX.Element => {
   const [emailError, setEmailError] = useState<boolean>(false);
   const [emailHelperText, setEmailHelperText] = useState<string>('');
   const [passwordInfo, setPasswordInfo] = useState<string>('');
+  const [telephone, setTelephone] = useState<string>('');
 
   return (
     <UserFormContext.Provider
@@ -77,6 +82,7 @@ export const UserFormProvider = ({children}: ProviderProps): JSX.Element => {
         passwordInfo,
         street,
         city,
+        telephone,
         setFirstName,
         setLastName,
         setEmail,
@@ -87,6 +93,7 @@ export const UserFormProvider = ({children}: ProviderProps): JSX.Element => {
         setPasswordInfo,
         setStreet,
         setCity,
+        setTelephone,
       }}>
       {children}
     </UserFormContext.Provider>

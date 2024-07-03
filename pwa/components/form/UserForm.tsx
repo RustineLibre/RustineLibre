@@ -18,6 +18,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
     email,
     setEmail,
     city,
+    telephone,
     setCity,
     street,
     setStreet,
@@ -26,6 +27,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
     setEmailError,
     emailHelperText,
     setEmailHelperText,
+    setTelephone,
   } = useContext(UserFormContext);
 
   useEffect(() => {
@@ -36,6 +38,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
       setPassword('***********');
       setStreet(user.street ? user.street : '');
       setCity(user.city ? user.city : '');
+      setTelephone(user.telephone);
     }
   }, [
     user,
@@ -45,6 +48,7 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
     setStreet,
     setCity,
     setPassword,
+    setTelephone,
   ]);
 
   const handleChangeFirstName = (
@@ -55,6 +59,12 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
 
   const handleChangeLastName = (event: ChangeEvent<HTMLInputElement>): void => {
     setLastName(event.target.value);
+  };
+
+  const handleChangeTelephone = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
+    setTelephone(event.target.value);
   };
 
   const handleChangeStreet = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -103,6 +113,19 @@ export const UserForm = ({user}: UserFormProps): JSX.Element => {
         value={lastName}
         inputProps={{maxLength: 50}}
         onChange={handleChangeLastName}
+      />
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        id="telephone"
+        label="Téléphone"
+        name="telephone"
+        autoComplete="telephone"
+        autoFocus
+        value={telephone}
+        inputProps={{maxLength: 20}}
+        onChange={handleChangeTelephone}
       />
       {!user && (
         <TextField
