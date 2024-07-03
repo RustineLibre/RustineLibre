@@ -230,6 +230,21 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     scrollToTop();
   }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (city && selectedBike && searchRadius) {
+      fetchRepairers();
+    }
+  }, [
+    searchRadius,
+    city,
+    fetchRepairers,
+    selectedBike,
+    setCity,
+    setSearchRadius,
+    setCityInput,
+    setSelectedBike,
+  ]);
+
   const fetchCitiesResult = useCallback(
     async (cityStr: string) => {
       const citiesResponse = await searchCity(cityStr, useNominatim);

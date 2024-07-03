@@ -46,6 +46,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [userAction, setUserAction] = useState<boolean>(false);
   const router = useRouter();
 
   const {
@@ -96,24 +97,46 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
     }
   }, [setCitiesList, fetchCitiesResult, cityInput]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const submitSearch = useCallback(() => {
+    if (!city || !selectedBike) {
+      return;
+    }
+    if (typeof city !== 'object') {
+      setErrorMessage('Veuillez sélectionner votre ville dans la liste');
+      return;
+    }
+
+    setUserAction(false);
+    router.push('/reparateur/chercher-un-reparateur');
+  }, [city, router, selectedBike]);
+
   const handleBikeChange = (event: SelectChangeEvent): void => {
     const selectedBikeType = bikeTypes.find(
       (bt) => bt.name === event.target.value
     );
     setSelectedBike(selectedBikeType ? selectedBikeType : null);
+    setUserAction(true);
+  };
+
+  const handleCityChange = (value: string | City | null) => {
+    setCity(value as City);
+    setUserAction(true);
   };
 
   const handleRadiusChange = (event: SelectChangeEvent): void => {
     setSearchRadius(event.target.value);
+    setUserAction(true);
   };
+
+  useEffect(() => {
+    if (userAction && city && searchRadius && selectedBike) {
+      submitSearch();
+    }
+  }, [city, searchRadius, selectedBike, submitSearch, userAction]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (typeof city !== 'object' || city === null) {
-      setErrorMessage('Veuillez sélectionner votre ville dans la liste');
-      return;
-    }
-    router.push('/reparateur/chercher-un-reparateur');
+    submitSearch();
   };
 
   const handleModal = () => {
@@ -205,7 +228,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
                     ? city
                     : formatCityInput(city.name, city.postcode)
                 }
-                onChange={(event, value) => setCity(value as City)}
+                onChange={(event, value) => handleCityChange(value)}
                 onInputChange={(event, value) => setCityInput(value)}
                 renderInput={(params) => (
                   <TextField
