@@ -52,6 +52,7 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {Repairer} from '@interfaces/Repairer';
 import ConfirmationReloadDialog from '@components/common/ConfirmationReloadDialog';
+import {useRouter} from 'next/router';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -72,6 +73,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
 
   const {
     cityInput,
@@ -206,15 +208,17 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       setIsLoading(false);
     },
     [
+      selectedBike,
       city,
-      currentPage,
+      isLoading,
       orderBy,
       filterBy,
-      selectedBike,
-      setRepairers,
-      setAllRepairers,
-      setTotalItems,
       repairerTypeSelected,
+      setAllRepairers,
+      setRepairers,
+      currentPage,
+      setTotalItems,
+      searchRadius,
       repairerTypes,
     ]
   );
@@ -229,6 +233,27 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setRepairers(getItemsByPage(allRepairers, currentPage));
     scrollToTop();
   }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (cityInput && selectedBike) {
+      fetchRepairers();
+      const handlePopState = () => {
+        setCityInput('');
+        setCity(null);
+        setSelectedBike(null);
+        return;
+      };
+
+      window.addEventListener('popstate', handlePopState);
+    }
+  }, [
+    cityInput,
+    fetchRepairers,
+    selectedBike,
+    setCity,
+    setCityInput,
+    setSelectedBike,
+  ]);
 
   const fetchCitiesResult = useCallback(
     async (cityStr: string) => {
