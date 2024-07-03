@@ -38,7 +38,6 @@ import {
 import ModalSearchRepairer from './ModalSearchRepairer';
 import LetterR from '@components/common/LetterR';
 import {formatCityInput} from '@helpers/formatCityInput';
-import * as url from 'node:url';
 
 const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
@@ -139,27 +138,6 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
     event.preventDefault();
     submitSearch();
   };
-
-  useEffect(() => {
-    const handlePopState = () => {
-      if (city && selectedBike && searchRadius) {
-        setCityInput('');
-        setCity(null);
-        setSelectedBike(null);
-        return;
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-  }, [
-    cityInput,
-    selectedBike,
-    setCityInput,
-    setSelectedBike,
-    setCity,
-    city,
-    searchRadius,
-  ]);
 
   const handleModal = () => {
     setSelectedBike(null);

@@ -233,14 +233,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   useEffect(() => {
     if (cityInput && selectedBike) {
       fetchRepairers();
-      const handlePopState = () => {
-        setCityInput('');
-        setCity(null);
-        setSelectedBike(null);
-        return;
-      };
-
-      window.addEventListener('popstate', handlePopState);
     }
   }, [
     cityInput,
