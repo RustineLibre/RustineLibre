@@ -220,7 +220,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   );
 
   useEffect(() => {
-    if (isMobile && city && selectedBike) {
+    if (isMobile && city && selectedBike && searchRadius) {
       fetchRepairers();
     }
   }, [city, isMobile, selectedBike]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -270,6 +270,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   };
 
   const handleRadiusChange = (event: SelectChangeEvent): void => {
+    setIsLoading(false);
     setSearchRadius(event.target.value);
   };
 
@@ -277,9 +278,9 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
+    setIsLoading(false);
     if (typeof city !== 'object' || city === null) {
       setErrorMessage('Veuillez sélectionner votre ville dans la liste');
-      setIsLoading(false);
       return;
     }
 
@@ -320,12 +321,14 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   };
 
   useEffect(() => {
+    setIsLoading(false);
     if (orderBy) {
       fetchRepairers();
     }
   }, [orderBy, fetchRepairers]);
 
   useEffect(() => {
+    setIsLoading(false);
     fetchRepairers();
   }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
