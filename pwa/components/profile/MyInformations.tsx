@@ -33,6 +33,9 @@ export const MyInformations = ({
   const [lastName, setLastName] = useState<string>('');
   const [lastNameError, setLastNameError] = useState<boolean>(false);
   const [lastNameHelperText, setLastNameHelperText] = useState<string>('');
+  const [telephone, setTelephone] = useState<string>('');
+  const [telephoneError, setTelephoneError] = useState<boolean>(false);
+  const [telephoneHelperText, setTelephoneHelperText] = useState<string>('');
   const [city, setCity] = useState<string>('');
   const [cityError, setCityError] = useState<boolean>(false);
   const [cityHelperText, setCityHelperText] = useState<string>('');
@@ -44,7 +47,7 @@ export const MyInformations = ({
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (!firstName || !lastName || !user) {
+    if (!firstName || !lastName || !user || !telephone) {
       return;
     }
     setError(false);
@@ -55,8 +58,9 @@ export const MyInformations = ({
         lastName: lastName,
         city: city,
         street: street,
+        telephone: telephone,
       };
-      await userResource.putById(user.id, bodyRequest);
+      await userResource.patchById(user.id, bodyRequest);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
@@ -80,6 +84,19 @@ export const MyInformations = ({
     } else {
       setFirstNameError(false);
       setFirstNameHelperText('');
+    }
+  };
+
+  const handleChangeTelephone = (
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
+    setTelephone(event.target.value);
+    if (event.target.value === '') {
+      setTelephoneError(true);
+      setTelephoneHelperText('Champ obligatoire');
+    } else {
+      setTelephoneError(false);
+      setTelephoneHelperText('');
     }
   };
 
@@ -123,6 +140,7 @@ export const MyInformations = ({
     setLastName(me.lastName);
     setCity(me.city ?? '');
     setStreet(me.street ?? '');
+    setTelephone(me.telephone ?? '');
   };
 
   useEffect(() => {
@@ -296,6 +314,32 @@ export const MyInformations = ({
             </Grid>
           </Grid>
         )}
+      </Grid>
+      <Grid container item xs={12} spacing={{xs: 0, md: 2}} direction="row">
+        <Grid item xs={12} sm={6} md={12} lg={6}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="telephone"
+            label="Téléphone"
+            name="telephone"
+            autoComplete="telephone"
+            value={telephone || ''}
+            sx={{
+              backgroundColor: 'white',
+              borderRadius: 6,
+            }}
+            inputProps={{maxLength: 20}}
+            onChange={handleChangeTelephone}
+            error={telephoneError}
+            helperText={telephoneHelperText}
+            onBlur={() => {
+              setTelephoneError(false);
+              setTelephoneHelperText('');
+            }}
+          />
+        </Grid>
       </Grid>
       <Box display="flex" flexDirection="column" alignItems="center">
         <Button

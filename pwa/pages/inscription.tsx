@@ -63,17 +63,38 @@ const Registration: NextPageWithLayout = ({}) => {
     }
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const {firstName, lastName, email, password, passwordError, city, street} =
-    useContext(UserFormContext);
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    passwordError,
+    city,
+    street,
+    telephone,
+  } = useContext(UserFormContext);
 
   const invalidForm =
-    !email || !password || passwordError || !firstName || !lastName || !checked;
+    !email ||
+    !password ||
+    passwordError ||
+    !firstName ||
+    !lastName ||
+    !checked ||
+    !telephone;
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (passwordError || !email || !password || !firstName || !lastName) {
+    if (
+      passwordError ||
+      !email ||
+      !password ||
+      !firstName ||
+      !lastName ||
+      !telephone
+    ) {
       return;
     }
 
@@ -88,6 +109,7 @@ const Registration: NextPageWithLayout = ({}) => {
         plainPassword: password,
         city: city,
         street: street,
+        telephone: telephone,
       });
 
       await login({

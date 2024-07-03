@@ -187,6 +187,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $firebaseToken;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
+    public ?string $telephone = null;
+
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
@@ -257,4 +261,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->password;
     }
+
 }
