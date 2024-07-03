@@ -152,10 +152,13 @@ const Login: NextPageWithLayout = ({}) => {
                       display="flex"
                       justifyContent="space-between"
                       width="100%">
-                      <Link href="/mot-de-passe-oublie" variant="body2">
+                      <Link
+                        rel="canonical"
+                        href="/mot-de-passe-oublie"
+                        variant="body2">
                         Mot de passe oublié ?
                       </Link>
-                      <Link href="/inscription" variant="body2">
+                      <Link rel="canonical" href="/inscription" variant="body2">
                         S’inscrire
                       </Link>
                     </Box>
