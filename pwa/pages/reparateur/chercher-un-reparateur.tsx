@@ -208,17 +208,15 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       setIsLoading(false);
     },
     [
-      selectedBike,
       city,
-      isLoading,
+      currentPage,
       orderBy,
       filterBy,
-      repairerTypeSelected,
-      setAllRepairers,
+      selectedBike,
       setRepairers,
-      currentPage,
+      setAllRepairers,
       setTotalItems,
-      searchRadius,
+      repairerTypeSelected,
       repairerTypes,
     ]
   );
