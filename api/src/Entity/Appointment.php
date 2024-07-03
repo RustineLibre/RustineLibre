@@ -82,6 +82,10 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?User $customer = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    public ?string $customerName = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]

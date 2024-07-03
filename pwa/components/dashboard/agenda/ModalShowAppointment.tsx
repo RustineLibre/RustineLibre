@@ -171,33 +171,38 @@ const ModalShowAppointment = ({
                 <AccountCircleIcon color="primary" />
                 <Typography>Client:</Typography>
                 <Typography>
-                  {appointment.customer.firstName}{' '}
-                  {appointment.customer.lastName}
+                  {appointment.customer
+                    ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
+                    : `${
+                        appointment.customerName ?? 'Nom inconnu'
+                      } (Client sans compte)`}
                 </Typography>
               </Box>
               <Box>
-                <Link
-                  href={`/sradmin/messagerie/${appointment.discussion!.id}`}>
-                  {isMobile ? (
-                    <IconButton
-                      color="secondary"
-                      disabled={!appointment.discussion}
-                      sx={{
-                        borderRadius: '50%',
-                        padding: '8px',
-                      }}>
-                      <EmailIcon />
-                    </IconButton>
-                  ) : (
-                    <Button
-                      size="small"
-                      color="secondary"
-                      disabled={!appointment.discussion}
-                      variant="outlined">
-                      Envoyer un message
-                    </Button>
-                  )}
-                </Link>
+                {appointment.discussion && (
+                  <Link
+                    href={`/sradmin/messagerie/${appointment.discussion!.id}`}>
+                    {isMobile ? (
+                      <IconButton
+                        color="secondary"
+                        disabled={!appointment.discussion}
+                        sx={{
+                          borderRadius: '50%',
+                          padding: '8px',
+                        }}>
+                        <EmailIcon />
+                      </IconButton>
+                    ) : (
+                      <Button
+                        size="small"
+                        color="secondary"
+                        disabled={!appointment.discussion}
+                        variant="outlined">
+                        Envoyer un message
+                      </Button>
+                    )}
+                  </Link>
+                )}
               </Box>
             </Box>
             {appointment.bike && (

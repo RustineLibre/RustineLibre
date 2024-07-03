@@ -79,10 +79,10 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
     );
 
     const appointmentsEvents = appointments.map((appointment) => {
-      const {customer, autoDiagnostic, slotTime} = appointment;
+      const {customer, autoDiagnostic, slotTime, customerName} = appointment;
       const title: string = customer
         ? `${customer.firstName} ${customer.lastName}`
-        : 'Nom inconnu';
+        : customerName ?? 'Nom inconnu';
       const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
 
       return {

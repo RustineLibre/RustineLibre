@@ -41,15 +41,8 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // If no customer provided, inject it
-        if (!$object->customer) {
-            $object->customer = $currentUser;
-
-            return;
-        }
-
         // If admin or current user = customer, do nothing
-        if ($this->security->isGranted(User::ROLE_ADMIN) || $object->customer === $currentUser) {
+        if ($this->security->isGranted(User::ROLE_ADMIN) || $object->customer === null) {
             return;
         }
 

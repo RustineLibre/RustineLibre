@@ -66,6 +66,7 @@ const ModalAppointmentCreate = ({
   const {user} = useAccount({});
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customerInput, setCustomerInput] = useState<string>('');
+  const [customerName, setCustomerName] = useState<string>('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
@@ -136,15 +137,22 @@ const ModalAppointmentCreate = ({
     setCustomerInput(event.target.value);
   };
 
+  const handleCustomerName = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
+    setCustomerName(event.target.value);
+  };
+
   const handleSelectCustomer = (customer: Customer): void => {
     setSelectedCustomer(customer);
   };
 
-  const createAppointment = async (selectedCustomer: Customer) => {
+  const createAppointment = async (customer: Customer | string) => {
     const requestBody: RequestBody = {
       repairer: repairer['@id'],
       slotTime: slotSelected,
-      customer: selectedCustomer['@id'],
+      customer: typeof customer !== 'string' ? customer['@id'] : null,
+      customerName: typeof customer === 'string' ? customer : null,
     };
     if (isItinerantRepairer && address && latitude && longitude) {
       requestBody['address'] = address;
@@ -156,10 +164,16 @@ const ModalAppointmentCreate = ({
     setLoading(false);
   };
 
-  const handleCreateAppointment = async (selectedCustomer: Customer) => {
+  const handleCreateAppointment = async () => {
+    if (null === selectedCustomer && !customerName) {
+      setErrorMessage(
+        'Vous devez sélectionner un compte client ou indiquer son nom et son prénom.'
+      );
+      return;
+    }
     setLoading(true);
     try {
-      await createAppointment(selectedCustomer);
+      await createAppointment(selectedCustomer ?? customerName);
       setDetails(true);
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
@@ -167,12 +181,16 @@ const ModalAppointmentCreate = ({
     setLoading(false);
   };
 
-  const handleCreateAppointmentWithoutDetails = async (
-    selectedCustomer: Customer
-  ) => {
+  const handleCreateAppointmentWithoutDetails = async () => {
+    if (!customerName && null === selectedCustomer) {
+      setErrorMessage(
+        'Vous devez sélectionner un compte client ou indiquer son nom et son prénom.'
+      );
+      return;
+    }
     setLoadingWithoutDetails(true);
     try {
-      await createAppointment(selectedCustomer);
+      await createAppointment(selectedCustomer ?? customerName);
       handleSuccess();
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
@@ -353,6 +371,7 @@ const ModalAppointmentCreate = ({
               </Box>
             </LocalizationProvider>
             <Autocomplete
+              disabled={'' !== customerName}
               sx={{mt: 2, mb: 1}}
               freeSolo
               value={customerInput}
@@ -365,13 +384,20 @@ const ModalAppointmentCreate = ({
               onChange={(event, value) => handleSelectCustomer(value as User)}
               renderInput={(params) => (
                 <TextField
-                  label="Client"
-                  required
+                  label="Compte client"
                   {...params}
                   value={customerInput}
                   onChange={(e) => handleCustomerChange(e)}
                 />
               )}
+            />
+            <Box sx={{textAlign: 'center', my: 1}}>ou</Box>
+            <TextField
+              disabled={null !== selectedCustomer}
+              sx={{width: '100%'}}
+              label="Nom / prénom du client"
+              value={customerName}
+              onChange={(e) => handleCustomerName(e)}
             />
           </Box>
         )}
@@ -415,7 +441,7 @@ const ModalAppointmentCreate = ({
           </>
         )}
       </DialogContent>
-      {selectedCustomer && (
+      {(selectedCustomer || customerName) && (
         <>
           <DialogActions>
             {details ? (
@@ -436,9 +462,7 @@ const ModalAppointmentCreate = ({
                 p={2}
                 gap={isMobile ? 0 : 2}>
                 <Button
-                  onClick={() =>
-                    handleCreateAppointmentWithoutDetails(selectedCustomer)
-                  }
+                  onClick={() => handleCreateAppointmentWithoutDetails()}
                   disabled={isItinerantRepairer! && !address}
                   size="medium"
                   variant="outlined"
@@ -450,7 +474,7 @@ const ModalAppointmentCreate = ({
                   Créer sans détails
                 </Button>
                 <Button
-                  onClick={() => handleCreateAppointment(selectedCustomer)}
+                  onClick={() => handleCreateAppointment()}
                   disabled={isItinerantRepairer! && !address}
                   size="medium"
                   variant="contained"

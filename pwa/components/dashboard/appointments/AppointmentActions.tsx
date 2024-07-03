@@ -121,8 +121,11 @@ const AppointmentActions = ({
                 Êtes-vous sûr de vouloir annuler ce rendez-vous ?
               </Typography>
               <Typography pt={4}>
-                Client : {appointment.customer.firstName}{' '}
-                {appointment.customer.lastName}
+                {appointment.customer
+                  ? `Client : ${appointment.customer.firstName} ${appointment.customer.lastName}`
+                  : `Client : ${
+                      appointment.customerName ?? 'Nom inconnu'
+                    } (Client sans compte)`}
               </Typography>
               <Typography pb={2}>
                 Date : {formatDate(appointment.slotTime)}
