@@ -76,6 +76,7 @@ const Home = () => {
               ))}
             </Grid>
             <Link
+              rel="canonical"
               href="/reparateur/chercher-un-reparateur"
               legacyBehavior
               passHref>

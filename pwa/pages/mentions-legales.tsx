@@ -75,7 +75,7 @@ const LegalNotice: NextPageWithLayout = () => {
                   href="mailto:contact@rustinelibre.fr"
                   legacyBehavior
                   passHref>
-                  <Link sx={{fontWeight: 800}} underline="none">
+                  <Link rel="canonical" sx={{fontWeight: 800}} underline="none">
                     {' '}
                     contact@rustinelibre.fr
                   </Link>
@@ -134,7 +134,10 @@ const LegalNotice: NextPageWithLayout = () => {
                     href="mailto:contact@rustinelibre.fr"
                     legacyBehavior
                     passHref>
-                    <Link sx={{fontWeight: 800}} underline="none">
+                    <Link
+                      rel="canonical"
+                      sx={{fontWeight: 800}}
+                      underline="none">
                       {' '}
                       contact@rustinelibre.fr{' '}
                     </Link>

@@ -241,6 +241,7 @@ const PasswordReset: NextPageWithLayout = ({
                 Mot de passe mis à jour.
               </Typography>
               <Link
+                rel="canonical"
                 legacyBehavior
                 passHref
                 href="/login"

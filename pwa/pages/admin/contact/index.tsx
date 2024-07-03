@@ -94,7 +94,9 @@ const Contact = (): JSX.Element => {
                         {formatDate(contact.createdAt, true)}
                       </TableCell>
                       <TableCell align="right">
-                        <Link href={`/admin/contact/${contact.id}`}>
+                        <Link
+                          rel="canonical"
+                          href={`/admin/contact/${contact.id}`}>
                           <RemoveRedEyeIcon
                             sx={{
                               color: '#8c83ba',
