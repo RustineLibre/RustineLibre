@@ -18,25 +18,21 @@ Plateforme de mise en relation avec des réparateurs de vélos
 
 ## URL du projet déployé via la CD
 
-La branche main est déployée sur [main.nonprod.bikelib.preprod-tilleuls.ovh](https://main.nonprod.bikelib.preprod-tilleuls.ovh)
+La branche main est déployée sur [preprod.rustinelibre.fr](https://preprod.rustinelibre.fr/)
 
-Les PR sont déployées sur [pr-NN.nonprod.bikelib.preprod-tilleuls.ovh](https://pr-NN.nonprod.bikelib.preprod-tilleuls.ovh) (uniquement si le label deploy est ajouté sur la PR)
-
-Les tags/releases sont déployées sur [demo.bikelib.preprod-tilleuls.ovh](https://demo.bikelib.preprod-tilleuls.ovh)
+Les tags/releases sont déployées sur [rustinelibre.fr](https://rustinelibre.fr/)
 
 ## Installation / utilisation du projet
 
 ```shell
 git clone git@github.com:RustineLibre/RustineLibre.git   # Clone du projet
 cd RustineLibre              # Se place dans le dossier du projet
-docker-compose build    # Installation du projet
-docker-compose up -d    # Lance les containers
-docker-compose exec php sh  # "Entrer" dans le container PHP
+docker-compose build         # Installation du projet
+docker-compose up -d         # Lance les containers
+docker-compose exec php sh   # "Entrer" dans le container PHP
 ```
 
-Temporairement, le site est protégé par un mot de passe : 
-Login : Libre
-Password : Rustine
+La préprod est protégée par un mot de passe
 
 ## Pour générer la base de données
 
@@ -227,7 +223,6 @@ php bin/console app:repairer:update-first-slot-available
 ```
 
 Une autre commande (facultative) permet de mettre à jour le status des rendez vous lorsque ces derniers n'ont pas obtenu de réponse depuis 72 heures ou que leur date est dépassée. Elle peut également être jouée quotidiennement :
-
 
 ```
 php bin/console app:appointments:cancel-old
