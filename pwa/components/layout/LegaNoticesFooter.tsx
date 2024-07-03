@@ -65,7 +65,7 @@ const LegalNoticesFooter = (): JSX.Element => {
       <Box width="100%" pt={4} maxWidth={{xs: 600, md: 700}} mx="auto">
         <img
           alt="Logo des financeurs du projet Rustine Libre"
-          src="/img/funders-logos.png"
+          src="/img/funders-logos.webp"
           style={{width: '100%'}}
         />
       </Box>

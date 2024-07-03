@@ -1,9 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
 import {Box} from '@mui/material';
-import repairers from '@public/img/repairers.jpg';
-import autoRepairers from '@public/img/auto-repairers.jpg';
-import repairerSalute from '@public/img/repairer-salute.jpg';
+import repairers from '@public/img/repairers.webp';
+import autoRepairers from '@public/img/auto-repairers.webp';
+import repairerSalute from '@public/img/repairer-salute.webp';
 
 const HomepageImagesGallery = () => {
   return (
