@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @implements ProcessorInterface<UpdateRepairerBossDto, RepairerEmployee>
+ * @template-implements ProcessorInterface<int>
  */
 final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
 {
