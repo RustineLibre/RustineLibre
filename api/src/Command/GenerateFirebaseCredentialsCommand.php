@@ -27,7 +27,7 @@ class GenerateFirebaseCredentialsCommand extends Command
         private string $firebaseAuthProvider,
         private string $firebaseClientCertUrl,
         private string $firebaseUniverseDomain,
-        ?string $name = null,
+        string $name = null,
     ) {
         parent::__construct($name);
     }

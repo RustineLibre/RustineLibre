@@ -19,7 +19,7 @@ class CancelAppointmentsPastOrDelayedCommand extends Command
 {
     public function __construct(
         private readonly AppointmentsCanceller $appointmentsCanceller,
-        ?string $name = null,
+        string $name = null,
     ) {
         parent::__construct($name);
     }
