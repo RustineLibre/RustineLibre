@@ -49,8 +49,8 @@ export const Description = ({
   const [repairerTypeSelected, setRepairerTypeSelected] =
     useState<RepairerType>(repairer?.repairerType!);
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
-  const [citiesList, setCitiesList] = useState<RepairerCity[]|City[]>([]);
-  const [repairerCities, setRepairerCities] = useState<RepairerCity[]>([]);
+  const [citiesList, setCitiesList] = useState<City[]>([]);
+  const [repairerCities, setRepairerCities] = useState<RepairerCity[]|any>([]);
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -73,7 +73,7 @@ export const Description = ({
 
   const handleCitySelect = (
     event: SyntheticEvent<Element, Event>,
-    cities: RepairerCity[]|City[]
+    cities: any
   ) => {
     let newRepairerCities : RepairerCity[] = [];
 
