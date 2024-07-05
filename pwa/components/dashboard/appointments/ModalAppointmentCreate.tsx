@@ -438,7 +438,7 @@ const ModalAppointmentCreate = ({
             )}
           </Box>
         )}
-        {selectedCustomer && pickedDate && pickedTime && (
+        {(selectedCustomer || customerName) && pickedDate && pickedTime && (
           <>
             {isItinerantRepairer && (
               <PinMap
