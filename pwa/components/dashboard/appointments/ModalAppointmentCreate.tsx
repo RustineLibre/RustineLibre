@@ -24,6 +24,10 @@ import {
   DialogActions,
   IconButton,
   useMediaQuery,
+  Select,
+  MenuItem,
+  FormControl,
+  SelectChangeEvent,
 } from '@mui/material';
 import {DatePicker, frFR, TimePicker} from '@mui/x-date-pickers';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
@@ -65,6 +69,7 @@ const ModalAppointmentCreate = ({
 }: AppointmentCreateProps): JSX.Element => {
   const {user} = useAccount({});
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customerType, setCustomerType] = useState<string>('');
   const [customerInput, setCustomerInput] = useState<string>('');
   const [customerName, setCustomerName] = useState<string>('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
@@ -130,6 +135,13 @@ const ModalAppointmentCreate = ({
       handleSuccess();
     }
   }, [details, newAppointment]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleCustomerType = (event: SelectChangeEvent): void => {
+    setSelectedCustomer(null);
+    setCustomerName('');
+    setCustomerInput('');
+    setCustomerType(event.target.value);
+  };
 
   const handleCustomerChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -370,35 +382,60 @@ const ModalAppointmentCreate = ({
                 />
               </Box>
             </LocalizationProvider>
-            <Autocomplete
-              disabled={'' !== customerName}
-              sx={{mt: 2, mb: 1}}
-              freeSolo
-              value={customerInput}
-              options={customers}
-              getOptionLabel={(customer) =>
-                typeof customer === 'string'
-                  ? customer
-                  : `${customer.firstName} ${customer.lastName} (${customer.email})`
-              }
-              onChange={(event, value) => handleSelectCustomer(value as User)}
-              renderInput={(params) => (
-                <TextField
-                  label="Compte client"
-                  {...params}
-                  value={customerInput}
-                  onChange={(e) => handleCustomerChange(e)}
-                />
-              )}
-            />
-            <Box sx={{textAlign: 'center', my: 1}}>ou</Box>
-            <TextField
-              disabled={null !== selectedCustomer}
-              sx={{width: '100%'}}
-              label="Nom / prénom du client"
-              value={customerName}
-              onChange={(e) => handleCustomerName(e)}
-            />
+            <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+              <InputLabel id="repairer-type-label">Pour qui ?</InputLabel>
+              <Select
+                id="repairer-type"
+                labelId="repairer-type-label"
+                required
+                label="Type de réparateur"
+                onChange={handleCustomerType}
+                value={customerType}
+                style={{width: '100%'}}>
+                <MenuItem disabled value="">
+                  Pour qui ?
+                </MenuItem>
+                <MenuItem key="customerWithAccount" value="customerWithAccount">
+                  Client avec un compte
+                </MenuItem>
+                <MenuItem
+                  key="customerWithoutAccount"
+                  value="customerWithoutAccount">
+                  Client sans compte
+                </MenuItem>
+              </Select>
+            </FormControl>
+            {customerType === 'customerWithAccount' && (
+              <Autocomplete
+                disabled={'' !== customerName}
+                freeSolo
+                value={customerInput}
+                options={customers}
+                getOptionLabel={(customer) =>
+                  typeof customer === 'string'
+                    ? customer
+                    : `${customer.firstName} ${customer.lastName} (${customer.email})`
+                }
+                onChange={(event, value) => handleSelectCustomer(value as User)}
+                renderInput={(params) => (
+                  <TextField
+                    label="Compte client"
+                    {...params}
+                    value={customerInput}
+                    onChange={(e) => handleCustomerChange(e)}
+                  />
+                )}
+              />
+            )}
+            {customerType === 'customerWithoutAccount' && (
+              <TextField
+                disabled={null !== selectedCustomer}
+                sx={{width: '100%'}}
+                label="Nom / prénom du client"
+                value={customerName}
+                onChange={(e) => handleCustomerName(e)}
+              />
+            )}
           </Box>
         )}
         {selectedCustomer && pickedDate && pickedTime && (
