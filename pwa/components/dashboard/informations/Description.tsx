@@ -74,7 +74,7 @@ export const Description = ({
     event: SyntheticEvent<Element, Event>,
     cities: City[]
   ) => {
-    let newRepairerCities = [];
+    let newRepairerCities : City[] = [];
     cities.map((city: City) => {
       newRepairerCities.push({
         formatted_name: `${city.name} (${city.postcode})`,
