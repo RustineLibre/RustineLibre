@@ -72,7 +72,11 @@ export const DashboardWaitingAppointments = ({
       return appointment.autoDiagnostic.prestation;
     }
 
-    return `${appointment.customer.firstName} ${appointment.customer.lastName}`;
+    return `${
+      appointment.customer
+        ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
+        : appointment.customerName ?? 'Nom inconnu'
+    }`;
   };
 
   const handleShowAppointment = (appointment: Appointment) => {
@@ -117,8 +121,9 @@ export const DashboardWaitingAppointments = ({
                     key={appointment.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                     <TableCell component="th" scope="row">
-                      {appointment.customer.firstName}{' '}
-                      {appointment.customer.lastName}
+                      {appointment.customer
+                        ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
+                        : appointment.customerName ?? 'Nom inconnu'}
                       <br />
                       <Typography
                         variant="body1"

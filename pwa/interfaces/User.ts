@@ -18,4 +18,5 @@ export interface User {
   emailConfirmed: boolean;
   lastRepairers: Repairer[];
   firebaseToken: string;
+  telephone: string;
 }

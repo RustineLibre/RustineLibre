@@ -24,6 +24,10 @@ import {
   DialogActions,
   IconButton,
   useMediaQuery,
+  Select,
+  MenuItem,
+  FormControl,
+  SelectChangeEvent,
 } from '@mui/material';
 import {DatePicker, frFR, TimePicker} from '@mui/x-date-pickers';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
@@ -65,7 +69,9 @@ const ModalAppointmentCreate = ({
 }: AppointmentCreateProps): JSX.Element => {
   const {user} = useAccount({});
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customerType, setCustomerType] = useState<string>('');
   const [customerInput, setCustomerInput] = useState<string>('');
+  const [customerName, setCustomerName] = useState<string>('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
@@ -130,21 +136,35 @@ const ModalAppointmentCreate = ({
     }
   }, [details, newAppointment]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleCustomerType = (event: SelectChangeEvent): void => {
+    setSelectedCustomer(null);
+    setCustomerName('');
+    setCustomerInput('');
+    setCustomerType(event.target.value);
+  };
+
   const handleCustomerChange = async (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): Promise<void> => {
     setCustomerInput(event.target.value);
   };
 
+  const handleCustomerName = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
+    setCustomerName(event.target.value);
+  };
+
   const handleSelectCustomer = (customer: Customer): void => {
     setSelectedCustomer(customer);
   };
 
-  const createAppointment = async (selectedCustomer: Customer) => {
+  const createAppointment = async (customer: Customer | string) => {
     const requestBody: RequestBody = {
       repairer: repairer['@id'],
       slotTime: slotSelected,
-      customer: selectedCustomer['@id'],
+      customer: typeof customer !== 'string' ? customer['@id'] : null,
+      customerName: typeof customer === 'string' ? customer : null,
     };
     if (isItinerantRepairer && address && latitude && longitude) {
       requestBody['address'] = address;
@@ -156,10 +176,16 @@ const ModalAppointmentCreate = ({
     setLoading(false);
   };
 
-  const handleCreateAppointment = async (selectedCustomer: Customer) => {
+  const handleCreateAppointment = async () => {
+    if (null === selectedCustomer && !customerName) {
+      setErrorMessage(
+        'Vous devez sélectionner un compte client ou indiquer son nom et son prénom.'
+      );
+      return;
+    }
     setLoading(true);
     try {
-      await createAppointment(selectedCustomer);
+      await createAppointment(selectedCustomer ?? customerName);
       setDetails(true);
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
@@ -167,12 +193,16 @@ const ModalAppointmentCreate = ({
     setLoading(false);
   };
 
-  const handleCreateAppointmentWithoutDetails = async (
-    selectedCustomer: Customer
-  ) => {
+  const handleCreateAppointmentWithoutDetails = async () => {
+    if (!customerName && null === selectedCustomer) {
+      setErrorMessage(
+        'Vous devez sélectionner un compte client ou indiquer son nom et son prénom.'
+      );
+      return;
+    }
     setLoadingWithoutDetails(true);
     try {
-      await createAppointment(selectedCustomer);
+      await createAppointment(selectedCustomer ?? customerName);
       handleSuccess();
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
@@ -352,30 +382,63 @@ const ModalAppointmentCreate = ({
                 />
               </Box>
             </LocalizationProvider>
-            <Autocomplete
-              sx={{mt: 2, mb: 1}}
-              freeSolo
-              value={customerInput}
-              options={customers}
-              getOptionLabel={(customer) =>
-                typeof customer === 'string'
-                  ? customer
-                  : `${customer.firstName} ${customer.lastName} (${customer.email})`
-              }
-              onChange={(event, value) => handleSelectCustomer(value as User)}
-              renderInput={(params) => (
-                <TextField
-                  label="Client"
-                  required
-                  {...params}
-                  value={customerInput}
-                  onChange={(e) => handleCustomerChange(e)}
-                />
-              )}
-            />
+            <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
+              <InputLabel id="repairer-type-label">Pour qui ?</InputLabel>
+              <Select
+                id="repairer-type"
+                labelId="repairer-type-label"
+                required
+                label="Type de réparateur"
+                onChange={handleCustomerType}
+                value={customerType}
+                style={{width: '100%'}}>
+                <MenuItem disabled value="">
+                  Pour qui ?
+                </MenuItem>
+                <MenuItem key="customerWithAccount" value="customerWithAccount">
+                  Client avec un compte
+                </MenuItem>
+                <MenuItem
+                  key="customerWithoutAccount"
+                  value="customerWithoutAccount">
+                  Client sans compte
+                </MenuItem>
+              </Select>
+            </FormControl>
+            {customerType === 'customerWithAccount' && (
+              <Autocomplete
+                disabled={'' !== customerName}
+                freeSolo
+                value={customerInput}
+                options={customers}
+                getOptionLabel={(customer) =>
+                  typeof customer === 'string'
+                    ? customer
+                    : `${customer.firstName} ${customer.lastName} (${customer.email})`
+                }
+                onChange={(event, value) => handleSelectCustomer(value as User)}
+                renderInput={(params) => (
+                  <TextField
+                    label="Compte client"
+                    {...params}
+                    value={customerInput}
+                    onChange={(e) => handleCustomerChange(e)}
+                  />
+                )}
+              />
+            )}
+            {customerType === 'customerWithoutAccount' && (
+              <TextField
+                disabled={null !== selectedCustomer}
+                sx={{width: '100%'}}
+                label="Nom / prénom du client"
+                value={customerName}
+                onChange={(e) => handleCustomerName(e)}
+              />
+            )}
           </Box>
         )}
-        {selectedCustomer && pickedDate && pickedTime && (
+        {(selectedCustomer || customerName) && pickedDate && pickedTime && (
           <>
             {isItinerantRepairer && (
               <PinMap
@@ -415,7 +478,7 @@ const ModalAppointmentCreate = ({
           </>
         )}
       </DialogContent>
-      {selectedCustomer && (
+      {(selectedCustomer || customerName) && (
         <>
           <DialogActions>
             {details ? (
@@ -436,9 +499,7 @@ const ModalAppointmentCreate = ({
                 p={2}
                 gap={isMobile ? 0 : 2}>
                 <Button
-                  onClick={() =>
-                    handleCreateAppointmentWithoutDetails(selectedCustomer)
-                  }
+                  onClick={() => handleCreateAppointmentWithoutDetails()}
                   disabled={isItinerantRepairer! && !address}
                   size="medium"
                   variant="outlined"
@@ -450,7 +511,7 @@ const ModalAppointmentCreate = ({
                   Créer sans détails
                 </Button>
                 <Button
-                  onClick={() => handleCreateAppointment(selectedCustomer)}
+                  onClick={() => handleCreateAppointment()}
                   disabled={isItinerantRepairer! && !address}
                   size="medium"
                   variant="contained"

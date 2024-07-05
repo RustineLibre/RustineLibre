@@ -116,6 +116,7 @@ export const CustomersList = (): JSX.Element => {
               <TableCell align="left">Nom</TableCell>
               <TableCell align="left">Prénom</TableCell>
               <TableCell align="left">Email</TableCell>
+              <TableCell align="left">Téléphone</TableCell>
               <TableCell align="left"></TableCell>
             </TableRow>
           </TableHead>
@@ -131,6 +132,7 @@ export const CustomersList = (): JSX.Element => {
                 </TableCell>
                 <TableCell align="left">{customer.firstName}</TableCell>
                 <TableCell align="left">{customer.email}</TableCell>
+                <TableCell align="left">{customer.telephone}</TableCell>
                 <TableCell align="right">
                   <Link
                     href={`/sradmin/clients/${customer.id}`}

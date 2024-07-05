@@ -44,6 +44,7 @@ export const NextLinkComposed = React.forwardRef<
       shallow={shallow}
       passHref
       locale={locale}
+      rel="canonical"
       legacyBehavior={legacyBehavior}>
       <Anchor ref={ref} {...other} />
     </NextLink>
@@ -97,7 +98,15 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(
       return <Anchor className={className} href={href} ref={ref} {...other} />;
     }
 
-    return <MuiLink className={className} href={href} ref={ref} {...other} />;
+    return (
+      <MuiLink
+        rel="canonical"
+        className={className}
+        href={href}
+        ref={ref}
+        {...other}
+      />
+    );
   }
 
   const linkAs = linkAsProp || as;

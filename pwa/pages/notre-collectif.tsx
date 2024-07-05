@@ -35,7 +35,7 @@ const OurCollective: NextPageWithLayout = () => {
               celles de l'économie sociale et solidaire, que nous mettons en
               valeur dans{' '}
               <NextLink href="/notre-charte" legacyBehavior passHref>
-                <Link sx={{fontWeight: 800}} underline="none">
+                <Link rel="canonical" sx={{fontWeight: 800}} underline="none">
                   notre charte
                 </Link>
               </NextLink>{' '}
