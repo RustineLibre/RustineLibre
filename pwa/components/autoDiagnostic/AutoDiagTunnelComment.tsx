@@ -1,5 +1,4 @@
 import React, {useContext, useState} from 'react';
-import Link from 'next/link';
 import {AutodiagContext} from '@contexts/AutodiagContext';
 import {
   Box,
@@ -58,8 +57,11 @@ export const AutoDiagTunnelComment = (): JSX.Element => {
       {loadingComment && <CircularProgress />}
       {!loadingComment && (
         <TextField
+          fullWidth
           placeholder={'Commentaire'}
-          minRows={3}
+          multiline
+          rows={3}
+          maxRows={5}
           onChange={(e: {target: {value: string}}) =>
             setComment(e.target.value)
           }
