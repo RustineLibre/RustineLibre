@@ -31,7 +31,7 @@ readonly class CreateDiscussionEventSubscriber implements EventSubscriberInterfa
         $object = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if (!$object instanceof Appointment || Request::METHOD_POST !== $method) {
+        if (!$object instanceof Appointment || Request::METHOD_POST !== $method || null === $object->customer) {
             return;
         }
 

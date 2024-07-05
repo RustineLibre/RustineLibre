@@ -39,7 +39,9 @@ export const TourMapPopUp = ({appointment}: TourMapPopUpProps): JSX.Element => {
         fontSize={14}
         fontWeight={600}
         sx={{wordBreak: 'break-word'}}>
-        {`${appointment.customer.firstName} ${appointment.customer.lastName}`}
+        {appointment.customer
+          ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
+          : `${appointment.customerName ?? 'Nom inconnu'} (Client sans compte)`}
       </Typography>
       <Typography
         color="text.secondary"

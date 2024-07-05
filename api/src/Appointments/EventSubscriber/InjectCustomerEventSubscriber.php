@@ -6,6 +6,7 @@ namespace App\Appointments\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Appointment;
+use App\Entity\RepairerEmployee;
 use App\Entity\User;
 use App\Repository\AppointmentRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -41,20 +42,23 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        // If no customer provided, inject it
-        if (!$object->customer) {
+        // If current user is not the repairer or an employee of the repairer, set it as customer
+        $userEmployees = $object->repairer->repairerEmployees->map(function (RepairerEmployee $repairerEmployee) {
+            return $repairerEmployee->employee;
+        })->toArray();
+        if ($currentUser !== $object->repairer->owner && !in_array($currentUser, $userEmployees)) {
             $object->customer = $currentUser;
 
             return;
         }
 
-        // If admin or current user = customer, do nothing
-        if ($this->security->isGranted(User::ROLE_ADMIN) || $object->customer === $currentUser) {
+        // If admin or current user = customer or null = customer, do nothing
+        if ($this->security->isGranted(User::ROLE_ADMIN) || $currentUser === $object->customer || null === $object->customer) {
             return;
         }
 
         // If boss/employee, check customer relationship
-        if (($this->security->isGranted(User::ROLE_BOSS) || $this->security->isGranted(User::ROLE_EMPLOYEE)) && $object->customer !== $currentUser) {
+        if ($this->security->isGranted(User::ROLE_BOSS) || $this->security->isGranted(User::ROLE_EMPLOYEE)) {
             $checkAppointment = $this->appointmentRepository->findOneBy([
                 'customer' => $object->customer,
                 'repairer' => $currentUser->repairerEmployee->repairer ?? $currentUser->repairer,

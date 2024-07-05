@@ -10,7 +10,6 @@ import {appointmentResource} from '@resources/appointmentResource';
 import {EventImpl} from '@fullcalendar/core/internal';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import ModalAppointmentCreate from '@components/dashboard/appointments/ModalAppointmentCreate';
-import {getFirstDaysOfMonth} from '@helpers/firstDayOfMonthHelper';
 import {getEndAppointment} from '@helpers/endAppointmentHelper';
 import router from 'next/router';
 import {DatesSetArg} from '@fullcalendar/core';
@@ -30,9 +29,25 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
     {title: string; id: string}[]
   >([]);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const {firstDayOfMonth, firstDayOfNextMonth} = getFirstDaysOfMonth();
-  const [startDate, setStartDate] = useState<string>(firstDayOfMonth);
-  const [endDate, setEndDate] = useState<string>(firstDayOfNextMonth);
+  const [startDate, setStartDate] = useState<string>(
+    new Date(
+      typeof router.query.selectedDate === 'string'
+        ? router.query.selectedDate.split('T')[0]
+        : Date.now()
+    )
+      .toISOString()
+      .split('T')[0]
+  );
+  const [endDate, setEndDate] = useState<string>(
+    typeof router.query.selectedDate === 'string'
+      ? new Date(
+          new Date(router.query.selectedDate.split('T')[0]).getDate() +
+            3600 * 1000 * 24
+        )
+          .toISOString()
+          .split('T')[0]
+      : new Date(Date.now() + 3600 * 1000 * 24).toISOString().split('T')[0]
+  );
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [initialDate, setInitialDate] = useState<Date | null>(null);
   const [openModalCreateAppointment, setOpenModalCreateAppointment] =
@@ -55,7 +70,6 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
   };
 
   useEffect(() => {
-    buildCalendarEvents(startDate, endDate);
     const dateQueryUrl = router.query.selectedDate;
     if (dateQueryUrl) {
       if (typeof dateQueryUrl === 'string') {
@@ -79,10 +93,10 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
     );
 
     const appointmentsEvents = appointments.map((appointment) => {
-      const {customer, autoDiagnostic, slotTime} = appointment;
+      const {customer, autoDiagnostic, slotTime, customerName} = appointment;
       const title: string = customer
         ? `${customer.firstName} ${customer.lastName}`
-        : 'Nom inconnu';
+        : customerName ?? 'Nom inconnu';
       const prestation = autoDiagnostic ? `(${autoDiagnostic.prestation})` : '';
 
       return {

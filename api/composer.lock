@@ -2920,16 +2920,16 @@
         },
         {
             "name": "jsor/doctrine-postgis",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsor/doctrine-postgis.git",
-                "reference": "be9bf2b66633621164dcb26c8f0d01701a950fa5"
+                "reference": "28d47faa60e4b596d19f864e5e991fa1e59f16be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsor/doctrine-postgis/zipball/be9bf2b66633621164dcb26c8f0d01701a950fa5",
-                "reference": "be9bf2b66633621164dcb26c8f0d01701a950fa5",
+                "url": "https://api.github.com/repos/jsor/doctrine-postgis/zipball/28d47faa60e4b596d19f864e5e991fa1e59f16be",
+                "reference": "28d47faa60e4b596d19f864e5e991fa1e59f16be",
                 "shasum": ""
             },
             "require": {
@@ -2984,9 +2984,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jsor/doctrine-postgis/issues",
-                "source": "https://github.com/jsor/doctrine-postgis/tree/v2.2.0"
+                "source": "https://github.com/jsor/doctrine-postgis/tree/v2.3.0"
             },
-            "time": "2023-04-26T20:17:57+00:00"
+            "time": "2024-02-20T22:32:02+00:00"
         },
         {
             "name": "kreait/firebase-bundle",
