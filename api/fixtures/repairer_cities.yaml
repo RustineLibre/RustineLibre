@@ -1,0 +1,14 @@
+App\Entity\RepairerCity:
+  repairer_city_1:
+    name: 'Nieppe'
+    postcode: '59850'
+    latitude: '50.6992987531'
+    longitude: '2.83247310085'
+    repairer: '@repairer_3'
+  repairer_city_2:
+    name: 'Armentières'
+    postcode: '59280'
+    latitude: '50.6913797537'
+    longitude: '2.8797155328'
+    repairer: '@repairer_4'
+

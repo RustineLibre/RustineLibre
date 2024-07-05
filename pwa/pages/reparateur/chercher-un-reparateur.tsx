@@ -232,7 +232,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
   useEffect(() => {
     if (city && selectedBike && searchRadius) {
-      fetchRepairers();
+      fetchRepairers(searchRadius);
     }
   }, [
     searchRadius,

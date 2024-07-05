@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repairers\EventSubscriber;
 
 use App\Entity\Repairer;
+use App\Entity\RepairerCity;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
@@ -32,7 +33,7 @@ final class GpsPointEventSubscriber
     {
         $entity = $args->getObject();
 
-        if (!$entity instanceof Repairer) {
+        if (!$entity instanceof Repairer && !$entity instanceof RepairerCity) {
             return;
         }
 
