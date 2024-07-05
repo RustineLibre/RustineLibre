@@ -2,7 +2,7 @@ import {User} from '@interfaces/User';
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
 import {MediaObject} from '@interfaces/MediaObject';
-import {RepairerCity} from "@interfaces/RepairerCity";
+import {RepairerCity} from '@interfaces/RepairerCity';
 
 export interface Repairer {
   '@id': string;

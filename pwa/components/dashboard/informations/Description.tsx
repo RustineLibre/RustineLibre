@@ -31,7 +31,7 @@ import Stack from '@mui/material/Stack';
 import {City, createCities} from '@interfaces/City';
 import {searchCity} from '@utils/apiCity';
 import {formatCityInput} from '@helpers/formatCityInput';
-import {RepairerCity} from "@interfaces/RepairerCity";
+import {RepairerCity} from '@interfaces/RepairerCity';
 
 interface DescriptionProps {
   repairer: Repairer | null;
@@ -50,7 +50,9 @@ export const Description = ({
     useState<RepairerType>(repairer?.repairerType!);
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
   const [citiesList, setCitiesList] = useState<City[]>([]);
-  const [repairerCities, setRepairerCities] = useState<RepairerCity[]|any>([]);
+  const [repairerCities, setRepairerCities] = useState<RepairerCity[] | any>(
+    []
+  );
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -75,9 +77,9 @@ export const Description = ({
     event: SyntheticEvent<Element, Event>,
     cities: any
   ) => {
-    let newRepairerCities : RepairerCity[] = [];
+    let newRepairerCities: RepairerCity[] = [];
 
-    cities.map((city: RepairerCity|City) => {
+    cities.map((city: RepairerCity | City) => {
       if ('lat' in city && 'lon' in city) {
         newRepairerCities.push({
           formatted_name: `${city.name} (${city.postcode})`,
@@ -87,7 +89,7 @@ export const Description = ({
           postcode: city.postcode,
         } as RepairerCity);
       } else {
-        newRepairerCities.push(city as RepairerCity)
+        newRepairerCities.push(city as RepairerCity);
       }
     });
 
@@ -247,7 +249,7 @@ export const Description = ({
               freeSolo
               value={repairerCities}
               options={citiesList}
-              getOptionLabel={(city: City|RepairerCity|string) =>
+              getOptionLabel={(city: City | RepairerCity | string) =>
                 typeof city === 'string'
                   ? city
                   : formatCityInput(city.name, city.postcode)
