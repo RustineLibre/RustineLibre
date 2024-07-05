@@ -31,6 +31,7 @@ import Stack from '@mui/material/Stack';
 import {City, createCities} from '@interfaces/City';
 import {searchCity} from '@utils/apiCity';
 import {formatCityInput} from '@helpers/formatCityInput';
+import {RepairerCity} from "@interfaces/RepairerCity";
 
 interface DescriptionProps {
   repairer: Repairer | null;
@@ -49,7 +50,7 @@ export const Description = ({
     useState<RepairerType>(repairer?.repairerType!);
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
   const [citiesList, setCitiesList] = useState<City[]>([]);
-  const [repairerCities, setRepairerCities] = useState<City[]>([]);
+  const [repairerCities, setRepairerCities] = useState<RepairerCity[]>([]);
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -74,7 +75,7 @@ export const Description = ({
     event: SyntheticEvent<Element, Event>,
     cities: City[]
   ) => {
-    let newRepairerCities : City[] = [];
+    let newRepairerCities : RepairerCity[] = [];
     cities.map((city: City) => {
       newRepairerCities.push({
         formatted_name: `${city.name} (${city.postcode})`,
@@ -82,7 +83,7 @@ export const Description = ({
         longitude: city.lon.toString(),
         name: city.name,
         postcode: city.postcode,
-      } as City);
+      } as RepairerCity);
     });
 
     setRepairerCities(newRepairerCities);
