@@ -79,6 +79,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     );
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
   const [comment, setComment] = useState<string>('');
+  const [acceptChart, setAcceptChart] = useState<boolean>(false);
   const [streetList, setStreetList] = useState<Street[]>([]);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
   const [repairerTypes, setRepairerTypes] =
