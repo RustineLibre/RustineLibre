@@ -263,11 +263,16 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public ?int $numberOfSlots = 1;
 
+    #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerCity::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
+    public Collection $repairerCities;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
         $this->repairerEmployees = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
+        $this->repairerCities = new ArrayCollection();
     }
 
     public function addBikeTypesSupported(BikeType $bikeTypesSupported): self
@@ -323,6 +328,35 @@ class Repairer
         if ($this->repairerInterventions->removeElement($repairerIntervention)) {
             if ($repairerIntervention->repairer === $this) {
                 unset($repairerIntervention->repairer);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RepairerCity>
+     */
+    public function getRepairerCities(): Collection
+    {
+        return $this->repairerCities;
+    }
+
+    public function addRepairerCity(RepairerCity $repairerCity): static
+    {
+        if (!$this->repairerCities->contains($repairerCity)) {
+            $this->repairerCities->add($repairerCity);
+            $repairerCity->repairer = $this;
+        }
+
+        return $this;
+    }
+
+    public function removeRepairerCity(RepairerCity $repairerCity): static
+    {
+        if ($this->repairerCities->removeElement($repairerCity)) {
+            if ($repairerCity->repairer === $this) {
+                $repairerCity->repairer = null;
             }
         }
 
