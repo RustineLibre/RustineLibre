@@ -8,4 +8,6 @@ export interface AutoDiagnostic {
   appointment: Appointment;
   prestation: string;
   photo: MediaObject;
+  comment: string;
 }
+
