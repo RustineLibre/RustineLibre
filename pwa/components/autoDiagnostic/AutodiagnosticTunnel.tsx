@@ -10,15 +10,15 @@ import AutoDiagTunnelPhoto from '@components/autoDiagnostic/AutoDiagTunnelPhoto'
 import AutoDiagTunnelChoice from '@components/autoDiagnostic/AutoDiagTunnelChoice';
 import AutoDiagTunnelBikeSelection from '@components/autoDiagnostic/AutoDiagTunnelBikeSelection';
 import {useTheme} from '@mui/material/styles';
-import AutoDiagTunnelComment from "@components/autoDiagnostic/AutoDiagTunnelComment";
+import AutoDiagTunnelComment from '@components/autoDiagnostic/AutoDiagTunnelComment';
 
 interface AutoDiagnosticTunnelProps {
   appointmentId: string;
 }
 
 export const AutoDiagnosticTunnel = ({
-                                       appointmentId,
-                                     }: AutoDiagnosticTunnelProps): JSX.Element => {
+  appointmentId,
+}: AutoDiagnosticTunnelProps): JSX.Element => {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -38,7 +38,7 @@ export const AutoDiagnosticTunnel = ({
     if (appointmentId) {
       setLoading(true);
       const appointmentFetched = await appointmentResource.getById(
-          appointmentId
+        appointmentId
       );
       setAppointment(appointmentFetched);
 
@@ -73,31 +73,31 @@ export const AutoDiagnosticTunnel = ({
   }, [appointmentId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-      <Box>
-        {!loading && appointment && (
-            <Box textAlign="center">
-              <Paper
-                  elevation={isMobile ? 0 : 1}
-                  sx={{p: 3, borderRadius: 6, maxWidth: '600px', mx: 'auto'}}>
-                <Stack
-                    spacing={5}
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                    }}>
-                  {tunnelStep === 'bike_selection' && (
-                      <AutoDiagTunnelBikeSelection />
-                  )}
-                  {tunnelStep === 'choice' && <AutoDiagTunnelChoice />}
-                  {tunnelStep === 'prestation' && <AutoDiagTunnelPrestation />}
-                  {tunnelStep === 'photo' && <AutoDiagTunnelPhoto />}
-                  {tunnelStep === 'comment' && <AutoDiagTunnelComment />}
-                </Stack>
-              </Paper>
-            </Box>
-        )}
-      </Box>
+    <Box>
+      {!loading && appointment && (
+        <Box textAlign="center">
+          <Paper
+            elevation={isMobile ? 0 : 1}
+            sx={{p: 3, borderRadius: 6, maxWidth: '600px', mx: 'auto'}}>
+            <Stack
+              spacing={5}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
+              {tunnelStep === 'bike_selection' && (
+                <AutoDiagTunnelBikeSelection />
+              )}
+              {tunnelStep === 'choice' && <AutoDiagTunnelChoice />}
+              {tunnelStep === 'prestation' && <AutoDiagTunnelPrestation />}
+              {tunnelStep === 'photo' && <AutoDiagTunnelPhoto />}
+              {tunnelStep === 'comment' && <AutoDiagTunnelComment />}
+            </Stack>
+          </Paper>
+        </Box>
+      )}
+    </Box>
   );
 };
 

@@ -10,4 +10,3 @@ export interface AutoDiagnostic {
   photo: MediaObject;
   comment: string;
 }
-
