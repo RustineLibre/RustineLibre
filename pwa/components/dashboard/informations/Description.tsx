@@ -73,17 +73,22 @@ export const Description = ({
 
   const handleCitySelect = (
     event: SyntheticEvent<Element, Event>,
-    cities: City[]
+    cities: RepairerCity[]|City[]
   ) => {
     let newRepairerCities : RepairerCity[] = [];
-    cities.map((city: City) => {
-      newRepairerCities.push({
-        formatted_name: `${city.name} (${city.postcode})`,
-        latitude: city.lat.toString(),
-        longitude: city.lon.toString(),
-        name: city.name,
-        postcode: city.postcode,
-      } as RepairerCity);
+
+    cities.map((city: RepairerCity|City) => {
+      if ('lat' in city && 'lon' in city) {
+        newRepairerCities.push({
+          formatted_name: `${city.name} (${city.postcode})`,
+          latitude: city.lat.toString(),
+          longitude: city.lon.toString(),
+          name: city.name,
+          postcode: city.postcode,
+        } as RepairerCity);
+      } else {
+        newRepairerCities.push(city as RepairerCity)
+      }
     });
 
     setRepairerCities(newRepairerCities);
@@ -126,18 +131,7 @@ export const Description = ({
           .filter((bikeTypeId) => bikeTypesSupported.includes(bikeTypeId))
       );
 
-      let cities: City[] = [];
-      repairer.repairerCities.map((city) => {
-        cities.push({
-          formatted_name: `${city.name} (${city.postcode})`,
-          lat: city.latitude,
-          lon: city.longitude,
-          name: city.name,
-          postcode: city.postcode,
-        } as City);
-      });
-
-      setRepairerCities(cities);
+      setRepairerCities(repairer.repairerCities);
     }
   }, [
     bikeTypes,
