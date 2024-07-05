@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {SyntheticEvent, useCallback, useEffect, useState} from 'react';
 import dynamic from 'next/dynamic';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
@@ -25,28 +25,76 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {Repairer} from '@interfaces/Repairer';
 import {RequestBody} from '@interfaces/Resource';
 import {errorRegex} from '@utils/errorRegex';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import {City, createCities} from '@interfaces/City';
+import {searchCity} from '@utils/apiCity';
+import {formatCityInput} from '@helpers/formatCityInput';
+import {RepairerCity} from '@interfaces/RepairerCity';
 
-interface ContactDetailsProps {
+interface DescriptionProps {
   repairer: Repairer | null;
   // eslint-disable-next-line no-unused-vars
   updateRepairer: (iri: string, bodyRequest: RequestBody) => void;
 }
 
-export const ContactDetails = ({
+export const Description = ({
   repairer,
   updateRepairer,
-}: ContactDetailsProps): JSX.Element => {
+}: DescriptionProps): JSX.Element => {
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
   const [description, setDescription] = useState<string>('');
   const [repairerTypeSelected, setRepairerTypeSelected] =
     useState<RepairerType>(repairer?.repairerType!);
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
-
+  const [citiesList, setCitiesList] = useState<City[]>([]);
+  const [repairerCities, setRepairerCities] = useState<RepairerCity[] | any>(
+    []
+  );
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+
+  const fetchCitiesResult = useCallback(
+    async (cityStr: string) => {
+      const citiesResponse = await searchCity(cityStr, false);
+      const cities: City[] = createCities(citiesResponse, false);
+      setCitiesList(cities);
+    },
+    [setCitiesList]
+  );
+
+  const handleCityChange = (value: string): void => {
+    if (value === '' || value.length < 3) {
+      setCitiesList([]);
+    } else fetchCitiesResult(value);
+  };
+
+  const handleCitySelect = (
+    event: SyntheticEvent<Element, Event>,
+    cities: any
+  ) => {
+    let newRepairerCities: RepairerCity[] = [];
+
+    cities.map((city: RepairerCity | City) => {
+      if ('lat' in city && 'lon' in city) {
+        newRepairerCities.push({
+          formatted_name: `${city.name} (${city.postcode})`,
+          latitude: city.lat.toString(),
+          longitude: city.lon.toString(),
+          name: city.name,
+          postcode: city.postcode,
+        } as RepairerCity);
+      } else {
+        newRepairerCities.push(city as RepairerCity);
+      }
+    });
+
+    setRepairerCities(newRepairerCities);
+  };
 
   const fetchRepairerTypes = async () => {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
@@ -84,6 +132,8 @@ export const ContactDetails = ({
           })
           .filter((bikeTypeId) => bikeTypesSupported.includes(bikeTypeId))
       );
+
+      setRepairerCities(repairer.repairerCities);
     }
   }, [
     bikeTypes,
@@ -122,6 +172,7 @@ export const ContactDetails = ({
         repairerType: repairerTypeSelected['@id'],
         bikeTypesSupported: selectedBikeTypeIRIs,
         description: description,
+        repairerCities: repairerCities,
       });
       setSuccess(true);
       setTimeout(() => {
@@ -189,6 +240,34 @@ export const ContactDetails = ({
             Description
           </InputLabel>
           <Editor content={description} setContent={setDescription} />
+          <Stack spacing={3} sx={{width: 1000}}>
+            <Autocomplete
+              fullWidth
+              multiple
+              sx={{mt: 2, mb: 1, p: 0}}
+              filterOptions={(options) => options}
+              freeSolo
+              value={repairerCities}
+              options={citiesList}
+              getOptionLabel={(city: City | RepairerCity | string) =>
+                typeof city === 'string'
+                  ? city
+                  : formatCityInput(city.name, city.postcode)
+              }
+              onChange={(event, value) => handleCitySelect(event, value)}
+              onInputChange={(event, value) => {
+                handleCityChange(value);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  label="Ville ou code postal"
+                  {...params}
+                  size="medium"
+                />
+              )}
+            />
+          </Stack>
+
           <Button type="submit" variant="contained" sx={{my: 2}}>
             {!pendingRegistration ? (
               'Enregistrer les informations'
@@ -210,4 +289,4 @@ export const ContactDetails = ({
   );
 };
 
-export default ContactDetails;
+export default Description;

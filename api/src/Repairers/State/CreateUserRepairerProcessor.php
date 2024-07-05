@@ -14,7 +14,7 @@ use App\Repairers\Dto\CreateUserRepairerDto;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * @template-implements ProcessorInterface<Repairer>
+ * @template-implements ProcessorInterface<int>
  */
 final class CreateUserRepairerProcessor implements ProcessorInterface
 {
@@ -28,7 +28,7 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
     /**
      * @param CreateUserRepairerDto $data
      */
-    public function process($data, Operation $operation, array $uriVariables = [], array $context = [])
+    public function process($data, Operation $operation, array $uriVariables = [], array $context = []): Repairer
     {
         $user = new User();
         $user->firstName = $data->firstName;

@@ -43,4 +43,28 @@ class AroundFilterTest extends AbstractTestCase
 
         $this->assertEquals(25, $response->toArray()['hydra:totalItems']);
     }
+
+    public function testCityNieppeIfRepairerHasCities(): void
+    {
+        $response = static::createClient()->request('GET', '/repairers?around[Nieppe]=50.6992987531,2.83247310085,2000');
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+
+        $responseContent = $response->toArray();
+        // The third repairer (benoit broutchoux) has another repairer city of intervention : Nieppe
+        $this->assertEquals(1, $responseContent['hydra:totalItems']);
+        $this->assertEquals('Chez Benoit Broutchoux', $responseContent['hydra:member'][0]['name']);
+    }
+
+    public function testCityArmentieresIfRepairerHasCities(): void
+    {
+        $response = static::createClient()->request('GET', '/repairers?around[Armentières]=50.6913797537,2.8797155328,2000');
+        $this->assertResponseIsSuccessful();
+        $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+
+        $responseContent = $response->toArray();
+        // The 4th repairer (Au réparateur de bicyclettes) has another repairer city of intervention : Armentières
+        $this->assertEquals(1, $responseContent['hydra:totalItems']);
+        $this->assertEquals('Au réparateur de bicyclettes', $responseContent['hydra:member'][0]['name']);
+    }
 }
