@@ -9,7 +9,8 @@ export interface Appointment {
   '@id': string;
   '@type': string;
   id: string;
-  customer: User;
+  customer: User | null;
+  customerName: string | null;
   repairer: Repairer;
   autoDiagnostic?: AutoDiagnostic;
   slotTime: string;

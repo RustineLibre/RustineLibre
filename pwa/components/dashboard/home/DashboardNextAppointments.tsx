@@ -113,8 +113,11 @@ const DashboardNextAppointments = ({
                     key={appointment.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
                     <TableCell component="th" scope="row">
-                      {appointment.customer.firstName}{' '}
-                      {appointment.customer.lastName}
+                      {appointment.customer
+                        ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
+                        : `${
+                            appointment.customerName ?? 'Nom inconnu'
+                          } (Client sans compte)`}
                       <br />
                       <Typography
                         variant="body1"
