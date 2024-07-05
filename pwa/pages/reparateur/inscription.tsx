@@ -33,6 +33,7 @@ import {
   Paper,
   Checkbox,
   Grid,
+  FormControlLabel,
 } from '@mui/material';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import PasswordInput from '@components/form/input/PasswordInput';
@@ -529,6 +530,33 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       onChange={handleChangeComments}
                     />
                   </Grid>
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      sx={{
+                        py: 1,
+                        fontSize: 14,
+                      }}
+                      control={
+                        <Checkbox
+                          checked={acceptChart}
+                          onClick={() => setAcceptChart(!acceptChart)}
+                        />
+                      }
+                      label={
+                        <Typography fontSize={14}>
+                          Je me reconnais dans les valeurs décrites dans{' '}
+                          <Link
+                            style={{textDecoration: 'none', fontSize: 14}}
+                            href="/notre-charte"
+                            rel="canonical"
+                            target="_blank">
+                            la charte
+                          </Link>
+                          , et je m&apos;engage à les respecter.{' '}
+                        </Typography>
+                      }
+                    />
+                  </Grid>
                 </Grid>
                 <Box display="flex" flexDirection="column" alignItems="center">
                   <Button
@@ -540,7 +568,8 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       !name ||
                       !email ||
                       !password ||
-                      !selectedBikeTypes.length
+                      !selectedBikeTypes.length ||
+                      !acceptChart
                     }
                     type="submit"
                     variant="contained"
