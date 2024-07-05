@@ -14,7 +14,7 @@ class OwnerFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'owner';
 
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
     {
         if (self::PROPERTY_NAME !== $property) {
             return;

@@ -37,5 +37,5 @@ class RepairerCity
     public ?string $longitude = null;
 
     #[ORM\Column(type: 'geography', nullable: true)]
-    public $gpsPoint = null;
+    public $gpsPoint;
 }

@@ -28,10 +28,9 @@ import {errorRegex} from '@utils/errorRegex';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import {City, createCities} from "@interfaces/City";
-import {searchCity} from "@utils/apiCity";
-import {formatCityInput} from "@helpers/formatCityInput";
-
+import {City, createCities} from '@interfaces/City';
+import {searchCity} from '@utils/apiCity';
+import {formatCityInput} from '@helpers/formatCityInput';
 
 interface DescriptionProps {
   repairer: Repairer | null;
@@ -57,12 +56,12 @@ export const Description = ({
   const [success, setSuccess] = useState<boolean>(false);
 
   const fetchCitiesResult = useCallback(
-      async (cityStr: string) => {
-        const citiesResponse = await searchCity(cityStr, false);
-        const cities: City[] = createCities(citiesResponse, false);
-        setCitiesList(cities);
-      },
-      [setCitiesList]
+    async (cityStr: string) => {
+      const citiesResponse = await searchCity(cityStr, false);
+      const cities: City[] = createCities(citiesResponse, false);
+      setCitiesList(cities);
+    },
+    [setCitiesList]
   );
 
   const handleCityChange = (value: string): void => {
@@ -72,19 +71,19 @@ export const Description = ({
   };
 
   const handleCitySelect = (
-      event: SyntheticEvent<Element, Event>,
-      cities: City[]
+    event: SyntheticEvent<Element, Event>,
+    cities: City[]
   ) => {
     let newRepairerCities = [];
     cities.map((city: City) => {
       newRepairerCities.push({
         formatted_name: `${city.name} (${city.postcode})`,
         latitude: city.lat.toString(),
-        longitude: city.lon.toString() ,
+        longitude: city.lon.toString(),
         name: city.name,
         postcode: city.postcode,
       } as City);
-    })
+    });
 
     setRepairerCities(newRepairerCities);
   };
@@ -135,7 +134,7 @@ export const Description = ({
           name: city.name,
           postcode: city.postcode,
         } as City);
-      })
+      });
 
       setRepairerCities(cities);
     }
@@ -176,7 +175,7 @@ export const Description = ({
         repairerType: repairerTypeSelected['@id'],
         bikeTypesSupported: selectedBikeTypeIRIs,
         description: description,
-        repairerCities: repairerCities
+        repairerCities: repairerCities,
       });
       setSuccess(true);
       setTimeout(() => {
@@ -244,31 +243,31 @@ export const Description = ({
             Description
           </InputLabel>
           <Editor content={description} setContent={setDescription} />
-          <Stack spacing={3} sx={{ width: 1000 }}>
+          <Stack spacing={3} sx={{width: 1000}}>
             <Autocomplete
-                fullWidth
-                multiple
-                sx={{mt: 2, mb: 1, p: 0}}
-                filterOptions={(options) => options}
-                freeSolo
-                value={repairerCities}
-                options={citiesList}
-                getOptionLabel={(city) =>
-                    typeof city === 'string'
-                        ? city
-                        : formatCityInput(city.name, city.postcode)
-                }
-                onChange={(event, value) => handleCitySelect(event, value)}
-                onInputChange={(event, value) => {
-                  handleCityChange(value);
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        label="Ville ou code postal"
-                        {...params}
-                        size="medium"
-                    />
-                )}
+              fullWidth
+              multiple
+              sx={{mt: 2, mb: 1, p: 0}}
+              filterOptions={(options) => options}
+              freeSolo
+              value={repairerCities}
+              options={citiesList}
+              getOptionLabel={(city) =>
+                typeof city === 'string'
+                  ? city
+                  : formatCityInput(city.name, city.postcode)
+              }
+              onChange={(event, value) => handleCitySelect(event, value)}
+              onInputChange={(event, value) => {
+                handleCityChange(value);
+              }}
+              renderInput={(params) => (
+                <TextField
+                  label="Ville ou code postal"
+                  {...params}
+                  size="medium"
+                />
+              )}
             />
           </Stack>
 

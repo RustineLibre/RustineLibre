@@ -66,7 +66,7 @@ class OpenApiFactory implements OpenApiFactoryInterface
                 ])),
                 '422' => new Model\Response('Unprocessable entity'),
                 '429' => new Model\Response('Too many requests'),
-        ]);
+            ]);
 
         $pathItem = new Model\PathItem();
         $pathItem = $pathItem->withPost($authOperation);

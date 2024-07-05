@@ -16,7 +16,7 @@ class RandomFilter extends AbstractFilter
 
     public const VALUE_NAME = 'random';
 
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
     {
         if (self::PROPERTY_NAME !== $property || self::VALUE_NAME !== $value) {
             return;
