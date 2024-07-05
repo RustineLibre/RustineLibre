@@ -49,7 +49,7 @@ export const Description = ({
   const [repairerTypeSelected, setRepairerTypeSelected] =
     useState<RepairerType>(repairer?.repairerType!);
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
-  const [citiesList, setCitiesList] = useState<City[]>([]);
+  const [citiesList, setCitiesList] = useState<RepairerCity[]|City[]>([]);
   const [repairerCities, setRepairerCities] = useState<RepairerCity[]>([]);
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
@@ -247,7 +247,7 @@ export const Description = ({
               freeSolo
               value={repairerCities}
               options={citiesList}
-              getOptionLabel={(city) =>
+              getOptionLabel={(city: City|RepairerCity|string) =>
                 typeof city === 'string'
                   ? city
                   : formatCityInput(city.name, city.postcode)
