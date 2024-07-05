@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\AutoDiagnostics\Validator as AutoDiagAssert;
 use App\Repository\AutoDiagnosticRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -56,4 +57,8 @@ class AutoDiagnostic
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ])]
     public ?MediaObject $photo = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ])]
+    public ?string $comment = null;
 }

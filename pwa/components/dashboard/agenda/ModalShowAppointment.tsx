@@ -33,6 +33,9 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import {Appointment} from '@interfaces/Appointment';
 import {formatDate, formatDateInSelect} from '@helpers/dateHelper';
 import {getAppointmentStatus} from '@helpers/appointmentStatus';
+import CommentIcon from '@mui/icons-material/Comment';
+import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
+import Divider from '@mui/material/Divider';
 
 type ModalShowAppointmentProps = {
   appointment: Appointment;
@@ -59,6 +62,7 @@ const ModalShowAppointment = ({
   const [selectedTime, setSelectedTime] = useState<string | undefined>('');
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [displayComment, setDisplayComment] = useState<boolean>(false);
 
   useEffect(() => {
     checkSlotTimePast();
@@ -256,6 +260,43 @@ const ModalShowAppointment = ({
                 <Typography>Date:</Typography>{' '}
                 {formatDate(appointment.slotTime)}
               </Box>
+              <Box>
+                {isMobile ? (
+                  <IconButton
+                    onClick={() => {
+                      displayComment
+                        ? setDisplayComment(false)
+                        : setDisplayComment(true);
+                    }}
+                    color="secondary"
+                    disabled={!appointment.autoDiagnostic?.comment}
+                    sx={{
+                      borderRadius: '50%',
+                      padding: '8px',
+                    }}>
+                    {displayComment ? (
+                      <CommentsDisabledIcon />
+                    ) : (
+                      <CommentIcon />
+                    )}
+                  </IconButton>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      displayComment
+                        ? setDisplayComment(false)
+                        : setDisplayComment(true);
+                    }}
+                    size="small"
+                    color="secondary"
+                    disabled={!appointment.autoDiagnostic?.comment}
+                    variant={displayComment ? 'contained' : 'outlined'}>
+                    {displayComment
+                      ? 'Cacher le commentaire'
+                      : 'Voir le commentaire'}
+                  </Button>
+                )}
+              </Box>
             </Box>
             <Box display="flex" gap={2}>
               <CheckCircleOutlineIcon color="primary" />
@@ -290,6 +331,22 @@ const ModalShowAppointment = ({
                 src={appointment.autoDiagnostic.photo.contentUrl}
                 alt="Photo autodiag"
               />
+            </Box>
+          )}
+          {displayComment && (
+            <Box
+              sx={{
+                mt: 2,
+                pt: 2,
+                p: 2,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderTop: '1px solid',
+              }}>
+              <Typography textAlign={'center'}>
+                {appointment.autoDiagnostic?.comment}
+              </Typography>
             </Box>
           )}
           {proposeOtherSlot && (

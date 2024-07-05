@@ -10,6 +10,7 @@ import AutoDiagTunnelPhoto from '@components/autoDiagnostic/AutoDiagTunnelPhoto'
 import AutoDiagTunnelChoice from '@components/autoDiagnostic/AutoDiagTunnelChoice';
 import AutoDiagTunnelBikeSelection from '@components/autoDiagnostic/AutoDiagTunnelBikeSelection';
 import {useTheme} from '@mui/material/styles';
+import AutoDiagTunnelComment from '@components/autoDiagnostic/AutoDiagTunnelComment';
 
 interface AutoDiagnosticTunnelProps {
   appointmentId: string;
@@ -91,6 +92,7 @@ export const AutoDiagnosticTunnel = ({
               {tunnelStep === 'choice' && <AutoDiagTunnelChoice />}
               {tunnelStep === 'prestation' && <AutoDiagTunnelPrestation />}
               {tunnelStep === 'photo' && <AutoDiagTunnelPhoto />}
+              {tunnelStep === 'comment' && <AutoDiagTunnelComment />}
             </Stack>
           </Paper>
         </Box>
