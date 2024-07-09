@@ -89,8 +89,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'country' => 'ipartial',
     'bikeTypesSupported.id' => 'exact',
     'bikeTypesSupported.name' => 'ipartial',
-    'repairerType.id' => 'exact',
-    'repairerType.name' => 'ipartial',
+    'repairerTypes.id' => 'exact',
+    'repairerTypes.name' => 'ipartial',
 ])]
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)] // Should always be last filter of the list
@@ -273,7 +273,6 @@ class Repairer
         $this->repairerEmployees = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->repairerCities = new ArrayCollection();
-        $this->repairerInterventions = new ArrayCollection();
         $this->repairerTypes = new ArrayCollection();
     }
 
