@@ -55,7 +55,8 @@ final class CreateUserRepairerDto
 
     #[Assert\NotNull(message: 'repairerType.name.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
-    public ?RepairerType $repairerType = null;
+    /** @var RepairerType[] */
+    public ?array $repairerTypes = null;
 
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $comment = null;

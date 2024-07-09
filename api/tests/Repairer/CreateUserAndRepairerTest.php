@@ -34,7 +34,7 @@ class CreateUserAndRepairerTest extends AbstractTestCase
             'city' => 'Lille',
             'postcode' => '59000',
             'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
-            'repairerType' => '/repairer_types/'.$this->repairerTypes[0]->id,
+            'repairerType' => ['/repairer_types/'.$this->repairerTypes[0]->id, '/repairer_types/'.$this->repairerTypes[1]->id],
             'comment' => 'Bonjour je voudrais rejoindre votre super plateforme',
         ];
     }
@@ -46,22 +46,22 @@ class CreateUserAndRepairerTest extends AbstractTestCase
         unset($jsonMissingFields['email']);
 
         // No need auth
-        $response = $this->createClient()->request('POST', '/create_user_and_repairer', [
+        $response = self::createClient()->request('POST', '/create_user_and_repairer', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $jsonMissingFields,
         ]);
-        $this->assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(422);
     }
 
     public function testPostRepairerAndUser(): void
     {
         // No need auth
-        $response = $this->createClient()->request('POST', '/create_user_and_repairer', [
+        $response = self::createClient()->request('POST', '/create_user_and_repairer', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $this->jsonNewRepairerAndUser,
         ]);
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         $responseData = $response->toArray();
 

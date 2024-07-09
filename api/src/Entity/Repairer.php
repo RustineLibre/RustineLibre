@@ -115,10 +115,10 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToMany(targetEntity: RepairerType::class)]
     #[ORM\JoinColumn(nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
-    public ?RepairerType $repairerType;
+    public ?Collection $repairerTypes;
 
     #[Assert\NotBlank(message: 'repairer.name.not_blank')]
     #[Assert\Length(
@@ -273,6 +273,8 @@ class Repairer
         $this->repairerEmployees = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->repairerCities = new ArrayCollection();
+        $this->repairerInterventions = new ArrayCollection();
+        $this->repairerTypes = new ArrayCollection();
     }
 
     public function addBikeTypesSupported(BikeType $bikeTypesSupported): self
@@ -359,6 +361,30 @@ class Repairer
                 $repairerCity->repairer = null;
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RepairerType>
+     */
+    public function getRepairerTypes(): Collection
+    {
+        return $this->repairerTypes;
+    }
+
+    public function addRepairerTypes(RepairerType $repairerTypes): self
+    {
+        if (!$this->repairerTypes->contains($repairerTypes)) {
+            $this->repairerTypes->add($repairerTypes);
+        }
+
+        return $this;
+    }
+
+    public function removeRepairerTypes(RepairerType $repairerTypes): self
+    {
+        $this->repairerTypes->removeElement($repairerTypes);
 
         return $this;
     }

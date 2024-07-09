@@ -48,7 +48,9 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
         $repairer->postcode = $data->postcode;
         $repairer->street = $data->street;
         $repairer->streetNumber = $data->streetNumber;
-        $repairer->repairerType = $data->repairerType;
+        foreach($data->repairerTypes as $repairerType) {
+            $repairer->addRepairerTypes($repairerType);
+        }
         if ($data->latitude) {
             $repairer->latitude = (string) $data->latitude;
         }
