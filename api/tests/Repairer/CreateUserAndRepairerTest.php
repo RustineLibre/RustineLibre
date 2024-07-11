@@ -72,6 +72,8 @@ class CreateUserAndRepairerTest extends AbstractTestCase
         $this->assertNotNull($responseData['owner']);
         $this->assertEquals('Lille', $responseData['city']);
         $this->assertEquals('59000', $responseData['postcode']);
+        // Check if multiple repairerTypes are well set
+        $this->assertCount(2, $responseData['repairerTypes']);
 
         // Remove creations for futures tests
         $this->createClientAuthAsAdmin()->request('DELETE', $newRepairerIri);
