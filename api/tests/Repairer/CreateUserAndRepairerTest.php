@@ -34,7 +34,7 @@ class CreateUserAndRepairerTest extends AbstractTestCase
             'city' => 'Lille',
             'postcode' => '59000',
             'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
-            'repairerType' => ['/repairer_types/'.$this->repairerTypes[0]->id, '/repairer_types/'.$this->repairerTypes[1]->id],
+            'repairerTypes' => ['/repairer_types/'.$this->repairerTypes[0]->id, '/repairer_types/'.$this->repairerTypes[1]->id],
             'comment' => 'Bonjour je voudrais rejoindre votre super plateforme',
         ];
     }

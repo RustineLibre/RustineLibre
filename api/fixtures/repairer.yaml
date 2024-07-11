@@ -355,7 +355,7 @@ App\Entity\Repairer:
     latitude: '50.629869166034084'
     longitude: '3.067642855095133'
     firstSlotAvailable: <(new DateTimeImmutable("2023-03-23 14:00:00"))>
-    repairerTypes: ['@atelier']
+    repairerTypes: ['@atelier', '@auto_reparation']
     enabled: true
     optionalPage: 'Nous fonctionnons uniquement sur rendez-vous'
   repairer_21:

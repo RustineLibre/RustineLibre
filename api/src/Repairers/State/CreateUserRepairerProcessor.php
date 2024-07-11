@@ -49,7 +49,7 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
         $repairer->street = $data->street;
         $repairer->streetNumber = $data->streetNumber;
         foreach($data->repairerTypes as $repairerType) {
-            $repairer->addRepairerTypes($repairerType);
+            $repairer->addRepairerType($repairerType);
         }
         if ($data->latitude) {
             $repairer->latitude = (string) $data->latitude;

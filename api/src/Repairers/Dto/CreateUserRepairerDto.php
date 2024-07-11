@@ -53,7 +53,7 @@ final class CreateUserRepairerDto
     #[Groups([Repairer::REPAIRER_WRITE])]
     public ?string $postcode = null;
 
-    #[Assert\NotNull(message: 'repairerType.name.not_blank')]
+    #[Assert\NotBlank(message: 'repairerType.name.not_blank')]
     #[Groups([Repairer::REPAIRER_WRITE])]
     /** @var RepairerType[] */
     public ?array $repairerTypes = null;

@@ -77,7 +77,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
-#[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[Patch(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(FirstSlotAvailableFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
@@ -115,10 +115,12 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;
 
+    #[ORM\JoinTable(name: 'repairer_repairer_type')]
+    #[ORM\JoinColumn(name: 'repairer_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'repairer_type_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: RepairerType::class)]
-    #[ORM\JoinColumn(nullable: true)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
-    public ?Collection $repairerTypes;
+    public Collection $repairerTypes;
 
     #[Assert\NotBlank(message: 'repairer.name.not_blank')]
     #[Assert\Length(
@@ -372,18 +374,18 @@ class Repairer
         return $this->repairerTypes;
     }
 
-    public function addRepairerTypes(RepairerType $repairerTypes): self
+    public function addRepairerType(RepairerType $repairerType): static
     {
-        if (!$this->repairerTypes->contains($repairerTypes)) {
-            $this->repairerTypes->add($repairerTypes);
+        if (!$this->repairerTypes->contains($repairerType)) {
+            $this->repairerTypes->add($repairerType);
         }
 
         return $this;
     }
 
-    public function removeRepairerTypes(RepairerType $repairerTypes): self
+    public function removeRepairerType(RepairerType $repairerType): static
     {
-        $this->repairerTypes->removeElement($repairerTypes);
+        $this->repairerTypes->removeElement($repairerType);
 
         return $this;
     }
