@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Discussion;
 use App\Entity\DiscussionMessage;
+use App\Entity\Repairer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -71,10 +72,17 @@ class DiscussionMessageRepository extends ServiceEntityRepository
             ->innerJoin('dm.discussion', 'd')
             ->where('dm.sender != :user')
             ->andWhere('dm.alreadyRead = :alreadyRead')
-            ->andWhere($user->repairer ? 'd.repairer = :repairer' : 'd.customer = :customer')
+            ->andWhere($user->repairers->count() ? 'd.repairer IN (:repairer_ids)' : 'd.customer = :customer')
             ->setParameter('user', $user)
             ->setParameter('alreadyRead', false)
-            ->setParameter($user->repairer ? 'repairer' : 'customer', $user->repairer ?: $user)
+            ->setParameter(
+                $user->repairers->count() ? 'repairer_ids' : 'customer',
+                $user->repairers->count() ?
+                    array_map(function(Repairer $repairer) {
+                        return $repairer->id;
+                    }, $user->repairers->toArray()) :
+                    $user
+            )
             ->getQuery()
             ->getSingleScalarResult();
     }

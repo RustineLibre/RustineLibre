@@ -15,7 +15,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 readonly class AppointmentRepairerExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
-        private Security $security
+        private Security $security,
     ) {
     }
 
