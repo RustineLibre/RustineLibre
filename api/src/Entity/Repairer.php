@@ -105,7 +105,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)] // Should always be last filter of the list
 #[ApiFilter(RepairerSearchFilter::class)]
-#[UniqueEntity('owner')]
 #[RepairerSlots]
 class Repairer
 {
@@ -120,7 +119,7 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ])]
     public ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;

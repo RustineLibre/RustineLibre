@@ -14,6 +14,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
 import HomeIcon from '@mui/icons-material/Home';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import ForumIcon from '@mui/icons-material/Forum';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
@@ -234,6 +235,23 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               </DrawerHeader>
               <Divider />
               <List>
+                <DashboardSidebarListItem
+                  text="Mes boutiques"
+                  open={true}
+                  icon={<StorefrontIcon />}
+                  path="/sradmin/mes-boutiques"
+                  subItems={
+                    user?.repairers
+                      ? user?.repairers.map((repairer) => {
+                          console.log(repairer.slug);
+                          return {
+                            text: repairer.name,
+                            path: `/sradmin/boutiques/${repairer.id}`,
+                          };
+                        })
+                      : []
+                  }
+                />
                 <DashboardSidebarListItem
                   text="Tableau de bord"
                   open={true}

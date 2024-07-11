@@ -153,9 +153,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $city = null;
 
-    #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Repairer::class, cascade: ['persist', 'remove'])]
     #[Groups([self::USER_READ])]
-    public ?Repairer $repairer = null;
+    public Collection $repairers;
 
     #[Assert\NotBlank(message: 'user.lastName.not_blank')]
     #[Assert\Length(
@@ -209,9 +209,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __toString(): string
     {
-        return $this->repairer
-            ? $this->repairer->name
-            : ($this->repairerEmployee && $this->repairerEmployee->repairer ? $this->repairerEmployee->repairer->name : sprintf('%s %s', $this->firstName, $this->lastName));
+        return sprintf('%s %s', $this->firstName, $this->lastName);
     }
 
     /**
