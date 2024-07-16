@@ -46,8 +46,9 @@ export const Description = ({
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
   const [description, setDescription] = useState<string>('');
-  const [repairerTypeSelected, setRepairerTypeSelected] =
-    useState<RepairerType>(repairer?.repairerType!);
+  const [repairerTypeSelected, setRepairerTypeSelected] = useState<string[]>(
+    []
+  );
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [repairerCities, setRepairerCities] = useState<RepairerCity[] | any>(
@@ -121,7 +122,17 @@ export const Description = ({
   useEffect(() => {
     if (repairer) {
       setDescription(repairer.description ?? '');
-      setRepairerTypeSelected(repairer.repairerType ?? null);
+      const repairerTypesSetted = repairer.repairerTypes.map((rt) => rt.name);
+      setRepairerTypeSelected(
+        repairer.repairerTypes
+          .map((repairerType) => {
+            return repairerType.name;
+          })
+          .filter((repairerTypeName) =>
+            repairerTypesSetted.includes(repairerTypeName)
+          )
+      );
+
       const bikeTypesSupported = repairer.bikeTypesSupported.map(
         (bt) => bt.name
       );
@@ -143,11 +154,14 @@ export const Description = ({
     setRepairerTypeSelected,
   ]);
 
-  const handleChangeRepairerType = (event: SelectChangeEvent): void => {
-    const selectedRepairerType = repairerTypes.find(
-      (rt) => rt.name === event.target.value
+  const handleChangeRepairerType = (
+    event: SelectChangeEvent<typeof repairerTypeSelected>
+  ): void => {
+    const value = event.target.value;
+
+    setRepairerTypeSelected(
+      typeof value === 'string' ? value.split(',') : value
     );
-    setRepairerTypeSelected(selectedRepairerType!);
   };
   const handleChangeBikeRepaired = (
     event: SelectChangeEvent<typeof selectedBikeTypes>
@@ -166,10 +180,16 @@ export const Description = ({
       .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
       .map((bikeType) => bikeType['@id']);
 
+    const repairerTypeSelectedIRIs: string[] = repairerTypes
+      .filter((repairerType) =>
+        repairerTypeSelected.includes(repairerType.name)
+      )
+      .map((repairerType) => repairerType['@id']);
+
     try {
       setPendingRegistration(true);
       await updateRepairer(repairer['@id'], {
-        repairerType: repairerTypeSelected['@id'],
+        repairerTypes: repairerTypeSelectedIRIs,
         bikeTypesSupported: selectedBikeTypeIRIs,
         description: description,
         repairerCities: repairerCities,
@@ -199,21 +219,26 @@ export const Description = ({
           <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
             <InputLabel id="repairer-type-label">Type de réparateur</InputLabel>
             <Select
-              id="repairer-type"
-              labelId="repairer-type-label"
+              labelId="filter-results-label"
+              id="filter-results"
+              multiple
+              fullWidth
               required
-              label="Type de réparateur"
+              value={repairerTypeSelected}
+              renderValue={(selected) => selected.join(', ')}
               onChange={handleChangeRepairerType}
-              value={repairerTypeSelected?.name ?? ''}
+              input={<OutlinedInput label="Type de réparateur" />}
               style={{width: '100%'}}>
-              {repairerTypes.map((rt) => (
-                <MenuItem key={rt.id} value={rt.name}>
-                  {rt.name}
+              {repairerTypes.map((repairerType) => (
+                <MenuItem key={repairerType.id} value={repairerType.name}>
+                  <Checkbox
+                    checked={repairerTypeSelected.includes(repairerType.name)}
+                  />
+                  <ListItemText primary={repairerType.name} />
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-
           <FormControl fullWidth required sx={{mt: 2, mb: 1}}>
             <InputLabel id="bike-type-label">Type de vélos</InputLabel>
             <Select
