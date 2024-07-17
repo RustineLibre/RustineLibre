@@ -28,7 +28,7 @@ export const isItinerant = (user: User): boolean => {
     return false;
   }
   if (
-    repairer?.repairerTypes.map(
+    repairer?.repairerTypes.some(
       (repairerType) => repairerType.name === 'Réparateur itinérant'
     )
   ) {
@@ -39,7 +39,7 @@ export const isItinerant = (user: User): boolean => {
 
 export const isRepairerItinerant = (repairer: Repairer): boolean => {
   if (
-    repairer?.repairerTypes.map(
+    repairer?.repairerTypes.some(
       (repairerType) => repairerType.name === 'Réparateur itinérant'
     )
   ) {

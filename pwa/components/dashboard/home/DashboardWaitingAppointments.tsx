@@ -28,6 +28,7 @@ import {getAutodiagBikeName} from '@helpers/appointmentStatus';
 import theme from 'styles/theme';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import HomeIcon from '@mui/icons-material/Home';
+import {isRepairerItinerant} from '@helpers/rolesHelpers';
 
 interface DashboardWaitingAppointmentsProps {
   repairer: Repairer;
@@ -112,7 +113,10 @@ export const DashboardWaitingAppointments = ({
                   },
                 }}>
                 <TableRow>
-                  <TableCell align="left">Lieu</TableCell>
+                  {repairer.repairerTypes.length > 1 &&
+                    isRepairerItinerant(repairer) && (
+                      <TableCell align="left">Lieu</TableCell>
+                    )}
                   <TableCell align="left">Nom</TableCell>
                   <TableCell align="right">Date</TableCell>
                   <TableCell align="center">Actions</TableCell>
@@ -123,13 +127,16 @@ export const DashboardWaitingAppointments = ({
                   <TableRow
                     key={appointment.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
-                    <TableCell component="th" scope="row">
-                      {appointment.address ? (
-                        <DirectionsBikeIcon color="secondary" />
-                      ) : (
-                        <HomeIcon color="secondary" />
+                    {repairer.repairerTypes.length > 1 &&
+                      isRepairerItinerant(repairer) && (
+                        <TableCell component="th" scope="row">
+                          {appointment.address ? (
+                            <DirectionsBikeIcon color="secondary" />
+                          ) : (
+                            <HomeIcon color="secondary" />
+                          )}
+                        </TableCell>
                       )}
-                    </TableCell>
                     <TableCell component="th" scope="row">
                       {appointment.customer
                         ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
