@@ -26,6 +26,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircleOutline';
 import {Repairer} from '@interfaces/Repairer';
 import {getAutodiagBikeName} from '@helpers/appointmentStatus';
 import theme from 'styles/theme';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import HomeIcon from '@mui/icons-material/Home';
 
 interface DashboardWaitingAppointmentsProps {
   repairer: Repairer;
@@ -110,6 +112,7 @@ export const DashboardWaitingAppointments = ({
                   },
                 }}>
                 <TableRow>
+                  <TableCell align="left">Lieu</TableCell>
                   <TableCell align="left">Nom</TableCell>
                   <TableCell align="right">Date</TableCell>
                   <TableCell align="center">Actions</TableCell>
@@ -120,6 +123,13 @@ export const DashboardWaitingAppointments = ({
                   <TableRow
                     key={appointment.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                    <TableCell component="th" scope="row">
+                      {appointment.address ? (
+                        <DirectionsBikeIcon color="secondary" />
+                      ) : (
+                        <HomeIcon color="secondary" />
+                      )}
+                    </TableCell>
                     <TableCell component="th" scope="row">
                       {appointment.customer
                         ? `${appointment.customer.firstName} ${appointment.customer.lastName}`

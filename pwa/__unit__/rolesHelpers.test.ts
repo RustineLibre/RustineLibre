@@ -69,7 +69,7 @@ describe('Testing if repairer has roving repairer type', () => {
       name: 'itinérant',
     };
     const partialRepairer: Partial<Repairer> = {
-      repairerType: partialRepairerType as RepairerType,
+      repairerTypes: [partialRepairerType as RepairerType],
     };
     const partialUser: Partial<User> = {
       repairer: partialRepairer as Repairer,
@@ -82,7 +82,7 @@ describe('Testing if repairer has roving repairer type', () => {
       name: 'itinérant',
     };
     const partialRepairer: Partial<Repairer> = {
-      repairerType: partialRepairerType as RepairerType,
+      repairerTypes: [partialRepairerType as RepairerType],
     };
     const partialRepairerEmployee: Partial<RepairerEmployee> = {
       repairer: partialRepairer as Repairer,
@@ -98,7 +98,7 @@ describe('Testing if repairer has roving repairer type', () => {
       name: 'itinérant',
     };
     const partialRepairer: Partial<Repairer> = {
-      repairerType: partialRepairerType as RepairerType,
+      repairerTypes: [partialRepairerType as RepairerType],
     };
     expect(isRepairerItinerant(partialRepairer as Repairer)).toBeTruthy();
   });
@@ -108,7 +108,7 @@ describe('Testing if repairer has roving repairer type', () => {
       name: 'other type',
     };
     const partialRepairer: Partial<Repairer> = {
-      repairerType: partialRepairerType as RepairerType,
+      repairerTypes: [partialRepairerType as RepairerType],
     };
     expect(isRepairerItinerant(partialRepairer as Repairer)).toBeFalsy();
   });

@@ -25,7 +25,6 @@ export const RepairerCard = ({
 }: RepairerProps): JSX.Element => {
   const {selectedRepairer} = useContext(SearchRepairerContext);
   const router = useRouter();
-  console.log(repairer);
 
   return (
     <ButtonBase

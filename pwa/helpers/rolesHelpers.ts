@@ -27,21 +27,23 @@ export const isItinerant = (user: User): boolean => {
   if (!repairer) {
     return false;
   }
-  repairer.repairerTypes.map((repairerType) => {
-    if (repairerType.name.includes('itinérant')) {
-      return true;
-    }
-  });
-
+  if (
+    repairer?.repairerTypes.map(
+      (repairerType) => repairerType.name === 'Réparateur itinérant'
+    )
+  ) {
+    return true;
+  }
   return false;
 };
 
 export const isRepairerItinerant = (repairer: Repairer): boolean => {
-  repairer.repairerTypes.map((repairerType) => {
-    if (repairerType.name.includes('itinérant')) {
-      return true;
-    }
-  });
-
+  if (
+    repairer?.repairerTypes.map(
+      (repairerType) => repairerType.name === 'Réparateur itinérant'
+    )
+  ) {
+    return true;
+  }
   return false;
 };

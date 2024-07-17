@@ -195,7 +195,12 @@ const PinMap = ({
         )}
 
       {!isABossOrAnEmployee && (
-        <Box display="flex" justifyContent="flex-end" pt={4}>
+        <Box display="flex" justifyContent="space-between" pt={4}>
+          {repairer.repairerTypes.length > 1 && (
+            <Button variant="contained" size="large" onClick={confirmPinMap}>
+              À l&apos;atelier
+            </Button>
+          )}
           <Button
             disabled={
               !longitude ||

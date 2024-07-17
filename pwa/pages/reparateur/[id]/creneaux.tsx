@@ -16,7 +16,7 @@ const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
   loading: () => <FullLoading />,
 });
 import {Repairer} from '@interfaces/Repairer';
-import {isCyclist} from '@helpers/rolesHelpers';
+import {isCyclist, isRepairerItinerant} from '@helpers/rolesHelpers';
 import FullLoading from '@components/common/FullLoading';
 import ConnectModal from '@components/rendez-vous/modals/ConnectModal';
 import NotCyclistModal from '@components/rendez-vous/modals/NotCyclistModal';
@@ -109,7 +109,7 @@ const RepairerSlots: NextPageWithLayout = () => {
 
   const handleSelectSlot = (day: string, time: string): void => {
     setSlotSelected(day + 'T' + time + ':00.000Z');
-    if (repairer?.repairerType.name === 'Réparateur itinérant') {
+    if (repairer && isRepairerItinerant(repairer)) {
       setTunnelStep('pinMap');
     } else if (repairer?.optionalPage && repairer.optionalPage !== '') {
       setTunnelStep('optionalPage');
