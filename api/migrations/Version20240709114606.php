@@ -25,7 +25,6 @@ final class Version20240709114606 extends AbstractMigration
         $this->addSql('ALTER TABLE contact ALTER email TYPE VARCHAR(180)');
         $this->addSql('ALTER TABLE repairer DROP CONSTRAINT fk_4a73f2bfd2c6bd92');
         $this->addSql('DROP INDEX idx_4a73f2bfd2c6bd92');
-        //Todo : Faire la transformation de données du type de réparateur
         $this->addSql('
         INSERT INTO repairer_repairer_type (repairer_id, repairer_type_id)
         SELECT id, repairer_type_id FROM repairer WHERE repairer_type_id IS NOT NULL
