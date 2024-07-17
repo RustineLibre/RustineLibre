@@ -33,6 +33,8 @@ import {ENTRYPOINT} from '@config/entrypoint';
 import {discussionResource} from '@resources/discussionResource';
 import Badge from '@mui/material/Badge';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
+
 
 const drawerWidth = 240;
 
@@ -195,6 +197,26 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                   </Typography>
                 </ListItem>
               </List>
+
+              <Box sx={{float: 'right'}}>
+                {(router && router.pathname === '/sradmin/agenda') && <GoogleCalendarSync />}
+              </Box>
+
+
+              {/*<Button*/}
+              {/*  onClick={clickLogOut}*/}
+              {/*  sx={{*/}
+              {/*    ml: 'auto',*/}
+              {/*    backgroundColor: 'white',*/}
+              {/*    color: 'primary.main',*/}
+              {/*    '&:hover': {*/}
+              {/*      backgroundColor: 'rgba(255,255,255,0.8)',*/}
+              {/*      color: 'primary.dark',*/}
+              {/*    },*/}
+              {/*  }}*/}
+              {/*  variant="contained">*/}
+              {/*  Synchroniser avec Google agenda*/}
+              {/*</Button>*/}
 
               <Button
                 onClick={clickLogOut}
