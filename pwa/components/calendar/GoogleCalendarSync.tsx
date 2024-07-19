@@ -39,7 +39,6 @@ const GoogleCalendarSync = ({repairer}) => {
         onError={handleLoginFailure}
         scope="https://www.googleapis.com/auth/calendar"
         flow="auth-code"
-        redirectUri={process.env.NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI}
       />
     </div>
   );
