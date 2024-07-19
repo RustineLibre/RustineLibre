@@ -12,10 +12,12 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
-use App\Controller\NumberOfMessageNotReadController;
+use App\Controller\NumberOfMessageNotReadForCustomerController;
 use App\Controller\NumberOfMessageNotReadForDiscussionController;
+use App\Controller\NumberOfMessageNotReadForRepairerController;
 use App\Controller\ReadMessageController;
 use App\Messages\Validator\UniqueDiscussion;
 use App\Repository\DiscussionRepository;
@@ -25,23 +27,32 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DiscussionRepository::class)]
 #[ApiResource(
+    operations: [
+        new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
+        new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer)"),
+        new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)"),
+        new Delete(security: "is_granted('ROLE_ADMIN')"),
+    ],
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
-    denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
 //    mercure: true,
+    denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
     paginationClientEnabled: true,
-    paginationClientItemsPerPage: true,
+    paginationClientItemsPerPage: true
 )]
-#[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or (user.repairer and user.repairer == object.repairer) 
-or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
 #[Get(
     uriTemplate: '/discussions/{id}/set_read',
     controller: ReadMessageController::class,
-    security: 'object.customer == user or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)',
+    security: 'object.customer == user or user.isAssociatedWithRepairer(object.repairer)',
 )]
 #[GetCollection(
-    uriTemplate: '/messages_unread',
-    controller: NumberOfMessageNotReadController::class,
+    uriTemplate: '/repairers/{repairer_id}/messages_unread',
+    uriVariables: [
+        'repairer_id' => new Link(
+            toProperty: 'repairer',
+            fromClass: Repairer::class
+        )
+    ],
+    controller: NumberOfMessageNotReadForRepairerController::class,
     openapi: new Operation(
         responses: [
             '200' => [
@@ -61,10 +72,39 @@ or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)
                 ],
             ],
         ],
-        summary: 'Get number of message not read',
-        description: 'Get number of message not read for all discussions',
+        summary: 'Get number of message not read for a repairer',
+        description: 'Get number of message not read for all discussions of a repairer',
     ),
     paginationEnabled: false,
+    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
+)]
+#[GetCollection(
+    uriTemplate: '/customer/messages_unread',
+    controller: NumberOfMessageNotReadForCustomerController::class,
+    openapi: new Operation(
+        responses: [
+            '200' => [
+                'description' => 'Number of message not read',
+                'content' => [
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'count' => [
+                                    'type' => 'integer',
+                                    'example' => 2,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        summary: 'Get number of message not read of a customer',
+        description: 'Get number of message not read for all discussions of a customer',
+    ),
+    paginationEnabled: false,
+    security: 'is_granted("IS_AUTHENTICATED_FULLY")',
 )]
 #[Get(
     uriTemplate: '/messages_unread/{id}',
@@ -91,10 +131,8 @@ or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)
         summary: 'Get number of message not read for a discussion',
         description: 'Get number of message not read for a discussion',
     ),
-    security: 'object.customer == user or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)',
+    security: 'object.customer == user or user.isAssociatedWithRepairer(object.repairer)',
 )]
-#[Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)")]
-#[Delete(security: "is_granted('ROLE_ADMIN')")]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['lastMessage' => ['nulls_comparison' => OrderFilter::NULLS_ALWAYS_LAST]])]
 #[UniqueDiscussion]

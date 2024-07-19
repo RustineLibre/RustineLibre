@@ -17,24 +17,33 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 import {User} from '@interfaces/User';
 import {isBoss} from '@helpers/rolesHelpers';
+import {Repairer} from '@interfaces/Repairer';
 
 interface EmployeesListProps {
   currentBoss: User;
+  repairers: Repairer[];
+  showRepairer: boolean;
 }
 
 export const EmployeesList = ({
   currentBoss,
+  repairers,
+  showRepairer = false,
 }: EmployeesListProps): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
   const [employees, setEmployees] = useState<RepairerEmployee[]>([]);
 
   const fetchEmployees = async () => {
-    if (currentBoss && isBoss(currentBoss) && currentBoss.repairer) {
+    if (currentBoss && isBoss(currentBoss)) {
       setLoadingList(true);
-      const response = await repairerEmployeesResource.getAll(true, {
-        repairer: currentBoss.repairer['@id'],
-      });
-      setEmployees(response['hydra:member']);
+      let employees = [];
+      for (const repairer of repairers) {
+        const response = await repairerEmployeesResource.getAll(true, {
+          repairer: repairer['@id'],
+        });
+        employees.push(...response['hydra:member']);
+      }
+      setEmployees(employees);
       setLoadingList(false);
     }
   };
@@ -62,6 +71,7 @@ export const EmployeesList = ({
             <TableRow>
               <TableCell>Nom</TableCell>
               <TableCell align="left">Rôle</TableCell>
+              {showRepairer && <TableCell align="left">Boutique</TableCell>}
               <TableCell align="center">Status</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
@@ -75,6 +85,13 @@ export const EmployeesList = ({
                   {currentBoss.firstName + ' ' + currentBoss.lastName}
                 </TableCell>
                 <TableCell align="left">Admin</TableCell>
+                {showRepairer && (
+                  <TableCell align="left">
+                    {currentBoss.repairers
+                      .map((repairer) => repairer.name)
+                      .join(', ')}
+                  </TableCell>
+                )}
                 <TableCell align="center">
                   <CheckCircleIcon color="success" />
                 </TableCell>
@@ -90,6 +107,11 @@ export const EmployeesList = ({
                   {repairerEmployee.employee.lastName}
                 </TableCell>
                 <TableCell align="left">Réparateur</TableCell>
+                {showRepairer && (
+                  <TableCell align="left">
+                    {repairerEmployee.repairer.name}
+                  </TableCell>
+                )}
                 <TableCell align="center">
                   {repairerEmployee.enabled ? (
                     <CheckCircleIcon color="success" />

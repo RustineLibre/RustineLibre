@@ -13,6 +13,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
@@ -27,6 +28,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
+    operations: [
+        new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user or (user.repairerEmployee and object.repairer == user.repairerEmployee.repairer)"),
+        new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
+        new Post(
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            validationContext: ['groups' => ['default']]
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user",
+            validationContext: ['groups' => ['default']],
+        ),
+        new Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user"),
+    ],
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
     paginationClientEnabled: true,
@@ -35,29 +49,34 @@ use Symfony\Component\Validator\Constraints as Assert;
         'standard_put',
     ]
 )]
+#[ApiResource(
+    uriTemplate: '/repairers/{repairer_id}/appointments',
+    operations: [new GetCollection()],
+    uriVariables: [
+        'repairer_id' => new Link(
+            toProperty: 'repairer',
+            fromClass: Repairer::class
+        )
+    ],
+    normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
+    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
+)]
+#[ApiResource(
+    uriTemplate: '/appointment_transition/{id}',
+    operations: [
+        new Put(
+            controller: AppointmentStatusAction::class,
+            openapi: new Model\Operation(
+                summary: 'Update appointment status',
+                description: 'Request body should contains a transition propery which is one of the following transition : validated_by_repairer, validated_by_cyclist, refused, propose_another_slot, cancellation'),
+            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user",
+            validationContext: ['groups' => ['transition']],
+        ),
+    ],
+    requirements: ['id' => '\d+'],
+)]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact', 'status' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'slotTime'], arguments: ['orderParameterName' => 'order'])]
-#[Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user or (user.repairerEmployee and object.repairer == user.repairerEmployee.repairer)")]
-#[GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
-#[Put(
-    uriTemplate: '/appointment_transition/{id}',
-    requirements: ['id' => '\d+'],
-    controller: AppointmentStatusAction::class,
-    openapi: new Model\Operation(
-        summary: 'Update appointment status',
-        description: 'Request body should contains a transition propery which is one of the following transition : validated_by_repairer, validated_by_cyclist, refused, propose_another_slot, cancellation'),
-    security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user",
-    validationContext: ['groups' => ['transition']],
-)]
-#[Post(
-    security: "is_granted('IS_AUTHENTICATED_FULLY')",
-    validationContext: ['groups' => ['default']]
-)]
-#[Put(
-    security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user",
-    validationContext: ['groups' => ['default']],
-)]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user")]
 #[ApiFilter(DateFilter::class, properties: ['slotTime'])]
 #[AppointmentState]
 class Appointment
@@ -86,7 +105,7 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $customerName = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Repairer::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     #[Assert\NotBlank(message: 'appointment.repairer.not_blank', groups: ['default'])]

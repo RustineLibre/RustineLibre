@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'standard_put',
     ]
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
+#[Get(security: "is_granted('ROLE_ADMIN') or (user.isBoss() && user.isAssociatedWithRepairer(object.repairer))")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
 #[Post(
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
@@ -37,12 +37,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Put(
     uriTemplate: '/employee_and_user/{id}',
-    security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer == user.repairer)",
+    security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or (user.isBoss() and user.isAssociatedWithRepairer(object.repairer)))",
     input: CreateUserEmployeeDto::class,
     processor: UpdateUserEmployeeProcessor::class
 )]
 #[Put(security: "is_granted('ROLE_ADMIN') or object.repairer == user.repairer")]
-#[Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer == user.repairer)")]
+#[Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or (user.isBoss() and user.isAssociatedWithRepairer(object.repairer)))")]
 #[ApiFilter(SearchFilter::class, properties: ['repairer' => 'exact'])]
 class RepairerEmployee
 {

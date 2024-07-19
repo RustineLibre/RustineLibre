@@ -36,14 +36,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    operations: [
+        new Get(security: "is_granted('ROLE_ADMIN') or (object == user) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object)) or (is_granted('ROLE_EMPLOYEE') and is_granted('CUSTOMER_READ', object))"),
+        new Post(security: "is_granted('ROLE_ADMIN') or !user"),
+        new Put(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN') or (object == user)"),
+    ],
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]],
     extraProperties: [
         'standard_put',
-    ]
+    ],
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or (object == user) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object)) or (is_granted('ROLE_EMPLOYEE') and is_granted('CUSTOMER_READ', object))")]
-#[Post(security: "is_granted('ROLE_ADMIN') or !user")]
 #[Post(
     uriTemplate: '/validation-code',
     controller: UserValidationCodeController::class,
@@ -61,8 +67,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriTemplate: '/resend-valid-code',
     controller: ResendValidationCodeController::class
 )]
-#[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
-#[Patch(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[Get(
     uriTemplate: '/me',
     openapi: new Model\Operation(
@@ -71,13 +75,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN') or object == user",
     provider: CurrentUserProvider::class,
 )]
-#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[GetCollection(
-    uriTemplate: '/customers',
+    uriTemplate: '/repairers/{repairer_id}/customers',
+    uriVariables: ['repairer_id'],
+    requirements: ['repairer_id' => '\d+'],
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
-    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS') or is_granted('ROLE_EMPLOYEE')",
     name: 'customers_list',
     provider: CustomersProvider::class,
 )]
@@ -91,7 +95,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN')",
     provider: ExportUserCollectionProvider::class
 )]
-#[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiFilter(UserSearchFilter::class)]
@@ -261,6 +264,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (in_array(self::ROLE_EMPLOYEE, $this->roles)) {
             return true;
+        }
+
+        return false;
+    }
+
+    public function isAssociatedWithRepairer(int | string | Repairer $repairer): bool
+    {
+        if ($this->isBoss()) {
+            return !$this->repairers->filter(function (Repairer $repairerOfUser) use ($repairer) {
+                return $repairer instanceof Repairer ? $repairerOfUser === $repairer : $repairerOfUser->id == $repairer;
+            })->isEmpty();
+        }
+
+        if ($this->isEmployee() && $this->repairerEmployee) {
+            return $repairer instanceof Repairer ?
+                $repairer === $this->repairerEmployee->repairer :
+                $repairer == $this->repairerEmployee->repairer->id;
         }
 
         return false;

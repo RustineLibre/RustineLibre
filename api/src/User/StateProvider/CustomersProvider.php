@@ -9,12 +9,14 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryResultCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repository\AppointmentRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -26,7 +28,6 @@ final class CustomersProvider implements ProviderInterface
         private readonly Security $security,
         private readonly UserRepository $userRepository,
         private readonly AppointmentRepository $appointmentRepository,
-        private readonly TranslatorInterface $translator,
         #[TaggedIterator('api_platform.doctrine.orm.query_extension.collection')] private readonly iterable $collectionExtensions = []
     ) {
     }
@@ -36,12 +37,21 @@ final class CustomersProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        /** @var User $user */
+        /** @var ?User $user */
         $user = $this->security->getUser();
-        $repairerFromEmployee = $user?->repairerEmployee?->repairer;
-        $repairerFromBoss = $user?->repairer;
-        if (!$repairerFromEmployee && !$repairerFromBoss) {
-            throw new NotFoundHttpException($this->translator->trans('404_notFound.customer', domain: 'validators'));
+        $repairerId = $uriVariables['repairer_id'] ?? null;
+        $repairerFromEmployee = $user?->repairerEmployee?->repairer->id == $repairerId ? $user?->repairerEmployee?->repairer : null;
+        $repairersFromBoss = array_filter($user?->repairers->toArray(), function (Repairer $repairer) use ($repairerId) {
+            return $repairer->id == $repairerId;
+        });
+        $repairerFromBoss = array_shift($repairersFromBoss);
+
+        if (
+            !$user ||
+            (!$user->isAdmin() && !$user->isBoss() && !$user->isEmployee()) ||
+            (!$repairerFromEmployee && !$repairerFromBoss)
+        ) {
+            throw new AccessDeniedException();
         }
 
         $customersIdsQueryBuilder = $this->appointmentRepository->getAppointmentCustomersIdsQueryBuilder();

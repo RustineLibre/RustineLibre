@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\User\Voters;
+namespace App\Repairers\Voters;
 
+use App\Entity\RepairerExceptionalClosure;
+use App\Entity\RepairerOpeningHours;
 use App\Entity\User;
-use App\Repository\AppointmentRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -16,29 +17,26 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  *
  * @template-extends Voter<T, TSubject>
  */
-class CustomerVoter extends Voter
+class RepairerExceptionalClosureVoter extends Voter
 {
     public function __construct(
         private readonly Security $security,
-        private readonly AppointmentRepository $appointmentRepository,
     ) {
     }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return 'CUSTOMER_READ' === $attribute && $subject instanceof User;
+        return 'WRITE_REPAIRER_EXCEPTIONAL_CLOSURE' === $attribute && $subject instanceof RepairerExceptionalClosure;
     }
 
+    /**
+     * @param RepairerOpeningHours $subject
+     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
 
-        // Should be at least repairer's boss or employee
-        if (!$currentUser || ($currentUser->repairers->count() < 1 && !$currentUser->repairerEmployee)) {
-            return false;
-        }
-
-        return (bool) $this->appointmentRepository->findOneByCustomerAndUserRepairer($subject, $currentUser);
+        return $currentUser->isAdmin() || $currentUser->isAssociatedWithRepairer($subject->repairer);
     }
 }

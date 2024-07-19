@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useRouter} from 'next/router';
-import {styled, Theme, CSSObject, useTheme} from '@mui/material/styles';
+import {styled, Theme, CSSObject, useTheme, alpha} from '@mui/material/styles';
 import {
   Box,
   Toolbar,
@@ -35,6 +35,14 @@ import {discussionResource} from '@resources/discussionResource';
 import Badge from '@mui/material/Badge';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
+import {Repairer} from '@interfaces/Repairer';
+import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/Edit';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import FileCopyIcon from '@mui/icons-material/FileCopy';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Menu, {MenuProps} from '@mui/material/Menu';
 
 const drawerWidth = 240;
 
@@ -111,11 +119,81 @@ interface DashboardLayoutProps {
   children?: React.ReactNode;
 }
 
+const StyledMenu = styled((props: MenuProps) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({theme}) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color:
+      theme.palette.mode === 'light'
+        ? 'rgb(55, 65, 81)'
+        : theme.palette.grey[300],
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity
+        ),
+      },
+    },
+  },
+}));
+
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const openMenu = (event: React.MouseEvent<HTMLElement>) => {
+    console.log(event.currentTarget);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeMenu = () => {
+    console.log('close');
+    setAnchorEl(null);
+  };
+  const handleClose = (repairer: Repairer | null | undefined = undefined) => {
+    if (undefined !== repairer) {
+      setRepairer(repairer);
+
+      if (!repairer) {
+        router.push('/sradmin/boutiques');
+      } else {
+        router.push(`/sradmin/boutiques/${repairer.id}`);
+      }
+    }
+    setAnchorEl(null);
+  };
+
   const router = useRouter();
+  const {repairer_id} = router.query;
+
   const {user} = useAccount({
     redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
   });
+  const [repairer, setRepairer] = useState<Repairer | null>(null);
   const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -137,26 +215,42 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   };
 
   const countUnread = async (): Promise<void> => {
-    if (!user) {
+    if (!user || !repairer) {
       return;
     }
 
-    const countUnread = await discussionResource.countUnread({});
+    const countUnread = await discussionResource.countUnreadForRepairer(
+      repairer,
+      {}
+    );
     setUnreadMessages(countUnread.count);
   };
 
   const fetchDiscussions = async () => {
-    if (!user || !user.repairer) {
+    if (!repairer) {
       return;
     }
 
     const response = await discussionResource.getAll(true, {
-      repairer: user.repairer.id,
+      repairer: repairer.id,
       itemsPerPage: 50,
       'order[lastMessage]': 'DESC',
     });
     setDiscussions(response['hydra:member']);
   };
+
+  useEffect(() => {
+    if (!repairer && repairer_id !== undefined) {
+      let currentRepairer = null;
+      if (user && isBoss(user)) {
+        currentRepairer =
+          user.repairers.find((repairer) => repairer.id == repairer_id) ?? null;
+      } else if (user && isEmployee(user)) {
+        currentRepairer = user.repairerEmployee?.repairer ?? null;
+      }
+      setRepairer(currentRepairer);
+    }
+  }, [repairer, repairer_id, user]);
 
   useEffect(() => {
     if (user) {
@@ -199,13 +293,11 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               </List>
 
               <Box sx={{float: 'right'}}>
-                {router && router.pathname === '/sradmin/agenda' && (
-                  <GoogleCalendarSync
-                    repairer={
-                      user && user.repairer !== undefined ? user.repairer : null
-                    }
-                  />
-                )}
+                {repairer &&
+                  router.asPath ===
+                    `/sradmin/boutiques/${repairer.id}/agenda` && (
+                    <GoogleCalendarSync repairer={repairer} />
+                  )}
               </Box>
 
               <Button
@@ -234,85 +326,110 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                 </Link>
               </DrawerHeader>
               <Divider />
+
+              <div
+                style={{width: '100%', margin: '20px 0', textAlign: 'center'}}>
+                <Button
+                  onClick={openMenu}
+                  id="demo-customized-button"
+                  aria-controls={open ? 'demo-customized-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  variant="contained"
+                  disableElevation
+                  // onClick={openMenu}
+                  endIcon={<KeyboardArrowDownIcon />}>
+                  {repairer ? repairer.name : 'Toutes mes boutiques'}
+                </Button>
+                <StyledMenu
+                  id="demo-customized-menu"
+                  MenuListProps={{
+                    'aria-labelledby': 'demo-customized-button',
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={closeMenu}>
+                  <MenuItem onClick={() => handleClose(null)} disableRipple>
+                    Toutes mes boutiques
+                  </MenuItem>
+                  <Divider />
+                  {user?.repairers.map((repairer) => (
+                    <MenuItem
+                      key={repairer.id}
+                      onClick={() => handleClose(repairer)}
+                      disableRipple>
+                      {repairer.name}
+                    </MenuItem>
+                  ))}
+                </StyledMenu>
+              </div>
+
+              {repairer && (
+                <>
+                  <List>
+                    <DashboardSidebarListItem
+                      text="Tableau de bord"
+                      open={true}
+                      icon={<HomeIcon />}
+                      path={`/sradmin/boutiques/${repairer.id}`}
+                    />
+                    <DashboardSidebarListItem
+                      text="Agenda"
+                      open={true}
+                      icon={<CalendarMonthIcon />}
+                      path={`/sradmin/boutiques/${repairer.id}/agenda`}
+                    />
+                    {user && isItinerant(user) && (
+                      <DashboardSidebarListItem
+                        text="Tournée"
+                        open={true}
+                        icon={<RouteIcon />}
+                        path={`/sradmin/boutiques/${repairer.id}/tour`}
+                      />
+                    )}
+                    <Badge badgeContent={unreadMessages} color="primary">
+                      <DashboardSidebarListItem
+                        text="Messages"
+                        open={true}
+                        icon={<ForumIcon />}
+                        path={`/sradmin/boutiques/${repairer.id}/messagerie`}
+                      />
+                    </Badge>
+                    <DashboardSidebarListItem
+                      text="Clients"
+                      open={true}
+                      icon={<FolderSharedIcon />}
+                      path={`/sradmin/boutiques/${repairer.id}/clients`}
+                    />
+                    {user && isBoss(user) && (
+                      <DashboardSidebarListItem
+                        text="Paramètres Agenda"
+                        open={true}
+                        icon={<HandymanIcon />}
+                        path={`/sradmin/boutiques/${repairer.id}/agenda/parametres`}
+                      />
+                    )}
+                    {user && isBoss(user) && (
+                      <DashboardSidebarListItem
+                        text="Employés"
+                        open={true}
+                        icon={<EngineeringIcon />}
+                        path={`/sradmin/boutiques/${repairer.id}/employes`}
+                      />
+                    )}
+                    {user && isBoss(user) && (
+                      <DashboardSidebarListItem
+                        text="Informations"
+                        open={true}
+                        icon={<InfoIcon />}
+                        path={`/sradmin/boutiques/${repairer.id}/informations`}
+                      />
+                    )}
+                  </List>
+                </>
+              )}
+              {repairer && <Divider />}
               <List>
-                <DashboardSidebarListItem
-                  text="Mes boutiques"
-                  open={true}
-                  icon={<StorefrontIcon />}
-                  path="/sradmin/mes-boutiques"
-                  subItems={
-                    user?.repairers
-                      ? user?.repairers.map((repairer) => {
-                          console.log(repairer.slug);
-                          return {
-                            text: repairer.name,
-                            path: `/sradmin/boutiques/${repairer.id}`,
-                          };
-                        })
-                      : []
-                  }
-                />
-                <DashboardSidebarListItem
-                  text="Tableau de bord"
-                  open={true}
-                  icon={<HomeIcon />}
-                  path="/sradmin"
-                />
-                <DashboardSidebarListItem
-                  text="Agenda"
-                  open={true}
-                  icon={<CalendarMonthIcon />}
-                  path="/sradmin/agenda"
-                />
-                {user && isItinerant(user) && (
-                  <DashboardSidebarListItem
-                    text="Tournée"
-                    open={true}
-                    icon={<RouteIcon />}
-                    path="/sradmin/tour"
-                  />
-                )}
-                <Badge badgeContent={unreadMessages} color="primary">
-                  <DashboardSidebarListItem
-                    text="Messages"
-                    open={true}
-                    icon={<ForumIcon />}
-                    path="/sradmin/messagerie"
-                  />
-                </Badge>
-                <DashboardSidebarListItem
-                  text="Clients"
-                  open={true}
-                  icon={<FolderSharedIcon />}
-                  path="/sradmin/clients"
-                />
-                {user && isBoss(user) && (
-                  <DashboardSidebarListItem
-                    text="Paramètres Agenda"
-                    open={true}
-                    icon={<HandymanIcon />}
-                    path="/sradmin/agenda/parametres"
-                  />
-                )}
-                {user && isBoss(user) && (
-                  <DashboardSidebarListItem
-                    text="Employés"
-                    open={true}
-                    icon={<EngineeringIcon />}
-                    path="/sradmin/employes"
-                  />
-                )}
-              </List>
-              <Divider />
-              <List>
-                {user && isBoss(user) && (
-                  <DashboardSidebarListItem
-                    text="Informations"
-                    open={true}
-                    icon={<InfoIcon />}
-                    path="/sradmin/informations"
-                  />
-                )}
                 <DashboardSidebarListItem
                   text="Mon compte"
                   open={true}

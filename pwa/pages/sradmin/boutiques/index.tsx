@@ -26,7 +26,7 @@ const Repairers = () => {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alighItems: 'center',
+              alignItems: 'center',
               my: 2,
             }}>
             <Typography variant="h5">Liste des boutiques</Typography>
@@ -37,6 +37,31 @@ const Repairers = () => {
             </Link>
           </Box>
           {user && isBoss(user) && <RepairersList repairers={user.repairers} />}
+        </Box>
+
+        <Box component="main">
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alighItems: 'center',
+              my: 2,
+            }}>
+            <Typography variant="h5">Liste des employés</Typography>
+            <Link href="/sradmin/boutiques/ajouter" legacyBehavior passHref>
+              <Button variant="contained" size="small" startIcon={<AddIcon />}>
+                Ajouter un employé
+              </Button>
+            </Link>
+          </Box>
+          {user && isBoss(user) && (
+            <EmployeesList
+              currentBoss={user}
+              repairers={user.repairers}
+              showRepairer={true}
+            />
+          )}
         </Box>
       </DashboardLayout>
     </>
