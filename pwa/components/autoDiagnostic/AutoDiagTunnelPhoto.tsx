@@ -34,7 +34,7 @@ export const AutoDiagTunnelPhoto = (): JSX.Element => {
       setAutoDiagnostic(autodiag);
     }
 
-    router.push(`/rendez-vous/recapitulatif/${appointment.id}`);
+    setTunnelStep('comment');
   };
 
   const handleClickBack = (): void => {

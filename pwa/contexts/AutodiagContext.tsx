@@ -13,11 +13,13 @@ interface AutodiagContext {
   appointment: Appointment | null;
   autoDiagnostic: AutoDiagnostic | null;
   photo: MediaObject | null;
+  comment: string | null;
   setTunnelStep: (value: string) => void;
   setPrestation: (value: string) => void;
   setAppointment: (value: Appointment) => void;
   setAutoDiagnostic: (value: AutoDiagnostic) => void;
   setPhoto: (value: MediaObject) => void;
+  setComment: (value: string) => void;
 }
 
 const initialValue = {
@@ -26,11 +28,13 @@ const initialValue = {
   appointment: null,
   autoDiagnostic: null,
   photo: null,
+  comment: null,
   setTunnelStep: () => null,
   setPrestation: () => null,
   setAppointment: () => null,
   setAutoDiagnostic: () => null,
   setPhoto: () => null,
+  setComment: () => null,
 };
 
 export const AutodiagContext = createContext<AutodiagContext>(initialValue);
@@ -43,6 +47,7 @@ export const AutodiagProvider = ({children}: ProviderProps): JSX.Element => {
     null
   );
   const [photo, setPhoto] = useState<MediaObject | null>(null);
+  const [comment, setComment] = useState<string | null>(null);
 
   return (
     <AutodiagContext.Provider
@@ -52,11 +57,13 @@ export const AutodiagProvider = ({children}: ProviderProps): JSX.Element => {
         appointment,
         autoDiagnostic,
         photo,
+        comment,
         setTunnelStep,
         setPrestation,
         setAppointment,
         setAutoDiagnostic,
         setPhoto,
+        setComment,
       }}>
       {children}
     </AutodiagContext.Provider>

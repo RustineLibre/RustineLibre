@@ -117,4 +117,19 @@ class AppointmentRepository extends ServiceEntityRepository
 
         return array_column($qb->getQuery()->getArrayResult(), 'repairerId');
     }
+
+    public function getNextAppointmentsNotSync(Repairer $repairer): array
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->leftJoin('a.repairer', 'r')
+            ->andWhere('a.repairer = :repairerId')
+            ->andWhere('a.googleSync != :true')
+            ->andWhere('a.slotTime > :now')
+            ->setParameter('repairerId', $repairer->id)
+            ->setParameter('true', true)
+            ->setParameter('now', new \DateTimeImmutable())
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }
