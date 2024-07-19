@@ -115,9 +115,6 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;
 
-    #[ORM\JoinTable(name: 'repairer_repairer_type')]
-    #[ORM\JoinColumn(name: 'repairer_id', referencedColumnName: 'id')]
-    #[ORM\InverseJoinColumn(name: 'repairer_type_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: RepairerType::class)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
     public Collection $repairerTypes;
