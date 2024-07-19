@@ -199,7 +199,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
               <Box sx={{float: 'right'}}>
                 {router && router.pathname === '/sradmin/agenda' && (
-                  <GoogleCalendarSync repairer={user ? user.repairer : null} />
+                  <GoogleCalendarSync repairer={(user && user.repairer !== undefined) ? user.repairer : null} />
                 )}
               </Box>
 

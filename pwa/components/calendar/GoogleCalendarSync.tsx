@@ -1,8 +1,17 @@
 import React from 'react';
 import {GoogleLogin, CredentialResponse} from '@react-oauth/google';
 import {getToken} from '@helpers/localHelper';
+import {Repairer} from "@interfaces/Repairer";
 
-const GoogleCalendarSync = ({repairer}) => {
+type GoogleCalendarSyncProps = {
+  repairer: Repairer | null;
+};
+
+type GoogleDataType = {
+  google_oauth_url: string;
+};
+
+const GoogleCalendarSync = ({repairer}: GoogleCalendarSyncProps) => {
   const handleLoginSuccess = (response: CredentialResponse) => {
     if (response.credential) {
       const currentToken = getToken();
@@ -18,9 +27,11 @@ const GoogleCalendarSync = ({repairer}) => {
         }),
       })
         .then((response) => response.json())
-        .then((data: object) => {
+        .then((data: GoogleDataType) => {
+
+          console.log(data);
+
           window.open(data.google_oauth_url, '_blank');
-          console.log('Google Calendar sync response:', data);
         })
         .catch((error) => {
           console.error('Error syncing with Google Calendar:', error);
@@ -36,9 +47,7 @@ const GoogleCalendarSync = ({repairer}) => {
     <div>
       <GoogleLogin
         onSuccess={handleLoginSuccess}
-        onError={handleLoginFailure}
-        scope="https://www.googleapis.com/auth/calendar"
-        flow="auth-code"
+        onError={() => handleLoginFailure}
       />
     </div>
   );
