@@ -31,7 +31,7 @@ const NavbarDesktop = ({
     let onClick;
 
     if (user && (boss || employee)) {
-      link = '/sradmin';
+      link = '/sradmin/boutiques';
       text = 'Accès réparateur';
     } else if (user && admin) {
       link = '/admin/reparateurs';

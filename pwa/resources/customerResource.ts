@@ -1,7 +1,9 @@
 import {AbstractResource} from '@resources/AbstractResource';
 import {User} from '@interfaces/User';
-import {RequestHeaders} from '@interfaces/Resource';
+import {Collection, RequestHeaders, RequestParams} from '@interfaces/Resource';
 import {getToken} from '@helpers/localHelper';
+import {Repairer} from "@interfaces/Repairer";
+import {Appointment} from "@interfaces/Appointment";
 
 class CustomerResource extends AbstractResource<User> {
   protected endpoint = '/customers';
@@ -39,6 +41,26 @@ class CustomerResource extends AbstractResource<User> {
     if (link.parentNode) {
       link.parentNode.removeChild(link);
     }
+  }
+
+  async getAllByRepairer(
+    repairer: Repairer,
+    params?: RequestParams,
+    headers?: RequestHeaders
+  ): Promise<Collection<User>> {
+    const doFetch = async () => {
+      return await fetch(
+        this.getUrl(`/repairers/${repairer.id}/customers`, params),
+        {
+          headers: {
+            ...this.getDefaultHeaders(true),
+            ...headers,
+          },
+        }
+      );
+    };
+
+    return await this.getResult(doFetch, true);
   }
 }
 

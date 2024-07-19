@@ -6,6 +6,7 @@ import {CircularProgress, IconButton} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForeverSharp';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
+import findIdInUri from '@helpers/findIdInUri';
 
 interface EmployeesListActionsProps {
   employee: RepairerEmployee;
@@ -28,7 +29,6 @@ export const EmployeesListActions = ({
     } catch (e) {}
     setRemovePending(false);
   };
-
   return (
     <>
       {removePending ? (
@@ -36,7 +36,7 @@ export const EmployeesListActions = ({
       ) : (
         <>
           <Link
-            href={`/sradmin/employes/edit/${employee.id}`}
+            href={`/sradmin/boutiques/${employee.repairer.id}/employes/edit/${employee.id}`}
             legacyBehavior
             passHref>
             <IconButton color="secondary">

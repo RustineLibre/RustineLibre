@@ -20,13 +20,16 @@ import {validateEmail} from '@utils/emailValidator';
 import {validatePassword} from '@utils/passwordValidator';
 import {RequestBody} from '@interfaces/Resource';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
+import {Repairer} from '@interfaces/Repairer';
 
 interface EmployeeFormProps {
   repairerEmployee: RepairerEmployee | null;
+  repairer: Repairer;
 }
 
 export const EmployeeForm = ({
   repairerEmployee,
+  repairer,
 }: EmployeeFormProps): JSX.Element => {
   const [enabled, setEnabled] = useState<boolean>(
     repairerEmployee ? repairerEmployee.enabled : true
@@ -81,6 +84,7 @@ export const EmployeeForm = ({
       firstName: firstName,
       lastName: lastName,
       email: email,
+      repairer: `/repairers/${repairer.id}`,
     };
     if (password !== '') {
       bodyRequest['plainPassword'] = password;
@@ -96,7 +100,7 @@ export const EmployeeForm = ({
         await repairerEmployeesResource.post(bodyRequest);
       }
       setUpdateSuccess(true);
-      await router.push('/sradmin/employes');
+      await router.push(`/sradmin/boutiques/${repairer.id}/employes`);
     } catch (e: any) {
       setErrorMessage(
         `${

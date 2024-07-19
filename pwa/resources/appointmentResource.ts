@@ -1,6 +1,12 @@
 import {AbstractResource} from '@resources/AbstractResource';
 import {Appointment} from '@interfaces/Appointment';
-import {RequestBody, RequestHeaders} from '@interfaces/Resource';
+import {
+  Collection,
+  RequestBody,
+  RequestHeaders,
+  RequestParams,
+} from '@interfaces/Resource';
+import {Repairer} from '@interfaces/Repairer';
 
 class AppointmentResource extends AbstractResource<Appointment> {
   protected endpoint = '/appointments';
@@ -24,6 +30,26 @@ class AppointmentResource extends AbstractResource<Appointment> {
     };
 
     return await this.getResult(doFetch);
+  }
+
+  async getAllByRepairer(
+    repairer: Repairer,
+    params?: RequestParams,
+    headers?: RequestHeaders
+  ): Promise<Collection<Appointment>> {
+    const doFetch = async () => {
+      return await fetch(
+        this.getUrl(`/repairers/${repairer.id}/appointments`, params),
+        {
+          headers: {
+            ...this.getDefaultHeaders(true),
+            ...headers,
+          },
+        }
+      );
+    };
+
+    return await this.getResult(doFetch, true);
   }
 }
 

@@ -25,6 +25,7 @@ class CreateRepairerInterventionTest extends InterventionAbstractTestCase
         $client = $this->createClientWithUser($repairer->owner);
         $response = $client->request('POST', '/repairer_interventions', [
             'json' => [
+                'repairer' => sprintf('/repairers/%s', $repairer->id),
                 'intervention' => sprintf('/interventions/%s', $id),
                 'price' => 100,
             ],
@@ -40,11 +41,13 @@ class CreateRepairerInterventionTest extends InterventionAbstractTestCase
 
     public function testBossCannotLinkToOtherBossIntervention(): void
     {
-        [$badBoss, $intervention] = $this->getBossAndOtherBossIntervention();
-        $client = $this->createClientWithUser($badBoss);
+        [$boss1, $intervention1] = $this->getBossAndHisIntervention();
+        [$boss2, $intervention2] = $this->getBossAndOtherBossIntervention();
+        $client = $this->createClientWithUser($boss1);
         $client->request('POST', '/repairer_interventions', [
             'json' => [
-                'intervention' => sprintf('/interventions/%s', $intervention->id),
+                'repairer' => sprintf('/repairers/%s', $boss1->repairers->toArray()[0]->id),
+                'intervention' => sprintf('/interventions/%s', $intervention2->id),
                 'price' => 100,
             ],
         ]);

@@ -65,24 +65,32 @@ class DiscussionMessageRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function getNumberOfMessageNotRead(User $user): int
+    public function getNumberOfMessageNotReadForCustomer(User $user): int
     {
         return $this->createQueryBuilder('dm')
             ->select('COUNT(dm) as count')
             ->innerJoin('dm.discussion', 'd')
             ->where('dm.sender != :user')
             ->andWhere('dm.alreadyRead = :alreadyRead')
-            ->andWhere($user->repairers->count() ? 'd.repairer IN (:repairer_ids)' : 'd.customer = :customer')
+            ->andWhere('d.customer = :customer')
             ->setParameter('user', $user)
             ->setParameter('alreadyRead', false)
-            ->setParameter(
-                $user->repairers->count() ? 'repairer_ids' : 'customer',
-                $user->repairers->count() ?
-                    array_map(function(Repairer $repairer) {
-                        return $repairer->id;
-                    }, $user->repairers->toArray()) :
-                    $user
-            )
+            ->setParameter('customer', $user)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function getNumberOfMessageNotReadForRepairer(User $user, string $repairerId): int
+    {
+        return $this->createQueryBuilder('dm')
+            ->select('COUNT(dm) as count')
+            ->innerJoin('dm.discussion', 'd')
+            ->where('dm.sender != :user')
+            ->andWhere('dm.alreadyRead = :alreadyRead')
+            ->andWhere('d.repairer = :repairer_id')
+            ->setParameter('user', $user)
+            ->setParameter('alreadyRead', false)
+            ->setParameter('repairer_id', $repairerId)
             ->getQuery()
             ->getSingleScalarResult();
     }

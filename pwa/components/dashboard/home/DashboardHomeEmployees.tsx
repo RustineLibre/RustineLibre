@@ -6,13 +6,16 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import Link from 'next/link';
 import theme from 'styles/theme';
+import {Repairer} from '@interfaces/Repairer';
 
 interface DashboardHomeEmployeesProps {
   currentBoss: User;
+  repairer: Repairer;
 }
 
 export const DashboardHomeEmployees = ({
   currentBoss,
+  repairer,
 }: DashboardHomeEmployeesProps): JSX.Element => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -31,7 +34,11 @@ export const DashboardHomeEmployees = ({
           </Button>
         </Link>
       </Typography>
-      <EmployeesList currentBoss={currentBoss} />
+      <EmployeesList
+        currentBoss={currentBoss}
+        repairers={[repairer]}
+        showRepairer={false}
+      />
     </Box>
   );
 };

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repository\DiscussionMessageRepository;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-readonly class NumberOfMessageNotReadController
+readonly class NumberOfMessageNotReadForCustomerController
 {
     public function __construct(
         private DiscussionMessageRepository $discussionMessageRepository,
@@ -23,7 +24,7 @@ readonly class NumberOfMessageNotReadController
     {
         /** @var User|null $user */
         $user = $this->security->getUser();
-        $notRead = $user ? $this->discussionMessageRepository->getNumberOfMessageNotRead(user: $user) : 0;
+        $notRead = $user ? $this->discussionMessageRepository->getNumberOfMessageNotReadForCustomer(user: $user) : 0;
 
         return new JsonResponse(['count' => $notRead]);
     }

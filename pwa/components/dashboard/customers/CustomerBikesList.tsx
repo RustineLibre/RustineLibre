@@ -21,13 +21,16 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Link from 'next/link';
 import ModalShowBike from '@components/dashboard/customers/ModalShowBike';
+import {Repairer} from "@interfaces/Repairer";
 
 interface CustomerBikesListProps {
   customer: Customer;
+  repairer: Repairer;
 }
 
 export const CustomerBikesList = ({
   customer,
+  repairer,
 }: CustomerBikesListProps): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
   const [bikes, setBikes] = useState<Bike[]>([]);
@@ -115,7 +118,7 @@ export const CustomerBikesList = ({
                   <Link
                     legacyBehavior
                     passHref
-                    href={`/sradmin/clients/velos/${bike.id}`}>
+                    href={`/sradmin/boutiques/${repairer.id}/clients/velos/${bike.id}`}>
                     <Button
                       variant="outlined"
                       startIcon={<FormatListBulletedIcon />}>
