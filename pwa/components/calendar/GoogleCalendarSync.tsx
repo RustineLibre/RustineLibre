@@ -1,7 +1,7 @@
 import React from 'react';
 import {GoogleLogin, CredentialResponse} from '@react-oauth/google';
 import {getToken} from '@helpers/localHelper';
-import {Repairer} from "@interfaces/Repairer";
+import {Repairer} from '@interfaces/Repairer';
 
 type GoogleCalendarSyncProps = {
   repairer: Repairer | null;
@@ -28,7 +28,6 @@ const GoogleCalendarSync = ({repairer}: GoogleCalendarSyncProps) => {
       })
         .then((response) => response.json())
         .then((data: GoogleDataType) => {
-
           console.log(data);
 
           window.open(data.google_oauth_url, '_blank');
