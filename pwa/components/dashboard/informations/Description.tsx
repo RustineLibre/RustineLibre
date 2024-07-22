@@ -260,7 +260,7 @@ export const Description = ({
               }}
               renderInput={(params) => (
                 <TextField
-                  label="Ville ou code postal"
+                  label="Vos villes d'intervention"
                   {...params}
                   size="medium"
                 />
