@@ -121,7 +121,6 @@ class AppointmentRepository extends ServiceEntityRepository
     public function getNextAppointmentsNotSync(Repairer $repairer): array
     {
         $qb = $this->createQueryBuilder('a')
-            ->leftJoin('a.repairer', 'r')
             ->andWhere('a.repairer = :repairerId')
             ->andWhere('a.googleSync != :true')
             ->andWhere('a.slotTime > :now')

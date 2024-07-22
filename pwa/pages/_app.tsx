@@ -33,11 +33,10 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
-  const date = new Date();
   return (
     <AuthProvider>
       <SearchRepairerProvider>
-        <GoogleOAuthProvider clientId="821363302500-6nc8cl1jseugkcl1n9lqjv64rueotfad.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
           <UserFormProvider>
             <>
               <Head>
