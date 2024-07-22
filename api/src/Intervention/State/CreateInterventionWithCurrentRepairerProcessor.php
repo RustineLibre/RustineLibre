@@ -47,12 +47,9 @@ final readonly class CreateInterventionWithCurrentRepairerProcessor implements P
             if (null === $data->price) {
                 throw new BadRequestHttpException($this->translator->trans('400_badRequest.intervention.price', domain: 'validators'));
             }
-            if (null === $user->repairer) {
-                throw new BadRequestHttpException($this->translator->trans('400_badRequest.repairer.create.intervention', domain: 'validators'));
-            }
             $repairerIntervention = new RepairerIntervention();
             $repairerIntervention->price = $data->price;
-            $repairerIntervention->repairer = $user->repairer;
+            $repairerIntervention->repairer = $data->repairer;
             $repairerIntervention->intervention = $intervention;
             $intervention->addRepairerIntervention($repairerIntervention);
         }

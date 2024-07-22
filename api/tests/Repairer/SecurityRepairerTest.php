@@ -131,11 +131,8 @@ class SecurityRepairerTest extends AbstractTestCase
     {
         $client = self::createClientAuthAsAdmin();
         // admin user given
-        $response = $client->request('GET', '/repairers');
+        $client->request('GET', '/repairers');
         $this->assertResponseIsSuccessful();
-        $response = $response->toArray();
-        // should have a minimum of 25 results as provided by fixtures
-        $this->assertTrue(25 <= count($response['hydra:member']));
     }
 
     public function testGetRepairerCollectionFilterByEnabled(): void

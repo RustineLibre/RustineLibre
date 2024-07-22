@@ -4,11 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Intervention;
 
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateInterventionTest extends AbstractTestCase
 {
+    public UserRepository $userRepository;
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->userRepository = self::getContainer()->get(UserRepository::class);
+    }
+
     public function testAdminCanPost(): void
     {
         $client = $this->createClientAuthAsAdmin();
@@ -53,9 +61,12 @@ class CreateInterventionTest extends AbstractTestCase
 
     public function testBossCanPost(): void
     {
-        $client = $this->createClientAuthAsBoss();
+        $boss = $this->userRepository->getUserWithRole('ROLE_BOSS');
+        $repairers = $boss->repairers->toArray();
+        $client = $this->createClientWithUser($boss);
         $client->request('POST', '/create_repairer_interventions', [
             'json' => [
+                'repairer' => sprintf('/repairers/%s', array_shift($repairers)->id),
                 'description' => 'Une nouvelle intervention boss !',
                 'price' => 1000,
             ],

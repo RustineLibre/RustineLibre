@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Get]
 #[GetCollection]
-#[Post(security: "is_granted('WRITE_REPAIRER_EXCEPTIONAL_CLOSURE')")]
+#[Post(securityPostDenormalize: "is_granted('WRITE_REPAIRER_EXCEPTIONAL_CLOSURE', object)")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.repairer.owner == user)")]
 #[ApiFilter(SearchFilter::class, properties: ['repairer' => 'exact'])]
 #[RepairerClosing]
