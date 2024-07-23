@@ -38,7 +38,8 @@ function MyApp({
   return (
     <AuthProvider>
       <SearchRepairerProvider>
-        <GoogleOAuthProvider clientId={typeof googleClientId === 'string' ? googleClientId : ''}>
+        <GoogleOAuthProvider
+          clientId={typeof googleClientId === 'string' ? googleClientId : ''}>
           <UserFormProvider>
             <>
               <Head>
