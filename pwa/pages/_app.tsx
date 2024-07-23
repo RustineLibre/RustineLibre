@@ -33,10 +33,12 @@ function MyApp({
   Component,
   pageProps,
 }: AppProps<{dehydratedState: DehydratedState}>) {
+  const googleClientId = process.env.GOOGLE_CLIENT_ID;
+
   return (
     <AuthProvider>
       <SearchRepairerProvider>
-        <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID}>
+        <GoogleOAuthProvider clientId={typeof googleClientId === 'string' ? googleClientId : ''}>
           <UserFormProvider>
             <>
               <Head>
