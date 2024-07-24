@@ -266,6 +266,12 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public Collection $repairerCities;
 
+    #[ORM\Column(length: 250, nullable: true)]
+    public ?string $googleAccessToken = null;
+
+    #[ORM\Column(length: 250, nullable: true)]
+    public ?string $googleRefreshToken = null;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();

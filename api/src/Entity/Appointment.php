@@ -139,6 +139,9 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ])]
     public ?Discussion $discussion = null;
 
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    public ?bool $googleSync = false;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable('now');
@@ -152,5 +155,16 @@ class Appointment
     public function setStatus(?string $status): void
     {
         $this->status = $status;
+    }
+
+    public function __toString(): string
+    {
+        if ($this->customer) {
+            return sprintf('%s %s', $this->customer->firstName, $this->customer->lastName);
+        } elseif ($this->customerName) {
+            return $this->customerName;
+        }
+
+        return sprintf('%s', $this->slotTime->format('d/m/y H:i'));
     }
 }

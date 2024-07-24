@@ -50,4 +50,7 @@ fi
 # Create firebase.json credentials file
 php bin/console app:firebase:credentials
 
+# Create google oauth credentials file
+php bin/console app:google:credentials
+
 exec docker-php-entrypoint "$@"
