@@ -66,7 +66,7 @@ describe('Testing if repairer has roving repairer type', () => {
 
   test("Should return true if the user has the repairer property and the type is 'roving'", () => {
     const partialRepairerType: Partial<RepairerType> = {
-      name: 'itinérant',
+      name: 'Réparateur itinérant',
     };
     const partialRepairer: Partial<Repairer> = {
       repairerTypes: [partialRepairerType as RepairerType],
@@ -79,7 +79,7 @@ describe('Testing if repairer has roving repairer type', () => {
 
   test("Should return true if the user has the repairerEmployee property with repairer and the type is 'roving'", () => {
     const partialRepairerType: Partial<RepairerType> = {
-      name: 'itinérant',
+      name: 'Réparateur itinérant',
     };
     const partialRepairer: Partial<Repairer> = {
       repairerTypes: [partialRepairerType as RepairerType],
@@ -95,7 +95,7 @@ describe('Testing if repairer has roving repairer type', () => {
 
   test("Should return true if the repairer has the 'roving' type", () => {
     const partialRepairerType: Partial<RepairerType> = {
-      name: 'itinérant',
+      name: 'Réparateur itinérant',
     };
     const partialRepairer: Partial<Repairer> = {
       repairerTypes: [partialRepairerType as RepairerType],
