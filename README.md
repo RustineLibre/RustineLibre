@@ -182,6 +182,13 @@ Et ajouter dans le .env.local de votre PWA
 NEXT_PUBLIC_ENTRYPOINT=https://<votre ip ngrok>.ngrok-free.app
 ```
 
+## Synchro google calendar
+La plateforme permet aux réparateurs de synchroniser l'agenda de leurs RDV rustine libre avec leurs agendas google, pour ce faire
+l'application a besoin de credentials google oauth qu'il faut renseigner dans le fichier .env et lancer la commande suivante
+
+```
+php bin/console app:google:credentials
+```
 
 ## Usage du site
 
