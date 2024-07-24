@@ -74,7 +74,9 @@ export const RepairerCard = ({
         <CardContent sx={{flex: 1}}>
           <Box mb={3}>
             <Typography variant="caption" textTransform="uppercase">
-              {repairer.repairerType.name}
+              {repairer.repairerTypes
+                .map((repairerType) => repairerType.name)
+                .join(' / ')}
             </Typography>
             <Typography
               variant="h5"

@@ -105,24 +105,38 @@ const Tour = () => {
           </Box>
 
           {loading && <CircularProgress />}
-          {!loading && appointments.length === 0 && (
-            <Box sx={{marginTop: '20px'}}>
-              {`Vous n'avez pas de RDV ce jour`}
-            </Box>
-          )}
-          {!loading && appointments.length > 0 && (
-            <Box sx={{marginTop: '30px'}}>
-              <Grid container spacing={2}>
-                <Grid item xs={5}>
-                  <TourAppointmentsList appointments={appointments} />
-                </Grid>
-                <Grid item xs={7}>
-                  {repairer && (
-                    <TourMap repairer={repairer} appointments={appointments} />
+          {!loading && (
+            <>
+              {appointments.length === 0 ? (
+                <Box sx={{marginTop: '20px'}}>
+                  {`Vous n'avez pas de RDV ce jour`}
+                </Box>
+              ) : (
+                <>
+                  {!appointments.some((appointment) => appointment.address) ? (
+                    <Box sx={{marginTop: '20px'}}>
+                      {`Vous n'avez pas de RDV à l'extérieur ce jour`}
+                    </Box>
+                  ) : (
+                    <Box sx={{marginTop: '30px'}}>
+                      <Grid container spacing={2}>
+                        <Grid item xs={5}>
+                          <TourAppointmentsList appointments={appointments} />
+                        </Grid>
+                        <Grid item xs={7}>
+                          {repairer && (
+                            <TourMap
+                              repairer={repairer}
+                              appointments={appointments}
+                            />
+                          )}
+                        </Grid>
+                      </Grid>
+                    </Box>
                   )}
-                </Grid>
-              </Grid>
-            </Box>
+                </>
+              )}
+            </>
           )}
         </Box>
       </DashboardLayout>

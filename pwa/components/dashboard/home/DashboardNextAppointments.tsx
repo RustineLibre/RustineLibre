@@ -28,6 +28,9 @@ import {Repairer} from '@interfaces/Repairer';
 import ModalAppointmentCreate from '@components/dashboard/appointments/ModalAppointmentCreate';
 import {getAutodiagBikeName} from '@helpers/appointmentStatus';
 import theme from 'styles/theme';
+import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
+import HomeIcon from '@mui/icons-material/Home';
+import {isRepairerItinerant} from '@helpers/rolesHelpers';
 
 interface DashboardNextAppointmentsProps {
   repairer: Repairer;
@@ -102,6 +105,10 @@ const DashboardNextAppointments = ({
                   },
                 }}>
                 <TableRow>
+                  {repairer.repairerTypes.length > 1 &&
+                    isRepairerItinerant(repairer) && (
+                      <TableCell align="left">Lieu</TableCell>
+                    )}
                   <TableCell align="left">Nom</TableCell>
                   <TableCell align="right">Date</TableCell>
                   <TableCell align="center">Action</TableCell>
@@ -112,6 +119,16 @@ const DashboardNextAppointments = ({
                   <TableRow
                     key={appointment.id}
                     sx={{'&:last-child td, &:last-child th': {border: 0}}}>
+                    {repairer.repairerTypes.length > 1 &&
+                      isRepairerItinerant(repairer) && (
+                        <TableCell component="th" scope="row">
+                          {appointment.address ? (
+                            <DirectionsBikeIcon color="secondary" />
+                          ) : (
+                            <HomeIcon color="secondary" />
+                          )}
+                        </TableCell>
+                      )}
                     <TableCell component="th" scope="row">
                       {appointment.customer
                         ? `${appointment.customer.firstName} ${appointment.customer.lastName}`

@@ -55,7 +55,7 @@ const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
 
   const updateRepairer = async (iri: string, bodyRequest: RequestBody) => {
     if (!repairer) return;
-    await repairerResource.put(iri, bodyRequest);
+    await repairerResource.patch(iri, bodyRequest);
     const response = await repairerResource.get(iri);
     setRepairer(response);
   };

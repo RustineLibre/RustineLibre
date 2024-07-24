@@ -8,6 +8,7 @@ use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repository\BikeTypeRepository;
 use App\Repository\RepairerRepository;
+use App\Repository\RepairerTypeRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,8 @@ class SecurityRepairerTest extends AbstractTestCase
     /** @var User[] */
     private array $users = [];
 
+    private array $repairerTypes = [];
+
     private UserRepository $userRepository;
 
     public function setUp(): void
@@ -30,6 +33,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->users = static::getContainer()->get(UserRepository::class)->findAll();
         $this->repairers = static::getContainer()->get(RepairerRepository::class)->findAll();
         $this->bikeTypes = static::getContainer()->get(BikeTypeRepository::class)->findAll();
+        $this->repairerTypes = static::getContainer()->get(RepairerTypeRepository::class)->findAll();
         $this->userRepository = static::getContainer()->get(UserRepository::class);
     }
 
@@ -106,7 +110,7 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertIsArray($response);
         $this->assertSame($response['name'], $this->repairers[5]->name);
         $this->assertIsString($response['owner']);
-        $this->assertSame($response['repairerType']['@id'], '/repairer_types/'.$this->repairers[5]->repairerType->id);
+        $this->assertSame($response['repairerTypes'][0]['@id'], '/repairer_types/'.$this->repairers[5]->repairerTypes[0]->id);
         $this->assertSame($response['openingHours'], $this->repairers[5]->openingHours);
         $this->assertArrayNotHasKey('enabled', $response);
     }
@@ -238,5 +242,37 @@ class SecurityRepairerTest extends AbstractTestCase
         $this->assertSame($response['description'], 'test slug by put');
         // test slug on update
         $this->assertSame($response['slug'], 'new-name');
+    }
+
+    // Multiple repairerTypes added and one deleted by patch
+    public function testAddMultipleRepairerTypesByPatch(): void
+    {
+        // Get a random repairer
+        $repairer = $this->repairers[20];
+        // enabled it
+        $repairer->enabled = true;
+        // Save it
+        static::getContainer()->get(RepairerRepository::class)->save($repairer, true);
+
+        // Valid user role given
+        $response = self::createClientWithUser($repairer->owner)->request('PATCH', sprintf('/repairers/%s', $repairer->id), [
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+            'json' => [
+                'repairerTypes' => ['/repairer_types/'.$this->repairerTypes[0]->id, '/repairer_types/'.$this->repairerTypes[1]->id],
+            ],
+        ]);
+
+        $response = $response->toArray();
+        $this->assertCount(2, $response['repairerTypes']);
+
+        $response2 = self::createClientWithUser($repairer->owner)->request('PATCH', sprintf('/repairers/%s', $repairer->id), [
+            'headers' => ['Content-Type' => 'application/merge-patch+json'],
+            'json' => [
+                'repairerTypes' => ['/repairer_types/'.$this->repairerTypes[0]->id],
+            ],
+        ]);
+
+        $response2 = $response2->toArray();
+        $this->assertCount(1, $response2['repairerTypes']);
     }
 }
