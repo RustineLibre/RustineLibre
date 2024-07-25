@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
         new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer)"),
-        new Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (user.repairer and user.repairer == object.repairer) or (user.repairerEmployee and user.repairerEmployee.repairer == object.repairer)"),
+        new Post(securityPostDenormalize: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or ((user.isBoss() or user.isEmployee()) and user.isAssociatedWithRepairer(object.repairer)))"),
         new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
