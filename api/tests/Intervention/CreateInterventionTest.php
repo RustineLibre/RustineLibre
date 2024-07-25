@@ -81,9 +81,11 @@ class CreateInterventionTest extends AbstractTestCase
 
     public function testBossForgetsPrice(): void
     {
-        $client = $this->createClientAuthAsBoss();
+        $boss = $this->userRepository->getUserWithRole('ROLE_BOSS');
+        $client = $this->createClientWithUser($boss);
         $client->request('POST', '/create_repairer_interventions', [
             'json' => [
+                'repairer' => sprintf('/repairers/%s', $boss->id),
                 'description' => 'Une nouvelle intervention boss !',
             ],
         ]);
