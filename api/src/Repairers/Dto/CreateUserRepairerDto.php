@@ -6,6 +6,7 @@ namespace App\Repairers\Dto;
 
 use App\Entity\BikeType;
 use App\Entity\Repairer;
+use App\Entity\RepairerCity;
 use App\Entity\RepairerType;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -71,4 +72,8 @@ final class CreateUserRepairerDto
     #[Groups([Repairer::REPAIRER_WRITE])]
     /** @var BikeType[] */
     public ?array $bikeTypesSupported = null;
+
+    #[Groups([Repairer::REPAIRER_WRITE])]
+    /** @var RepairerCity[] */
+    public ?array $repairerCities = null;
 }
