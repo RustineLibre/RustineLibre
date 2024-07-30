@@ -1,4 +1,4 @@
-import {NextPageWithLayout} from 'pages/_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import {ENTRYPOINT} from '@config/entrypoint';
 import React, {
   useState,

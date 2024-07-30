@@ -4,7 +4,7 @@ import {useAccount} from '@contexts/AuthContext';
 import {Box, Tabs, Tab} from '@mui/material';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import {Repairer} from '@interfaces/Repairer';
-import {NextPageWithLayout} from '../../_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import OpeningHours from '@components/dashboard/agenda/OpeningHours';
 import ExceptionalClosure from '@components/dashboard/agenda/ExceptionalClosure';
 

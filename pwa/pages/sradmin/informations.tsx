@@ -1,4 +1,4 @@
-import {NextPageWithLayout} from '../_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import Head from 'next/head';
 import {useAccount} from '@contexts/AuthContext';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
