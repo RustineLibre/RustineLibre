@@ -61,6 +61,10 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
             $repairer->addBikeTypesSupported($bikeType);
         }
 
+        foreach ($data->repairerCities as $repairerCity) {
+            $repairer->addRepairerCity($repairerCity);
+        }
+
         // Validate the new entity
         $this->validator->validate($repairer);
 
