@@ -28,7 +28,7 @@ import Link from 'next/link';
 import {isBoss, isEmployee, isItinerant} from '@helpers/rolesHelpers';
 import RouteIcon from '@mui/icons-material/Route';
 import Logo from '@components/common/Logo';
-import {useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {Discussion} from '@interfaces/Discussion';
 import {ENTRYPOINT} from '@config/entrypoint';
 import {discussionResource} from '@resources/discussionResource';
@@ -43,6 +43,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Menu, {MenuProps} from '@mui/material/Menu';
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 const drawerWidth = 240;
 
@@ -176,8 +177,6 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   };
   const handleClose = (repairer: Repairer | null | undefined = undefined) => {
     if (undefined !== repairer) {
-      setRepairer(repairer);
-
       if (!repairer) {
         router.push('/sradmin/boutiques');
       } else {
@@ -189,11 +188,11 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
   const router = useRouter();
   const {repairer_id} = router.query;
+  const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);
 
   const {user} = useAccount({
     redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
   });
-  const [repairer, setRepairer] = useState<Repairer | null>(null);
   const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -238,19 +237,6 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     });
     setDiscussions(response['hydra:member']);
   };
-
-  useEffect(() => {
-    if (!repairer && repairer_id !== undefined) {
-      let currentRepairer = null;
-      if (user && isBoss(user)) {
-        currentRepairer =
-          user.repairers.find((repairer) => repairer.id == repairer_id) ?? null;
-      } else if (user && isEmployee(user)) {
-        currentRepairer = user.repairerEmployee?.repairer ?? null;
-      }
-      setRepairer(currentRepairer);
-    }
-  }, [repairer, repairer_id, user]);
 
   useEffect(() => {
     if (user) {
