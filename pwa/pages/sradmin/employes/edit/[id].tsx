@@ -1,5 +1,5 @@
-import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect, useContext} from 'react';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
+import React, {useState, useEffect} from 'react';
 import Head from 'next/head';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import Box from '@mui/material/Box';

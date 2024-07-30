@@ -1,4 +1,4 @@
-import {NextPageWithLayout} from 'pages/_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import React, {useCallback, useEffect, useState} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';

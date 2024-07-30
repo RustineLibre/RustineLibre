@@ -1,9 +1,9 @@
-import {NextPageWithLayout} from 'pages/_app';
 import React from 'react';
 import Head from 'next/head';
 import {Container, Typography, Box, List, ListItem, Link} from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import NextLink from 'next/link';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const OurCollective: NextPageWithLayout = () => {
   return (
