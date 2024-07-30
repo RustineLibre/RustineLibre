@@ -38,6 +38,8 @@ import RegistrationTunnelWorkshop from '@components/repairers/registration/Regis
 import Link from 'next/link';
 import {Simulate} from 'react-dom/test-utils';
 import submit = Simulate.submit;
+import {userResource} from '@resources/userResource';
+import {User} from '@interfaces/User';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -66,8 +68,16 @@ export const RegistrationTunnel = ({
     selectedBikeTypes,
     multipleWorkshop,
     repairerCities,
+    hasBoss,
+    setHasBoss,
     setRepairerCities,
     setMultipleWorkShop,
+    setName,
+    setCity,
+    setStreet,
+    setRepairerTypeSelected,
+    setComment,
+    setSelectedBikeTypes,
     setTunnelStep,
   } = useContext(RepairerRegistrationContext);
   const [cityInput, setCityInput] = useState<string>('');
@@ -82,6 +92,7 @@ export const RegistrationTunnel = ({
     useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [finish, setFinish] = useState<boolean>(false);
+  const [newBoss, setNewBoss] = useState<User | null>(null);
 
   const fetchRepairerTypes = async () => {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
@@ -154,23 +165,30 @@ export const RegistrationTunnel = ({
         .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
         .map((bikeType) => bikeType['@id']);
       setPendingRegistration(true);
-      await repairerResource.postRepairerAndUser({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        plainPassword: password,
-        name: name,
-        street: street?.name,
-        streetNumber: streetNumber,
-        city: city.name,
-        postcode: city?.postcode,
-        bikeTypesSupported: selectedBikeTypeIRIs,
-        repairerTypes: repairerTypeSelectedIRIs,
-        repairerCities: repairerCities,
-        comment: comment,
-        latitude: street?.lat ?? city.lat,
-        longitude: street?.lon ?? city.lon,
-      });
+      if (!hasBoss) {
+        const response = await repairerResource.postRepairerAndUser({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          plainPassword: password,
+          name: name,
+          street: street?.name,
+          streetNumber: streetNumber,
+          city: city.name,
+          postcode: city?.postcode,
+          bikeTypesSupported: selectedBikeTypeIRIs,
+          repairerTypes: repairerTypeSelectedIRIs,
+          repairerCities: repairerCities,
+          comment: comment,
+          latitude: street?.lat ?? city.lat,
+          longitude: street?.lon ?? city.lon,
+        });
+        setNewBoss(response.owner);
+        setHasBoss(true);
+      } else {
+        console.log(newBoss);
+      }
+
       setPendingRegistration(false);
       !multipleWorkshop || finish
         ? handleSetSuccess()
@@ -184,6 +202,16 @@ export const RegistrationTunnel = ({
     setPendingRegistration(false);
   };
 
+  const handleCreateAndContinue = () => {
+    handleSubmit();
+    setName('');
+    setCity(null);
+    setStreet(null);
+    setRepairerTypeSelected([]);
+    setComment('');
+    setSelectedBikeTypes([]);
+    setRepairerCities([]);
+  };
   const handleCreateAndFinish = () => {
     setFinish(true);
     handleSubmit();

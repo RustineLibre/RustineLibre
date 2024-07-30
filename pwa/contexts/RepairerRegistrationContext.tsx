@@ -22,6 +22,8 @@ interface RepairerRegistrationContext {
   multipleWorkshop: boolean;
   chosen: boolean;
   repairerCities: RepairerCity[] | any;
+  hasBoss: boolean;
+  setHasBoss: (value: boolean) => void;
   setRepairerCities: (value: RepairerCity[] | any) => void;
   setChosen: (value: boolean) => void;
   setMultipleWorkShop: (value: boolean) => void;
@@ -53,6 +55,8 @@ const initialValue = {
   multipleWorkshop: false,
   chosen: false,
   repairerCities: [],
+  hasBoss: false,
+  setHasBoss: () => null,
   setRepairerCities: () => null,
   setChosen: () => null,
   setMultipleWorkShop: () => null,
@@ -93,6 +97,7 @@ export const RepairerRegistrationProvider = ({
   const [repairerCities, setRepairerCities] = useState<RepairerCity[] | any>(
     []
   );
+  const [hasBoss, setHasBoss] = useState<boolean>(false);
 
   return (
     <RepairerRegistrationContext.Provider
@@ -111,6 +116,8 @@ export const RepairerRegistrationProvider = ({
         multipleWorkshop,
         chosen,
         repairerCities,
+        hasBoss,
+        setHasBoss,
         setRepairerCities,
         setChosen,
         setMultipleWorkShop,
