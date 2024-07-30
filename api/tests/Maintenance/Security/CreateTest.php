@@ -14,55 +14,40 @@ use App\Repository\AppointmentRepository;
 use App\Repository\BikeRepository;
 use App\Repository\MaintenanceRepository;
 use App\Repository\RepairerEmployeeRepository;
+use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CreateTest extends AbstractTestCase
 {
-    protected Maintenance $maintenance;
-
-    protected Appointment $appointment;
-
-    protected Bike $bike;
-
-    protected User $user;
-
-    protected Repairer $repairerWithAppointment;
-
-    protected User $customer;
-
-    protected User $boss;
-
-    protected RepairerEmployee $repairerEmployee;
-
     private TranslatorInterface $translator;
+    private RepairerEmployeeRepository $repairerEmployeeRepository;
+    private BikeRepository $bikeRepository;
+    private AppointmentRepository $appointmentRepository;
 
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy(['name' => 'name 4']);
-        $this->user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
-        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['customer' => $this->user]);
-        $this->repairerWithAppointment = $this->appointment->repairer;
-        $this->boss = $this->repairerWithAppointment->owner;
-        $this->customer = $this->appointment->customer;
-        $this->repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $this->repairerWithAppointment]);
-        $this->bike = static::getContainer()->get(BikeRepository::class)->findOneBy(['owner' => $this->customer]);
         $this->translator = static::getContainer()->get(TranslatorInterface::class);
+        $this->repairerEmployeeRepository = self::getContainer()->get(RepairerEmployeeRepository::class);
+        $this->bikeRepository = self::getContainer()->get(BikeRepository::class);
+        $this->appointmentRepository = self::getContainer()->get(AppointmentRepository::class);
     }
 
     public function testUserCanCreateMaintenanceForOwnBike(): void
     {
-        $this->createClientWithUser($this->maintenance->bike->owner)->request('POST', '/maintenances', [
-        'headers' => ['Content-Type' => 'application/json'],
-        'json' => [
-            'name' => 'Test',
-            'description' => 'test description',
-            'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
-            'repairDate' => '2023-04-28 14:30:00',
+        /** @var Maintenance $maintenance */
+        $maintenance = self::getContainer()->get(MaintenanceRepository::class)->findOneBy([]);
+        $this->createClientWithUser($maintenance->bike->owner)->request('POST', '/maintenances', [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'name' => 'Test',
+                'description' => 'test description',
+                'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
+                'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);
 
@@ -71,12 +56,20 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCannotCreateMaintenanceForOtherBike(): void
     {
-        $this->createClientAuthAsUser()->request('POST', '/maintenances', [
+        /** @var Bike[] $bikes */
+        $bikes = $this->bikeRepository->findAll();
+
+        $bike1 = $bikes[0];
+        $bike2 = current(array_filter($bikes, function(Bike $bike) use ($bike1) {
+            return $bike->owner !== $bike1->owner;
+        }));
+
+        $this->createClientWithUser($bike1->owner)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
+                'bike' => sprintf('/bikes/%d', $bike2->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);
@@ -92,13 +85,17 @@ class CreateTest extends AbstractTestCase
 
     public function testBossCanCreateMaintenanceForCustomer(): void
     {
+        /** @var Appointment $appointment */
+        $appointment = $this->appointmentRepository->findOneBy([]);
+        $bike = $appointment->customer->bikes->toArray()[0];
+
         // boss add maintenance on bike's customer
-        $this->createClientWithUser($this->boss)->request('POST', '/maintenances', [
+        $this->createClientWithUser($appointment->repairer->owner)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $this->bike->id),
+                'bike' => sprintf('/bikes/%d', $bike->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);
@@ -107,13 +104,27 @@ class CreateTest extends AbstractTestCase
 
     public function testBossCannotCreateMaintenanceForOtherUser(): void
     {
+        $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
+        $boss = $repairer->owner;
+
+        /** @var Appointment $appointment */
+        $appointment = $this->appointmentRepository->createQueryBuilder('a')
+            ->where('a.repairer != :repairer')
+            ->setParameter('repairer', $boss->repairers->toArray()[0])
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        /** @var Bike $bike */
+        $bike = $appointment->customer->bikes->toArray()[0];
+
         // boss add maintenance on other bike according to the fixtures
-        $this->createClientWithUser($this->boss)->request('POST', '/maintenances', [
+        $this->createClientWithUser($boss)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
+                'bike' => sprintf('/bikes/%d', $bike->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);
@@ -129,13 +140,35 @@ class CreateTest extends AbstractTestCase
 
     public function testEmployeeCanCreateMaintenanceForCustomer(): void
     {
+        /** @var RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->createQueryBuilder('re')
+            ->innerJoin('re.repairer', 'r')
+            ->leftJoin(Appointment::class, 'a', Join::WITH, 'r.id = a.repairer')
+            ->innerJoin('a.customer', 'c')
+            ->innerJoin('c.bikes', 'b')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        /** @var Bike $bike */
+        $bike = $this->bikeRepository->createQueryBuilder('b')
+            ->innerJoin('b.owner', 'o')
+            ->leftJoin(Appointment::class, 'a', Join::WITH, 'o.id = a.customer')
+            ->innerJoin('a.repairer', 'r')
+            ->innerJoin('r.repairerEmployees', 're')
+            ->where('r.id = :repairer')
+            ->setParameter('repairer', $repairerEmployee->repairer->id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
         // Employee add maintenance on bike's customer
-        $this->createClientWithUser($this->repairerEmployee->employee)->request('POST', '/maintenances', [
+        $this->createClientWithUser($repairerEmployee->employee)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $this->bike->id),
+                'bike' => sprintf('/bikes/%d', $bike->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);
@@ -144,13 +177,27 @@ class CreateTest extends AbstractTestCase
 
     public function testEmployeeCannotCreateMaintenanceForOtherUser(): void
     {
+        /** @var RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
+
+        /** @var Bike $bike */
+        $bike = $this->bikeRepository->createQueryBuilder('b')
+            ->innerJoin('b.owner', 'o')
+            ->leftJoin(Appointment::class, 'a', Join::WITH, 'o.id = a.customer')
+            ->innerJoin('a.repairer', 'r')
+            ->where('r.id != :repairerId')
+            ->setParameter('repairerId', $repairerEmployee->repairer->id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
         // Employee add maintenance on other bike
-        $this->createClientWithUser($this->repairerEmployee->employee)->request('POST', '/maintenances', [
+        $this->createClientWithUser($repairerEmployee->employee)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
                 'description' => 'test description',
-                'bike' => sprintf('/bikes/%d', $this->maintenance->bike->id),
+                'bike' => sprintf('/bikes/%d', $bike->id),
                 'repairDate' => '2023-04-28 14:30:00',
             ],
         ]);

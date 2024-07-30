@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Intervention;
 
+use App\Entity\Repairer;
 use App\Entity\RepairerIntervention;
 
 class GetInterventionTest extends InterventionAbstractTestCase
@@ -13,9 +14,13 @@ class GetInterventionTest extends InterventionAbstractTestCase
         $user = $this->getBossAndHisIntervention()[0];
 
         // get all interventions from user
+        $repairerInterventions = array_merge(...array_map(static function (Repairer $repairer): array {
+            return $repairer->repairerInterventions->toArray();
+        }, $user->repairers->toArray()));
+
         $expectedInterventions = array_map(static function (RepairerIntervention $repairerIntervention) {
             return $repairerIntervention->intervention->id;
-        }, $user->repairer->repairerInterventions->toArray());
+        }, $repairerInterventions);
 
         $client = $this->createClientAuthAsBoss();
         $response = $client->request('GET', sprintf('/interventions?owner=%s', $user->id))->toArray();

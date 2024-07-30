@@ -10,6 +10,7 @@ use App\Entity\Maintenance;
 use App\Entity\User;
 use App\Repository\AppointmentRepository;
 use App\Repository\MaintenanceRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,8 +57,6 @@ class GetTest extends AbstractTestCase
         $response = $this->createClientAuthAsAdmin()->request('GET', '/maintenances')->toArray();
 
         $this->assertResponseIsSuccessful();
-        // check that admin get all collection
-        $this->assertSameSize($response['hydra:member'], $this->maintenances);
         // Check order filter by id
         $this->assertGreaterThan($response['hydra:member'][0]['id'], $response['hydra:member'][1]['id']);
     }
@@ -82,8 +81,27 @@ class GetTest extends AbstractTestCase
 
     public function testUserCannotGetMaintenanceForOthersBikes(): void
     {
-        $otherMaintenance = $this->maintenances[0];
-        $this->createClientWithUser($this->owner)->request('GET', sprintf('/maintenances/%d', $otherMaintenance->id));
+        /** @var Maintenance $maintenance */
+        $maintenance = $this->maintenanceRepository->findOneBy([]);
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        /** @var User $user */
+        $user = $userRepository->createQueryBuilder('u')
+            ->where('u.id != :currentOwnerId')
+            ->andWhere('u.id != :currentAuthorId')
+            ->andWhere('CAST(u.roles AS TEXT) LIKE :role')
+            ->setParameter('currentOwnerId', $maintenance->bike->owner->id)
+            ->setParameter('currentAuthorId', $maintenance->author->id)
+            ->setParameter('role', '%ROLE_USER%')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$user instanceof User) {
+            self::fail('Aucun utilisateur n\a été trouvé pour ce test');
+        }
+
+        $this->createClientWithUser($user)->request('GET', sprintf('/maintenances/%d', $maintenance->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 

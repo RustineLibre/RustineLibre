@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user or (user.repairerEmployee and object.repairer == user.repairerEmployee.repairer)"),
+        new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer)"),
         new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
         new Post(
             security: "is_granted('IS_AUTHENTICATED_FULLY')",

@@ -31,7 +31,7 @@ class GetTest extends AbstractTestCase
 
     public function testRepairerCanGetOwnCustomersCollection(): void
     {
-        $response = $this->createClientWithUser($this->repairer->owner)->request('GET', '/customers')->toArray();
+        $response = $this->createClientWithUser($this->repairer->owner)->request('GET', sprintf('/repairers/%s/customers', $this->repairer->id))->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertGreaterThanOrEqual(2, count($response['hydra:member']));
@@ -48,20 +48,20 @@ class GetTest extends AbstractTestCase
 
     public function testRepairerCanGetCustomersByFirstName(): void
     {
-        $response = $this->createClientWithUser($this->repairer->owner)->request('GET', '/customers')->toArray();
+        $response = $this->createClientWithUser($this->repairer->owner)->request('GET', sprintf('/repairers/%s/customers', $this->repairer->id))->toArray();
 
         $customerFirstName = $response['hydra:member'][0]['firstName'];
-        $response2 = $this->createClientWithUser($this->repairer->owner)->request('GET', sprintf('/customers?firstName=%s', $customerFirstName))->toArray();
+        $response2 = $this->createClientWithUser($this->repairer->owner)->request('GET', sprintf('/repairers/%s/customers?firstName=%s', $this->repairer->id, $customerFirstName))->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertLessThanOrEqual(count($response['hydra:member']), count($response2['hydra:member']));
     }
 
     public function testRepairerCanGetCustomersByLastName(): void
     {
-        $response = $this->createClientWithUser($this->repairer->owner)->request('GET', '/customers')->toArray();
+        $response = $this->createClientWithUser($this->repairer->owner)->request('GET', sprintf('/repairers/%s/customers', $this->repairer->id))->toArray();
 
         $customerLastName = $response['hydra:member'][0]['lastName'];
-        $response2 = $this->createClientWithUser($this->repairer->owner)->request('GET', sprintf('/customers?lastName=%s', $customerLastName))->toArray();
+        $response2 = $this->createClientWithUser($this->repairer->owner)->request('GET', sprintf('/repairers/%s/customers?lastName=%s', $this->repairer->id, $customerLastName))->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertLessThanOrEqual(count($response['hydra:member']), count($response2['hydra:member']));
     }

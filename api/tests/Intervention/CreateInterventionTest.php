@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Intervention;
 
+use App\Entity\Repairer;
+use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,11 +50,13 @@ class CreateInterventionTest extends AbstractTestCase
 
     public function testAdminSetPrice(): void
     {
+        $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
         $client = $this->createClientAuthAsAdmin();
         $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention admin !',
                 'price' => 1000,
+                'repairer' => sprintf('/repairers/%s', $repairer->id),
             ],
         ])->toArray();
 
@@ -61,12 +65,12 @@ class CreateInterventionTest extends AbstractTestCase
 
     public function testBossCanPost(): void
     {
-        $boss = $this->userRepository->getUserWithRole('ROLE_BOSS');
-        $repairers = $boss->repairers->toArray();
-        $client = $this->createClientWithUser($boss);
+        /** @var Repairer $repairer */
+        $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
+        $client = $this->createClientWithUser($repairer->owner);
         $client->request('POST', '/create_repairer_interventions', [
             'json' => [
-                'repairer' => sprintf('/repairers/%s', array_shift($repairers)->id),
+                'repairer' => sprintf('/repairers/%s', $repairer->id),
                 'description' => 'Une nouvelle intervention boss !',
                 'price' => 1000,
             ],
@@ -120,10 +124,13 @@ class CreateInterventionTest extends AbstractTestCase
 
     public function testUserCannotPost(): void
     {
+        $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
         $client = $this->createClientAuthAsUser();
         $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention !',
+                'price' => 10,
+                'repairer' => sprintf('/repairers/%s', $repairer->id),
             ],
         ]);
 
@@ -132,10 +139,13 @@ class CreateInterventionTest extends AbstractTestCase
 
     public function testUnauthenticatedCannotPost(): void
     {
+        $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
         $client = self::createClient();
         $client->request('POST', '/create_repairer_interventions', [
             'json' => [
                 'description' => 'Une nouvelle intervention !',
+                'price' => 10,
+                'repairer' => sprintf('/repairers/%s', $repairer->id),
             ],
         ]);
 

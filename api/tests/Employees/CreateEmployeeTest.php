@@ -10,7 +10,6 @@ use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateEmployeeTest extends AbstractTestCase
@@ -87,8 +86,21 @@ class CreateEmployeeTest extends AbstractTestCase
 
     public function testRemoveEmployeeAsBadBoss(): void
     {
-        $repairerEmployee5 = $this->repairerEmployeeRepository->findOneBy([]);
-        $this->createClientAuthAsBoss()->request('DELETE', sprintf('/repairer_employees/%s', $repairerEmployee5->id));
+        /** @var ?RepairerEmployee $repairerEmployee5 */
+        $repairerEmployee = $this->repairerEmployeeRepository->createQueryBuilder('re')
+            ->innerJoin('re.repairer', 'r')
+            ->innerJoin('r.owner', 'o')
+            ->where('o.email != :email')
+            ->setParameter('email', 'boss@test.com')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (null === $repairerEmployee) {
+            self::fail('Aucun employé n\'a été trouvé pour ce test.');
+        }
+
+        $this->createClientAuthAsBoss()->request('DELETE', sprintf('/repairer_employees/%s', $repairerEmployee->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 

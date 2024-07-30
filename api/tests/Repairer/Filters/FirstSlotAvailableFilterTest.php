@@ -28,6 +28,7 @@ class FirstSlotAvailableFilterTest extends SlotsTestCase
         self::assertLessThanOrEqual($response['hydra:member'][1]['firstSlotAvailable'], $response['hydra:member'][0]['firstSlotAvailable']);
         self::assertLessThanOrEqual($response['hydra:member'][2]['firstSlotAvailable'], $response['hydra:member'][1]['firstSlotAvailable']);
 
+        dd($response, \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:sP', $response['hydra:member'][0]['firstSlotAvailable'])->format('Y-m-d H:i:s'));
         // Create an appointment
         $this->createClientAuthAsAdmin()->request('POST', '/appointments', ['json' => [
             'customer' => sprintf('/users/%s', $user->id),
