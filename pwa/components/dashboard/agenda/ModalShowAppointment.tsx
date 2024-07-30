@@ -35,7 +35,7 @@ import {formatDate, formatDateInSelect} from '@helpers/dateHelper';
 import {getAppointmentStatus} from '@helpers/appointmentStatus';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
-import Divider from '@mui/material/Divider';
+import NextLink from 'next/link';
 
 type ModalShowAppointmentProps = {
   appointment: Appointment;
@@ -184,28 +184,32 @@ const ModalShowAppointment = ({
               </Box>
               <Box>
                 {appointment.discussion && (
-                  <Link
-                    href={`/sradmin/messagerie/${appointment.discussion!.id}`}>
-                    {isMobile ? (
-                      <IconButton
-                        color="secondary"
-                        disabled={!appointment.discussion}
-                        sx={{
-                          borderRadius: '50%',
-                          padding: '8px',
-                        }}>
-                        <EmailIcon />
-                      </IconButton>
-                    ) : (
-                      <Button
-                        size="small"
-                        color="secondary"
-                        disabled={!appointment.discussion}
-                        variant="outlined">
-                        Envoyer un message
-                      </Button>
-                    )}
-                  </Link>
+                  <NextLink
+                    href={`/sradmin/messagerie/${appointment.discussion!.id}`}
+                    legacyBehavior
+                    passHref>
+                    <Link>
+                      {isMobile ? (
+                        <IconButton
+                          color="secondary"
+                          disabled={!appointment.discussion}
+                          sx={{
+                            borderRadius: '50%',
+                            padding: '8px',
+                          }}>
+                          <EmailIcon />
+                        </IconButton>
+                      ) : (
+                        <Button
+                          size="small"
+                          color="secondary"
+                          disabled={!appointment.discussion}
+                          variant="outlined">
+                          Envoyer un message
+                        </Button>
+                      )}
+                    </Link>
+                  </NextLink>
                 )}
               </Box>
             </Box>
@@ -220,27 +224,32 @@ const ModalShowAppointment = ({
                   <Typography>{appointment.bike.name}</Typography>
                 </Box>
                 <Box>
-                  <Link href={`/sradmin/clients/velos/${appointment.bike.id}`}>
-                    {isMobile ? (
-                      <IconButton
-                        color="secondary"
-                        disabled={!appointment.bike}
-                        sx={{
-                          borderRadius: '50%',
-                          padding: '8px',
-                        }}>
-                        <AssignmentIcon />
-                      </IconButton>
-                    ) : (
-                      <Button
-                        size="small"
-                        color="secondary"
-                        disabled={!appointment.bike}
-                        variant="outlined">
-                        Voir le carnet du vélo
-                      </Button>
-                    )}
-                  </Link>
+                  <NextLink
+                    href={`/sradmin/clients/velos/${appointment.bike.id}`}
+                    legacyBehavior
+                    passHref>
+                    <Link>
+                      {isMobile ? (
+                        <IconButton
+                          color="secondary"
+                          disabled={!appointment.bike}
+                          sx={{
+                            borderRadius: '50%',
+                            padding: '8px',
+                          }}>
+                          <AssignmentIcon />
+                        </IconButton>
+                      ) : (
+                        <Button
+                          size="small"
+                          color="secondary"
+                          disabled={!appointment.bike}
+                          variant="outlined">
+                          Voir le carnet du vélo
+                        </Button>
+                      )}
+                    </Link>
+                  </NextLink>
                 </Box>
               </Box>
             )}

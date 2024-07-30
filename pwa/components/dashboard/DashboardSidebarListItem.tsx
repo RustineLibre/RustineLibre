@@ -6,10 +6,10 @@ import {
   ListItemText,
   ListItem,
   Typography,
-  Link,
   useMediaQuery,
 } from '@mui/material';
 import theme from 'styles/theme';
+import Link from 'next/link';
 
 interface DashboardSidebarListItemProps {
   text: string;
@@ -26,10 +26,6 @@ const DashboardSidebarListItem = ({
 }: DashboardSidebarListItemProps): JSX.Element => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
-  const handleMenuClick = () => {
-    router.push(path);
-  };
 
   return (
     <Link href={path} style={{textDecoration: 'none'}}>
