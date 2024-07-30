@@ -71,7 +71,7 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
 
         // Update old boss
         $currentBoss->roles = [User::ROLE_EMPLOYEE];
-        $currentBoss->repairer = null;
+        $currentBoss->repairers = [];
         $currentBoss->repairerEmployee = $newRepairerEmployee;
 
         // Set the new roles

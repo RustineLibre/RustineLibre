@@ -26,16 +26,16 @@ readonly class AppointmentCustomerExtension implements QueryCollectionExtensionI
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-//        /** @var ?User $user */
-//        $user = $this->security->getUser();
-//
-//        // Return if boss or employee
-//        if (null === $user || Appointment::class !== $resourceClass || $user->isBoss() || $user->isEmployee()) {
-//            return;
-//        }
-//
-//        $rootAlias = $queryBuilder->getRootAliases()[0];
-//        $queryBuilder->andWhere(sprintf('%s.customer = :customer', $rootAlias));
-//        $queryBuilder->setParameter('customer', $user->id);
+        /** @var ?User $user */
+        $user = $this->security->getUser();
+
+        // Return if boss or employee
+        if (null === $user || Appointment::class !== $resourceClass || $user->isBoss() || $user->isEmployee()) {
+            return;
+        }
+
+        $rootAlias = $queryBuilder->getRootAliases()[0];
+        $queryBuilder->andWhere(sprintf('%s.customer = :customer', $rootAlias));
+        $queryBuilder->setParameter('customer', $user->id);
     }
 }

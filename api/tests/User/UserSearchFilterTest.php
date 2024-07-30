@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\User;
 
+use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
@@ -13,19 +14,21 @@ class UserSearchFilterTest extends AbstractTestCase
 {
     private User $employee;
 
+    private Repairer $repairer;
+
     public function setUp(): void
     {
         parent::setUp();
 
-        $repairer = static::getContainer()->get(RepairerRepository::class)->findOneBy(['name' => 'Chez Johnny']);
-        $repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $repairer]);
+        $this->repairer = static::getContainer()->get(RepairerRepository::class)->findOneBy(['name' => 'Chez Johnny']);
+        $repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $this->repairer]);
         $this->employee = $repairerEmployee->employee;
     }
 
     public function testBossCanGetHisRepairerCustomersByFirstName(): void
     {
         // Only one user with this firstName for this repairer according to the fixtures
-        $response = $this->createClientAuthAsBoss()->request('GET', 'https://localhost/customers?userSearch=raphael')->toArray();
+        $response = $this->createClientAuthAsBoss()->request('GET', sprintf('https://localhost/repairers/%s/customers?userSearch=raphael', $this->repairer->id))->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertSame($response['hydra:member'][0]['firstName'], 'Raphael');
@@ -36,7 +39,7 @@ class UserSearchFilterTest extends AbstractTestCase
     public function testBossCanGetHisRepairerCustomersByLastName(): void
     {
         // Only one user with this lastName for this repairer according to the fixtures
-        $response = $this->createClientAuthAsBoss()->request('GET', 'https://localhost/customers?userSearch=tilleuls')->toArray();
+        $response = $this->createClientAuthAsBoss()->request('GET', sprintf('https://localhost/repairers/%s/customers?userSearch=tilleuls', $this->repairer->id))->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertSame($response['hydra:member'][0]['firstName'], 'Raphael');
@@ -49,7 +52,7 @@ class UserSearchFilterTest extends AbstractTestCase
     public function testBossCanGetHisRepairerCustomersByEmail(): void
     {
         // This user is linked to this repairer according to the fixtures
-        $response = $this->createClientAuthAsBoss()->request('GET', 'https://localhost/customers?userSearch=user1@test.com')->toArray();
+        $response = $this->createClientAuthAsBoss()->request('GET', sprintf('https://localhost/repairers/%s/customers?userSearch=user1@test.com', $this->repairer->id))->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertSame($response['hydra:member'][0]['firstName'], 'Raphael');
@@ -60,7 +63,7 @@ class UserSearchFilterTest extends AbstractTestCase
     public function testEmployeeCanGetHisRepairerCustomersByFirstName(): void
     {
         // Only one user with this firstName for this repairer according to the fixtures
-        $response = $this->createClientWithUser($this->employee)->request('GET', 'https://localhost/customers?userSearch=raphael')->toArray();
+        $response = $this->createClientWithUser($this->employee)->request('GET', sprintf('https://localhost/repairers/%s/customers?userSearch=raphael', $this->repairer->id))->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertSame($response['hydra:member'][0]['firstName'], 'Raphael');
@@ -71,7 +74,7 @@ class UserSearchFilterTest extends AbstractTestCase
     public function testEmployeeCanGetHisRepairerCustomersByLastName(): void
     {
         // Only one user with this lastName for this repairer according to the fixtures
-        $response = $this->createClientAuthAsBoss()->request('GET', 'https://localhost/customers?userSearch=tilleuls')->toArray();
+        $response = $this->createClientAuthAsBoss()->request('GET', sprintf('https://localhost/repairers/%s/customers?userSearch=tilleuls', $this->repairer->id))->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertSame($response['hydra:member'][0]['firstName'], 'Raphael');
@@ -84,7 +87,7 @@ class UserSearchFilterTest extends AbstractTestCase
     public function testEmployeeCanGetHisRepairerCustomersByEmail(): void
     {
         // This user is linked to this repairer according to the fixtures
-        $response = $this->createClientAuthAsBoss()->request('GET', 'https://localhost/customers?userSearch=user1@test.com')->toArray();
+        $response = $this->createClientAuthAsBoss()->request('GET', sprintf('https://localhost/repairers/%s/customers?userSearch=user1@test.com', $this->repairer->id))->toArray();
 
         $this->assertResponseIsSuccessful();
         $this->assertSame($response['hydra:member'][0]['firstName'], 'Raphael');

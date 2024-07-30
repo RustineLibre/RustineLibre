@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Get]
 #[GetCollection]
-#[Post(securityPostValidation: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and is_granted('WRITE_REPAIRER_OPENING_HOURS', object))")]
+#[Post(securityPostDenormalize: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and user.isAssociatedWithRepairer(object.repairer))")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.repairer.owner == user)")]
 #[ApiFilter(SearchFilter::class, properties: ['repairer' => 'exact', 'day' => 'exact'])]
 #[RepairerOpenings]
