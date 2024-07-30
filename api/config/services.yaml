@@ -4,6 +4,14 @@ parameters:
     storage_use_path_style_endpoint: '%env(bool:STORAGE_USE_PATH_STYLE_ENDPOINT)%'
     storage_key: '%env(string:STORAGE_KEY)%'
     storage_secret: '%env(string:STORAGE_SECRET)%'
+    google_client_id: '%env(string:GOOGLE_CLIENT_ID)%'
+    google_project_id: '%env(string:GOOGLE_PROJECT_ID)%'
+    google_client_secret: '%env(string:GOOGLE_CLIENT_SECRET)%'
+    google_auth_uri: '%env(string:GOOGLE_AUTH_URI)%'
+    google_token_uri: '%env(string:GOOGLE_TOKEN_URI)%'
+    google_auth_provider_cert_url: '%env(string:GOOGLE_AUTH_PROVIDER_CERT_URL)%'
+    google_redirect_uris: '%env(string:GOOGLE_REDIRECT_URIS)%'
+    google_javascript_origins: '%env(string:GOOGLE_JAVASCRIPT_ORIGINS)%'
 
 services:
     # default configuration for services in *this* file
@@ -25,6 +33,14 @@ services:
             string $firebaseClientCertUrl: "%env(FIREBASE_CLIENT_CERT_URL)%"
             string $firebaseUniverseDomain: "%env(FIREBASE_UNIVERSE_DOMAIN)%"
             string $storageBucket: "%env(STORAGE_BUCKET)%"
+            string $googleClientId: "%env(GOOGLE_CLIENT_ID)%"
+            string $googleProjectId: "%env(GOOGLE_PROJECT_ID)%"
+            string $googleClientSecret: "%env(GOOGLE_CLIENT_SECRET)%"
+            string $googleAuthUri: "%env(GOOGLE_AUTH_URI)%"
+            string $googleTokenUri: "%env(GOOGLE_TOKEN_URI)%"
+            string $googleAuthProviderCertUrl: "%env(GOOGLE_AUTH_PROVIDER_CERT_URL)%"
+            string $googleRedirectUris: "%env(GOOGLE_REDIRECT_URIS)%"
+            string $googleJavascriptOrigins: "%env(GOOGLE_JAVASCRIPT_ORIGINS)%"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

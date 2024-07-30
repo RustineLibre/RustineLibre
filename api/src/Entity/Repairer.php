@@ -77,7 +77,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
-#[Patch(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[Patch(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(FirstSlotAvailableFilter::class)]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
@@ -89,8 +89,8 @@ use Symfony\Component\Validator\Constraints as Assert;
     'country' => 'ipartial',
     'bikeTypesSupported.id' => 'exact',
     'bikeTypesSupported.name' => 'ipartial',
-    'repairerType.id' => 'exact',
-    'repairerType.name' => 'ipartial',
+    'repairerTypes.id' => 'exact',
+    'repairerTypes.name' => 'ipartial',
 ])]
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)] // Should always be last filter of the list
@@ -114,10 +114,9 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\ManyToMany(targetEntity: RepairerType::class)]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
-    public ?RepairerType $repairerType;
+    public Collection $repairerTypes;
 
     #[Assert\NotBlank(message: 'repairer.name.not_blank')]
     #[Assert\Length(
@@ -266,12 +265,19 @@ class Repairer
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, User::USER_READ])]
     public Collection $repairerCities;
 
+    #[ORM\Column(length: 250, nullable: true)]
+    public ?string $googleAccessToken = null;
+
+    #[ORM\Column(length: 250, nullable: true)]
+    public ?string $googleRefreshToken = null;
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();
         $this->repairerEmployees = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->repairerCities = new ArrayCollection();
+        $this->repairerTypes = new ArrayCollection();
     }
 
     public function addBikeTypesSupported(BikeType $bikeTypesSupported): self
@@ -358,6 +364,30 @@ class Repairer
                 $repairerCity->repairer = null;
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RepairerType>
+     */
+    public function getRepairerTypes(): Collection
+    {
+        return $this->repairerTypes;
+    }
+
+    public function addRepairerType(RepairerType $repairerType): static
+    {
+        if (!$this->repairerTypes->contains($repairerType)) {
+            $this->repairerTypes->add($repairerType);
+        }
+
+        return $this;
+    }
+
+    public function removeRepairerType(RepairerType $repairerType): static
+    {
+        $this->repairerTypes->removeElement($repairerType);
 
         return $this;
     }

@@ -189,7 +189,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
         });
 
         const queryString = ids
-          .map((id) => `repairerType.id[]=${id}`)
+          .map((id) => `repairerTypes.id[]=${id}`)
           .join('&');
 
         params = {...{repairerType: `${queryString}`}, ...params};
@@ -314,7 +314,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     const {
       target: {value},
     } = event;
-
     setRepairerTypeSelected(
       typeof value === 'string' ? value.split(',') : value
     );

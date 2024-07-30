@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Head from 'next/head';
-import {repairerResource} from '@resources/repairerResource';
 import {useAccount} from '@contexts/AuthContext';
-import {Box, CircularProgress} from '@mui/material';
+import {Box} from '@mui/material';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import {Repairer} from '@interfaces/Repairer';
 import {NextPageWithLayout} from '../../_app';

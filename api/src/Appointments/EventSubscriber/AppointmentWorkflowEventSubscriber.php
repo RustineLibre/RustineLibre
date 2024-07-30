@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Appointments\EventSubscriber;
 
+use App\Appointments\Services\GoogleSync;
 use App\Emails\AppointmentChangeTimeEmail;
 use App\Emails\AppointmentRefusedEmail;
 use App\Emails\ConfirmationEmail;
@@ -35,6 +36,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         private AppointmentRefusedEmail $appointmentRefusedEmail,
         private RequestStack $requestStack,
         private Security $security,
+        private GoogleSync $googleSync,
         private TranslatorInterface $translator)
     {
     }
@@ -62,6 +64,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $appointment->status = Appointment::VALIDATED;
         $this->entityManager->flush();
 
+        $this->googleSync->syncAppointment($appointment);
         $this->confirmationEmail->sendConfirmationEmail(appointment: $appointment);
         $this->appointmentConfirmNotification->sendAppointmentConfirmNotification(appointment: $appointment);
     }

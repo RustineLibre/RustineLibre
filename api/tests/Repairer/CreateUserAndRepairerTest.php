@@ -10,11 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreateUserAndRepairerTest extends AbstractTestCase
 {
-//    use RefreshDatabaseTrait;
-
-//    private array $jsonNewRepairerAndUser = [];
-//    private array $bikeTypes = [];
-//    private array $repairerTypes = [];
 
     private BikeTypeRepository $bikeTypeRepository;
 
@@ -26,24 +21,6 @@ class CreateUserAndRepairerTest extends AbstractTestCase
 
         $this->bikeTypeRepository = static::getContainer()->get(BikeTypeRepository::class);
         $this->repairerTypeRepository = static::getContainer()->get(RepairerTypeRepository::class);
-
-//        $this->bikeTypes = static::getContainer()->get(BikeTypeRepository::class)->findAll();
-//        $this->repairerTypes = static::getContainer()->get(RepairerTypeRepository::class)->findAll();
-//
-//        $this->jsonNewRepairerAndUser = [
-//            'firstName' => 'Michel',
-//            'lastName' => 'Michel',
-//            'email' => 'michel@michel.com',
-//            'plainPassword' => 'Test1passwordOk!',
-//            'name' => 'Nouvel atelier',
-//            'street' => 'rue de la justice',
-//            'streetNumber' => '8',
-//            'city' => 'Lille',
-//            'postcode' => '59000',
-//            'bikeTypesSupported' => ['/bike_types/'.$this->bikeTypes[0]->id, '/bike_types/'.$this->bikeTypes[1]->id],
-//            'repairerType' => '/repairer_types/'.$this->repairerTypes[0]->id,
-//            'comment' => 'Bonjour je voudrais rejoindre votre super plateforme',
-//        ];
     }
 
     public function testPostRepairerAndUserMissingFields(): void
@@ -53,22 +30,22 @@ class CreateUserAndRepairerTest extends AbstractTestCase
         unset($jsonMissingFields['email']);
 
         // No need auth
-        $response = $this->createClient()->request('POST', '/create_user_and_repairer', [
+        $response = self::createClient()->request('POST', '/create_user_and_repairer', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $jsonMissingFields,
         ]);
-        $this->assertResponseStatusCodeSame(422);
+        self::assertResponseStatusCodeSame(422);
     }
 
     public function testPostRepairerAndUser(): void
     {
         // No need auth
-        $response = $this->createClient()->request('POST', '/create_user_and_repairer', [
+        $response = self::createClient()->request('POST', '/create_user_and_repairer', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => $this->generateJsonNewRepairerAndUser(),
         ]);
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         $responseData = $response->toArray();
 
@@ -79,6 +56,8 @@ class CreateUserAndRepairerTest extends AbstractTestCase
         $this->assertNotNull($responseData['owner']);
         $this->assertEquals('Lille', $responseData['city']);
         $this->assertEquals('59000', $responseData['postcode']);
+        // Check if multiple repairerTypes are well set
+        $this->assertCount(2, $responseData['repairerTypes']);
 
         // Remove creations for futures tests
         $this->createClientAuthAsAdmin()->request('DELETE', $newRepairerIri);

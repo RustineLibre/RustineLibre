@@ -27,7 +27,7 @@ export interface Repairer {
   firstSlotAvailable?: string;
   comment?: string;
   bikeTypesSupported: BikeType[];
-  repairerType: RepairerType;
+  repairerTypes: RepairerType[];
   repairerCities: RepairerCity[];
   enabled: boolean;
   openingHours?: string;

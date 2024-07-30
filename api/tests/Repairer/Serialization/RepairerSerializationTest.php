@@ -65,7 +65,7 @@ class RepairerSerializationTest extends AbstractTestCase
         $this->assertArrayHasKey('description', $response);
         $this->assertArrayHasKey('mobilePhone', $response);
         $this->assertArrayHasKey('owner', $response);
-        $this->assertArrayHasKey('repairerType', $response);
+        $this->assertArrayHasKey('repairerTypes', $response);
         $this->assertArrayHasKey('name', $response);
         $this->assertArrayHasKey('latitude', $response);
         $this->assertArrayHasKey('longitude', $response);
@@ -81,7 +81,7 @@ class RepairerSerializationTest extends AbstractTestCase
         $this->assertArrayHasKey('description', $response);
         $this->assertArrayHasKey('mobilePhone', $response);
         $this->assertArrayHasKey('owner', $response);
-        $this->assertArrayHasKey('repairerType', $response);
+        $this->assertArrayHasKey('repairerTypes', $response);
         $this->assertArrayHasKey('name', $response);
         $this->assertArrayHasKey('latitude', $response);
         $this->assertArrayHasKey('longitude', $response);

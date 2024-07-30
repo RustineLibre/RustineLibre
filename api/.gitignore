@@ -35,6 +35,10 @@ Makefile
 /config/firebase/*.json
 ###< Firebase SDK
 
+###> Google oauth
+/config/google/*.json
+###< Google oauth
+
 ###> Images
 /public/media/*
 

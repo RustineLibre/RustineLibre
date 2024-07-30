@@ -82,7 +82,7 @@ const RepairerPresentation = ({repairer}: RepairerPresentationProps) => {
             <Typography
               variant="h4"
               sx={{textAlign: {xs: 'center', md: 'left'}}}>
-              {repairer.repairerType?.name}
+              {repairer.repairerTypes?.map((rt) => rt.name).join(' / ')}
             </Typography>
             {repairer.descriptionPicture && !isMobile ? (
               <RepairerPresentationImage repairer={repairer} />

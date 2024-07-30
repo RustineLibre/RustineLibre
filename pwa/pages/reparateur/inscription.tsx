@@ -74,10 +74,9 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   const [streetNumber, setStreetNumber] = useState<string>('');
   const [cityInput, setCityInput] = useState<string>('');
   const [citiesList, setCitiesList] = useState<City[]>([]);
-  const [repairerTypeSelected, setRepairerTypeSelected] =
-    useState<RepairerType | null>(
-      repairerTypesFetched.length > 0 ? repairerTypesFetched[0] : null
-    );
+  const [repairerTypeSelected, setRepairerTypeSelected] = useState<string[]>(
+    []
+  );
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
   const [comment, setComment] = useState<string>('');
   const [acceptChart, setAcceptChart] = useState<boolean>(false);
@@ -93,7 +92,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   const fetchRepairerTypes = async () => {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
     setRepairerTypes(responseRepairerTypes['hydra:member']);
-    setRepairerTypeSelected(responseRepairerTypes['hydra:member'][0]);
   };
 
   useEffect(() => {
@@ -154,6 +152,11 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     }
 
     try {
+      const repairerTypeSelectedIRIs: string[] = repairerTypes
+        .filter((repairerType) =>
+          repairerTypeSelected.includes(repairerType.name)
+        )
+        .map((repairerType) => repairerType['@id']);
       const selectedBikeTypeIRIs: string[] = bikeTypes
         .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
         .map((bikeType) => bikeType['@id']);
@@ -169,7 +172,7 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
         city: city.name,
         postcode: city?.postcode,
         bikeTypesSupported: selectedBikeTypeIRIs,
-        repairerType: repairerTypeSelected ? repairerTypeSelected['@id'] : null,
+        repairerTypes: repairerTypeSelectedIRIs,
         comment: comment,
         latitude: street?.lat ?? city.lat,
         longitude: street?.lon ?? city.lon,
@@ -230,11 +233,15 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
     }
   };
 
-  const handleChangeRepairerType = (event: SelectChangeEvent): void => {
-    const selectedRepairerType = repairerTypes.find(
-      (rt) => rt.name === event.target.value
+  const handleChangeRepairerType = (
+    event: SelectChangeEvent<typeof repairerTypeSelected>
+  ): void => {
+    const {
+      target: {value},
+    } = event;
+    setRepairerTypeSelected(
+      typeof value === 'string' ? value.split(',') : value
     );
-    setRepairerTypeSelected(selectedRepairerType ? selectedRepairerType : null);
   };
 
   const handleChangeBikeRepaired = (
@@ -474,15 +481,22 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
                       </InputLabel>
                       <Select
                         required
+                        multiple
                         id="repairer-type"
                         labelId="repairer-type-label"
                         label="Type de réparateur"
                         onChange={handleChangeRepairerType}
-                        value={repairerTypeSelected?.name}
-                        style={{width: '100%'}}>
+                        value={repairerTypeSelected}
+                        style={{width: '100%'}}
+                        renderValue={(selected) => selected.join(', ')}>
                         {repairerTypes.map((repairer) => (
                           <MenuItem key={repairer.id} value={repairer.name}>
-                            {repairer.name}
+                            <Checkbox
+                              checked={
+                                repairerTypeSelected.indexOf(repairer.name) > -1
+                              }
+                            />
+                            <ListItemText primary={repairer.name} />{' '}
                           </MenuItem>
                         ))}
                       </Select>

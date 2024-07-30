@@ -14,6 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
         "gesdinet/jwt-refresh-token-bundle": "^1.1",
+        "google/apiclient": "^2.15",
         "hautelook/alice-bundle": "^2.13",
         "jsor/doctrine-postgis": "^2.1",
         "kreait/firebase-bundle": "^5.0",

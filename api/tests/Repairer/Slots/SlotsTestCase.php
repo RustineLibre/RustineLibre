@@ -60,7 +60,7 @@ class SlotsTestCase extends AbstractTestCase
                 'streetNumber' => '5',
                 'city' => 'Lille',
                 'postcode' => '59000',
-                'repairerType' => sprintf('/repairer_types/%d', $repairerType->id),
+                'repairerTypes' => [sprintf('/repairer_types/%d', $repairerType->id)],
                 'comment' => $randomString,
                 'bikeTypesSupported' => [sprintf('/bike_types/%d', $bikeType->id)],
             ],
@@ -82,6 +82,7 @@ class SlotsTestCase extends AbstractTestCase
                 'slotsDuration' => 60,
                 'numberOfSlots' => 4,
                 'bikeTypesSupported' => [sprintf('/bike_types/%s', $bikeType->id)],
+                'repairerTypes' => [sprintf('/repairer_types/%d', $repairerType->id)],
             ],
         ])->toArray();
 

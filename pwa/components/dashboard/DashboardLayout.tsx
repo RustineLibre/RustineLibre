@@ -42,6 +42,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Menu, {MenuProps} from '@mui/material/Menu';
+import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
 
 const drawerWidth = 240;
 
@@ -290,6 +291,16 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                   </Typography>
                 </ListItem>
               </List>
+
+              <Box sx={{float: 'right'}}>
+                {router && router.pathname === '/sradmin/agenda' && (
+                  <GoogleCalendarSync
+                    repairer={
+                      user && user.repairer !== undefined ? user.repairer : null
+                    }
+                  />
+                )}
+              </Box>
 
               <Button
                 onClick={clickLogOut}

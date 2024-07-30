@@ -132,13 +132,23 @@ export const AppointmentCard = ({
                 <Typography variant="h5">
                   {appointment.repairer.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {appointment.repairer.streetNumber}{' '}
-                  {appointment.repairer.street}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {appointment.repairer.postcode} {appointment.repairer.city}
-                </Typography>
+                {appointment.address ? (
+                  <Typography variant="body2" color="text.secondary">
+                    À l&apos;adresse : <br />
+                    {appointment.address}
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="body2" color="text.secondary">
+                      {appointment.repairer.streetNumber}{' '}
+                      {appointment.repairer.street}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {appointment.repairer.postcode}{' '}
+                      {appointment.repairer.city}
+                    </Typography>
+                  </>
+                )}
               </Box>
               <ConfirmationModal
                 open={openModal}
