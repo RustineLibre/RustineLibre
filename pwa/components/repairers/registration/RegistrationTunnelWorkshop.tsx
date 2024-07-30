@@ -201,11 +201,15 @@ export const RegistrationTunnelWorkshop = ({
         <Typography variant="h3" textAlign="center" color="primary.main" pb={2}>
           Enregistrement de l&apos;enseigne (2/3)
         </Typography>
+        <Typography variant="h5" component="label">
+          {!chosen
+            ? "Votre enseigne possède t'elle plusieurs antenne?"
+            : !multipleWorkshop
+            ? "Enregistrement de l'enseigne"
+            : 'Enregistrement de plusieurs enseignes'}
+        </Typography>
         {!multipleWorkshop && (
           <>
-            <Typography variant="h5" component="label">
-              Votre enseigne possède t&apos;elle plusieurs antenne?
-            </Typography>
             <Box
               width={{xs: '60%', md: '40%'}}
               mt={3}
