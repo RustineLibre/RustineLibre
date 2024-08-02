@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Repairer\Filters;
 
+use App\Entity\Repairer;
+use App\Repairers\Service\UpdateOldFirstSlotAvailableService;
+use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\Repairer\Slots\SlotsTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,14 +31,16 @@ class FirstSlotAvailableFilterTest extends SlotsTestCase
         self::assertLessThanOrEqual($response['hydra:member'][1]['firstSlotAvailable'], $response['hydra:member'][0]['firstSlotAvailable']);
         self::assertLessThanOrEqual($response['hydra:member'][2]['firstSlotAvailable'], $response['hydra:member'][1]['firstSlotAvailable']);
 
-        dd($response, \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:sP', $response['hydra:member'][0]['firstSlotAvailable'])->format('Y-m-d H:i:s'));
+        /** @var Repairer $repairer */
+        $repairer = $this->repairerRepository->find($response['hydra:member'][0]['id']);
         // Create an appointment
-        $this->createClientAuthAsAdmin()->request('POST', '/appointments', ['json' => [
-            'customer' => sprintf('/users/%s', $user->id),
-            'repairer' => sprintf('/repairers/%d', $response['hydra:member'][0]['id']),
-            'slotTime' => \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:sP', $response['hydra:member'][0]['firstSlotAvailable'])->format('Y-m-d H:i:s'),
-        ]]);
-        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        for ($i = 0 ; $i < $repairer->numberOfSlots ; $i++) {
+            $this->createClientAuthAsAdmin()->request('POST', '/appointments', ['json' => [
+                'customer' => sprintf('/users/%s', $user->id),
+                'repairer' => sprintf('/repairers/%d', $response['hydra:member'][0]['id']),
+                'slotTime' => \DateTimeImmutable::createFromFormat('Y-m-d\TH:i:sP', $response['hydra:member'][0]['firstSlotAvailable'])->format('Y-m-d H:i:s'),
+            ]]);
+        }
 
         // Check that previous first result is no more before others
         $response2 = static::createClient()->request('GET', '/repairers?availability=ASC')->toArray();

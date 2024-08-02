@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Repairer\Filters;
 
+use App\Entity\Repairer;
 use App\Repository\RepairerRepository;
 use App\Repository\RepairerTypeRepository;
 use App\Tests\AbstractTestCase;

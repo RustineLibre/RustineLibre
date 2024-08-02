@@ -44,20 +44,28 @@ class DeleteTest extends AbstractTestCase
     public function testUserCannotDeleteMaintenanceForOtherBike(): void
     {
         /** @var Maintenance $maintenance */
-        $maintenance = $this->maintenanceRepository->findOneBy([]);
-        /** @var UserRepository $userRepository */
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        /** @var User $user */
-        $user = $userRepository->createQueryBuilder('u')
-            ->where('u.id != :currentOwnerId')
-            ->andWhere('u.id != :currentAuthorId')
-            ->andWhere('CAST(u.roles AS TEXT) LIKE :role')
-            ->setParameter('currentOwnerId', $maintenance->bike->owner->id)
-            ->setParameter('currentAuthorId', $maintenance->author->id)
-            ->setParameter('role', '%ROLE_USER%')
+        $maintenance = $this->maintenanceRepository->createQueryBuilder('m')
+            ->where('m.bike IS NOT NULL')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        $qbUser = $userRepository->createQueryBuilder('u')
+            ->where('u.id != :currentOwnerId')
+            ->andWhere('CAST(u.roles AS TEXT) LIKE :role')
+            ->setParameter('currentOwnerId', $maintenance->bike->owner->id)
+            ->setParameter('role', '%ROLE_USER%')
+            ->setMaxResults(1);
+
+        if ($maintenance->author) {
+            $qbUser->andWhere('u.id != :currentAuthorId')
+                ->setParameter('currentAuthorId', $maintenance->author->id);
+        }
+
+        /** @var User $user */
+        $user = $qbUser->getQuery()->getOneOrNullResult();
 
         if (!$user) {
             self::fail('Aucun utilisateur n\a été trouvé pour ce test');

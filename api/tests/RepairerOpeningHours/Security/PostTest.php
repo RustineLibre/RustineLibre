@@ -41,8 +41,8 @@ class PostTest extends AbstractTestCase
             'json' => [
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'day' => 'monday',
-                'startTime' => '19:00',
-                'endTime' => '20:00',
+                'startTime' => '20:00',
+                'endTime' => '21:00',
             ],
         ]);
 
@@ -56,8 +56,8 @@ class PostTest extends AbstractTestCase
             'json' => [
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'day' => 'monday',
-                'startTime' => '19:00',
-                'endTime' => '20:00',
+                'startTime' => '21:00',
+                'endTime' => '22:00',
             ],
         ]);
 

@@ -17,10 +17,11 @@ use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use App\Tests\Maintenance\MaintenanceAbstractTestCase;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Response;
 
-class UpdateTest extends AbstractTestCase
+class UpdateTest extends MaintenanceAbstractTestCase
 {
 //    protected Maintenance $maintenance;
 //
@@ -156,25 +157,22 @@ class UpdateTest extends AbstractTestCase
 
     public function testRepairerBossCannotUpdateOtherMaintenances(): void
     {
-        $boss = $this->userRepository->getUserWithRole('ROLE_BOSS');
-        $maintenance = $this->maintenanceRepository->createQueryBuilder('m')
+        /** @var Repairer $repairer */
+        $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
+
+        $qbUserIdsWhoHaveAppointmentWithRepairer = $this->getUserIdsWhoHaveAppointmentWithRepairerQueryBuilder();
+
+        $qbMaintenance = $this->maintenanceRepository->createQueryBuilder('m');
+        $maintenance = $qbMaintenance
             ->innerJoin('m.bike', 'b')
-            ->innerJoin('b.owner', 'o')
-            ->leftJoin(Appointment::class, 'a', Join::WITH, 'a.customer = o.id')
-            ->innerJoin('a.repairer', 'r')
-            ->innerJoin('r.owner', 'ro')
-            ->where('ro.id != :bossId')
-            ->andWhere('CAST(ro.roles AS TEXT) LIKE :role')
-            ->andWhere('o.id != :bossId')
-            ->andWhere('o.id != :bossId')
-            ->setParameter('bossId', $boss->id)
-            ->setParameter('role', '%ROLE_BOSS%')
+            ->where($qbMaintenance->expr()->notIn('b.owner', $qbUserIdsWhoHaveAppointmentWithRepairer->getDQL()))
+            ->setParameter('repairer', $repairer)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
 
         // According to the fixtures, maintenance is not from this boss
-        $this->createClientWithUser($boss)->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
+        $this->createClientWithUser($repairer->owner)->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'description' => 'put by other boss',
@@ -229,26 +227,28 @@ class UpdateTest extends AbstractTestCase
     {
         /** @var RepairerEmployee $repairerEmployee */
         $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
+
+        $qbUserIdsWhoHaveAppointmentWithRepairer = $this->getUserIdsWhoHaveAppointmentWithRepairerQueryBuilder();
+
+        $qbMaintenance = $this->maintenanceRepository->createQueryBuilder('m');
         /** @var Maintenance $maintenance */
-        $maintenance = $this->maintenanceRepository->createQueryBuilder('m')
-            ->innerJoin('m.bike', 'b')
-            ->innerJoin('b.owner', 'o')
-            ->leftJoin(Appointment::class, 'a', Join::WITH, 'a.customer = o.id')
-            ->innerJoin('a.repairer', 'r')
-            ->where('r.id != :repairerId')
-            ->setParameter('repairerId', $repairerEmployee->repairer->id)
+        $maintenance = $qbMaintenance->innerJoin('m.bike', 'b')
+            ->where($qbMaintenance->expr()->notIn('b.owner', $qbUserIdsWhoHaveAppointmentWithRepairer->getDQL()))
+            ->setParameter('repairer', $repairerEmployee->repairer)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
 
         // According to the fixtures, maintenance is not from this employee
-        $this->createClientWithUser($repairerEmployee->employee)->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
+        $response = $this->createClientWithUser($repairerEmployee->employee)->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'description' => 'put by other employee',
                 'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
             ],
         ]);
+
+//        dd($repairerEmployee->employee->id, $maintenance->bike->owner->id, "status code " . $response->getStatusCode());
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }

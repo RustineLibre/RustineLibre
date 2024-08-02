@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\RepairerExceptionnalClosure\Security;
 
+use App\Entity\Repairer;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +37,9 @@ class PostTest extends AbstractTestCase
 
     public function testBossCanCreate(): void
     {
+        /** @var Repairer $repairer */
         $repairer = $this->repairerRepository->findOneBy([]);
+
         $this->createClientWithUser($repairer->owner)->request('POST', '/repairer_exceptional_closures',
             [
                 'json' => [

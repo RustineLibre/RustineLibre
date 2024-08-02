@@ -17,11 +17,12 @@ use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use App\Tests\Maintenance\MaintenanceAbstractTestCase;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CreateTest extends AbstractTestCase
+class CreateTest extends MaintenanceAbstractTestCase
 {
     private TranslatorInterface $translator;
     private RepairerEmployeeRepository $repairerEmployeeRepository;
@@ -86,7 +87,18 @@ class CreateTest extends AbstractTestCase
     public function testBossCanCreateMaintenanceForCustomer(): void
     {
         /** @var Appointment $appointment */
-        $appointment = $this->appointmentRepository->findOneBy([]);
+        $appointment = $this->appointmentRepository->createQueryBuilder('a')
+            ->innerJoin('a.customer', 'c')
+            ->innerJoin('c.bikes', 'b')
+            ->where('b.id IS NOT NULL')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$appointment) {
+            self::fail('Aucun appointment n\'a été trouvé pour ce test');
+        }
+
         $bike = $appointment->customer->bikes->toArray()[0];
 
         // boss add maintenance on bike's customer
@@ -104,22 +116,20 @@ class CreateTest extends AbstractTestCase
 
     public function testBossCannotCreateMaintenanceForOtherUser(): void
     {
+        /** @var Repairer $repairer */
         $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
-        $boss = $repairer->owner;
 
-        /** @var Appointment $appointment */
-        $appointment = $this->appointmentRepository->createQueryBuilder('a')
-            ->where('a.repairer != :repairer')
-            ->setParameter('repairer', $boss->repairers->toArray()[0])
+        $qbUserIdsWhoHaveAppointmentWithRepairer = $this->getUserIdsWhoHaveAppointmentWithRepairerQueryBuilder();
+
+        $qbBike = $this->bikeRepository->createQueryBuilder('b');
+        $bike = $qbBike->where($qbBike->expr()->notIn('b.owner', $qbUserIdsWhoHaveAppointmentWithRepairer->getDQL()))
+            ->setParameter('repairer', $repairer)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
 
-        /** @var Bike $bike */
-        $bike = $appointment->customer->bikes->toArray()[0];
-
         // boss add maintenance on other bike according to the fixtures
-        $this->createClientWithUser($boss)->request('POST', '/maintenances', [
+        $this->createClientWithUser($repairer->owner)->request('POST', '/maintenances', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'name' => 'Test',
@@ -180,13 +190,13 @@ class CreateTest extends AbstractTestCase
         /** @var RepairerEmployee $repairerEmployee */
         $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
 
+        $qbUserIdsWhoHaveAppointmentWithRepairer = $this->getUserIdsWhoHaveAppointmentWithRepairerQueryBuilder();
+
         /** @var Bike $bike */
-        $bike = $this->bikeRepository->createQueryBuilder('b')
-            ->innerJoin('b.owner', 'o')
-            ->leftJoin(Appointment::class, 'a', Join::WITH, 'o.id = a.customer')
-            ->innerJoin('a.repairer', 'r')
-            ->where('r.id != :repairerId')
-            ->setParameter('repairerId', $repairerEmployee->repairer->id)
+        $qbBike = $this->bikeRepository->createQueryBuilder('b');
+        $bike = $qbBike
+            ->where($qbBike->expr()->notIn('b.owner', $qbUserIdsWhoHaveAppointmentWithRepairer->getDQL()))
+            ->setParameter('repairer', $repairerEmployee->repairer)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
