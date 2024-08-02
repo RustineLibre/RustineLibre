@@ -103,7 +103,7 @@ class CreateUserAndRepairerTest extends AbstractTestCase
             'city' => 'Lille',
             'postcode' => '59000',
             'bikeTypesSupported' => [sprintf('/bike_types/%s', $bikeTypes[0]->id), sprintf('/bike_types/%s', $bikeTypes[1]->id)],
-            'repairerType' => sprintf('/repairer_types/%s', $repairerTypes[0]->id),
+            'repairerTypes' => [sprintf('/repairer_types/%s', $repairerTypes[0]->id), sprintf('/repairer_types/%s', $repairerTypes[1]->id)],
             'comment' => 'Bonjour je voudrais rejoindre votre super plateforme',
         ];
     }

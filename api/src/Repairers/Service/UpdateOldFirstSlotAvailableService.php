@@ -22,7 +22,9 @@ readonly class UpdateOldFirstSlotAvailableService
     {
         /** @var Repairer[] $repairers */
         $repairers = $this->repairerRepository->findByOldFirstSlotAvailable();
-
+//        dd(array_map(function(Repairer $repairer) {
+//            return $repairer->id;
+//        }, $repairers));
         foreach ($repairers as $repairer) {
             $this->logger->info(sprintf('Update $firstSlotAvailable for repairer %d', $repairer->id));
             $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $repairer, flush: true);

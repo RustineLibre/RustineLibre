@@ -44,7 +44,7 @@ class SlotsTestCase extends AbstractTestCase
         if ($numberSlotsAvailable > 4) {
             self::fail('Number of slots available must be less than 4');
         }
-        $repairerType = $this->repairerTypeRepository->findOneBy([]);
+        $repairerType = $this->repairerTypeRepository->findOneBy(['name' => 'Réparateur itinérant']);
         $bikeType = $this->getBikeType();
         $client = $this->createClientAuthAsAdmin();
         $adminClient = $this->createClientAuthAsAdmin();
@@ -75,10 +75,10 @@ class SlotsTestCase extends AbstractTestCase
                 'mobilePhone' => '0720596321',
                 'street' => 'rue de la clé',
                 'streetNumber' => '8',
-                'city' => 'Lille',
+                'city' => 'Lens',
                 'postcode' => '59000',
-                'latitude' => '50.62544631958008',
-                'longitude' => '3.0352721214294434',
+                'latitude' => '50.4395353',
+                'longitude' => '2.7984971',
                 'country' => 'France',
                 'slotsDuration' => 60,
                 'numberOfSlots' => 4,

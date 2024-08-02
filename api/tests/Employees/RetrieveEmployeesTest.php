@@ -105,22 +105,22 @@ class RetrieveEmployeesTest extends AbstractTestCase
 
     public function testGetEmployeesAsBossWithNoEmployees(): void
     {
-        $users = array_reverse(static::getContainer()->get(UserRepository::class)->findAll());
+        /** @var Repairer[] $repairers */
+        $repairers = self::getContainer()->get(RepairerRepository::class)->findAll();
 
-        $firstRandomBoss = null;
-        /** @var User $user */
-        foreach ($users as $user) {
-            if ($user->isBoss() && 'boss@test.com' !== $user->email) {
-                $firstRandomBoss = $user;
+        $repairerWithNoEmployees = null;
+
+        foreach ($repairers as $repairer) {
+            if ($repairer->repairerEmployees->count() === 0) {
+                $repairerWithNoEmployees = $repairer;
             }
         }
 
-        if (!$firstRandomBoss) {
+        if (!$repairerWithNoEmployees) {
             throw new NotFoundHttpException($this->translator->trans('404_notFound.boss', domain: 'validators'));
         }
 
-        // Boss of repairer 1 try to get an employee of repairer 2
-        $response = $this->createClientWithCredentials(['email' => $firstRandomBoss->email, 'password' => 'Test1passwordOk!'])->request('GET', '/repairer_employees');
+        $response = $this->createClientWithCredentials(['email' => $repairerWithNoEmployees->owner->email, 'password' => 'Test1passwordOk!'])->request('GET', '/repairer_employees');
         $this->assertEquals(0, $response->toArray()['hydra:totalItems']);
     }
 }

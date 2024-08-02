@@ -208,6 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
+        $this->repairers = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -273,13 +274,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->isBoss()) {
             return !$this->repairers->filter(function (Repairer $repairerOfUser) use ($repairer) {
-                return $repairer instanceof Repairer ? $repairerOfUser === $repairer : $repairerOfUser->id == $repairer;
+                return $repairer instanceof Repairer ? $repairerOfUser->id === $repairer->id : $repairerOfUser->id == $repairer;
             })->isEmpty();
         }
 
         if ($this->isEmployee() && $this->repairerEmployee) {
             return $repairer instanceof Repairer ?
-                $repairer === $this->repairerEmployee->repairer :
+                $repairer->id === $this->repairerEmployee->repairer->id :
                 $repairer == $this->repairerEmployee->repairer->id;
         }
 
