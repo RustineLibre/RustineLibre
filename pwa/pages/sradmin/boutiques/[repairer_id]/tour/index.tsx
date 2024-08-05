@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
@@ -15,6 +15,7 @@ import {Appointment} from '@interfaces/Appointment';
 import Grid from '@mui/material/Grid';
 import TourAppointmentsList from '@components/dashboard/tour/TourAppointmentsList';
 import dynamic from 'next/dynamic';
+import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
 const TourMap = dynamic(() => import('@components/dashboard/tour/TourMap'), {
   ssr: false,
 });
@@ -23,19 +24,8 @@ const Tour = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const {user} = useAccount({});
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [repairer, setRepairer] = useState<Repairer | null>(null);
+  const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);
   const [date, setDate] = useState<Date>(new Date());
-
-  useEffect(() => {
-    if (user && user.repairer) {
-      setRepairer(user.repairer);
-      return;
-    }
-
-    if (user && user.repairerEmployee) {
-      setRepairer(user.repairerEmployee.repairer);
-    }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePreviousDate = (numberOfDays: number) => {
     let newDate = new Date(date.getTime() - 24 * 60 * 60 * 1000 * numberOfDays);

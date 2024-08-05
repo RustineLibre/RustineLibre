@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from 'pages/_app';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {useRouter} from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -29,10 +29,12 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {Bike} from '@interfaces/Bike';
 import {Maintenance} from '@interfaces/Maintenance';
 import {formatDate} from '@helpers/dateHelper';
+import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
 
 const CustomerBikes: NextPageWithLayout = () => {
   const router = useRouter();
   const {id} = router.query;
+  const {repairer} = useContext(DashboardRepairerContext);
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [bike, setBike] = useState<Bike | null>(null);
   const [maintenanceSelected, setMaintenanceSelected] =
@@ -116,9 +118,9 @@ const CustomerBikes: NextPageWithLayout = () => {
         {!loading && bike && (
           <h3>
             Carnet d&#39;entretien : <u>{bike.name}</u>{' '}
-            <Link href={`/sradmin/clients/${bike.owner.id}`}>
+            {repairer && <Link href={`/sradmin/boutiques/${repairer.id}/clients/${bike.owner.id}`}>
               ({bike.owner.firstName} {bike.owner.lastName})
-            </Link>
+            </Link> }
             <Button
               variant="outlined"
               onClick={() => setOpenModalAddMaintenance(true)}

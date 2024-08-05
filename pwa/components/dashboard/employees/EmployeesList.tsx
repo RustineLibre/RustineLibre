@@ -39,7 +39,7 @@ export const EmployeesList = ({
       let employees = [];
       for (const repairer of repairers) {
         const response = await repairerEmployeesResource.getAll(true, {
-          repairer: repairer['@id'],
+          repairer: `/repairers/${repairer.id}`,
         });
         employees.push(...response['hydra:member']);
       }

@@ -66,7 +66,7 @@ const RepairerDiscussionList = ({
                 key={discussionItem.id}
                 discussionGiven={discussionItem}
                 current={discussion?.id === discussionItem.id}
-                isCustomer={!(isBoss(user) || isEmployee(user))}
+                repairer={repairer}
               />
             );
           })}
