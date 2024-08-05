@@ -59,7 +59,7 @@ const CustomerDiscussionList = ({
                 key={discussionItem.id}
                 current={discussionItem.id === discussion?.id}
                 discussionGiven={discussionItem}
-                isCustomer={!(isBoss(user) || isEmployee(user))}
+                repairer={null}
               />
             );
           })}

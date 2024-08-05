@@ -101,6 +101,7 @@ export const OpeningHoursDetail = ({
       <Divider sx={{marginBottom: '20px'}} />
 
       <ModalAddOpeningHours
+        repairer={repairer}
         day={dayOfWeek.en}
         openModal={openModal}
         handleCloseModal={handleCloseModal}

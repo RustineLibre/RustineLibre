@@ -104,6 +104,7 @@ export const ExceptionalClosure = ({
       <ModalAddExceptionalClosure
         openModal={openModal}
         handleCloseModal={handleCloseModal}
+        repairer={repairer}
       />
     </>
   );

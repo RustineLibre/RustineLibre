@@ -14,7 +14,6 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
 import HomeIcon from '@mui/icons-material/Home';
-import StorefrontIcon from '@mui/icons-material/Storefront';
 import ForumIcon from '@mui/icons-material/Forum';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
@@ -37,10 +36,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
 import {Repairer} from '@interfaces/Repairer';
 import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Menu, {MenuProps} from '@mui/material/Menu';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
@@ -187,7 +182,6 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   };
 
   const router = useRouter();
-  const {repairer_id} = router.query;
   const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);
 
   const {user} = useAccount({

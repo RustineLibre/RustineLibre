@@ -100,7 +100,7 @@ const MobileNavbar = ({
           ))}
           {isBossOrEmployee && (
             <Link
-              href="/sradmin"
+              href="/sradmin/boutiques"
               style={{textDecoration: 'none', color: 'currentcolor'}}>
               <MenuItem
                 sx={{textAlign: 'center'}}

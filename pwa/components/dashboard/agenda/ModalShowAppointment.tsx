@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {appointmentResource} from '@resources/appointmentResource';
 import {openingHoursResource} from '@resources/openingHours';
 import AppointmentActions from '../appointments/AppointmentActions';
@@ -36,6 +36,8 @@ import {getAppointmentStatus} from '@helpers/appointmentStatus';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import NextLink from 'next/link';
+import Divider from '@mui/material/Divider';
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 type ModalShowAppointmentProps = {
   appointment: Appointment;
@@ -51,6 +53,7 @@ const ModalShowAppointment = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+  const {repairer} = useContext(DashboardRepairerContext);
   const [loadingNewSlot, setLoadingNewSlot] = useState<boolean>(false);
   const [proposeOtherSlot, setProposeOtherSlot] = useState<boolean>(false);
   const [slotsAvailable, setSlotsAvailable] = useState<any>(null);
@@ -183,9 +186,11 @@ const ModalShowAppointment = ({
                 </Typography>
               </Box>
               <Box>
-                {appointment.discussion && (
+                {appointment.discussion && repairer && (
                   <NextLink
-                    href={`/sradmin/messagerie/${appointment.discussion!.id}`}
+                    href={`/sradmin/boutiques/${repairer.id}/messagerie/${
+                      appointment.discussion!.id
+                    }`}
                     legacyBehavior
                     passHref>
                     <Link>

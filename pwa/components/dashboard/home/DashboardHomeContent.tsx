@@ -89,7 +89,7 @@ export const DashboardHomeContent = ({
           </Grid>
           {isBoss(currentUser) && (
             <Grid item xs={12} mt={2}>
-              <DashboardHomeEmployees currentBoss={currentUser} />
+              <DashboardHomeEmployees currentBoss={currentUser} repairer={repairer} />
             </Grid>
           )}
         </Grid>

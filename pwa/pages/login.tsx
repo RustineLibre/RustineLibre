@@ -38,7 +38,7 @@ const Login: NextPageWithLayout = ({}) => {
     if (user && user.emailConfirmed) {
       // Si c'est un compte réparateur on le redirige vers son back office
       if (isBoss(user) || isEmployee(user)) {
-        router.push('/sradmin');
+        router.push('/sradmin/boutiques');
       } else if (isAdmin(user)) {
         router.push('/admin/reparateurs');
       } else {
