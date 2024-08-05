@@ -1,6 +1,7 @@
 import {AbstractResource} from '@resources/AbstractResource';
 import {User} from '@interfaces/User';
-import {RequestBody, RequestHeaders} from '@interfaces/Resource';
+import {RequestBody} from '@interfaces/Resource';
+import {getToken} from '@helpers/localHelper';
 
 class UserResource extends AbstractResource<User> {
   protected endpoint = '/users';
@@ -77,6 +78,18 @@ class UserResource extends AbstractResource<User> {
     };
 
     return await this.getResult(doFetch);
+  }
+
+  async exportUserCollectionCsv(): Promise<Response> {
+    const currentToken = getToken();
+
+    return await fetch('/export_users_csv', {
+      headers: {
+        'Content-Type': 'text/csv',
+        Authorization: `Bearer ${currentToken}`,
+      },
+      method: 'GET',
+    });
   }
 }
 

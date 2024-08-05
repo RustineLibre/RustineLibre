@@ -26,6 +26,7 @@ use App\Repairers\Filter\ProximityFilter;
 use App\Repairers\Filter\RandomFilter;
 use App\Repairers\Filter\RepairerSearchFilter;
 use App\Repairers\State\CreateUserRepairerProcessor;
+use App\Repairers\State\ExportRepairerCollectionProvider;
 use App\Repairers\State\UpdateRepairerBossProcessor;
 use App\Repairers\Validator\RepairerSlots;
 use App\Repository\RepairerRepository;
@@ -49,6 +50,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
 #[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_COLLECTION_READ]])]
+#[GetCollection(
+    uriTemplate: '/export_repairers_csv',
+    outputFormats: ['csv' => ['text/csv']],
+    openapi: new Model\Operation(
+        summary: 'Export repairer collection to csv format',
+    ),
+    security: "is_granted('ROLE_ADMIN')",
+    provider: ExportRepairerCollectionProvider::class,
+)]
 #[GetCollection(
     uriTemplate: '/repairer_get_slots_available/{id}',
     requirements: ['id' => '\d+'],
