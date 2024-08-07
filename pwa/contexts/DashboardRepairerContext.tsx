@@ -29,7 +29,7 @@ export const DashboardRepairerProvider = ({
   children,
 }: ProviderProps): JSX.Element => {
   const router = useRouter();
-  const {repairer_id} = router.query;
+  const {repairer_id} = router.query ?? null;
   const {user} = useAccount({});
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const [repairerNotFound, setRepairerNotFound] = useState<boolean>(false);
@@ -40,6 +40,10 @@ export const DashboardRepairerProvider = ({
     }
 
     setRepairerNotFound(false);
+    if (!repairer_id) {
+      setRepairer(null);
+      return;
+    }
 
     const repairerForBoss = user.repairers.find(
       (repairer) => repairer.id == repairer_id

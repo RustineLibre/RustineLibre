@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Link from 'next/link';
 import {repairerEmployeesResource} from '@resources/repairerEmployeesResource';
 import ConfirmationModal from '@components/common/ConfirmationModal';
@@ -7,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForeverSharp';
 import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 import findIdInUri from '@helpers/findIdInUri';
+import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
 
 interface EmployeesListActionsProps {
   employee: RepairerEmployee;
@@ -17,6 +18,7 @@ export const EmployeesListActions = ({
   employee,
   fetchEmployees,
 }: EmployeesListActionsProps): JSX.Element => {
+  const {repairer} = useContext(DashboardRepairerContext);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
 
@@ -36,7 +38,7 @@ export const EmployeesListActions = ({
       ) : (
         <>
           <Link
-            href={`/sradmin/boutiques/${employee.repairer.id}/employes/edit/${employee.id}`}
+            href={repairer ? `/sradmin/boutiques/${employee.repairer.id}/employes/edit/${employee.id}` : `/sradmin/boutiques/employes/edit/${employee.id}`}
             legacyBehavior
             passHref>
             <IconButton color="secondary">

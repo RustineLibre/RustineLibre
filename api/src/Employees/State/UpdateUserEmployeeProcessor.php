@@ -43,6 +43,7 @@ final class UpdateUserEmployeeProcessor implements ProcessorInterface
             throw new NotFoundHttpException($this->translator->trans('404_notFound.repairer.employee', domain: 'validators'));
         }
 
+        $repairerEmployee->repairer = $data->repairer;
         $repairerEmployee->enabled = boolval($data->enabled);
         $this->validator->validate($repairerEmployee);
 

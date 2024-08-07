@@ -86,7 +86,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     processor: UpdateRepairerBossProcessor::class
 )]
 #[Put(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
-#[Delete(security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
+#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
 #[Patch(denormalizationContext: ['groups' => [self::REPAIRER_WRITE]], security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)")]
 #[ApiFilter(AroundFilter::class)]
 #[ApiFilter(FirstSlotAvailableFilter::class)]

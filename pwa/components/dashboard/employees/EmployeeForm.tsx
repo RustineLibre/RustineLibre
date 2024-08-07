@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
 import {repairerEmployeesResource} from '@resources/repairerEmployeesResource';
-import {useAuth} from '@contexts/AuthContext';
+import {useAccount, useAuth} from '@contexts/AuthContext';
 import {UserFormContext} from '@contexts/UserFormContext';
 import {
   Alert,
@@ -10,6 +10,11 @@ import {
   CircularProgress,
   Container,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
   Switch,
   TextField,
   Typography,
@@ -24,16 +29,20 @@ import {Repairer} from '@interfaces/Repairer';
 
 interface EmployeeFormProps {
   repairerEmployee: RepairerEmployee | null;
-  repairer: Repairer;
+  repairer: Repairer | null;
 }
 
 export const EmployeeForm = ({
   repairerEmployee,
   repairer,
 }: EmployeeFormProps): JSX.Element => {
+  const router = useRouter();
+  const {user} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`
+});
   const [enabled, setEnabled] = useState<boolean>(
     repairerEmployee ? repairerEmployee.enabled : true
   );
+  const [selectedRepairer, setSelectedRepairer] = useState<string | null>(null);
   const [enabledNewAdmin, setEnabledNewAdmin] = useState<boolean>(false);
   const [pendingRegistration, setPendingRegistration] =
     useState<boolean>(false);
@@ -42,7 +51,6 @@ export const EmployeeForm = ({
   const [updateSuccess, setUpdateSuccess] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [adminDialogOpen, setAdminDialogOpen] = useState<boolean>(false);
-  const router = useRouter();
   const {logout} = useAuth();
 
   const {
@@ -69,13 +77,15 @@ export const EmployeeForm = ({
     setFirstName(repairerEmployee ? repairerEmployee.employee.firstName : '');
     setLastName(repairerEmployee ? repairerEmployee.employee.lastName : '');
     setPassword('');
+    setSelectedRepairer(repairerEmployee ? repairerEmployee.repairer.name : '');
   }, [repairerEmployee, setEmail, setFirstName, setLastName, setPassword]);
 
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    if (passwordError || !email || !firstName || !lastName) {
+    const repairerOfEmployee = user?.repairers.find(repairer => repairer.name === selectedRepairer);
+    if (passwordError || !email || !firstName || !lastName || !repairerOfEmployee) {
       return;
     }
     setErrorMessage(null);
@@ -84,7 +94,7 @@ export const EmployeeForm = ({
       firstName: firstName,
       lastName: lastName,
       email: email,
-      repairer: `/repairers/${repairer.id}`,
+      repairer: repairerOfEmployee['@id'],
     };
     if (password !== '') {
       bodyRequest['plainPassword'] = password;
@@ -100,7 +110,7 @@ export const EmployeeForm = ({
         await repairerEmployeesResource.post(bodyRequest);
       }
       setUpdateSuccess(true);
-      await router.push(`/sradmin/boutiques/${repairer.id}/employes`);
+      await router.push(repairer ? `/sradmin/boutiques/${repairer.id}/employes` : '/sradmin/boutiques');
     } catch (e: any) {
       setErrorMessage(
         `${
@@ -233,6 +243,24 @@ export const EmployeeForm = ({
             value={password}
             onChange={handleChangePassword}
           />
+          <FormControl fullWidth required>
+            <InputLabel id="repairer-label">Boutique</InputLabel>
+            <Select
+              required
+              labelId="repairer-label"
+              label="Boutique"
+              id="repairer"
+              input={<OutlinedInput label="Boutique" />}
+              value={selectedRepairer}
+              onChange={(e) => setSelectedRepairer(e.target.value)}
+              style={{width: '100%'}}>
+              {user?.repairers.map((repairer) => (
+                <MenuItem key={repairer.id} value={repairer.name}>
+                  {repairer.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
           <Typography variant="body1">
             {repairerEmployee
               ? 'Laissez ce champ vide pour conserver le mot de passe actuel'
