@@ -72,7 +72,7 @@ describe('Testing if repairer has roving repairer type', () => {
       repairerTypes: [partialRepairerType as RepairerType],
     };
     const partialUser: Partial<User> = {
-      repairer: partialRepairer as Repairer,
+      repairers: [partialRepairer as Repairer],
     };
     expect(isItinerant(partialUser as User)).toBeTruthy();
   });
