@@ -10,7 +10,6 @@ use Doctrine\ORM\QueryBuilder;
 
 class MaintenanceAbstractTestCase extends AbstractTestCase
 {
-
     private UserRepository $userRepository;
 
     public function setUp(): void
@@ -27,5 +26,4 @@ class MaintenanceAbstractTestCase extends AbstractTestCase
             ->where('a.repairer = :repairer')
             ->addGroupBy('u.id');
     }
-
 }

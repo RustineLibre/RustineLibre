@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Repairer\Filters;
 
 use App\Entity\Repairer;
-use App\Repairers\Service\UpdateOldFirstSlotAvailableService;
-use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\Repairer\Slots\SlotsTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class FirstSlotAvailableFilterTest extends SlotsTestCase
 {
@@ -34,7 +31,7 @@ class FirstSlotAvailableFilterTest extends SlotsTestCase
         /** @var Repairer $repairer */
         $repairer = $this->repairerRepository->find($response['hydra:member'][0]['id']);
         // Create an appointment
-        for ($i = 0 ; $i < $repairer->numberOfSlots ; $i++) {
+        for ($i = 0; $i < $repairer->numberOfSlots; ++$i) {
             $this->createClientAuthAsAdmin()->request('POST', '/appointments', ['json' => [
                 'customer' => sprintf('/users/%s', $user->id),
                 'repairer' => sprintf('/repairers/%d', $response['hydra:member'][0]['id']),

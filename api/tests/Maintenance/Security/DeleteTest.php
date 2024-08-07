@@ -9,7 +9,6 @@ use App\Entity\User;
 use App\Repository\MaintenanceRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
-use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Response;
 
 class DeleteTest extends AbstractTestCase

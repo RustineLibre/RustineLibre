@@ -16,28 +16,27 @@ use App\Repository\MaintenanceRepository;
 use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
-use App\Tests\AbstractTestCase;
 use App\Tests\Maintenance\MaintenanceAbstractTestCase;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Response;
 
 class UpdateTest extends MaintenanceAbstractTestCase
 {
-//    protected Maintenance $maintenance;
-//
-//    protected Appointment $appointment;
-//
-//    protected Bike $bike;
-//
-//    protected User $user;
-//
-//    protected Repairer $repairerWithAppointment;
-//
-//    protected User $customer;
-//
-//    protected User $boss;
-//
-//    protected RepairerEmployee $repairerEmployee;
+    //    protected Maintenance $maintenance;
+    //
+    //    protected Appointment $appointment;
+    //
+    //    protected Bike $bike;
+    //
+    //    protected User $user;
+    //
+    //    protected Repairer $repairerWithAppointment;
+    //
+    //    protected User $customer;
+    //
+    //    protected User $boss;
+    //
+    //    protected RepairerEmployee $repairerEmployee;
     private RepairerEmployeeRepository $repairerEmployeeRepository;
     private BikeRepository $bikeRepository;
     private AppointmentRepository $appointmentRepository;
@@ -54,15 +53,14 @@ class UpdateTest extends MaintenanceAbstractTestCase
         $this->maintenanceRepository = self::getContainer()->get(MaintenanceRepository::class);
         $this->userRepository = self::getContainer()->get(UserRepository::class);
 
-
-//        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy([], ['id' => 'ASC']);
-//        $this->user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
-//        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['customer' => $this->user]);
-//        $this->repairerWithAppointment = $this->appointment->repairer;
-//        $this->boss = $this->repairerWithAppointment->owner;
-//        $this->customer = $this->appointment->customer;
-//        $this->repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $this->repairerWithAppointment]);
-//        $this->bike = static::getContainer()->get(BikeRepository::class)->findOneBy(['owner' => $this->customer]);
+        //        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy([], ['id' => 'ASC']);
+        //        $this->user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
+        //        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['customer' => $this->user]);
+        //        $this->repairerWithAppointment = $this->appointment->repairer;
+        //        $this->boss = $this->repairerWithAppointment->owner;
+        //        $this->customer = $this->appointment->customer;
+        //        $this->repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $this->repairerWithAppointment]);
+        //        $this->bike = static::getContainer()->get(BikeRepository::class)->findOneBy(['owner' => $this->customer]);
     }
 
     public function testUserCanUpdateMaintenanceForOwnBike(): void
@@ -198,7 +196,6 @@ class UpdateTest extends MaintenanceAbstractTestCase
             ->getQuery()
             ->getOneOrNullResult();
 
-
         $client = $this->createClientWithUser($repairerEmployee->employee);
         // employee add maintenance on bike's customer
         $response = $client->request('POST', '/maintenances', [
@@ -248,7 +245,7 @@ class UpdateTest extends MaintenanceAbstractTestCase
             ],
         ]);
 
-//        dd($repairerEmployee->employee->id, $maintenance->bike->owner->id, "status code " . $response->getStatusCode());
+        //        dd($repairerEmployee->employee->id, $maintenance->bike->owner->id, "status code " . $response->getStatusCode());
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }

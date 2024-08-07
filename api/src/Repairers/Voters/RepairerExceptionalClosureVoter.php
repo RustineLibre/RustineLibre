@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Repairers\Voters;
 
-use App\Entity\Repairer;
 use App\Entity\RepairerExceptionalClosure;
 use App\Entity\RepairerOpeningHours;
 use App\Entity\User;

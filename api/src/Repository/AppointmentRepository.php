@@ -128,10 +128,10 @@ class AppointmentRepository extends ServiceEntityRepository
         if ($userRepairer->repairerEmployee) {
             $qb->andWhere('a.repairer = :repairer')
                 ->setParameter('repairer', $userRepairer->repairerEmployee->repairer);
-        } else if ($userRepairer->repairers->count() > 0) {
+        } elseif ($userRepairer->repairers->count() > 0) {
             $condition = '';
             foreach ($userRepairer->repairers as $key => $repairer) {
-                if ($condition !== '') {
+                if ('' !== $condition) {
                     $condition .= ' OR ';
                 }
                 $condition .= sprintf('a.repairer = :repairer_%s', $key);
@@ -144,7 +144,7 @@ class AppointmentRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getOneOrNullResult();
     }
-      
+
     public function getNextAppointmentsNotSync(Repairer $repairer): array
     {
         $qb = $this->createQueryBuilder('a')

@@ -6,10 +6,8 @@ namespace App\Tests\Employees;
 
 use App\Entity\Repairer;
 use App\Entity\RepairerEmployee;
-use App\Entity\User;
 use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
-use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -111,7 +109,7 @@ class RetrieveEmployeesTest extends AbstractTestCase
         $repairerWithNoEmployees = null;
 
         foreach ($repairers as $repairer) {
-            if ($repairer->repairerEmployees->count() === 0) {
+            if (0 === $repairer->repairerEmployees->count()) {
                 $repairerWithNoEmployees = $repairer;
             }
         }

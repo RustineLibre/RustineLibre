@@ -5,12 +5,10 @@ namespace App\Tests\Repairer;
 use App\Repository\BikeTypeRepository;
 use App\Repository\RepairerTypeRepository;
 use App\Tests\AbstractTestCase;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateUserAndRepairerTest extends AbstractTestCase
 {
-
     private BikeTypeRepository $bikeTypeRepository;
 
     private RepairerTypeRepository $repairerTypeRepository;
@@ -84,5 +82,4 @@ class CreateUserAndRepairerTest extends AbstractTestCase
             'comment' => 'Bonjour je voudrais rejoindre votre super plateforme',
         ];
     }
-
 }

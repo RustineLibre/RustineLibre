@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
-//    mercure: true,
+    //    mercure: true,
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true
@@ -50,7 +50,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'repairer_id' => new Link(
             toProperty: 'repairer',
             fromClass: Repairer::class
-        )
+        ),
     ],
     controller: NumberOfMessageNotReadForRepairerController::class,
     openapi: new Operation(

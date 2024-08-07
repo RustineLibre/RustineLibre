@@ -9,14 +9,11 @@ use App\Entity\Bike;
 use App\Entity\Maintenance;
 use App\Entity\Repairer;
 use App\Entity\RepairerEmployee;
-use App\Entity\User;
 use App\Repository\AppointmentRepository;
 use App\Repository\BikeRepository;
 use App\Repository\MaintenanceRepository;
 use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
-use App\Repository\UserRepository;
-use App\Tests\AbstractTestCase;
 use App\Tests\Maintenance\MaintenanceAbstractTestCase;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,7 +58,7 @@ class CreateTest extends MaintenanceAbstractTestCase
         $bikes = $this->bikeRepository->findAll();
 
         $bike1 = $bikes[0];
-        $bike2 = current(array_filter($bikes, function(Bike $bike) use ($bike1) {
+        $bike2 = current(array_filter($bikes, function (Bike $bike) use ($bike1) {
             return $bike->owner !== $bike1->owner;
         }));
 

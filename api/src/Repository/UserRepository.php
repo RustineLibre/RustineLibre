@@ -57,13 +57,13 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb = $this->createQueryBuilder('u');
 
         return $qb->where(
-                $qb->expr()->not($qb->expr()->exists(
-                        $this->getEntityManager()->createQueryBuilder()
-                        ->select('1')
-                        ->from('App\Entity\Repairer', 'r')
-                        ->where('r.owner = u')
-                        ->getDQL()
-                )
+            $qb->expr()->not($qb->expr()->exists(
+                $this->getEntityManager()->createQueryBuilder()
+                ->select('1')
+                ->from('App\Entity\Repairer', 'r')
+                ->where('r.owner = u')
+                ->getDQL()
+            )
             ))
             ->andWhere('CAST(u.roles AS TEXT) LIKE :role')
             ->setParameter('role', '%ROLE_USER%')

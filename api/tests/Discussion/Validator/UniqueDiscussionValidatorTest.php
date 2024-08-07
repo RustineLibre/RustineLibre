@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Discussion\Validator;
 
 use App\Entity\Discussion;
-use App\Repository\DiscussionRepository;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
