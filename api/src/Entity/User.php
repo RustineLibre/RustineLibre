@@ -270,7 +270,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
-    public function isAssociatedWithRepairer(int | string | Repairer $repairer): bool
+    public function isAssociatedWithRepairer(int|string|Repairer $repairer): bool
     {
         if ($this->isBoss()) {
             return !$this->repairers->filter(function (Repairer $repairerOfUser) use ($repairer) {

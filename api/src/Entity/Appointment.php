@@ -56,7 +56,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'repairer_id' => new Link(
             toProperty: 'repairer',
             fromClass: Repairer::class
-        )
+        ),
     ],
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',

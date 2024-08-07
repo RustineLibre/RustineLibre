@@ -15,9 +15,7 @@ use App\Repository\AppointmentRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @template-implements ProviderInterface<User>
@@ -47,9 +45,9 @@ final class CustomersProvider implements ProviderInterface
         $repairerFromBoss = array_shift($repairersFromBoss);
 
         if (
-            !$user ||
-            (!$user->isAdmin() && !$user->isBoss() && !$user->isEmployee()) ||
-            (!$repairerFromEmployee && !$repairerFromBoss)
+            !$user
+            || (!$user->isAdmin() && !$user->isBoss() && !$user->isEmployee())
+            || (!$repairerFromEmployee && !$repairerFromBoss)
         ) {
             throw new AccessDeniedException();
         }

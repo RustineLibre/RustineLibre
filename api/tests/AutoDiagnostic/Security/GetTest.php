@@ -7,11 +7,9 @@ namespace App\Tests\AutoDiagnostic\Security;
 use App\Entity\Appointment;
 use App\Entity\AutoDiagnostic;
 use App\Entity\User;
-use App\Repository\AppointmentRepository;
 use App\Repository\AutoDiagnosticRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
-use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\HttpFoundation\Response;
 
 class GetTest extends AbstractTestCase
@@ -75,13 +73,13 @@ class GetTest extends AbstractTestCase
             ->getQuery()
             ->getOneOrNullResult();
 
-//        $autoDiagnostic = $this->autoDiagnosticRepository->createQueryBuilder('ad')
-//            ->innerJoin('ad.appointment', 'a')
-//            ->andWhere('a.customer != :user')
-//            ->setParameter('user', $user)
-//            ->setMaxResults(1)
-//            ->getQuery()
-//            ->getOneOrNullResult();
+        //        $autoDiagnostic = $this->autoDiagnosticRepository->createQueryBuilder('ad')
+        //            ->innerJoin('ad.appointment', 'a')
+        //            ->andWhere('a.customer != :user')
+        //            ->setParameter('user', $user)
+        //            ->setMaxResults(1)
+        //            ->getQuery()
+        //            ->getOneOrNullResult();
 
         $this->createClientWithUser($user)->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);

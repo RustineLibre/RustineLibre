@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Intervention;
 
 use App\Entity\Intervention;
-use App\Entity\RepairerIntervention;
 use App\Entity\User;
 use App\Repository\InterventionRepository;
 use App\Repository\UserRepository;

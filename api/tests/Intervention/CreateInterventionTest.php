@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CreateInterventionTest extends AbstractTestCase
 {
     public UserRepository $userRepository;
+
     public function setUp(): void
     {
         parent::setUp();

@@ -26,6 +26,6 @@ class RepairerInterventionVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        return !!$subject->intervention->isAdmin;
+        return (bool) $subject->intervention->isAdmin;
     }
 }

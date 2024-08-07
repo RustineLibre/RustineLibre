@@ -6,7 +6,6 @@ namespace App\Repository;
 
 use App\Entity\Discussion;
 use App\Entity\DiscussionMessage;
-use App\Entity\Repairer;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
