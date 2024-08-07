@@ -79,7 +79,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
 )]
 #[GetCollection(
-    uriTemplate: '/customer/messages_unread',
+    uriTemplate: '/customers/messages_unread',
     controller: NumberOfMessageNotReadForCustomerController::class,
     openapi: new Operation(
         responses: [
