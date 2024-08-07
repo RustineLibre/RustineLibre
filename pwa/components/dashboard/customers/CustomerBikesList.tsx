@@ -21,7 +21,7 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Link from 'next/link';
 import ModalShowBike from '@components/dashboard/customers/ModalShowBike';
-import {Repairer} from "@interfaces/Repairer";
+import {Repairer} from '@interfaces/Repairer';
 
 interface CustomerBikesListProps {
   customer: Customer;

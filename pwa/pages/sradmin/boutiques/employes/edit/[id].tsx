@@ -43,10 +43,7 @@ const EditEmployee: NextPageWithLayout = () => {
         {isLoading ? (
           <CircularProgress />
         ) : (
-          <EmployeeForm
-            repairerEmployee={repairerEmployee}
-            repairer={null}
-          />
+          <EmployeeForm repairerEmployee={repairerEmployee} repairer={null} />
         )}
       </Box>
     </>

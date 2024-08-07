@@ -20,7 +20,7 @@ import {formatDate} from 'helpers/dateHelper';
 import {getAppointmentStatus} from '@helpers/appointmentStatus';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import {useAccount} from '@contexts/AuthContext';
-import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 interface CustomerAppointmentsListProps {
   customer: Customer;

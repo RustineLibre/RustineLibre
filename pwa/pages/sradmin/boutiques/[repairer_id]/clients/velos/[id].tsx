@@ -29,7 +29,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {Bike} from '@interfaces/Bike';
 import {Maintenance} from '@interfaces/Maintenance';
 import {formatDate} from '@helpers/dateHelper';
-import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 const CustomerBikes: NextPageWithLayout = () => {
   const router = useRouter();
@@ -118,9 +118,12 @@ const CustomerBikes: NextPageWithLayout = () => {
         {!loading && bike && (
           <h3>
             Carnet d&#39;entretien : <u>{bike.name}</u>{' '}
-            {repairer && <Link href={`/sradmin/boutiques/${repairer.id}/clients/${bike.owner.id}`}>
-              ({bike.owner.firstName} {bike.owner.lastName})
-            </Link> }
+            {repairer && (
+              <Link
+                href={`/sradmin/boutiques/${repairer.id}/clients/${bike.owner.id}`}>
+                ({bike.owner.firstName} {bike.owner.lastName})
+              </Link>
+            )}
             <Button
               variant="outlined"
               onClick={() => setOpenModalAddMaintenance(true)}
