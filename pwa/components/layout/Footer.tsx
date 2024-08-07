@@ -47,7 +47,7 @@ const Footer = ({user}: FooterProps): JSX.Element => {
       return;
     }
 
-    const unreadMessagesCount = await discussionResource.countUnread({});
+    const unreadMessagesCount = await discussionResource.countUnreadForUser();
     setUnreadMessages(unreadMessagesCount.count);
   };
 
