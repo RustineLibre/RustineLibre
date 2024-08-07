@@ -34,7 +34,7 @@ import {City as GouvCity} from '@interfaces/Gouv';
 import {repairerResource} from '@resources/repairerResource';
 import {errorRegex} from '@utils/errorRegex';
 import {useRouter} from 'next/router';
-import {useAuth} from "@contexts/AuthContext";
+import {useAuth} from '@contexts/AuthContext';
 
 interface RepairerFormProps {
   repairer: Repairer | null;
@@ -54,8 +54,9 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
   const [city, setCity] = useState<City | null>(null);
   const [street, setStreet] = useState<Street | null>(null);
   const [streetNumber, setStreetNumber] = useState<string>('');
-  const [repairerTypesSelected, setRepairerTypesSelected] =
-    useState<string[]>([]);
+  const [repairerTypesSelected, setRepairerTypesSelected] = useState<string[]>(
+    []
+  );
   const [selectedBikeTypes, setSelectedBikeTypes] = useState<string[]>([]);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
   const [streetList, setStreetList] = useState<Street[]>([]);
@@ -65,8 +66,12 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
     if (repairer) {
       setName(repairer.name!);
       setStreetNumber(repairer.streetNumber!);
-      setRepairerTypesSelected(repairer.repairerTypes.map(repairerType => repairerType.name));
-      setSelectedBikeTypes(repairer.bikeTypesSupported.map(bikeType => bikeType.name));
+      setRepairerTypesSelected(
+        repairer.repairerTypes.map((repairerType) => repairerType.name)
+      );
+      setSelectedBikeTypes(
+        repairer.bikeTypesSupported.map((bikeType) => bikeType.name)
+      );
 
       if (!street && repairer.street && repairer.city && repairer.postcode) {
         setStreet({
@@ -74,7 +79,7 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
           city: repairer.city,
           postcode: repairer.postcode,
           lat: 0,
-          lon: 0
+          lon: 0,
         } as Street);
       }
       if (!city && repairer.city && repairer.postcode) {
@@ -89,7 +94,7 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
         setCityInput(`${repairer.city} (${repairer.postcode})`);
       }
     }
-  }, [repairer]);
+  }, [repairer, city, street]);
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
@@ -110,7 +115,9 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
         .map((bikeType) => bikeType['@id']);
 
       const selectedRepairerTypesIRIs: string[] = repairerTypes
-        .filter((repairerType) => repairerTypesSelected.includes(repairerType.name))
+        .filter((repairerType) =>
+          repairerTypesSelected.includes(repairerType.name)
+        )
         .map((repairerType) => repairerType['@id']);
 
       const body = {
@@ -127,7 +134,9 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
 
       setPendingRegistration(true);
 
-      const response = repairer ? await repairerResource.put(repairer['@id'], body, {}, true) : await repairerResource.post(body)
+      const response = repairer
+        ? await repairerResource.put(repairer['@id'], body, {}, true)
+        : await repairerResource.post(body);
       fetchUser();
       setPendingRegistration(false);
       setSuccess(true);
@@ -173,7 +182,7 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
         : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
       setCitiesList(cities);
     },
-    [setCitiesList]
+    [setCitiesList, useNominatim]
   );
 
   useEffect(() => {
@@ -277,7 +286,9 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
         )}
         <Grid item xs={12}>
           <FormControl fullWidth required>
-            <InputLabel id="repairer-types-label">Type de réparateur</InputLabel>
+            <InputLabel id="repairer-types-label">
+              Type de réparateur
+            </InputLabel>
             <Select
               required
               labelId="repairer-types-label"
@@ -285,17 +296,21 @@ export const RepairerForm = ({repairer}: RepairerFormProps): JSX.Element => {
               id="repairer-types"
               multiple
               value={repairerTypesSelected}
-              onChange={(e) => setRepairerTypesSelected(
-                typeof e.target.value === 'string'
-                  ? e.target.value.split(',')
-                  : e.target.value
-              )}
+              onChange={(e) =>
+                setRepairerTypesSelected(
+                  typeof e.target.value === 'string'
+                    ? e.target.value.split(',')
+                    : e.target.value
+                )
+              }
               style={{width: '100%'}}
               renderValue={(selected) => selected.join(', ')}>
               {repairerTypes.map((repairerType) => (
                 <MenuItem key={repairerType.id} value={repairerType.name}>
                   <Checkbox
-                    checked={repairerTypesSelected.indexOf(repairerType.name) > -1}
+                    checked={
+                      repairerTypesSelected.indexOf(repairerType.name) > -1
+                    }
                   />
                   <ListItemText primary={repairerType.name} />
                   {repairerType.name}

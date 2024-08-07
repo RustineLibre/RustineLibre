@@ -2,8 +2,8 @@ import {AbstractResource} from '@resources/AbstractResource';
 import {User} from '@interfaces/User';
 import {Collection, RequestHeaders, RequestParams} from '@interfaces/Resource';
 import {getToken} from '@helpers/localHelper';
-import {Repairer} from "@interfaces/Repairer";
-import {Appointment} from "@interfaces/Appointment";
+import {Repairer} from '@interfaces/Repairer';
+import {Appointment} from '@interfaces/Appointment';
 
 class CustomerResource extends AbstractResource<User> {
   protected endpoint = '/customers';

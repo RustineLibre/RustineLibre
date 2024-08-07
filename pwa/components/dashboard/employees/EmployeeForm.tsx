@@ -37,8 +37,9 @@ export const EmployeeForm = ({
   repairer,
 }: EmployeeFormProps): JSX.Element => {
   const router = useRouter();
-  const {user} = useAccount({redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`
-});
+  const {user} = useAccount({
+    redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
+  });
   const [enabled, setEnabled] = useState<boolean>(
     repairerEmployee ? repairerEmployee.enabled : true
   );
@@ -84,8 +85,16 @@ export const EmployeeForm = ({
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    const repairerOfEmployee = user?.repairers.find(repairer => repairer.name === selectedRepairer);
-    if (passwordError || !email || !firstName || !lastName || !repairerOfEmployee) {
+    const repairerOfEmployee = user?.repairers.find(
+      (repairer) => repairer.name === selectedRepairer
+    );
+    if (
+      passwordError ||
+      !email ||
+      !firstName ||
+      !lastName ||
+      !repairerOfEmployee
+    ) {
       return;
     }
     setErrorMessage(null);
@@ -110,7 +119,11 @@ export const EmployeeForm = ({
         await repairerEmployeesResource.post(bodyRequest);
       }
       setUpdateSuccess(true);
-      await router.push(repairer ? `/sradmin/boutiques/${repairer.id}/employes` : '/sradmin/boutiques');
+      await router.push(
+        repairer
+          ? `/sradmin/boutiques/${repairer.id}/employes`
+          : '/sradmin/boutiques'
+      );
     } catch (e: any) {
       setErrorMessage(
         `${

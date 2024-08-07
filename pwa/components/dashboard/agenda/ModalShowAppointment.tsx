@@ -36,7 +36,7 @@ import {getAppointmentStatus} from '@helpers/appointmentStatus';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import Divider from '@mui/material/Divider';
-import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 type ModalShowAppointmentProps = {
   appointment: Appointment;

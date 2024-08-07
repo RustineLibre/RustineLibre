@@ -38,7 +38,7 @@ import MenuItem from '@mui/material/MenuItem';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import Menu, {MenuProps} from '@mui/material/Menu';
 import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
-import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 const drawerWidth = 240;
 
@@ -270,13 +270,11 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               </List>
 
               <Box sx={{float: 'right'}}>
-                {repairer && router.asPath === `/sradmin/boutiques/${repairer.id}/agenda` && (
-                  <GoogleCalendarSync
-                    repairer={
-                      repairer
-                    }
-                  />
-                )}
+                {repairer &&
+                  router.asPath ===
+                    `/sradmin/boutiques/${repairer.id}/agenda` && (
+                    <GoogleCalendarSync repairer={repairer} />
+                  )}
               </Box>
 
               <Button

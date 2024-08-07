@@ -78,7 +78,7 @@ export const DashboardWaitingAppointments = ({
     return `${
       appointment.customer
         ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
-        : appointment.customerName ?? 'Nom inconnu'
+        : (appointment.customerName ?? 'Nom inconnu')
     }`;
   };
 
@@ -140,7 +140,7 @@ export const DashboardWaitingAppointments = ({
                     <TableCell component="th" scope="row">
                       {appointment.customer
                         ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
-                        : appointment.customerName ?? 'Nom inconnu'}
+                        : (appointment.customerName ?? 'Nom inconnu')}
                       <br />
                       <Typography
                         variant="body1"
@@ -186,7 +186,9 @@ export const DashboardWaitingAppointments = ({
                     scope="row"
                     colSpan={3}
                     sx={{textAlign: 'center'}}>
-                    <Link href={`/sradmin/boutiques/${repairer.id}/agenda`}>Voir tout</Link>
+                    <Link href={`/sradmin/boutiques/${repairer.id}/agenda`}>
+                      Voir tout
+                    </Link>
                   </TableCell>
                 </TableRow>
               </TableBody>

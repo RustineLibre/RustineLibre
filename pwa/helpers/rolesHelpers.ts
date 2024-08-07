@@ -18,13 +18,18 @@ export const isAdmin = (user: User): boolean => {
 };
 
 export const isItinerant = (user: User): boolean => {
-  const repairers = user.repairers && user.repairers.length > 0
-    ? user.repairers
-    : user.repairerEmployee
-    ? [user.repairerEmployee.repairer]
-    : [];
+  const repairers =
+    user.repairers && user.repairers.length > 0
+      ? user.repairers
+      : user.repairerEmployee
+        ? [user.repairerEmployee.repairer]
+        : [];
 
-  return repairers.some(repairer => repairer.repairerTypes.some(repairerType => repairerType.name === 'Réparateur itinérant'))
+  return repairers.some((repairer) =>
+    repairer.repairerTypes.some(
+      (repairerType) => repairerType.name === 'Réparateur itinérant'
+    )
+  );
 };
 
 export const isRepairerItinerant = (repairer: Repairer): boolean => {

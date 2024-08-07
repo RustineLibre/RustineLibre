@@ -90,7 +90,7 @@ export abstract class AbstractResource<T> {
     id: string,
     body: RequestBody = {},
     headers?: RequestHeaders,
-    withAuth: boolean = true,
+    withAuth: boolean = true
   ): Promise<T> {
     const doFetch = async () => {
       return await fetch(this.getUrl(id), {

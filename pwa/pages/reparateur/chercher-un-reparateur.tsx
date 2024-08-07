@@ -216,6 +216,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       setTotalItems,
       repairerTypeSelected,
       repairerTypes,
+      isLoading,
+      searchRadius,
     ]
   );
 

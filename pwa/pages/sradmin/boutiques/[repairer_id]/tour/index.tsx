@@ -15,7 +15,7 @@ import {Appointment} from '@interfaces/Appointment';
 import Grid from '@mui/material/Grid';
 import TourAppointmentsList from '@components/dashboard/tour/TourAppointmentsList';
 import dynamic from 'next/dynamic';
-import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 const TourMap = dynamic(() => import('@components/dashboard/tour/TourMap'), {
   ssr: false,
 });

@@ -19,7 +19,7 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {RequestBody} from '@interfaces/Resource';
 import {errorRegex} from '@utils/errorRegex';
-import {Repairer} from "@interfaces/Repairer";
+import {Repairer} from '@interfaces/Repairer';
 
 type ModalAddOpeningHoursProps = {
   day: string;
