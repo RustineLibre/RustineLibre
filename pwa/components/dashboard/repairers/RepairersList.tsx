@@ -69,7 +69,7 @@ const RepairersList = ({repairers}: RepairersListProps) => {
                 ) : (
                   <>
                     <Link
-                      href={`/sradmin/boutiques/edit/${repairer.id}`}
+                      href={`/sradmin/boutiques/${repairer.id}/edit`}
                       legacyBehavior
                       passHref>
                       <IconButton color="secondary">

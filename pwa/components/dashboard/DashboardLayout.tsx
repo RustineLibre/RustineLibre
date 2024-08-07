@@ -167,22 +167,19 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   };
 
   const closeMenu = () => {
-    console.log('close');
     setAnchorEl(null);
   };
-  const handleClose = (repairer: Repairer | null | undefined = undefined) => {
-    if (undefined !== repairer) {
-      if (!repairer) {
-        router.push('/sradmin/boutiques');
-      } else {
-        router.push(`/sradmin/boutiques/${repairer.id}`);
-      }
-    }
+  const handleClose = (repairer: Repairer | null = null) => {
     setAnchorEl(null);
+    if (!repairer) {
+      router.push('/sradmin/boutiques');
+    } else {
+      router.push(`/sradmin/boutiques/${repairer.id}`);
+    }
   };
 
   const router = useRouter();
-  const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);
+  const {repairer} = useContext(DashboardRepairerContext);
 
   const {user} = useAccount({
     redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,

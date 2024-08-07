@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useContext, useEffect, useState} from 'react';
 import {
   Paper,
   Table,
@@ -20,7 +20,7 @@ import {formatDate} from 'helpers/dateHelper';
 import {getAppointmentStatus} from '@helpers/appointmentStatus';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import {useAccount} from '@contexts/AuthContext';
-import {Repairer} from '@interfaces/Repairer';
+import {DashboardRepairerContext} from "@contexts/DashboardRepairerContext";
 
 interface CustomerAppointmentsListProps {
   customer: Customer;
@@ -29,6 +29,7 @@ interface CustomerAppointmentsListProps {
 export const CustomerAppointmentsList = ({
   customer,
 }: CustomerAppointmentsListProps): JSX.Element => {
+  const {repairer} = useContext(DashboardRepairerContext);
   const [loadingList, setLoadingList] = useState<boolean>(false);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [appointmentSelected, setAppointmentSelected] =
@@ -52,14 +53,7 @@ export const CustomerAppointmentsList = ({
   };
 
   const fetchAppointments = async () => {
-    if (!user) {
-      return;
-    }
-
-    const repairer: Repairer | undefined = user.repairer
-      ? user.repairer
-      : user.repairerEmployee?.repairer;
-    if (!repairer) {
+    if (!user || !repairer) {
       return;
     }
 
