@@ -35,10 +35,10 @@ class MaintenanceVoter extends Voter
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
 
-        if (!$currentUser || !$currentUser->repairer) {
+        if (!$currentUser) {
             return false;
         }
 
-        return (bool) $this->appointmentRepository->findOneBy(['repairer' => $currentUser->repairer, 'customer' => $subject->bike->owner]);
+        return (bool) $this->appointmentRepository->findOneByCustomerAndUserRepairer($subject->bike->owner, $currentUser);
     }
 }

@@ -10,13 +10,16 @@ import {Customer} from '@interfaces/Customer';
 import {Tab, Tabs} from '@mui/material';
 import CustomerAppointmentsList from '@components/dashboard/customers/CustomerAppointmentsList';
 import CustomerBikesList from '@components/dashboard/customers/CustomerBikesList';
+import {Repairer} from '@interfaces/Repairer';
 
 interface CustomersDetailProps {
   customer: Customer;
+  repairer: Repairer;
 }
 
 export const CustomersDetail = ({
   customer,
+  repairer,
 }: CustomersDetailProps): JSX.Element => {
   const [tabValue, setTabValue] = React.useState<number>(0);
 
@@ -52,7 +55,9 @@ export const CustomersDetail = ({
           </List>
         )}
         {tabValue === 1 && <CustomerAppointmentsList customer={customer} />}
-        {tabValue === 2 && <CustomerBikesList customer={customer} />}
+        {tabValue === 2 && (
+          <CustomerBikesList customer={customer} repairer={repairer} />
+        )}
       </Box>
     </Box>
   );

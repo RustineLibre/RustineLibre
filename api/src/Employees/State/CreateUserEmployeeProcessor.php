@@ -12,7 +12,6 @@ use App\Entity\RepairerEmployee;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -50,18 +49,7 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         // Create a new employee
         $repairerEmployee = new RepairerEmployee();
         $repairerEmployee->employee = $user;
-
-        // If the current user is not an admin, inject automatically its repairer shop
-        if ($currentUser->isAdmin() && !$currentUser->repairer) {
-            $repairerEmployee->repairer = $data->repairer;
-        } else {
-            $currentRepairer = $currentUser->repairer;
-            if (!$currentRepairer) {
-                throw new BadRequestHttpException($this->translator->trans('400_badRequest.add.employee', domain: 'validators'));
-            }
-
-            $repairerEmployee->repairer = $currentRepairer;
-        }
+        $repairerEmployee->repairer = $data->repairer;
 
         // Validate the new entity
         $this->validator->validate($repairerEmployee);

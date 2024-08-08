@@ -40,17 +40,18 @@ class InterventionAbstractTestCase extends AbstractTestCase
         return $intervention;
     }
 
-    public function getBossAndHisIntervention(): ?array
+    /**
+     * @return array{User, Intervention}
+     */
+    public function getBossAndHisIntervention(): array
     {
         foreach ($this->users as $user) {
-            if (
-                null !== $user->repairer
-                && $user->isBoss()
-                && 0 < $user->repairer->repairerInterventions->count()
-            ) {
-                foreach ($user->repairer->repairerInterventions as $repairerIntervention) {
-                    if (false === $repairerIntervention->intervention->isAdmin) {
-                        return [$user, $repairerIntervention->intervention];
+            if ($user->isBoss()) {
+                foreach ($user->repairers as $repairer) {
+                    foreach ($repairer->repairerInterventions as $repairerIntervention) {
+                        if (false === $repairerIntervention->intervention->isAdmin) {
+                            return [$user, $repairerIntervention->intervention];
+                        }
                     }
                 }
             }
@@ -58,6 +59,9 @@ class InterventionAbstractTestCase extends AbstractTestCase
         self::fail('No user with intervention found');
     }
 
+    /**
+     * @return array{User, Intervention}
+     */
     public function getBossAndOtherBossIntervention(): array
     {
         [$user, $intervention] = $this->getBossAndHisIntervention();

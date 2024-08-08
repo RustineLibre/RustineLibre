@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Customers;
 
+use App\Entity\Appointment;
 use App\Entity\Repairer;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
+use Doctrine\ORM\Query\Expr\Join;
 
 class CustomersCsvControllerTest extends AbstractTestCase
 {
@@ -21,7 +23,11 @@ class CustomersCsvControllerTest extends AbstractTestCase
     public function testExportCsv(): void
     {
         /** @var Repairer $repairer */
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $repairer = $this->repairerRepository->createQueryBuilder('r')
+            ->innerJoin(Appointment::class, 'a', Join::WITH, 'r.id  = a.repairer')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         $response = $this->createClientWithUser($repairer->owner)->request('GET', sprintf('/export_customers_csv/%d', $repairer->id));
         self::assertResponseIsSuccessful();

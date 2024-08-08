@@ -59,10 +59,10 @@ readonly class InjectCustomerEventSubscriber implements EventSubscriberInterface
 
         // If boss/employee, check customer relationship
         if ($this->security->isGranted(User::ROLE_BOSS) || $this->security->isGranted(User::ROLE_EMPLOYEE)) {
-            $checkAppointment = $this->appointmentRepository->findOneBy([
-                'customer' => $object->customer,
-                'repairer' => $currentUser->repairerEmployee->repairer ?? $currentUser->repairer,
-            ]);
+            $checkAppointment = $this->appointmentRepository->findOneByCustomerAndUserRepairer(
+                $object->customer,
+                $currentUser
+            );
 
             if ($checkAppointment) {
                 return;

@@ -30,6 +30,7 @@ final class CreateUserEmployeeDto
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?bool $enabled = null;
 
+    #[Assert\NotNull]
     #[Groups([RepairerEmployee::EMPLOYEE_WRITE])]
     public ?Repairer $repairer = null;
 }

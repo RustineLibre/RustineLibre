@@ -59,7 +59,10 @@ export const DashboardHomeContent = ({
   const fetchAppointments = async (
     params: RequestParams
   ): Promise<Appointment[]> => {
-    const response = await appointmentResource.getAll(true, params);
+    const response = await appointmentResource.getAllByRepairer(
+      repairer,
+      params
+    );
     return response['hydra:member'];
   };
 
@@ -86,7 +89,10 @@ export const DashboardHomeContent = ({
           </Grid>
           {isBoss(currentUser) && (
             <Grid item xs={12} mt={2}>
-              <DashboardHomeEmployees currentBoss={currentUser} />
+              <DashboardHomeEmployees
+                currentBoss={currentUser}
+                repairer={repairer}
+              />
             </Grid>
           )}
         </Grid>

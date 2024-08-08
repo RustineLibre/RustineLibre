@@ -49,7 +49,7 @@ const NotCyclistModal = ({open, onClose}: ConnectModalProps): JSX.Element => {
         </Typography>
       </DialogContent>
       <DialogActions sx={{p: 2}}>
-        <Link href="/sradmin" legacyBehavior passHref>
+        <Link href="/sradmin/boutiques" legacyBehavior passHref>
           <Button variant="contained">Accéder au back office</Button>
         </Link>
       </DialogActions>

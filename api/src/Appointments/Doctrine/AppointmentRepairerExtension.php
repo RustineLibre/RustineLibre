@@ -8,6 +8,7 @@ use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use App\Entity\Appointment;
+use App\Entity\Repairer;
 use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -15,7 +16,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 readonly class AppointmentRepairerExtension implements QueryCollectionExtensionInterface
 {
     public function __construct(
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -35,9 +36,13 @@ readonly class AppointmentRepairerExtension implements QueryCollectionExtensionI
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
-        $queryBuilder
-            ->andWhere(sprintf('%s.repairer = :repairerId', $rootAlias))
-            ->setParameter('repairerId', $user->repairer ? $user->repairer->id : ($user->repairerEmployee?->repairer->id))
-        ;
+        $repairers = $user->repairers->count() > 0 ? $user->repairers->toArray() : [$user->repairerEmployee->repairer];
+        $repairerIds = array_map(function (Repairer $repairer): int {
+            return $repairer->id;
+        }, $repairers);
+
+        $queryBuilder->innerJoin(sprintf('%s.repairer', $rootAlias), 'r')
+            ->orWhere('r.id IN (:repairersIds)')
+            ->setParameter('repairersIds', $repairerIds);
     }
 }

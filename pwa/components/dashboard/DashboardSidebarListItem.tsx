@@ -10,11 +10,17 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import theme from 'styles/theme';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 interface DashboardSidebarListItemProps {
   text: string;
   open: boolean;
   icon: any;
+  path: string;
+}
+
+interface SubItem {
+  text: string;
   path: string;
 }
 
@@ -25,6 +31,7 @@ const DashboardSidebarListItem = ({
   path,
 }: DashboardSidebarListItemProps): JSX.Element => {
   const router = useRouter();
+  const {repairer_id} = router.query;
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleMenuClick = () => {
@@ -32,40 +39,42 @@ const DashboardSidebarListItem = ({
   };
 
   return (
-    <Link href={path} style={{textDecoration: 'none'}}>
-      <ListItem key={text} disablePadding sx={{display: 'block'}}>
-        <ListItemButton
-          sx={{
-            minHeight: 48,
-            justifyContent: open ? 'initial' : 'center',
-            px: 2.5,
-          }}>
-          <ListItemIcon
+    <>
+      <Link href={path} style={{textDecoration: 'none'}}>
+        <ListItem key={text} disablePadding sx={{display: 'block'}}>
+          <ListItemButton
             sx={{
-              minWidth: 0,
-              mr: open ? 2 : 'auto',
-              justifyContent: 'center',
-              color: 'primary.main',
+              minHeight: 48,
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
             }}>
-            {icon}
-          </ListItemIcon>
-          {!isMobile && (
-            <ListItemText
-              disableTypography
-              primary={
-                <Typography
-                  sx={{
-                    color:
-                      path === router.pathname ? 'primary.main' : 'grey.600',
-                  }}>
-                  {text}
-                </Typography>
-              }
-            />
-          )}
-        </ListItemButton>
-      </ListItem>
-    </Link>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 2 : 'auto',
+                justifyContent: 'center',
+                color: 'primary.main',
+              }}>
+              {icon}
+            </ListItemIcon>
+            {!isMobile && (
+              <ListItemText
+                disableTypography
+                primary={
+                  <Typography
+                    sx={{
+                      color:
+                        path === router.asPath ? 'primary.main' : 'grey.600',
+                    }}>
+                    {text}
+                  </Typography>
+                }
+              />
+            )}
+          </ListItemButton>
+        </ListItem>
+      </Link>
+    </>
   );
 };
 

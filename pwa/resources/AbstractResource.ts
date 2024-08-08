@@ -89,12 +89,13 @@ export abstract class AbstractResource<T> {
   async put(
     id: string,
     body: RequestBody = {},
-    headers?: RequestHeaders
+    headers?: RequestHeaders,
+    withAuth: boolean = true
   ): Promise<T> {
     const doFetch = async () => {
       return await fetch(this.getUrl(id), {
         headers: {
-          ...this.getDefaultHeaders(),
+          ...this.getDefaultHeaders(withAuth),
           ...headers,
         },
         method: 'PUT',

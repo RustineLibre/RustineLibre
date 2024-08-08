@@ -118,6 +118,33 @@ class AppointmentRepository extends ServiceEntityRepository
         return array_column($qb->getQuery()->getArrayResult(), 'repairerId');
     }
 
+    public function findOneByCustomerAndUserRepairer(User $customer, User $userRepairer): ?Appointment
+    {
+        $qb = $this->createQueryBuilder('a')
+            ->setMaxResults(1)
+            ->where('a.customer = :customer')
+            ->setParameter('customer', $customer);
+
+        if ($userRepairer->repairerEmployee) {
+            $qb->andWhere('a.repairer = :repairer')
+                ->setParameter('repairer', $userRepairer->repairerEmployee->repairer);
+        } elseif ($userRepairer->repairers->count() > 0) {
+            $condition = '';
+            foreach ($userRepairer->repairers as $key => $repairer) {
+                if ('' !== $condition) {
+                    $condition .= ' OR ';
+                }
+                $condition .= sprintf('a.repairer = :repairer_%s', $key);
+                $qb->setParameter(sprintf('repairer_%s', $key), $repairer);
+            }
+            $qb->andWhere($condition);
+        } else {
+            return null;
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function getNextAppointmentsNotSync(Repairer $repairer): array
     {
         $qb = $this->createQueryBuilder('a')

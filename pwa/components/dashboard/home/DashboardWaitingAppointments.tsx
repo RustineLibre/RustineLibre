@@ -186,7 +186,9 @@ export const DashboardWaitingAppointments = ({
                     scope="row"
                     colSpan={3}
                     sx={{textAlign: 'center'}}>
-                    <Link href="/sradmin/agenda">Voir tout</Link>
+                    <Link href={`/sradmin/boutiques/${repairer.id}/agenda`}>
+                      Voir tout
+                    </Link>
                   </TableCell>
                 </TableRow>
               </TableBody>
