@@ -187,7 +187,9 @@ const ModalShowAppointment = ({
               <Box>
                 {appointment.discussion && repairer && (
                   <Link
-                    href={`/sradmin/boutiques/${repairer.id}/messagerie/${appointment.discussion!.id}`}>
+                    href={`/sradmin/boutiques/${repairer.id}/messagerie/${
+                      appointment.discussion!.id
+                    }`}>
                     {isMobile ? (
                       <IconButton
                         color="secondary"

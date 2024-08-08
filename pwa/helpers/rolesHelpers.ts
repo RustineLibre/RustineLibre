@@ -22,8 +22,8 @@ export const isItinerant = (user: User): boolean => {
     user.repairers && user.repairers.length > 0
       ? user.repairers
       : user.repairerEmployee
-        ? [user.repairerEmployee.repairer]
-        : [];
+      ? [user.repairerEmployee.repairer]
+      : [];
 
   return repairers.some((repairer) =>
     repairer.repairerTypes.some(
