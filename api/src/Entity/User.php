@@ -24,6 +24,7 @@ use App\Repository\UserRepository;
 use App\User\Filter\UserSearchFilter;
 use App\User\StateProvider\CurrentUserProvider;
 use App\User\StateProvider\CustomersProvider;
+use App\User\StateProvider\ExportUserCollectionProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -79,6 +80,16 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS') or is_granted('ROLE_EMPLOYEE')",
     name: 'customers_list',
     provider: CustomersProvider::class,
+)]
+#[GetCollection(
+    uriTemplate: '/export_users_csv',
+    outputFormats: ['csv' => ['text/csv']],
+    openapi: new Model\Operation(
+        summary: 'Export user collection to csv format',
+    ),
+    normalizationContext: [],
+    security: "is_granted('ROLE_ADMIN')",
+    provider: ExportUserCollectionProvider::class
 )]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]

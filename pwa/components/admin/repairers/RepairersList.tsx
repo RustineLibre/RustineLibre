@@ -19,6 +19,7 @@ import {
   IconButton,
   InputAdornment,
   Switch,
+  Button,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
@@ -26,6 +27,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {formatDate} from '@helpers/dateHelper';
 import {Repairer} from '@interfaces/Repairer';
+import {downloadFile} from '@utils/downloadFileLink';
 
 export const RepairersList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -117,6 +119,13 @@ export const RepairersList = (): JSX.Element => {
     setRepairers(updatedRepairerList);
   };
 
+  const downloadCsv = async () =>
+    await repairerResource
+      .exportRepairerCollectionCsv()
+      .then((response: Response) =>
+        downloadFile(response, 'repairer_collection')
+      );
+
   return (
     <Box>
       <TextField
@@ -133,6 +142,9 @@ export const RepairersList = (): JSX.Element => {
           ),
         }}
       />
+      <Button onClick={downloadCsv} variant="contained" sx={{float: 'right'}}>
+        Télécharger au format CSV
+      </Button>
       <TableContainer elevation={4} component={Paper} sx={{marginTop: '10px'}}>
         <Table aria-label="employees">
           <TableHead

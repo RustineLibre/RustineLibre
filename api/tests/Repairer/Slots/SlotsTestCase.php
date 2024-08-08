@@ -13,6 +13,7 @@ use App\Repository\RepairerTypeRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\BikeTypeTrait;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 
 class SlotsTestCase extends AbstractTestCase
 {

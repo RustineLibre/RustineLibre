@@ -18,12 +18,14 @@ import {
   Typography,
   IconButton,
   InputAdornment,
+  Button,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import {User} from '@interfaces/User';
 import {formatDate} from '@helpers/dateHelper';
+import {downloadFile} from '@utils/downloadFileLink';
 
 export const UsersList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -110,6 +112,11 @@ export const UsersList = (): JSX.Element => {
     }
   };
 
+  const downloadCsv = async () =>
+    await userResource
+      .exportUserCollectionCsv()
+      .then((response: Response) => downloadFile(response, 'user_collection'));
+
   return (
     <Box>
       <TextField
@@ -126,6 +133,9 @@ export const UsersList = (): JSX.Element => {
           ),
         }}
       />
+      <Button onClick={downloadCsv} variant="contained" sx={{float: 'right'}}>
+        Télécharger au format CSV
+      </Button>
       <TableContainer elevation={4} component={Paper} sx={{marginTop: '10px'}}>
         <Table aria-label="employees">
           <TableHead

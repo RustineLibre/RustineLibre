@@ -22,7 +22,7 @@ import {Customer} from '@interfaces/Customer';
 import SearchIcon from '@mui/icons-material/Search';
 import {InputAdornment} from '@mui/material';
 import {useAccount} from '@contexts/AuthContext';
-import {discussionResource} from '@resources/discussionResource';
+import {downloadFile} from '@utils/downloadFileLink';
 
 export const CustomersList = (): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
@@ -32,9 +32,12 @@ export const CustomersList = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const {user} = useAccount({});
 
-  const downloadCsv = async () => {
-    await customerResource.customersCsv(user?.repairer?.id ?? null);
-  };
+  const downloadCsv = async () =>
+    await customerResource
+      .exportCustomerCollectionCsv(user?.repairer?.id ?? null)
+      .then((response: Response) =>
+        downloadFile(response, 'customer_collection')
+      );
 
   const fetchCustomers = async () => {
     setLoadingList(true);

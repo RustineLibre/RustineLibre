@@ -59,7 +59,7 @@ class UpdateEmployeeTest extends AbstractTestCase
 
     public function testUpdateAsAdmin(): void
     {
-        $response = $this->createClientAuthAsAdmin($this->repairerEmployees[3]->repairer->owner)->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[3]->id), [
+        $response = $this->createClientAuthAsAdmin()->request('PUT', sprintf('/employee_and_user/%s', $this->repairerEmployees[3]->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'firstName' => 'Michel Michel',
