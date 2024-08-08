@@ -366,7 +366,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
         <Box display="flex" flexDirection="column">
           <Box
             position="fixed"
-            top={{xs: '56px', sm: '64px', md: '100px'}}
+            top={{xs: '56px', sm: '64px', md: '80px'}}
             width="100%"
             bgcolor="white"
             paddingY="10px"
