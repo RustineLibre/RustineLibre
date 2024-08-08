@@ -317,7 +317,9 @@ const ModalAppointmentCreate = ({
   const handleSuccess = () => {
     setErrorMessage(null);
     setSuccess(true);
-    router.push(`/sradmin/agenda?selectedDate=${slotSelected}`);
+    router.push(
+      `/sradmin/boutiques/${repairer.id}/agenda?selectedDate=${slotSelected}`
+    );
     setTimeout(async () => {
       handleClose();
     }, 3000);

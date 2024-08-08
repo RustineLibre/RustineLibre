@@ -229,32 +229,34 @@ const ModalShowAppointment = ({
                   <Typography>{appointment.bike.name}</Typography>
                 </Box>
                 <Box>
-                  <NextLink
-                    href={`/sradmin/clients/velos/${appointment.bike.id}`}
-                    legacyBehavior
-                    passHref>
-                    <Link>
-                      {isMobile ? (
-                        <IconButton
-                          color="secondary"
-                          disabled={!appointment.bike}
-                          sx={{
-                            borderRadius: '50%',
-                            padding: '8px',
-                          }}>
-                          <AssignmentIcon />
-                        </IconButton>
-                      ) : (
-                        <Button
-                          size="small"
-                          color="secondary"
-                          disabled={!appointment.bike}
-                          variant="outlined">
-                          Voir le carnet du vélo
-                        </Button>
-                      )}
-                    </Link>
-                  </NextLink>
+                  {repairer && (
+                    <NextLink
+                      href={`/sradmin/boutiques/${repairer.id}/clients/velos/${appointment.bike.id}`}
+                      legacyBehavior
+                      passHref>
+                      <Link>
+                        {isMobile ? (
+                          <IconButton
+                            color="secondary"
+                            disabled={!appointment.bike}
+                            sx={{
+                              borderRadius: '50%',
+                              padding: '8px',
+                            }}>
+                            <AssignmentIcon />
+                          </IconButton>
+                        ) : (
+                          <Button
+                            size="small"
+                            color="secondary"
+                            disabled={!appointment.bike}
+                            variant="outlined">
+                            Voir le carnet du vélo
+                          </Button>
+                        )}
+                      </Link>
+                    </NextLink>
+                  )}
                 </Box>
               </Box>
             )}
