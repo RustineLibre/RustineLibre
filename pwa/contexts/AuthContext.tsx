@@ -123,8 +123,9 @@ const useProviderAuth = () => {
 
   const login = async (data: {email: string; password: string}) => {
     try {
-      const {token, refresh_token} =
-        await authenticationResource.authenticate(data);
+      const {token, refresh_token} = await authenticationResource.authenticate(
+        data
+      );
       setToken(token);
       setRefreshToken(refresh_token);
       fetchUser();
