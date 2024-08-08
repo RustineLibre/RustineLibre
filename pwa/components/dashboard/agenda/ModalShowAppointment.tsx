@@ -224,27 +224,30 @@ const ModalShowAppointment = ({
                   <Typography>{appointment.bike.name}</Typography>
                 </Box>
                 <Box>
-                  <Link href={`/sradmin/clients/velos/${appointment.bike.id}`}>
-                    {isMobile ? (
-                      <IconButton
-                        color="secondary"
-                        disabled={!appointment.bike}
-                        sx={{
-                          borderRadius: '50%',
-                          padding: '8px',
-                        }}>
-                        <AssignmentIcon />
-                      </IconButton>
-                    ) : (
-                      <Button
-                        size="small"
-                        color="secondary"
-                        disabled={!appointment.bike}
-                        variant="outlined">
-                        Voir le carnet du vélo
-                      </Button>
-                    )}
-                  </Link>
+                  {repairer && (
+                    <Link
+                      href={`/sradmin/boutiques/${repairer.id}/clients/velos/${appointment.bike.id}`}>
+                      {isMobile ? (
+                        <IconButton
+                          color="secondary"
+                          disabled={!appointment.bike}
+                          sx={{
+                            borderRadius: '50%',
+                            padding: '8px',
+                          }}>
+                          <AssignmentIcon />
+                        </IconButton>
+                      ) : (
+                        <Button
+                          size="small"
+                          color="secondary"
+                          disabled={!appointment.bike}
+                          variant="outlined">
+                          Voir le carnet du vélo
+                        </Button>
+                      )}
+                    </Link>
+                  )}
                 </Box>
               </Box>
             )}
