@@ -1,4 +1,3 @@
-import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, useContext} from 'react';
 import Head from 'next/head';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
@@ -10,6 +9,7 @@ import {Customer} from '@interfaces/Customer';
 import {userResource} from '@resources/userResource';
 import Error404 from '@pages/404';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const CustomerShow: NextPageWithLayout = () => {
   const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);

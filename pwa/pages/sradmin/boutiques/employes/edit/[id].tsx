@@ -1,4 +1,3 @@
-import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect} from 'react';
 import Head from 'next/head';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
@@ -8,6 +7,7 @@ import {RepairerEmployee} from '@interfaces/RepairerEmployee';
 import {repairerEmployeesResource} from '@resources/repairerEmployeesResource';
 import {CircularProgress} from '@mui/material';
 import EmployeeForm from '@components/dashboard/employees/EmployeeForm';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const EditEmployee: NextPageWithLayout = () => {
   const router = useRouter();

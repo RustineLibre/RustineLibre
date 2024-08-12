@@ -1,4 +1,3 @@
-import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, useContext} from 'react';
 import Head from 'next/head';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
@@ -10,6 +9,7 @@ import {CircularProgress} from '@mui/material';
 import EmployeeForm from '@components/dashboard/employees/EmployeeForm';
 import Error404 from '@pages/404';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const EditEmployee: NextPageWithLayout = () => {
   const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);

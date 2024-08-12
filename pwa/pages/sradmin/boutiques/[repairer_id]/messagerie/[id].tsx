@@ -1,4 +1,3 @@
-import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, useContext} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
@@ -10,6 +9,7 @@ import RepairerDiscussionList from '@components/messagerie/RepairerDiscussionLis
 import {Discussion} from '@interfaces/Discussion';
 import Error404 from '@pages/404';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const SrAdminMessagerie: NextPageWithLayout = () => {
   const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);

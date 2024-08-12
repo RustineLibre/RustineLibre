@@ -1,9 +1,9 @@
-import {NextPageWithLayout} from 'pages/_app';
 import React from 'react';
 import Head from 'next/head';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import Box from '@mui/material/Box';
 import EmployeeForm from '@components/dashboard/employees/EmployeeForm';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const AddEmployee: NextPageWithLayout = () => {
   return (

@@ -2,11 +2,11 @@ import React, {useContext} from 'react';
 import Head from 'next/head';
 import {Box, Tabs, Tab} from '@mui/material';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
-import {NextPageWithLayout} from '@pages/_app';
 import OpeningHours from '@components/dashboard/agenda/OpeningHours';
 import ExceptionalClosure from '@components/dashboard/agenda/ExceptionalClosure';
 import Error404 from '@pages/404';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const AgendaParameters: NextPageWithLayout = () => {
   const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);

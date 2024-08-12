@@ -1,4 +1,3 @@
-import {NextPageWithLayout} from 'pages/_app';
 import React, {useState, useEffect, useContext} from 'react';
 import {useRouter} from 'next/router';
 import Head from 'next/head';
@@ -30,6 +29,7 @@ import {Bike} from '@interfaces/Bike';
 import {Maintenance} from '@interfaces/Maintenance';
 import {formatDate} from '@helpers/dateHelper';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
 const CustomerBikes: NextPageWithLayout = () => {
   const router = useRouter();
