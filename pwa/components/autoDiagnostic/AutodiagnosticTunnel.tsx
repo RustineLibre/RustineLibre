@@ -26,7 +26,6 @@ export const AutoDiagnosticTunnel = ({
   const {
     tunnelStep,
     appointment,
-    photo,
     setTunnelStep,
     setPrestation,
     setAppointment,
@@ -37,9 +36,8 @@ export const AutoDiagnosticTunnel = ({
   async function fetchAppointment() {
     if (appointmentId) {
       setLoading(true);
-      const appointmentFetched = await appointmentResource.getById(
-        appointmentId
-      );
+      const appointmentFetched =
+        await appointmentResource.getById(appointmentId);
       setAppointment(appointmentFetched);
 
       if (!appointmentFetched) {

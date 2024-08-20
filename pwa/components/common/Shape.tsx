@@ -1,4 +1,4 @@
-import {SimplePaletteColorOptions, Theme, useTheme} from '@mui/material';
+import {SimplePaletteColorOptions, Theme, useTheme} from '@mui/material/styles';
 
 type ColorKey = keyof Theme['palette'];
 

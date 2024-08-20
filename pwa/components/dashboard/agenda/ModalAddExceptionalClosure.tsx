@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import dayjs from 'dayjs';
+import dayjs, {Dayjs} from 'dayjs';
 import 'dayjs/locale/fr';
 import {exceptionalClosureResource} from '@resources/exceptionalClosingResource';
 import {
@@ -18,7 +18,7 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import CloseIcon from '@mui/icons-material/Close';
-import {frFR} from '@mui/x-date-pickers';
+import {frFR} from '@mui/x-date-pickers/locales';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {errorRegex} from '@utils/errorRegex';
 import {RequestBody} from '@interfaces/Resource';
@@ -107,8 +107,8 @@ const ModalAddExceptionalClosure = ({
                 sx={{width: '100%'}}
                 format="DD-MM-YYYY"
                 label="Jour début"
-                value={startDate}
-                onChange={(newValue: string | dayjs.Dayjs | null) =>
+                value={startDate ? dayjs(startDate) : null}
+                onChange={(newValue: string | Dayjs | null) =>
                   setStartDate(
                     newValue && typeof newValue !== 'string'
                       ? newValue.format('YYYY-MM-DD')
@@ -129,7 +129,7 @@ const ModalAddExceptionalClosure = ({
                 sx={{width: '100%'}}
                 format="DD-MM-YYYY"
                 label="Jour fin (inclus)"
-                value={endDate}
+                value={endDate ? dayjs(endDate) : null}
                 onChange={(newValue: string | dayjs.Dayjs | null) =>
                   setEndDate(
                     newValue && typeof newValue !== 'string'

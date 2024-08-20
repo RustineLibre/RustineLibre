@@ -29,7 +29,8 @@ import {
   FormControl,
   SelectChangeEvent,
 } from '@mui/material';
-import {DatePicker, frFR, TimePicker} from '@mui/x-date-pickers';
+import {DatePicker, TimePicker} from '@mui/x-date-pickers';
+import {frFR} from '@mui/x-date-pickers/locales';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import AppointmentCreateAddPhoto from '@components/dashboard/appointments/AppointmentCreateAddPhoto';
