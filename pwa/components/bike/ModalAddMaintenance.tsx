@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import {useTheme} from '@mui/material/styles';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
-import {frFR} from '@mui/x-date-pickers';
+import {frFR} from '@mui/x-date-pickers/locales';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -272,7 +272,7 @@ const ModalAddMaintenance = ({
                 format="DD-MM-YYYY"
                 label="Date de la réparation"
                 defaultValue={null}
-                value={selectedDate && dayjs(selectedDate)}
+                value={selectedDate ? dayjs(selectedDate) : null}
                 onChange={(newValue: string | Dayjs | null) =>
                   setSelectedDate(
                     newValue && typeof newValue !== 'string'

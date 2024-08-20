@@ -31,8 +31,8 @@ const RepairerDiscussionList = ({
     const repairer = user.repairer
       ? user.repairer
       : user.repairerEmployee
-      ? user.repairerEmployee.repairer
-      : null;
+        ? user.repairerEmployee.repairer
+        : null;
     if (!repairer) {
       return;
     }
