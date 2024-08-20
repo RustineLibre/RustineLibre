@@ -1,4 +1,4 @@
-import {NextPageWithLayout} from 'pages/_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import React, {useMemo, useState} from 'react';
 import Head from 'next/head';
 import {Container, Typography, Paper, Button, Box} from '@mui/material';

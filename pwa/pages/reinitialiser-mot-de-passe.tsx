@@ -1,4 +1,4 @@
-import {NextPageWithLayout} from 'pages/_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import React, {ChangeEvent, useState} from 'react';
 import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import Head from 'next/head';

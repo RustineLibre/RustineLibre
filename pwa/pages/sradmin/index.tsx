@@ -18,7 +18,7 @@ const Dashboard = () => {
     if (user && user.repairerEmployee) {
       setRepairer(user.repairerEmployee.repairer);
     }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <>

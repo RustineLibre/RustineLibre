@@ -15,7 +15,7 @@ abstract class AbstractTestCase extends ApiTestCase
         self::bootKernel();
     }
 
-    protected function createClientAuthAsAdmin(): Client
+    protected function createClientAuthAsAdmin(array $headers = []): Client
     {
         $response = static::createClient()->request('POST', '/auth', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -27,12 +27,15 @@ abstract class AbstractTestCase extends ApiTestCase
 
         $json = $response->toArray();
 
-        $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
+        $headers = [
+            'Authorization' => 'Bearer '.$json['token'],
+            ...$headers,
+        ];
 
-        return $client;
+        return static::createClient([], ['headers' => $headers]);
     }
 
-    protected function createClientWithCredentials(array $body = []): Client
+    protected function createClientWithCredentials(array $body = [], array $headers = []): Client
     {
         $response = static::createClient()->request('POST', '/auth', [
             'headers' => ['Content-Type' => 'application/json'],
@@ -44,24 +47,27 @@ abstract class AbstractTestCase extends ApiTestCase
 
         $json = $response->toArray();
 
-        $client = static::createClient([], ['headers' => ['authorization' => 'Bearer '.$json['token']]]);
+        $headers = [
+            'Authorization' => 'Bearer '.$json['token'],
+            ...$headers,
+        ];
 
-        return $client;
+        return static::createClient([], ['headers' => $headers]);
     }
 
-    protected function createClientAuthAsUser(): Client
+    protected function createClientAuthAsUser(array $headers = []): Client
     {
-        return $this->createClientWithCredentials();
+        return $this->createClientWithCredentials($headers);
     }
 
-    protected function createClientAuthAsRepairer(): Client
+    protected function createClientAuthAsRepairer(array $headers = []): Client
     {
-        return $this->createClientWithCredentials(['email' => 'repairer2@test.com', 'password' => 'Test1passwordOk!']);
+        return $this->createClientWithCredentials(['email' => 'repairer2@test.com', 'password' => 'Test1passwordOk!'], $headers);
     }
 
-    protected function createClientAuthAsBoss(): Client
+    protected function createClientAuthAsBoss(array $headers = []): Client
     {
-        return $this->createClientWithCredentials(['email' => 'boss@test.com', 'password' => 'Test1passwordOk!']);
+        return $this->createClientWithCredentials(['email' => 'boss@test.com', 'password' => 'Test1passwordOk!'], $headers);
     }
 
     protected function createClientWithUser(User $user): Client

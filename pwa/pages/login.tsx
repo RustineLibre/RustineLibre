@@ -1,4 +1,4 @@
-import {NextPageWithLayout} from 'pages/_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import React, {useState, ChangeEvent, useEffect} from 'react';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
@@ -17,6 +17,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {isAdmin, isBoss, isEmployee} from '@helpers/rolesHelpers';
+import NextLink from 'next/link';
 
 const Login: NextPageWithLayout = ({}) => {
   const [email, setEmail] = useState<string>('');
@@ -152,15 +153,19 @@ const Login: NextPageWithLayout = ({}) => {
                       display="flex"
                       justifyContent="space-between"
                       width="100%">
-                      <Link
-                        rel="canonical"
+                      <NextLink
                         href="/mot-de-passe-oublie"
-                        variant="body2">
-                        Mot de passe oublié ?
-                      </Link>
-                      <Link rel="canonical" href="/inscription" variant="body2">
-                        S’inscrire
-                      </Link>
+                        legacyBehavior
+                        passHref>
+                        <Link rel="canonical" variant="body2">
+                          Mot de passe oublié ?
+                        </Link>
+                      </NextLink>
+                      <NextLink href="/inscription" legacyBehavior passHref>
+                        <Link rel="canonical" variant="body2">
+                          S’inscrire
+                        </Link>
+                      </NextLink>
                     </Box>
                   </Box>
                 </Box>

@@ -1,7 +1,7 @@
-import {NextPageWithLayout} from 'pages/_app';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import React from 'react';
 import Head from 'next/head';
-import {Container, Typography, Paper, Avatar, Box} from '@mui/material';
+import {Container, Typography, Box} from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';

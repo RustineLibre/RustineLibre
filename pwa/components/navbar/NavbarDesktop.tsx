@@ -58,7 +58,7 @@ const NavbarDesktop = ({
     return onClick ? (
       Element
     ) : (
-      <NextLink legacyBehavior href={link}>
+      <NextLink href={link} legacyBehavior passHref>
         {Element}
       </NextLink>
     );
@@ -71,8 +71,10 @@ const NavbarDesktop = ({
       display={{xs: 'none', md: 'flex'}}
       justifyContent="space-between"
       alignItems="center">
-      <NextLink href="/" style={{height: '35px', display: 'block'}}>
-        <Logo inline color="primary" />
+      <NextLink href="/" legacyBehavior passHref>
+        <Link style={{height: '35px', display: 'block'}}>
+          <Logo inline color="primary" />
+        </Link>
       </NextLink>
       <Box display="flex" gap={4} justifyContent="flex" alignItems="center">
         {pages.map(({name, link, disabled}) => {
