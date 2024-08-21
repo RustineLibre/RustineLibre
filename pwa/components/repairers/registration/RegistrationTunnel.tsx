@@ -1,7 +1,6 @@
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
 import React, {
-  ChangeEvent,
   useCallback,
   useContext,
   useEffect,
@@ -29,17 +28,14 @@ import {
   CircularProgress,
   FormControlLabel,
   Grid,
-  Paper,
   Typography,
 } from '@mui/material';
 import LetterR from '@components/common/LetterR';
 import RegistrationTunnelUserInfo from '@components/repairers/registration/RegistrationTunnelUserInfo';
 import RegistrationTunnelWorkshop from '@components/repairers/registration/RegistrationTunnelWorkshop';
 import Link from 'next/link';
-import {Simulate} from 'react-dom/test-utils';
-import submit = Simulate.submit;
-import {userResource} from '@resources/userResource';
 import {User} from '@interfaces/User';
+import {RegistrationTunnelChoiceWorkshop} from '@components/repairers/registration/RegistrationTunnelChoiceWorkshop';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -71,7 +67,6 @@ export const RegistrationTunnel = ({
     hasBoss,
     setHasBoss,
     setRepairerCities,
-    setMultipleWorkShop,
     setName,
     setCity,
     setStreet,
@@ -133,11 +128,6 @@ export const RegistrationTunnel = ({
     } else fetchCitiesResult(cityInput);
   }, [setCitiesList, fetchCitiesResult, cityInput]);
 
-  const handleCityChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): Promise<void> => {
-    setCityInput(event.target.value);
-  };
   const handleSubmit = async (
     event?: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
@@ -248,6 +238,7 @@ export const RegistrationTunnel = ({
       </Box>
       <Grid container spacing={2} direction="column">
         {tunnelStep === 'user_info' && <RegistrationTunnelUserInfo />}
+        {tunnelStep === 'choice' && <RegistrationTunnelChoiceWorkshop />}
         {tunnelStep === 'workshop' && (
           <RegistrationTunnelWorkshop
             repairerTypes={repairerTypes}
@@ -301,8 +292,8 @@ export const RegistrationTunnel = ({
       </Grid>
       {tunnelStep === 'validation' && (
         <Box display="flex" flexDirection="column" alignItems="center">
-          <Button variant="contained" onClick={() => setTunnelStep('workshop')}>
-            Précédent
+          <Button variant="outlined" onClick={() => setTunnelStep('workshop')}>
+            Retour
           </Button>
           {multipleWorkshop && (
             <>
@@ -323,7 +314,7 @@ export const RegistrationTunnel = ({
                 size="large"
                 sx={{mt: 2, mx: 'auto'}}>
                 {!pendingRegistration ? (
-                  'Enregistrer cet atelier et continuer'
+                  'Enregistrer cette antenne et continuer'
                 ) : (
                   <CircularProgress size={20} sx={{color: 'white'}} />
                 )}

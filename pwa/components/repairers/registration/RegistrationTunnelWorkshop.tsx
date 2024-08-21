@@ -34,6 +34,8 @@ import {City as GouvCity} from '@interfaces/Gouv';
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
 import {RepairerCity} from '@interfaces/RepairerCity';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import Avatar from '@mui/material/Avatar';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -47,7 +49,6 @@ export const RegistrationTunnelWorkshop = ({
   repairerTypes,
 }: WorkshopProps): JSX.Element => {
   const {
-    tunnelStep,
     name,
     city,
     street,
@@ -56,11 +57,8 @@ export const RegistrationTunnelWorkshop = ({
     repairerTypeSelected,
     selectedBikeTypes,
     multipleWorkshop,
-    chosen,
     repairerCities,
     setRepairerCities,
-    setChosen,
-    setMultipleWorkShop,
     setTunnelStep,
     setRepairerTypeSelected,
     setSelectedBikeTypes,
@@ -131,7 +129,6 @@ export const RegistrationTunnelWorkshop = ({
     setRepairerCities(newRepairerCities);
   };
 
-  const checkRoving = () => {};
   const handleChangeStreetNumber = (
     event: ChangeEvent<HTMLInputElement>
   ): void => {
@@ -180,243 +177,211 @@ export const RegistrationTunnelWorkshop = ({
     setSelectedBikeTypes(typeof value === 'string' ? value.split(',') : value);
   };
 
-  const handleClickYes = () => {
-    setChosen(true);
-    setMultipleWorkShop(true);
-  };
-
-  const handleClickNo = () => {
-    setChosen(true);
-  };
-
   const handleGoBack = () => {
-    setTunnelStep('user_info');
-    setChosen(false);
-    setMultipleWorkShop(false);
+    setTunnelStep('choice');
   };
 
   return (
     <>
       <Box display="flex" flexDirection="column" gap={2} sx={{mx: 'auto'}}>
-        <Typography variant="h3" textAlign="center" color="primary.main" pb={2}>
-          Enregistrement de l&apos;enseigne (2/3)
-        </Typography>
+        <Box display="flex" flexDirection="column" gap={2} sx={{mx: 'auto'}}>
+          <Avatar sx={{bgcolor: 'primary.main', mx: 'auto'}}>
+            <StorefrontIcon sx={{color: 'white', fontSize: '1.7rem'}} />
+          </Avatar>
+          <Typography
+            variant="h2"
+            textAlign="center"
+            color="primary.main"
+            pb={2}>
+            Mon enseigne
+          </Typography>
+        </Box>
         <Typography variant="h5" component="label">
-          {!chosen
-            ? "Votre enseigne possède t'elle plusieurs antenne?"
-            : !multipleWorkshop
-            ? "Enregistrement de l'enseigne"
-            : 'Enregistrement de plusieurs enseignes'}
+          {!multipleWorkshop
+            ? "Informations de l'enseigne"
+            : 'Informations des antennes'}
         </Typography>
-        {!multipleWorkshop && (
-          <>
-            <Box
-              width={{xs: '60%', md: '40%'}}
-              mt={3}
-              display="flex"
-              mx="auto"
-              justifyContent="space-between">
-              <Button
-                variant="contained"
-                color={'secondary'}
-                onClick={handleClickYes}>
-                Oui
-              </Button>
-              <Button
-                onClick={handleClickNo}
-                variant="outlined"
-                color={'secondary'}>
-                Non
-              </Button>
-            </Box>
-          </>
-        )}
       </Box>
-
-      {chosen && (
-        <>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              required
-              id="name"
-              label="Nom de votre enseigne"
-              name="name"
-              autoComplete="name"
-              value={name}
-              inputProps={{maxLength: 80}}
-              onChange={handleChangeName}
-            />
-          </Grid>
+      <>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            required
+            id="name"
+            label="Nom de votre enseigne"
+            name="name"
+            autoComplete="name"
+            value={name}
+            inputProps={{maxLength: 80}}
+            onChange={handleChangeName}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Autocomplete
+            filterOptions={(options) => options}
+            freeSolo
+            value={city}
+            options={citiesList}
+            getOptionLabel={(city) =>
+              typeof city === 'string'
+                ? city
+                : formatCityInput(city.name, city.postcode)
+            }
+            onChange={(event, value) => setCity(value as City)}
+            renderInput={(params) => (
+              <TextField
+                label="Ville ou code postal"
+                required
+                {...params}
+                value={cityInput}
+                onChange={(e: any) => handleCityChange(e)}
+              />
+            )}
+          />
+        </Grid>
+        {city && (
           <Grid item xs={12}>
             <Autocomplete
-              filterOptions={(options) => options}
               freeSolo
-              value={cityInput}
-              options={citiesList}
-              getOptionLabel={(city) =>
-                typeof city === 'string'
-                  ? city
-                  : formatCityInput(city.name, city.postcode)
+              value={street}
+              options={streetList}
+              getOptionLabel={(streetObject) =>
+                typeof streetObject === 'string'
+                  ? streetObject
+                  : `${streetObject.name} (${streetObject.city})`
               }
-              onChange={(event, value) => setCity(value as City)}
+              onChange={(event, value) => setStreet(value as Street)}
               renderInput={(params) => (
                 <TextField
-                  label="Ville ou code postal"
-                  required
+                  label="Rue"
                   {...params}
-                  value={cityInput}
-                  onChange={(e: any) => handleCityChange(e)}
+                  value={street}
+                  onChange={(e) => handleChangeStreet(e)}
                 />
               )}
             />
           </Grid>
-          {city && (
-            <Grid item xs={12}>
-              <Autocomplete
-                freeSolo
-                value={street}
-                options={streetList}
-                getOptionLabel={(streetObject) =>
-                  typeof streetObject === 'string'
-                    ? streetObject
-                    : `${streetObject.name} (${streetObject.city})`
-                }
-                onChange={(event, value) => setStreet(value as Street)}
-                renderInput={(params) => (
-                  <TextField
-                    label="Rue"
-                    {...params}
-                    value={street}
-                    onChange={(e) => handleChangeStreet(e)}
-                  />
-                )}
-              />
-            </Grid>
-          )}
-          {city && (
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                id="streetNumber"
-                label="Numéro de la rue"
-                name="streetNumber"
-                autoComplete="streetNumber"
-                value={streetNumber}
-                inputProps={{maxLength: 30}}
-                onChange={handleChangeStreetNumber}
-              />
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <FormControl fullWidth required>
-              <InputLabel id="repairer-type-label">
-                Type de réparateur
-              </InputLabel>
-              <Select
-                required
-                multiple
-                id="repairer-type"
-                labelId="repairer-type-label"
-                label="Type de réparateur"
-                onChange={handleChangeRepairerType}
-                value={repairerTypeSelected}
-                style={{width: '100%'}}
-                renderValue={(selected) => selected.join(', ')}>
-                {repairerTypes.map((repairer) => (
-                  <MenuItem key={repairer.id} value={repairer.name}>
-                    <Checkbox
-                      checked={repairerTypeSelected.indexOf(repairer.name) > -1}
-                    />
-                    <ListItemText primary={repairer.name} />{' '}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          {isRoving && (
-            <Grid item xs={12}>
-              <FormControl fullWidth required>
-                <Autocomplete
-                  fullWidth
-                  multiple
-                  sx={{mt: 2, mb: 1, p: 0}}
-                  filterOptions={(options) => options}
-                  freeSolo
-                  value={repairerCities}
-                  options={citiesList}
-                  getOptionLabel={(city: City | RepairerCity | string) =>
-                    typeof city === 'string'
-                      ? city
-                      : formatCityInput(city.name, city.postcode)
-                  }
-                  onChange={(event, value) => handleCitySelect(event, value)}
-                  onInputChange={(event, value) => {
-                    handleItinerantCityChange(value);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      label="Villes d'intervention itinérance"
-                      {...params}
-                      size="medium"
-                    />
-                  )}
-                />
-              </FormControl>
-            </Grid>
-          )}
-          <Grid item xs={12}>
-            <FormControl fullWidth required>
-              <InputLabel id="bike-type-label">Vélos réparés</InputLabel>
-              <Select
-                required
-                labelId="bike-type-label"
-                label="Vélos réparés"
-                id="bike-type"
-                multiple
-                fullWidth
-                value={selectedBikeTypes}
-                onChange={handleChangeBikeRepaired}
-                renderValue={(selected) => selected.join(', ')}>
-                {bikeTypes.map((bikeType) => (
-                  <MenuItem key={bikeType.name} value={bikeType.name}>
-                    <Checkbox
-                      checked={selectedBikeTypes.indexOf(bikeType.name) > -1}
-                    />
-                    <ListItemText primary={bikeType.name} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+        )}
+        {city && (
           <Grid item xs={12}>
             <TextField
               fullWidth
-              multiline
-              rows={3}
-              id="comment"
-              label="Commentaires"
-              name="comment"
-              autoComplete="comment"
-              value={comment}
-              inputProps={{maxLength: 2000}}
-              onChange={handleChangeComments}
+              id="streetNumber"
+              label="Numéro de la rue"
+              name="streetNumber"
+              autoComplete="streetNumber"
+              value={streetNumber}
+              inputProps={{maxLength: 30}}
+              onChange={handleChangeStreetNumber}
             />
           </Grid>
-        </>
-      )}
+        )}
+        <Grid item xs={12}>
+          <FormControl fullWidth required>
+            <InputLabel id="repairer-type-label">Type de réparateur</InputLabel>
+            <Select
+              required
+              multiple
+              id="repairer-type"
+              labelId="repairer-type-label"
+              label="Type de réparateur"
+              onChange={handleChangeRepairerType}
+              value={repairerTypeSelected}
+              style={{width: '100%'}}
+              renderValue={(selected) => selected.join(', ')}>
+              {repairerTypes.map((repairer) => (
+                <MenuItem key={repairer.id} value={repairer.name}>
+                  <Checkbox
+                    checked={repairerTypeSelected.indexOf(repairer.name) > -1}
+                  />
+                  <ListItemText primary={repairer.name} />{' '}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        {isRoving && (
+          <Grid item xs={12}>
+            <FormControl fullWidth required>
+              <Autocomplete
+                fullWidth
+                multiple
+                sx={{mt: 2, mb: 1, p: 0}}
+                filterOptions={(options) => options}
+                freeSolo
+                value={repairerCities}
+                options={citiesList}
+                getOptionLabel={(city: City | RepairerCity | string) =>
+                  typeof city === 'string'
+                    ? city
+                    : formatCityInput(city.name, city.postcode)
+                }
+                onChange={(event, value) => handleCitySelect(event, value)}
+                onInputChange={(event, value) => {
+                  handleItinerantCityChange(value);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    label="Villes d'intervention itinérance"
+                    {...params}
+                    size="medium"
+                  />
+                )}
+              />
+            </FormControl>
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <FormControl fullWidth required>
+            <InputLabel id="bike-type-label">Vélos réparés</InputLabel>
+            <Select
+              required
+              labelId="bike-type-label"
+              label="Vélos réparés"
+              id="bike-type"
+              multiple
+              fullWidth
+              value={selectedBikeTypes}
+              onChange={handleChangeBikeRepaired}
+              renderValue={(selected) => selected.join(', ')}>
+              {bikeTypes.map((bikeType) => (
+                <MenuItem key={bikeType.name} value={bikeType.name}>
+                  <Checkbox
+                    checked={selectedBikeTypes.indexOf(bikeType.name) > -1}
+                  />
+                  <ListItemText primary={bikeType.name} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            multiline
+            rows={3}
+            id="comment"
+            label="Commentaires"
+            name="comment"
+            autoComplete="comment"
+            value={comment}
+            inputProps={{maxLength: 2000}}
+            onChange={handleChangeComments}
+          />
+        </Grid>
+      </>
       <Box
-        width={{xs: '60%', md: '40%'}}
+        width={{xs: '100%', md: '80%'}}
         mt={3}
         display="flex"
         mx="auto"
         justifyContent="space-between">
-        <Button variant="contained" onClick={handleGoBack}>
-          Précédent
+        <Button variant="outlined" onClick={handleGoBack}>
+          Retour
         </Button>
         <Button
           onClick={() => setTunnelStep('validation')}
-          variant="outlined"
+          variant="contained"
           disabled={
             !name ||
             !city ||
