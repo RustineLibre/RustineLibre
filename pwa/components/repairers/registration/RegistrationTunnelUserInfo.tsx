@@ -4,6 +4,7 @@ import React, {ChangeEvent, useContext, useState} from 'react';
 import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext';
 import {validateEmail} from '@utils/emailValidator';
 import {UserFormContext} from '@contexts/UserFormContext';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const RegistrationTunnelUserInfo = (): JSX.Element => {
   const {
@@ -19,8 +20,6 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
   const {password} = useContext(UserFormContext);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [emailHelperText, setEmailHelperText] = useState<string>('');
-
-  console.log(tunnelStep);
 
   const handleChangeFirstName = (
     event: ChangeEvent<HTMLInputElement>
@@ -46,8 +45,11 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
   return (
     <>
       <Box display="flex" flexDirection="column" gap={2} sx={{mx: 'auto'}}>
-        <Typography variant="h3" textAlign="center" color="primary.main" pb={2}>
-          Informations utilisateur (1/3)
+        <AccountCircleIcon
+          sx={{color: 'primary.main', fontSize: '3rem', mx: 'auto'}}
+        />
+        <Typography variant="h2" textAlign="center" color="primary.main" pb={2}>
+          Mon identité
         </Typography>
       </Box>
       <Grid container item xs={12} spacing={2} direction="row">
@@ -101,9 +103,9 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
       <Box width="100%" display="flex" justifyContent="center" mt={4}>
         <Button
           variant="contained"
-          onClick={() => setTunnelStep('workshop')}
+          onClick={() => setTunnelStep('choice')}
           disabled={!firstName || !lastName || !email || !password}>
-          Suivant
+          Etape suivante
         </Button>
       </Box>
     </>

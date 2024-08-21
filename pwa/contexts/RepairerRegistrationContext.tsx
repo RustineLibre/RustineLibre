@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useState} from 'react';
+import React, {createContext, ReactNode, useState} from 'react';
 import {City} from '@interfaces/City';
 import {Street} from '@interfaces/Street';
 import {RepairerCity} from '@interfaces/RepairerCity';
@@ -23,6 +23,8 @@ interface RepairerRegistrationContext {
   chosen: boolean;
   repairerCities: RepairerCity[] | any;
   hasBoss: boolean;
+  choiceValue: string;
+  setChoiceValue: (value: string) => void;
   setHasBoss: (value: boolean) => void;
   setRepairerCities: (value: RepairerCity[] | any) => void;
   setChosen: (value: boolean) => void;
@@ -41,7 +43,7 @@ interface RepairerRegistrationContext {
 }
 
 const initialValue = {
-  tunnelStep: 'user_info',
+  tunnelStep: 'workshop',
   firstName: '',
   lastName: '',
   email: '',
@@ -56,6 +58,8 @@ const initialValue = {
   chosen: false,
   repairerCities: [],
   hasBoss: false,
+  choiceValue: '',
+  setChoiceValue: () => null,
   setHasBoss: () => null,
   setRepairerCities: () => null,
   setChosen: () => null,
@@ -79,7 +83,7 @@ export const RepairerRegistrationContext =
 export const RepairerRegistrationProvider = ({
   children,
 }: ProviderProps): JSX.Element => {
-  const [tunnelStep, setTunnelStep] = useState<string>('user_info');
+  const [tunnelStep, setTunnelStep] = useState<string>('workshop');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -98,6 +102,7 @@ export const RepairerRegistrationProvider = ({
     []
   );
   const [hasBoss, setHasBoss] = useState<boolean>(false);
+  const [choiceValue, setChoiceValue] = useState('');
 
   return (
     <RepairerRegistrationContext.Provider
@@ -117,6 +122,8 @@ export const RepairerRegistrationProvider = ({
         chosen,
         repairerCities,
         hasBoss,
+        choiceValue,
+        setChoiceValue,
         setHasBoss,
         setRepairerCities,
         setChosen,
