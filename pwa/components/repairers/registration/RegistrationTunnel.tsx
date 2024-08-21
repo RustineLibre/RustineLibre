@@ -1,11 +1,6 @@
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {UserFormContext} from '@contexts/UserFormContext';
 import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext';
 import {
