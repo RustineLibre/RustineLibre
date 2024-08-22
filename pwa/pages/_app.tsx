@@ -1,4 +1,5 @@
 import Layout from '@components/common/Layout';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import type {AppProps} from 'next/app';
 import type {DehydratedState} from 'react-query';
 import Head from 'next/head';
@@ -7,13 +8,18 @@ import '../styles/calendar.css';
 import Analytics from '@components/layout/Analytics';
 import {GoogleOAuthProvider} from '@react-oauth/google';
 
+type AppPropsWithLayout<T> = AppProps<T> & {
+  Component: NextPageWithLayout<T>;
+};
+
 function MyApp({
   Component,
   pageProps,
-}: AppProps<{dehydratedState: DehydratedState}>) {
+}: AppPropsWithLayout<{dehydratedState: DehydratedState}>) {
+  const getLayout = Component.getLayout ?? ((page) => page);
   const googleClientId = process.env.GOOGLE_CLIENT_ID;
 
-  return (
+  return getLayout(
     <>
       <Head>
         <meta
