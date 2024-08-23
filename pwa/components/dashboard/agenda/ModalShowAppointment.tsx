@@ -35,11 +35,7 @@ import {formatDate, formatDateInSelect} from '@helpers/dateHelper';
 import {getAppointmentStatus} from '@helpers/appointmentStatus';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
-<<<<<<< HEAD
 import NextLink from 'next/link';
-import Divider from '@mui/material/Divider';
-=======
->>>>>>> 11942db (fix for review)
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 type ModalShowAppointmentProps = {

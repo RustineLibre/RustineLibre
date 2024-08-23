@@ -9,11 +9,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import theme from 'styles/theme';
-<<<<<<< HEAD
 import Link from 'next/link';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-=======
->>>>>>> 11942db (fix for review)
 
 interface DashboardSidebarListItemProps {
   text: string;
