@@ -43,13 +43,14 @@ class RetrieveEmployeesTest extends AbstractTestCase
 
     public function testGetRepairerEmployeesAsAdmin(): void
     {
-        $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees');
+        $response = $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees')->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertJsonContains([
             '@context' => '/contexts/RepairerEmployee',
             '@id' => '/repairer_employees',
             '@type' => 'hydra:Collection',
         ]);
+        $this->assertGreaterThanOrEqual(1, $response['hydra:member']);
     }
 
     public function testGetRepairerEmployeeAsAdmin(): void
@@ -93,12 +94,13 @@ class RetrieveEmployeesTest extends AbstractTestCase
 
     public function testGetEmployeesAsBossWithEmployees(): void
     {
-        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees');
+        $response = $this->createClientAuthAsBoss()->request('GET', '/repairer_employees')->toArray();
         $this->assertJsonContains([
             '@context' => '/contexts/RepairerEmployee',
             '@id' => '/repairer_employees',
             '@type' => 'hydra:Collection',
         ]);
+        self::assertGreaterThanOrEqual(1, count($response['hydra:member']));
     }
 
     public function testGetEmployeesAsBossWithNoEmployees(): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\AutoDiagnostic\Security;
 
-use App\Entity\Appointment;
 use App\Entity\AutoDiagnostic;
 use App\Entity\User;
 use App\Repository\AutoDiagnosticRepository;
@@ -72,14 +71,6 @@ class GetTest extends AbstractTestCase
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
-
-        //        $autoDiagnostic = $this->autoDiagnosticRepository->createQueryBuilder('ad')
-        //            ->innerJoin('ad.appointment', 'a')
-        //            ->andWhere('a.customer != :user')
-        //            ->setParameter('user', $user)
-        //            ->setMaxResults(1)
-        //            ->getQuery()
-        //            ->getOneOrNullResult();
 
         $this->createClientWithUser($user)->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);

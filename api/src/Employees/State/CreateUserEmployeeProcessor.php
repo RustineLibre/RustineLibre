@@ -12,18 +12,16 @@ use App\Entity\RepairerEmployee;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @template-implements ProcessorInterface<int>
  */
-final class CreateUserEmployeeProcessor implements ProcessorInterface
+final readonly class CreateUserEmployeeProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly ValidatorInterface $validator,
-        private readonly Security $security,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private ValidatorInterface $validator,
+        private Security $security,
+        private EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -43,13 +41,14 @@ final class CreateUserEmployeeProcessor implements ProcessorInterface
         $this->validator->validate($user);
 
         // Get current user
-        /** @var User $currentUser */
         $currentUser = $this->security->getUser();
 
         // Create a new employee
         $repairerEmployee = new RepairerEmployee();
         $repairerEmployee->employee = $user;
-        $repairerEmployee->repairer = $data->repairer;
+        if ($currentUser instanceof User && ($currentUser->isAdmin() || $currentUser->isAssociatedWithRepairer($data->repairer->id))) {
+            $repairerEmployee->repairer = $data->repairer;
+        }
 
         // Validate the new entity
         $this->validator->validate($repairerEmployee);

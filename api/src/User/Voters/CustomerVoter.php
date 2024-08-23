@@ -35,7 +35,7 @@ class CustomerVoter extends Voter
         $currentUser = $this->security->getUser();
 
         // Should be at least repairer's boss or employee
-        if (!$currentUser || ($currentUser->repairers->count() < 1 && !$currentUser->repairerEmployee)) {
+        if (!$currentUser) {
             return false;
         }
 

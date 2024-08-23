@@ -43,7 +43,7 @@ final readonly class RepairerEventSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $user->roles = [...$user->roles, User::ROLE_BOSS];
+        $user->roles = array_unique([...$user->roles, User::ROLE_BOSS]);
         $object->owner = $user;
         $this->validator->validate($object);
     }

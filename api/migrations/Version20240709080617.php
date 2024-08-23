@@ -11,7 +11,7 @@ final class Version20240709080617 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add possibility to have several repairer for one user';
+        return 'Add possibility to have several repairers for one user';
     }
 
     public function up(Schema $schema): void

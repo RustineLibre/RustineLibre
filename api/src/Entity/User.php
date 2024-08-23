@@ -37,12 +37,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_ADMIN') or (object == user) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object)) or (is_granted('ROLE_EMPLOYEE') and is_granted('CUSTOMER_READ', object))"),
+        new Get(security: "is_granted('ROLE_ADMIN') or object == user or is_granted('CUSTOMER_READ', object)"),
         new Post(security: "is_granted('ROLE_ADMIN') or !user"),
         new Put(security: "is_granted('ROLE_ADMIN') or object == user"),
         new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
-        new Delete(security: "is_granted('ROLE_ADMIN') or (object == user)"),
+        new Delete(security: "is_granted('ROLE_ADMIN') or object == user"),
     ],
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]],
@@ -82,6 +82,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
+    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
     name: 'customers_list',
     provider: CustomersProvider::class,
 )]
@@ -126,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Repairer::REPAIRER_COLLECTION_READ])]
     public ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     #[Groups([self::USER_READ])]
     public array $roles = ['ROLE_USER'];
 
@@ -235,7 +236,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
-        return array_values(array_unique($roles));
+        return $this->roles;
+
+        return array_unique($roles);
     }
 
     public function eraseCredentials()
@@ -270,18 +273,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
-    public function isAssociatedWithRepairer(int|string|Repairer $repairer): bool
+    public function isAssociatedWithRepairer(int|string $id): bool
     {
         if ($this->isBoss()) {
-            return !$this->repairers->filter(function (Repairer $repairerOfUser) use ($repairer) {
-                return $repairer instanceof Repairer ? $repairerOfUser->id === $repairer->id : $repairerOfUser->id == $repairer;
+            return !$this->repairers->filter(function (Repairer $repairerOfUser) use ($id) {
+                return $repairerOfUser->id == $id;
             })->isEmpty();
         }
 
         if ($this->isEmployee() && $this->repairerEmployee) {
-            return $repairer instanceof Repairer ?
-                $repairer->id === $this->repairerEmployee->repairer->id :
-                $repairer == $this->repairerEmployee->repairer->id;
+            return $id == $this->repairerEmployee->repairer->id;
         }
 
         return false;

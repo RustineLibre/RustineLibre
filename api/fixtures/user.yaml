@@ -26,15 +26,6 @@ App\Entity\User:
     emailConfirmed: true
     street: <address()>
     city: <city()>
-  boss_test:
-    roles: [ "ROLE_BOSS" ]
-    email: "bosstest@test.com"
-    firstName: <firstName()>
-    lastName: <lastName()>
-    plainPassword: "Test1passwordOk!"
-    emailConfirmed: true
-    street: <address()>
-    city: <city()>
   user_1:
     roles: ["ROLE_USER"]
     email: "user1@test.com"

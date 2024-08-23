@@ -2,6 +2,7 @@ App\Entity\RepairerEmployee:
   employee_1:
     repairer: '@repairer_1'
     employee: '@user_3'
+    enabled: true
   employee_2:
     repairer: '@repairer_1'
     employee: '@user_4'

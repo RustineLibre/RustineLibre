@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Post(
-            securityPostValidation: "is_granted('ROLE_ADMIN') or (user.isAssociatedWithRepairer(object.repairer) and is_granted('REPAIRER_INTERVENTION_WRITE', object))",
+            securityPostValidation: "is_granted('ROLE_ADMIN') or (user.isAssociatedWithRepairer(object.repairer.id) and object.intervention.isAdmin)",
         ),
     ],
     denormalizationContext: ['groups' => [self::WRITE]]

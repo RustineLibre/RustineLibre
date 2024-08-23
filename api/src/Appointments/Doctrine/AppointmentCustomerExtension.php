@@ -30,7 +30,7 @@ readonly class AppointmentCustomerExtension implements QueryCollectionExtensionI
         $user = $this->security->getUser();
 
         // Return if boss or employee
-        if (null === $user || Appointment::class !== $resourceClass || $user->isBoss() || $user->isEmployee()) {
+        if (null === $user || Appointment::class !== $resourceClass || $user->isBoss() || $user->isEmployee() || $user->isAdmin()) {
             return;
         }
 

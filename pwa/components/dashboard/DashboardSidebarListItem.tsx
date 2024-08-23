@@ -9,18 +9,16 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import theme from 'styles/theme';
+<<<<<<< HEAD
 import Link from 'next/link';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+=======
+>>>>>>> 11942db (fix for review)
 
 interface DashboardSidebarListItemProps {
   text: string;
   open: boolean;
   icon: any;
-  path: string;
-}
-
-interface SubItem {
-  text: string;
   path: string;
 }
 
@@ -31,7 +29,6 @@ const DashboardSidebarListItem = ({
   path,
 }: DashboardSidebarListItemProps): JSX.Element => {
   const router = useRouter();
-  const {repairer_id} = router.query;
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (

@@ -160,9 +160,8 @@ const StyledMenu = styled((props: MenuProps) => (
 
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const open = !!anchorEl;
   const openMenu = (event: React.MouseEvent<HTMLElement>) => {
-    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 
@@ -173,9 +172,10 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     setAnchorEl(null);
     if (!repairer) {
       router.push('/sradmin/boutiques');
-    } else {
-      router.push(`/sradmin/boutiques/${repairer.id}`);
+      return;
     }
+
+    router.push(`/sradmin/boutiques/${repairer.id}`);
   };
 
   const router = useRouter();
@@ -308,8 +308,8 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                 style={{width: '100%', margin: '20px 0', textAlign: 'center'}}>
                 <Button
                   onClick={openMenu}
-                  id="demo-customized-button"
-                  aria-controls={open ? 'demo-customized-menu' : undefined}
+                  id="repairer-selection-button"
+                  aria-controls={open ? 'repairer-selection-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                   variant="contained"
@@ -319,9 +319,9 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                   {repairer ? repairer.name : 'Toutes mes boutiques'}
                 </Button>
                 <StyledMenu
-                  id="demo-customized-menu"
+                  id="repairer-selection-menu"
                   MenuListProps={{
-                    'aria-labelledby': 'demo-customized-button',
+                    'aria-labelledby': 'repairer-selection-button',
                   }}
                   anchorEl={anchorEl}
                   open={open}

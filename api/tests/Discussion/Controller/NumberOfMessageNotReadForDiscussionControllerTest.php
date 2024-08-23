@@ -32,7 +32,7 @@ class NumberOfMessageNotReadForDiscussionControllerTest extends AbstractTestCase
             return $message->sender !== $user && !$message->alreadyRead;
         }));
 
-        $response = $this->createClientWithUser($discussion->customer)->request('GET', sprintf('/messages_unread/%s', $discussion->id))->toArray();
+        $response = $this->createClientWithUser($discussion->customer)->request('GET', sprintf('/messages_unread/%s', $discussion->id))->toArray(false);
         self::assertResponseIsSuccessful();
         self::assertArrayHasKey('count', $response);
         self::assertSame($response['count'], $notRead);

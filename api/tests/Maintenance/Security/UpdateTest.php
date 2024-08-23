@@ -9,7 +9,6 @@ use App\Entity\Bike;
 use App\Entity\Maintenance;
 use App\Entity\Repairer;
 use App\Entity\RepairerEmployee;
-use App\Entity\User;
 use App\Repository\AppointmentRepository;
 use App\Repository\BikeRepository;
 use App\Repository\MaintenanceRepository;
@@ -22,21 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UpdateTest extends MaintenanceAbstractTestCase
 {
-    //    protected Maintenance $maintenance;
-    //
-    //    protected Appointment $appointment;
-    //
-    //    protected Bike $bike;
-    //
-    //    protected User $user;
-    //
-    //    protected Repairer $repairerWithAppointment;
-    //
-    //    protected User $customer;
-    //
-    //    protected User $boss;
-    //
-    //    protected RepairerEmployee $repairerEmployee;
     private RepairerEmployeeRepository $repairerEmployeeRepository;
     private BikeRepository $bikeRepository;
     private AppointmentRepository $appointmentRepository;
@@ -52,15 +36,6 @@ class UpdateTest extends MaintenanceAbstractTestCase
         $this->appointmentRepository = self::getContainer()->get(AppointmentRepository::class);
         $this->maintenanceRepository = self::getContainer()->get(MaintenanceRepository::class);
         $this->userRepository = self::getContainer()->get(UserRepository::class);
-
-        //        $this->maintenance = static::getContainer()->get(MaintenanceRepository::class)->findOneBy([], ['id' => 'ASC']);
-        //        $this->user = static::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
-        //        $this->appointment = static::getContainer()->get(AppointmentRepository::class)->findOneBy(['customer' => $this->user]);
-        //        $this->repairerWithAppointment = $this->appointment->repairer;
-        //        $this->boss = $this->repairerWithAppointment->owner;
-        //        $this->customer = $this->appointment->customer;
-        //        $this->repairerEmployee = static::getContainer()->get(RepairerEmployeeRepository::class)->findOneBy(['repairer' => $this->repairerWithAppointment]);
-        //        $this->bike = static::getContainer()->get(BikeRepository::class)->findOneBy(['owner' => $this->customer]);
     }
 
     public function testUserCanUpdateMaintenanceForOwnBike(): void
@@ -237,15 +212,13 @@ class UpdateTest extends MaintenanceAbstractTestCase
             ->getOneOrNullResult();
 
         // According to the fixtures, maintenance is not from this employee
-        $response = $this->createClientWithUser($repairerEmployee->employee)->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
+        $this->createClientWithUser($repairerEmployee->employee)->request('PUT', sprintf('/maintenances/%d', $maintenance->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'description' => 'put by other employee',
                 'bike' => sprintf('/bikes/%d', $maintenance->bike->id),
             ],
         ]);
-
-        //        dd($repairerEmployee->employee->id, $maintenance->bike->owner->id, "status code " . $response->getStatusCode());
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }

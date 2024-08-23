@@ -29,8 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer)"),
-        new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY')"),
+        new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer.id)"),
+        new GetCollection(security: "is_granted('IS_AUTHENTICATED_FULLY') and !user.isBoss() and !user.isEmployee()"),
         new Post(
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             validationContext: ['groups' => ['default']]
@@ -105,7 +105,7 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $customerName = null;
 
-    #[ORM\ManyToOne(targetEntity: Repairer::class)]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     #[Assert\NotBlank(message: 'appointment.repairer.not_blank', groups: ['default'])]

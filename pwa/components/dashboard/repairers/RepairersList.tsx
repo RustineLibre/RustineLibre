@@ -1,7 +1,5 @@
-import {User} from '@interfaces/User';
 import {Repairer} from '@interfaces/Repairer';
 import {
-  Box,
   CircularProgress,
   IconButton,
   Paper,
@@ -12,15 +10,11 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import EmployeesListActions from '@components/dashboard/employees/EmployeesListActions';
 import React, {useState} from 'react';
 import Link from 'next/link';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForeverSharp';
 import ConfirmationModal from '@components/common/ConfirmationModal';
-import {repairerEmployeesResource} from '@resources/repairerEmployeesResource';
 import {repairerResource} from '@resources/repairerResource';
 
 interface RepairersListProps {
@@ -35,7 +29,6 @@ const RepairersList = ({repairers}: RepairersListProps) => {
     try {
       await repairerResource.delete(repairer['@id']);
       setDeleteDialogOpen(false);
-      // await fetchEmployees();
     } catch (e) {}
     setRemovePending(false);
   };

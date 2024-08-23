@@ -45,7 +45,7 @@ class UpdateBossTest extends AbstractTestCase
         $boss = $userRepository->getUsersWithRole('ROLE_BOSS');
         $owner = $this->repairerEmployees[0]->repairer->owner;
         $badBoss = array_filter($boss, function (User $user) use ($owner) {
-            return $user != $owner;
+            return $user !== $owner;
         });
         $this->createClientWithUser($badBoss[0])->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
             'headers' => ['Content-Type' => 'application/json'],

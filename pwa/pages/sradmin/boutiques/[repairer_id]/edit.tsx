@@ -6,7 +6,7 @@ import RepairerForm from '@components/dashboard/repairers/RepairerForm';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 const AddRepairer = () => {
-  const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);
+  const {repairer} = useContext(DashboardRepairerContext);
   return (
     <>
       <Head>

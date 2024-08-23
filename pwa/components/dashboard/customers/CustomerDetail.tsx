@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -12,15 +12,15 @@ import CustomerAppointmentsList from '@components/dashboard/customers/CustomerAp
 import CustomerBikesList from '@components/dashboard/customers/CustomerBikesList';
 import {Repairer} from '@interfaces/Repairer';
 
-interface CustomersDetailProps {
+interface CustomerDetailProps {
   customer: Customer;
   repairer: Repairer;
 }
 
-export const CustomersDetail = ({
+export const CustomerDetail = ({
   customer,
   repairer,
-}: CustomersDetailProps): JSX.Element => {
+}: CustomerDetailProps): JSX.Element => {
   const [tabValue, setTabValue] = React.useState<number>(0);
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
@@ -63,4 +63,4 @@ export const CustomersDetail = ({
   );
 };
 
-export default CustomersDetail;
+export default CustomerDetail;

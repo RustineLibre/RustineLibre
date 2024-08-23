@@ -11,15 +11,11 @@ interface ProviderProps {
 interface DashboardRepairerContext {
   repairer: Repairer | null;
   repairerNotFound: boolean;
-  setRepairer: (repairer: Repairer | null) => void;
-  setRepairerNotFound: (isLoading: boolean) => void;
 }
 
 const initialValue = {
   repairer: null,
-  setRepairer: () => null,
   repairerNotFound: false,
-  setRepairerNotFound: () => null,
 };
 
 export const DashboardRepairerContext =
@@ -72,8 +68,6 @@ export const DashboardRepairerProvider = ({
       value={{
         repairer,
         repairerNotFound,
-        setRepairer,
-        setRepairerNotFound,
       }}>
       {children}
     </DashboardRepairerContext.Provider>
