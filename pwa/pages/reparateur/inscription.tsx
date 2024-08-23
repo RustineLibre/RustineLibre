@@ -23,9 +23,6 @@ const RepairerRegistration: NextPageWithLayout<RepairerRegistrationProps> = ({
   repairerTypesFetched = [],
 }) => {
   const [success, setSuccess] = useState<boolean>(false);
-  const [pendingRegistration, setPendingRegistration] =
-    useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSetSuccess = () => {
     setSuccess(true);
