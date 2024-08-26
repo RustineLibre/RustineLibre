@@ -29,8 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Delete(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
-    //    mercure: true,
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
+    mercure: true,
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
 )]
