@@ -20,7 +20,7 @@ readonly class NumberOfMessageNotReadForCustomerProvider implements ProviderInte
     ) {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): MessageUnread
     {
         /** @var ?User $user */
         $user = $this->security->getUser();

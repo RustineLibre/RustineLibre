@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Messages\ApiResource;
 
 use ApiPlatform\Metadata\ApiResource;
@@ -21,7 +23,7 @@ use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
     uriTemplate: '/repairers/{repairer_id}/messages_unread',
     uriVariables: [
         'repairer_id' => new Link(
-            toProperty: 'repairer',
+            fromProperty: 'id',
             fromClass: Repairer::class,
         ),
     ],
@@ -39,7 +41,7 @@ use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
     security: 'is_granted("MESSAGE_UNREAD_BY_DISCUSSION", discussion_id)',
     provider: NumberOfMessageNotReadForDiscussionProvider::class,
 )]
-class MessageUnread
+final class MessageUnread
 {
     public function __construct(
         public int $count,

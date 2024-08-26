@@ -25,7 +25,7 @@ readonly class NumberOfMessageNotReadForDiscussionProvider implements ProviderIn
     ) {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): MessageUnread
     {
         /** @var ?User $user */
         $user = $this->security->getUser();

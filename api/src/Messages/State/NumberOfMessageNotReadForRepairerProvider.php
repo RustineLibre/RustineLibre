@@ -21,12 +21,12 @@ readonly class NumberOfMessageNotReadForRepairerProvider implements ProviderInte
     ) {
     }
 
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): MessageUnread
     {
         /** @var User|null $user */
         $user = $this->security->getUser();
 
-        if ($repairer_id = $uriVariables['repairer_id']) {
+        if (!$repairer_id = $uriVariables['repairer_id']) {
             throw new BadRequestHttpException('The repairer id must be provided');
         }
 
