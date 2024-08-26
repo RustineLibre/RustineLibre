@@ -24,7 +24,7 @@ import {useAccount, useAuth} from '@contexts/AuthContext';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Link from 'next/link';
-import {isBoss, isEmployee, isItinerant} from '@helpers/rolesHelpers';
+import {isBoss, isEmployee, isRepairerItinerant} from '@helpers/rolesHelpers';
 import RouteIcon from '@mui/icons-material/Route';
 import Logo from '@components/common/Logo';
 import {useContext, useEffect, useState} from 'react';
@@ -356,7 +356,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                       icon={<CalendarMonthIcon />}
                       path={`/sradmin/boutiques/${repairer.id}/agenda`}
                     />
-                    {user && isItinerant(user) && (
+                    {user && isRepairerItinerant(repairer) && (
                       <DashboardSidebarListItem
                         text="Tournée"
                         open={true}
