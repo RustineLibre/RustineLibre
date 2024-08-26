@@ -1,5 +1,5 @@
 import NextLink from 'next/link';
-import {Button, Box, Link} from '@mui/material';
+import {Box, Button, Link} from '@mui/material';
 import {Page} from '@interfaces/Page';
 import {User} from '@interfaces/User';
 import {useRouter} from 'next/router';
