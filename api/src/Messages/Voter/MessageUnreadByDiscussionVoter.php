@@ -10,7 +10,6 @@ use App\Repository\DiscussionRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use App\Messages\ApiResource\MessageUnread;
 
 /**
  * @template T of string
