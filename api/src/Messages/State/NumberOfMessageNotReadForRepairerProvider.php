@@ -10,6 +10,9 @@ use App\Repository\DiscussionMessageRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
+/**
+ * @template-implements ProviderInterface<MessageUnread>
+ */
 readonly class NumberOfMessageNotReadForRepairerProvider implements ProviderInterface
 {
     public function __construct(

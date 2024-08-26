@@ -13,6 +13,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @template-implements ProviderInterface<MessageUnread>
+ */
 readonly class NumberOfMessageNotReadForDiscussionProvider implements ProviderInterface
 {
     public function __construct(

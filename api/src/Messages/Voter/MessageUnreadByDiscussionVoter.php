@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Messages\Voter;
 
 use App\Entity\Discussion;
@@ -8,7 +10,14 @@ use App\Repository\DiscussionRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use App\Messages\ApiResource\MessageUnread;
 
+/**
+ * @template T of string
+ * @template TSubject of mixed
+ *
+ * @template-extends Voter<T, TSubject>
+ */
 class MessageUnreadByDiscussionVoter extends Voter
 {
     public function __construct(

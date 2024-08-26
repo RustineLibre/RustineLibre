@@ -9,6 +9,9 @@ use App\Messages\ApiResource\MessageUnread;
 use App\Repository\DiscussionMessageRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 
+/**
+ * @template-implements ProviderInterface<MessageUnread>
+ */
 readonly class NumberOfMessageNotReadForCustomerProvider implements ProviderInterface
 {
     public function __construct(
