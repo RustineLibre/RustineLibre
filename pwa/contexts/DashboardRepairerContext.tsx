@@ -54,7 +54,7 @@ export const DashboardRepairerProvider = ({
       user &&
       isEmployee(user) &&
       user.repairerEmployee &&
-      user.repairerEmployee.repairer.id === repairer_id
+      user.repairerEmployee.repairer.id == repairer_id
     ) {
       setRepairer(user.repairerEmployee.repairer);
       return;

@@ -63,9 +63,11 @@ export const CustomerAppointmentsList = ({
       itemsPerPage: 20,
       'order[id]': 'DESC',
       customer: customer.id,
-      repairer: repairer['@id'],
     };
-    const response = await appointmentResource.getAll(true, params);
+    const response = await appointmentResource.getAllByRepairer(
+      repairer,
+      params
+    );
     setAppointments(response['hydra:member']);
     setTotalPages(Math.ceil(response['hydra:totalItems'] / 20));
     setLoadingList(false);

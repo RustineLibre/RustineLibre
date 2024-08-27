@@ -81,10 +81,13 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const buildCalendarEvents = async (start: string, end: string) => {
-    const appointmentsFetch = await appointmentResource.getAll(true, {
-      'slotTime[after]': start,
-      'slotTime[before]': end,
-    });
+    const appointmentsFetch = await appointmentResource.getAllByRepairer(
+      repairer,
+      {
+        'slotTime[after]': start,
+        'slotTime[before]': end,
+      }
+    );
     const allAppointments = appointmentsFetch['hydra:member'];
 
     const statusValues = ['validated', 'pending_repairer'];

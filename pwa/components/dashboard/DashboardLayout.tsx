@@ -24,7 +24,7 @@ import {useAccount, useAuth} from '@contexts/AuthContext';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import HandymanIcon from '@mui/icons-material/Handyman';
 import Link from 'next/link';
-import {isBoss, isEmployee, isRepairerItinerant} from '@helpers/rolesHelpers';
+import {isBoss, isEmployee, isItinerant} from '@helpers/rolesHelpers';
 import RouteIcon from '@mui/icons-material/Route';
 import Logo from '@components/common/Logo';
 import {useContext, useEffect, useState} from 'react';
@@ -304,64 +304,76 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
               </DrawerHeader>
               <Divider />
 
-              <div
-                style={{width: '100%', margin: '20px 0', textAlign: 'center'}}>
-                <Button
-                  onClick={openMenu}
-                  id="repairer-selection-button"
-                  aria-controls={open ? 'repairer-selection-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  variant="contained"
-                  disableElevation
-                  // onClick={openMenu}
-                  endIcon={<KeyboardArrowDownIcon />}>
-                  {repairer ? repairer.name : 'Toutes mes boutiques'}
-                </Button>
-                <StyledMenu
-                  id="repairer-selection-menu"
-                  MenuListProps={{
-                    'aria-labelledby': 'repairer-selection-button',
-                  }}
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={closeMenu}>
-                  <MenuItem onClick={() => handleClose(null)} disableRipple>
-                    Toutes mes boutiques
-                  </MenuItem>
-                  <Divider />
-                  {user?.repairers.map((repairer) => (
-                    <MenuItem
-                      key={repairer.id}
-                      onClick={() => handleClose(repairer)}
-                      disableRipple>
-                      {repairer.name}
-                    </MenuItem>
-                  ))}
-                </StyledMenu>
-              </div>
+              {isBoss(user) && (
+                <div
+                  style={{
+                    width: '100%',
+                    margin: '20px 0',
+                    textAlign: 'center',
+                  }}>
+                  <>
+                    <Button
+                      onClick={openMenu}
+                      id="repairer-selection-button"
+                      aria-controls={
+                        open ? 'repairer-selection-menu' : undefined
+                      }
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                      variant="contained"
+                      disableElevation
+                      endIcon={<KeyboardArrowDownIcon />}>
+                      {repairer ? repairer.name : 'Toutes mes boutiques'}
+                    </Button>
+                    <StyledMenu
+                      id="repairer-selection-menu"
+                      MenuListProps={{
+                        'aria-labelledby': 'repairer-selection-button',
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={closeMenu}>
+                      <MenuItem onClick={() => handleClose(null)} disableRipple>
+                        Toutes mes boutiques
+                      </MenuItem>
+                      <Divider />
+                      {user?.repairers.map((repairer) => (
+                        <MenuItem
+                          key={repairer.id}
+                          onClick={() => handleClose(repairer)}
+                          disableRipple>
+                          {repairer.name}
+                        </MenuItem>
+                      ))}
+                    </StyledMenu>
+                  </>
+                </div>
+              )}
 
-              {repairer && (
+              {(repairer ||
+                (user &&
+                  user.repairerEmployee &&
+                  user.repairerEmployee.repairer)) && (
                 <>
                   <List>
                     <DashboardSidebarListItem
                       text="Tableau de bord"
                       open={true}
                       icon={<HomeIcon />}
-                      path={`/sradmin/boutiques/${repairer.id}`}
+                      path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}`}
                     />
                     <DashboardSidebarListItem
                       text="Agenda"
                       open={true}
                       icon={<CalendarMonthIcon />}
-                      path={`/sradmin/boutiques/${repairer.id}/agenda`}
+                      path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/agenda`}
                     />
-                    {user && isRepairerItinerant(repairer) && (
+                    {isItinerant(user) && (
                       <DashboardSidebarListItem
                         text="Tournée"
                         open={true}
                         icon={<RouteIcon />}
-                        path={`/sradmin/boutiques/${repairer.id}/tour`}
+                        path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/tour`}
                       />
                     )}
                     <Badge badgeContent={unreadMessages} color="primary">
@@ -369,21 +381,21 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         text="Messages"
                         open={true}
                         icon={<ForumIcon />}
-                        path={`/sradmin/boutiques/${repairer.id}/messagerie`}
+                        path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/messagerie`}
                       />
                     </Badge>
                     <DashboardSidebarListItem
                       text="Clients"
                       open={true}
                       icon={<FolderSharedIcon />}
-                      path={`/sradmin/boutiques/${repairer.id}/clients`}
+                      path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/clients`}
                     />
                     {user && isBoss(user) && (
                       <DashboardSidebarListItem
                         text="Paramètres Agenda"
                         open={true}
                         icon={<HandymanIcon />}
-                        path={`/sradmin/boutiques/${repairer.id}/agenda/parametres`}
+                        path={`/sradmin/boutiques/${repairer?.id}/agenda/parametres`}
                       />
                     )}
                     {user && isBoss(user) && (
@@ -391,7 +403,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         text="Employés"
                         open={true}
                         icon={<EngineeringIcon />}
-                        path={`/sradmin/boutiques/${repairer.id}/employes`}
+                        path={`/sradmin/boutiques/${repairer?.id}/employes`}
                       />
                     )}
                     {user && isBoss(user) && (
@@ -399,7 +411,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         text="Informations"
                         open={true}
                         icon={<InfoIcon />}
-                        path={`/sradmin/boutiques/${repairer.id}/informations`}
+                        path={`/sradmin/boutiques/${repairer?.id}/informations`}
                       />
                     )}
                   </List>

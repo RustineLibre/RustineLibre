@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Messages\State;
 
 use ApiPlatform\Metadata\Operation;
@@ -12,7 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 /**
  * @template-implements ProviderInterface<MessageUnread>
  */
-readonly class NumberOfMessageNotReadForCustomerProvider implements ProviderInterface
+final readonly class NumberOfMessageNotReadForCustomerProvider implements ProviderInterface
 {
     public function __construct(
         private DiscussionMessageRepository $discussionMessageRepository,

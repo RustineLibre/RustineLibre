@@ -22,7 +22,6 @@ import {frFR} from '@mui/x-date-pickers/locales';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {errorRegex} from '@utils/errorRegex';
 import {RequestBody} from '@interfaces/Resource';
-import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 
 type ModalAddExceptionalClosureProps = {

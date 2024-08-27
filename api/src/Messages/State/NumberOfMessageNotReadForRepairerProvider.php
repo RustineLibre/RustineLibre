@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Messages\State;
 
 use ApiPlatform\Metadata\Operation;
@@ -13,7 +15,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 /**
  * @template-implements ProviderInterface<MessageUnread>
  */
-readonly class NumberOfMessageNotReadForRepairerProvider implements ProviderInterface
+final readonly class NumberOfMessageNotReadForRepairerProvider implements ProviderInterface
 {
     public function __construct(
         private DiscussionMessageRepository $discussionMessageRepository,

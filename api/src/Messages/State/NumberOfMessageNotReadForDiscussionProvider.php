@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Messages\State;
 
 use ApiPlatform\Metadata\Operation;
@@ -16,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @template-implements ProviderInterface<MessageUnread>
  */
-readonly class NumberOfMessageNotReadForDiscussionProvider implements ProviderInterface
+final readonly class NumberOfMessageNotReadForDiscussionProvider implements ProviderInterface
 {
     public function __construct(
         private DiscussionMessageRepository $discussionMessageRepository,

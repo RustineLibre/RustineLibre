@@ -79,7 +79,7 @@ class DiscussionMessageRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function getNumberOfMessageNotReadForRepairer(User $user, string $repairerId): int
+    public function getNumberOfMessageNotReadForRepairer(User $user, string|int $repairerId): int
     {
         return $this->createQueryBuilder('dm')
             ->select('COUNT(dm) as count')

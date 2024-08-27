@@ -1,13 +1,11 @@
 import {ENTRYPOINT} from '@config/entrypoint';
-import React, {useContext, useEffect, useState} from 'react';
-import {useRouter} from 'next/router';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {discussionResource} from '@resources/discussionResource';
 import {Avatar, Box, CardMedia, Typography, Badge} from '@mui/material';
 import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
-import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 
 type DiscussionListItemProps = {
@@ -21,7 +19,6 @@ const DiscussionListItem = ({
   repairer,
   current,
 }: DiscussionListItemProps): JSX.Element => {
-  const router = useRouter();
   const [unreadCounter, setUnreadCounter] = useState<number>(0);
   const [discussion, setDiscussion] = useState<Discussion>(discussionGiven);
 
