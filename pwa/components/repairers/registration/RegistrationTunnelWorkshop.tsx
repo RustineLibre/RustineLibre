@@ -36,6 +36,7 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {RepairerCity} from '@interfaces/RepairerCity';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import Avatar from '@mui/material/Avatar';
+import {useRouter} from 'next/router';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -48,6 +49,7 @@ export const RegistrationTunnelWorkshop = ({
   bikeTypes,
   repairerTypes,
 }: WorkshopProps): JSX.Element => {
+  const router = useRouter();
   const {
     name,
     city,
@@ -58,6 +60,10 @@ export const RegistrationTunnelWorkshop = ({
     selectedBikeTypes,
     multipleWorkshop,
     repairerCities,
+    isRoving,
+    hasBoss,
+    setIsRoving,
+    setStepTwoCompleted,
     setRepairerCities,
     setTunnelStep,
     setRepairerTypeSelected,
@@ -71,7 +77,6 @@ export const RegistrationTunnelWorkshop = ({
   const [cityInput, setCityInput] = useState<string>('');
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [streetList, setStreetList] = useState<Street[]>([]);
-  const [isRoving, setIsRoving] = useState<boolean>(false);
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void => {
     setName(event.target.value);
@@ -168,6 +173,7 @@ export const RegistrationTunnelWorkshop = ({
       );
     }
   }, [repairerTypeSelected]);
+
   const handleChangeBikeRepaired = (
     event: SelectChangeEvent<typeof selectedBikeTypes>
   ) => {
@@ -179,6 +185,13 @@ export const RegistrationTunnelWorkshop = ({
 
   const handleGoBack = () => {
     setTunnelStep('choice');
+    router.push('/reparateur/inscription/choix-antenne');
+  };
+
+  const handleNextStep = () => {
+    setTunnelStep('validation');
+    setStepTwoCompleted(true);
+    router.push('/reparateur/inscription/validation');
   };
 
   return (
@@ -380,7 +393,7 @@ export const RegistrationTunnelWorkshop = ({
           Retour
         </Button>
         <Button
-          onClick={() => setTunnelStep('validation')}
+          onClick={handleNextStep}
           variant="contained"
           disabled={
             !name ||

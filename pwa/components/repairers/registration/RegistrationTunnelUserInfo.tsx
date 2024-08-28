@@ -5,13 +5,17 @@ import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext
 import {validateEmail} from '@utils/emailValidator';
 import {UserFormContext} from '@contexts/UserFormContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {useRouter} from 'next/router';
 
 export const RegistrationTunnelUserInfo = (): JSX.Element => {
+  const router = useRouter();
   const {
     tunnelStep,
     firstName,
     lastName,
     email,
+    stepOneCompleted,
+    setStepOneCompleted,
     setTunnelStep,
     setFirstName,
     setLastName,
@@ -40,6 +44,12 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
       setEmailError(false);
       setEmailHelperText('');
     }
+  };
+
+  const handleNextStep = () => {
+    setTunnelStep('choice');
+    setStepOneCompleted(true);
+    router.push('/reparateur/inscription/choix-antenne');
   };
 
   return (
@@ -103,7 +113,7 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
       <Box width="100%" display="flex" justifyContent="center" mt={4}>
         <Button
           variant="contained"
-          onClick={() => setTunnelStep('choice')}
+          onClick={() => handleNextStep()}
           disabled={!firstName || !lastName || !email || !password}>
           Etape suivante
         </Button>
