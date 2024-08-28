@@ -8,7 +8,6 @@ import {
   createCitiesWithGouvAPI,
   createCitiesWithNominatimAPI,
 } from '@interfaces/City';
-import {Street} from '@interfaces/Street';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {searchCity} from '@utils/apiCity';
@@ -56,13 +55,18 @@ export const RegistrationTunnelValidation = () => {
     repairerCities,
     hasBoss,
     isRoving,
+    stepOneCompleted,
+    stepTwoFirstQuestionCompleted,
+    stepTwoCompleted,
     setFormCompleted,
     setSuccess,
+    setSuccessMessage,
     setHasBoss,
     setRepairerCities,
     setName,
     setCity,
     setStreet,
+    setStreetNumber,
     setRepairerTypeSelected,
     setComment,
     setSelectedBikeTypes,
@@ -72,7 +76,6 @@ export const RegistrationTunnelValidation = () => {
   const [citiesList, setCitiesList] = useState<City[]>([]);
 
   const [acceptChart, setAcceptChart] = useState<boolean>(false);
-  const [streetList, setStreetList] = useState<Street[]>([]);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
   const [repairerTypes, setRepairerTypes] = useState<RepairerType[]>([]);
   const [pendingRegistration, setPendingRegistration] =
@@ -130,10 +133,16 @@ export const RegistrationTunnelValidation = () => {
       !lastName ||
       !email ||
       !password ||
+      !name ||
       !repairerTypeSelected ||
       !city ||
+      !street ||
+      !streetNumber ||
       selectedBikeTypes.length === 0
     ) {
+      setErrorMessage(
+        "Il semble manquer des informations nécessaires à l'inscription, veuillez vérifier les champs des formulaires"
+      );
       return;
     }
 
@@ -143,11 +152,15 @@ export const RegistrationTunnelValidation = () => {
           repairerTypeSelected.includes(repairerType.name)
         )
         .map((repairerType) => repairerType['@id']);
+
       const selectedBikeTypeIRIs: string[] = bikeTypes
         .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
         .map((bikeType) => bikeType['@id']);
+
       setPendingRegistration(true);
+
       if (!hasBoss) {
+        /*
         const response = await repairerResource.postRepairerAndUser({
           firstName: firstName,
           lastName: lastName,
@@ -165,10 +178,11 @@ export const RegistrationTunnelValidation = () => {
           latitude: street?.lat ?? city.lat,
           longitude: street?.lon ?? city.lon,
         });
-        setNewBoss(response.owner);
+        setNewBoss(response.owner);*/
+        console.log('première enseigne');
         setHasBoss(true);
       } else {
-        const response = await repairerResource.post({
+        /*        const response = await repairerResource.post({
           owner: newBoss?.['@id'],
           name: name,
           street: street?.name,
@@ -181,12 +195,12 @@ export const RegistrationTunnelValidation = () => {
           comment: comment,
           latitude: street?.lat ?? city.lat,
           longitude: street?.lon ?? city.lon,
-        });
-        console.log(newBoss);
+        });*/
       }
 
       setPendingRegistration(false);
-      !multipleWorkshop || finish ? handleSuccess() : setTunnelStep('workshop');
+
+      !multipleWorkshop || finish ? handleSuccess() : handleCreateAndContinue();
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
       setTimeout(() => {
@@ -204,25 +218,50 @@ export const RegistrationTunnelValidation = () => {
   };
 
   const handleCreateAndContinue = () => {
-    handleSubmit();
     setName('');
     setCity(null);
     setStreet(null);
+    setStreetNumber('');
     setRepairerTypeSelected([]);
     setComment('');
     setSelectedBikeTypes([]);
     setRepairerCities([]);
     setTunnelStep('workshop');
+    setSuccessMessage('Votre antenne a été créée avec succès');
     router.push('/reparateur/inscription/mon-enseigne');
   };
   const handleCreateAndFinish = () => {
     setFinish(true);
-    handleSubmit();
   };
+
+  useEffect(() => {
+    if (finish) {
+      handleSubmit();
+    }
+  }, [finish]);
 
   const handleGoBack = () => {
     setTunnelStep('workshop');
     router.push('/reparateur/inscription/mon-enseigne');
+  };
+
+  useEffect(() => {
+    if (tunnelStep !== 'validation') {
+      !stepOneCompleted
+        ? redirectToFirstStep()
+        : !stepTwoFirstQuestionCompleted
+          ? redirectToChoiceStep()
+          : handleGoBack();
+    }
+  }, []);
+
+  const redirectToFirstStep = () => {
+    setTunnelStep('user_info');
+    router.push('/reparateur/inscription');
+  };
+  const redirectToChoiceStep = () => {
+    setTunnelStep('choice');
+    router.push('/reparateur/inscription/choix-antenne');
   };
 
   return (
@@ -416,7 +455,7 @@ export const RegistrationTunnelValidation = () => {
                   !selectedBikeTypes.length ||
                   !acceptChart
                 }
-                onClick={handleCreateAndContinue}
+                onClick={() => handleSubmit()}
                 variant="contained"
                 size="large"
                 sx={{mt: 2, mx: 'auto'}}>
@@ -464,7 +503,7 @@ export const RegistrationTunnelValidation = () => {
               !selectedBikeTypes.length ||
               !acceptChart
             }
-            type="submit"
+            onClick={handleCreateAndFinish}
             variant="contained"
             size="large"
             sx={{mt: 2, mx: 'auto'}}>

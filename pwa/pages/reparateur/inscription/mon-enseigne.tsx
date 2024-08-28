@@ -1,17 +1,12 @@
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import RepairerRegistrationLayout from '@components/layout/RepairerRegistrationLayout';
-import {RegistrationTunnelValidation} from '@components/repairers/registration/RegistrationTunnelValidation';
-import React, {ReactElement, useContext} from 'react';
-import WebsiteLayout from '@components/layout/WebsiteLayout';
+import React, {ReactElement} from 'react';
 import {RegistrationTunnelWorkshop} from '@components/repairers/registration/RegistrationTunnelWorkshop';
-import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext';
 import {GetStaticProps} from 'next';
-import {ENTRYPOINT} from '@config/entrypoint';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
-import RepairerChoiceRegistration from './choix-antenne';
 
 type RepairerRegistrationProps = {
   bikeTypesFetched: BikeType[];

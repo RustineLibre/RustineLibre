@@ -7,7 +7,7 @@ import {
   RadioGroup,
   Typography,
 } from '@mui/material';
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import Avatar from '@mui/material/Avatar';
@@ -17,8 +17,8 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
   const router = useRouter();
   const {
     choiceValue,
-    multipleWorkshop,
-    chosen,
+    tunnelStep,
+    stepOneCompleted,
     setStepTwoFirstQuestionCompleted,
     setChoiceValue,
     setChosen,
@@ -34,6 +34,12 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
     setChosen(true);
     choice === 'Oui' ? setMultipleWorkShop(true) : setMultipleWorkShop(false);
   };
+
+  useEffect(() => {
+    if (tunnelStep !== 'choice' || !stepOneCompleted) {
+      router.push('/reparateur/inscription');
+    }
+  }, []);
 
   const handleNextStep = () => {
     setTunnelStep('workshop');
