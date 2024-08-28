@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
@@ -61,7 +62,12 @@ export const RegistrationTunnelWorkshop = ({
     multipleWorkshop,
     repairerCities,
     isRoving,
-    hasBoss,
+    tunnelStep,
+    stepOneCompleted,
+    stepTwoFirstQuestionCompleted,
+    stepTwoCompleted,
+    successMessage,
+    setSuccessMessage,
     setIsRoving,
     setStepTwoCompleted,
     setRepairerCities,
@@ -189,13 +195,34 @@ export const RegistrationTunnelWorkshop = ({
   };
 
   const handleNextStep = () => {
-    setTunnelStep('validation');
     setStepTwoCompleted(true);
+    setTunnelStep('validation');
     router.push('/reparateur/inscription/validation');
   };
 
+  useEffect(() => {
+    if (tunnelStep !== 'workshop' || !stepTwoFirstQuestionCompleted) {
+      stepOneCompleted
+        ? router.push('/reparateur/inscription/choix-antenne')
+        : router.push('/reparateur/inscription');
+    }
+  }, []);
+
+  useEffect(() => {
+    successMessage &&
+      setTimeout(() => {
+        setSuccessMessage('');
+      }, 5000);
+  }, []);
+
+
   return (
     <>
+      {successMessage && (
+        <Alert color="success" sx={{my: 2}}>
+          {successMessage}
+        </Alert>
+      )}
       <Box display="flex" flexDirection="column" gap={2} sx={{mx: 'auto'}}>
         <Box display="flex" flexDirection="column" gap={2} sx={{mx: 'auto'}}>
           <Avatar sx={{bgcolor: 'primary.main', mx: 'auto'}}>
@@ -400,8 +427,8 @@ export const RegistrationTunnelWorkshop = ({
             !city ||
             !street ||
             !streetNumber ||
-            !repairerTypeSelected ||
-            !selectedBikeTypes
+            !repairerTypeSelected.length ||
+            !selectedBikeTypes.length
           }>
           Suivant
         </Button>

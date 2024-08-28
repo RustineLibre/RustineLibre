@@ -1,13 +1,6 @@
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
-import {ENTRYPOINT} from '@config/entrypoint';
-import React, {ReactElement, useContext, useState} from 'react';
-import {Box, Button, Grid, Paper} from '@mui/material';
-import {
-  RepairerRegistrationContext,
-  RepairerRegistrationProvider,
-} from '@contexts/RepairerRegistrationContext';
-import {RegistrationTunnelValidation} from '@components/repairers/registration/RegistrationTunnelValidation';
-import Link from 'next/link';
+import React, {ReactElement} from 'react';
+
 import RepairerRegistrationLayout from '@components/layout/RepairerRegistrationLayout';
 import RegistrationTunnelUserInfo from '@components/repairers/registration/RegistrationTunnelUserInfo';
 
@@ -33,8 +26,6 @@ const RepairerRegistration: NextPageWithLayout = ({}) => {
 };
 
 RepairerRegistration.getLayout = (page: ReactElement) => {
-  // here the best is to create a RepairerRegistrationLayout and put the context and the text "Devenir réparateur" in it
-  // this way, the context and the text will be shared with all steps pages
   return <RepairerRegistrationLayout>{page}</RepairerRegistrationLayout>;
 };
 

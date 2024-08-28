@@ -10,11 +10,9 @@ import {useRouter} from 'next/router';
 export const RegistrationTunnelUserInfo = (): JSX.Element => {
   const router = useRouter();
   const {
-    tunnelStep,
     firstName,
     lastName,
     email,
-    stepOneCompleted,
     setStepOneCompleted,
     setTunnelStep,
     setFirstName,

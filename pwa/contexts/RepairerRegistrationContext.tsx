@@ -30,6 +30,8 @@ interface RepairerRegistrationContext {
   formCompleted: boolean;
   isRoving: boolean;
   success: boolean;
+  successMessage: string;
+  setSuccessMessage: (value: string) => void;
   setSuccess: (value: boolean) => void;
   setIsRoving: (value: boolean) => void;
   setFormCompleted: (value: boolean) => void;
@@ -77,6 +79,8 @@ const initialValue = {
   formCompleted: false,
   isRoving: false,
   success: false,
+  successMessage: '',
+  setSuccessMessage: () => null,
   setSuccess: () => null,
   setIsRoving: () => null,
   setFormCompleted: () => null,
@@ -130,10 +134,13 @@ export const RepairerRegistrationProvider = ({
   const [stepOneCompleted, setStepOneCompleted] = useState<boolean>(false);
   const [stepTwoFirstQuestionCompleted, setStepTwoFirstQuestionCompleted] =
     useState<boolean>(false);
-  const [stepTwoCompleted, setFormCompleted] = useState<boolean>(false);
-  const [formCompleted, setStepTwoCompleted] = useState<boolean>(false);
+  const [stepTwoCompleted, setStepTwoCompleted] = useState<boolean>(false);
+  const [formCompleted, setFormCompleted] = useState<boolean>(false);
   const [isRoving, setIsRoving] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string>(
+    ''
+  );
 
   return (
     <RepairerRegistrationContext.Provider
@@ -160,6 +167,8 @@ export const RepairerRegistrationProvider = ({
         formCompleted,
         isRoving,
         success,
+        successMessage,
+        setSuccessMessage,
         setSuccess,
         setIsRoving,
         setFormCompleted,
