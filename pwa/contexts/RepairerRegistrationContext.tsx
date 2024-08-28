@@ -24,6 +24,18 @@ interface RepairerRegistrationContext {
   repairerCities: RepairerCity[] | any;
   hasBoss: boolean;
   choiceValue: string;
+  stepOneCompleted: boolean;
+  stepTwoFirstQuestionCompleted: boolean;
+  stepTwoCompleted: boolean;
+  formCompleted: boolean;
+  isRoving: boolean;
+  success: boolean;
+  setSuccess: (value: boolean) => void;
+  setIsRoving: (value: boolean) => void;
+  setFormCompleted: (value: boolean) => void;
+  setStepTwoCompleted: (value: boolean) => void;
+  setStepTwoFirstQuestionCompleted: (value: boolean) => void;
+  setStepOneCompleted: (value: boolean) => void;
   setChoiceValue: (value: string) => void;
   setHasBoss: (value: boolean) => void;
   setRepairerCities: (value: RepairerCity[] | any) => void;
@@ -43,7 +55,7 @@ interface RepairerRegistrationContext {
 }
 
 const initialValue = {
-  tunnelStep: 'workshop',
+  tunnelStep: 'user_info',
   firstName: '',
   lastName: '',
   email: '',
@@ -59,6 +71,18 @@ const initialValue = {
   repairerCities: [],
   hasBoss: false,
   choiceValue: '',
+  stepOneCompleted: false,
+  stepTwoFirstQuestionCompleted: false,
+  stepTwoCompleted: false,
+  formCompleted: false,
+  isRoving: false,
+  success: false,
+  setSuccess: () => null,
+  setIsRoving: () => null,
+  setFormCompleted: () => null,
+  setStepTwoCompleted: () => null,
+  setStepTwoFirstQuestionCompleted: () => null,
+  setStepOneCompleted: () => null,
   setChoiceValue: () => null,
   setHasBoss: () => null,
   setRepairerCities: () => null,
@@ -83,7 +107,7 @@ export const RepairerRegistrationContext =
 export const RepairerRegistrationProvider = ({
   children,
 }: ProviderProps): JSX.Element => {
-  const [tunnelStep, setTunnelStep] = useState<string>('workshop');
+  const [tunnelStep, setTunnelStep] = useState<string>('user_info');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -103,6 +127,13 @@ export const RepairerRegistrationProvider = ({
   );
   const [hasBoss, setHasBoss] = useState<boolean>(false);
   const [choiceValue, setChoiceValue] = useState('');
+  const [stepOneCompleted, setStepOneCompleted] = useState<boolean>(false);
+  const [stepTwoFirstQuestionCompleted, setStepTwoFirstQuestionCompleted] =
+    useState<boolean>(false);
+  const [stepTwoCompleted, setFormCompleted] = useState<boolean>(false);
+  const [formCompleted, setStepTwoCompleted] = useState<boolean>(false);
+  const [isRoving, setIsRoving] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
 
   return (
     <RepairerRegistrationContext.Provider
@@ -123,6 +154,18 @@ export const RepairerRegistrationProvider = ({
         repairerCities,
         hasBoss,
         choiceValue,
+        stepOneCompleted,
+        stepTwoFirstQuestionCompleted,
+        stepTwoCompleted,
+        formCompleted,
+        isRoving,
+        success,
+        setSuccess,
+        setIsRoving,
+        setFormCompleted,
+        setStepTwoCompleted,
+        setStepTwoFirstQuestionCompleted,
+        setStepOneCompleted,
         setChoiceValue,
         setHasBoss,
         setRepairerCities,

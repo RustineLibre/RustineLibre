@@ -11,10 +11,15 @@ import React, {useContext} from 'react';
 import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import Avatar from '@mui/material/Avatar';
+import {useRouter} from 'next/router';
 
 export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
+  const router = useRouter();
   const {
     choiceValue,
+    multipleWorkshop,
+    chosen,
+    setStepTwoFirstQuestionCompleted,
     setChoiceValue,
     setChosen,
     setMultipleWorkShop,
@@ -30,8 +35,15 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
     choice === 'Oui' ? setMultipleWorkShop(true) : setMultipleWorkShop(false);
   };
 
+  const handleNextStep = () => {
+    setTunnelStep('workshop');
+    setStepTwoFirstQuestionCompleted(true);
+    router.push('/reparateur/inscription/mon-enseigne');
+  };
+
   const handleGoBack = () => {
     setTunnelStep('user_info');
+    router.push('/reparateur/inscription');
   };
 
   return (
@@ -99,7 +111,7 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
           Retour
         </Button>
         <Button
-          onClick={() => setTunnelStep('workshop')}
+          onClick={handleNextStep}
           variant="contained"
           disabled={!choiceValue}>
           Suivant
