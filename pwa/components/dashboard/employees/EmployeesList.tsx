@@ -50,7 +50,7 @@ export const EmployeesList = ({
 
   useEffect(() => {
     fetchEmployees();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [repairers]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
