@@ -8,7 +8,6 @@ import utc from 'dayjs/plugin/utc';
 import {customerResource} from '@resources/customerResource';
 import {appointmentResource} from '@resources/appointmentResource';
 import {autoDiagnosticResource} from '@resources/autoDiagResource';
-import {useAccount} from '@contexts/AuthContext';
 import {
   Box,
   TextField,
@@ -39,7 +38,7 @@ import AppointmentCreateAddBikeType from '@components/dashboard/appointments/App
 import AppointmentCreateAddComment from './AppointmentCreateAddComment';
 import {useTheme} from '@mui/material/styles';
 import {padNumber} from '@helpers/dateHelper';
-import {isItinerant} from '@helpers/rolesHelpers';
+import {isRepairerItinerant} from '@helpers/rolesHelpers';
 import {RequestBody} from '@interfaces/Resource';
 import {Customer} from '@interfaces/Customer';
 import {User} from '@interfaces/User';
@@ -68,7 +67,6 @@ const ModalAppointmentCreate = ({
   openModal,
   handleCloseModal,
 }: AppointmentCreateProps): JSX.Element => {
-  const {user} = useAccount({});
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customerType, setCustomerType] = useState<string>('');
   const [customerInput, setCustomerInput] = useState<string>('');
@@ -98,14 +96,14 @@ const ModalAppointmentCreate = ({
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
   const [address, setAddress] = useState<string>('');
-  const isItinerantRepairer = user && isItinerant(user);
+  const isItinerantRepairer = isRepairerItinerant(repairer);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   dayjs.extend(timezone);
   dayjs.extend(utc);
   const fetchCustomers = async () => {
-    const response = await customerResource.getAll(true, {
+    const response = await customerResource.getAllByRepairer(repairer, {
       userSearch: customerInput,
     });
     setCustomers(response['hydra:member']);
