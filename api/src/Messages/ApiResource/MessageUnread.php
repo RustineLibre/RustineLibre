@@ -27,6 +27,7 @@ use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
             fromClass: Repairer::class,
         ),
     ],
+    requirements: ['repairer_id' => '\d+'],
     security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
     provider: NumberOfMessageNotReadForRepairerProvider::class,
 )]
@@ -38,6 +39,7 @@ use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
             fromClass: Discussion::class,
         ),
     ],
+    requirements: ['discussion_id' => '\d+'],
     security: 'is_granted("MESSAGE_UNREAD_BY_DISCUSSION", discussion_id)',
     provider: NumberOfMessageNotReadForDiscussionProvider::class,
 )]

@@ -41,8 +41,10 @@ export const DashboardRepairerProvider = ({
       return;
     }
 
-    const repairerForBoss = user.repairers.find(
-      (repairer) => repairer.id == repairer_id
+    const repairerForBoss = user.repairers.find((repairer) =>
+      Array.isArray(repairer_id)
+        ? repairer_id.includes(repairer.id.toString())
+        : repairer.id.toString() === repairer_id
     );
 
     if (user && isBoss(user) && repairerForBoss) {
@@ -54,7 +56,9 @@ export const DashboardRepairerProvider = ({
       user &&
       isEmployee(user) &&
       user.repairerEmployee &&
-      user.repairerEmployee.repairer.id == repairer_id
+      (Array.isArray(repairer_id)
+        ? repairer_id.includes(user.repairerEmployee.repairer.id.toString())
+        : user.repairerEmployee.repairer.id.toString() === repairer_id)
     ) {
       setRepairer(user.repairerEmployee.repairer);
       return;

@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Messages\ApiResource\MessageUnread;
 use App\Repository\DiscussionMessageRepository;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
  * @template-implements ProviderInterface<MessageUnread>
@@ -26,7 +27,12 @@ final readonly class NumberOfMessageNotReadForCustomerProvider implements Provid
     {
         /** @var ?User $user */
         $user = $this->security->getUser();
-        $notRead = $user ? $this->discussionMessageRepository->getNumberOfMessageNotReadForCustomer(user: $user) : 0;
+
+        if (!$user instanceof User) {
+            throw new UnexpectedTypeException($user, User::class);
+        }
+
+        $notRead = $this->discussionMessageRepository->getNumberOfMessageNotReadForCustomer(user: $user);
 
         return new MessageUnread($notRead);
     }

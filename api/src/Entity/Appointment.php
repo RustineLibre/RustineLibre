@@ -58,6 +58,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             fromClass: Repairer::class
         ),
     ],
+    requirements: ['repairer_id' => '\d+'],
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
 )]

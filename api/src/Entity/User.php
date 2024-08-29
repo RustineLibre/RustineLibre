@@ -271,16 +271,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return false;
     }
 
-    public function isAssociatedWithRepairer(int|string $id): bool
+    public function isAssociatedWithRepairer(int $id): bool
     {
         if ($this->isBoss()) {
             return !$this->repairers->filter(function (Repairer $repairerOfUser) use ($id) {
-                return $repairerOfUser->id == $id;
+                return $repairerOfUser->id === $id;
             })->isEmpty();
         }
 
-        if ($this->isEmployee() && $this->repairerEmployee) {
-            return $id == $this->repairerEmployee->repairer->id;
+        if ($this->repairerEmployee && $this->isEmployee()) {
+            return $id === $this->repairerEmployee->repairer->id;
         }
 
         return false;
