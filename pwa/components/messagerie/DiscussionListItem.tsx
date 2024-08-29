@@ -58,87 +58,85 @@ const DiscussionListItem = ({
 
   return (
     <>
-      {repairer && (
-        <Link
-          legacyBehavior
-          passHref
-          key={discussion.id}
-          href={
-            !repairer
-              ? `/messagerie/${discussion.id}`
-              : `/sradmin/boutiques/${repairer.id}/messagerie/${discussion.id}`
-          }>
-          <Box
-            sx={{
-              cursor: current ? 'default' : 'pointer',
-              width: '100%',
-              borderRadius: 5,
-              mb: 2,
-              transition: 'all ease 0.3s',
-              bgcolor: current ? 'lightprimary.dark' : 'grey.100',
-              '&:hover': {
-                filter: current ? 'none' : 'brightness(0.90)',
-              },
-            }}>
-            <Badge badgeContent={unreadCounter} color="primary">
-              <Box px={2} py={2} display="flex" gap={2} alignItems="center">
-                {!repairer && (
-                  <>
-                    {discussion.repairer.thumbnail ? (
-                      <CardMedia
-                        component="div"
-                        sx={{
-                          width: 48,
-                          height: 48,
-                          position: 'relative',
-                        }}>
-                        <Image
-                          fill
-                          alt=""
-                          src={discussion.repairer.thumbnail.contentUrl}
-                          style={{borderRadius: '50%', objectFit: 'cover'}}
-                        />
-                      </CardMedia>
-                    ) : (
-                      <Avatar
-                        sx={{
-                          width: '48px',
-                          height: '48px',
-                          bgcolor: current ? 'primary.main' : 'grey.300',
-                        }}
+      <Link
+        legacyBehavior
+        passHref
+        key={discussion.id}
+        href={
+          !repairer
+            ? `/messagerie/${discussion.id}`
+            : `/sradmin/boutiques/${repairer.id}/messagerie/${discussion.id}`
+        }>
+        <Box
+          sx={{
+            cursor: current ? 'default' : 'pointer',
+            width: '100%',
+            borderRadius: 5,
+            mb: 2,
+            transition: 'all ease 0.3s',
+            bgcolor: current ? 'lightprimary.dark' : 'grey.100',
+            '&:hover': {
+              filter: current ? 'none' : 'brightness(0.90)',
+            },
+          }}>
+          <Badge badgeContent={unreadCounter} color="primary">
+            <Box px={2} py={2} display="flex" gap={2} alignItems="center">
+              {!repairer && (
+                <>
+                  {discussion.repairer.thumbnail ? (
+                    <CardMedia
+                      component="div"
+                      sx={{
+                        width: 48,
+                        height: 48,
+                        position: 'relative',
+                      }}>
+                      <Image
+                        fill
+                        alt=""
+                        src={discussion.repairer.thumbnail.contentUrl}
+                        style={{borderRadius: '50%', objectFit: 'cover'}}
                       />
-                    )}
-                  </>
-                )}
-                <Box>
-                  <Typography
-                    variant="body2"
-                    fontWeight={800}
-                    gutterBottom
-                    color={current ? 'primary.main' : 'text.secondary'}>
-                    {!repairer
-                      ? discussion.repairer.name
-                      : `${discussion.customer.firstName} ${discussion.customer.lastName}`}
-                  </Typography>
-                  <Typography
-                    color="grey.500"
-                    variant="caption"
-                    fontStyle="italic"
-                    component="div"
-                    lineHeight="1.2">
-                    {discussion.lastMessage
-                      ? `Dernier message : ${formatDate(
-                          discussion.lastMessage,
-                          true
-                        )}`
-                      : 'Pas encore de message'}
-                  </Typography>
-                </Box>
+                    </CardMedia>
+                  ) : (
+                    <Avatar
+                      sx={{
+                        width: '48px',
+                        height: '48px',
+                        bgcolor: current ? 'primary.main' : 'grey.300',
+                      }}
+                    />
+                  )}
+                </>
+              )}
+              <Box>
+                <Typography
+                  variant="body2"
+                  fontWeight={800}
+                  gutterBottom
+                  color={current ? 'primary.main' : 'text.secondary'}>
+                  {!repairer
+                    ? discussion.repairer.name
+                    : `${discussion.customer.firstName} ${discussion.customer.lastName}`}
+                </Typography>
+                <Typography
+                  color="grey.500"
+                  variant="caption"
+                  fontStyle="italic"
+                  component="div"
+                  lineHeight="1.2">
+                  {discussion.lastMessage
+                    ? `Dernier message : ${formatDate(
+                        discussion.lastMessage,
+                        true
+                      )}`
+                    : 'Pas encore de message'}
+                </Typography>
               </Box>
-            </Badge>
-          </Box>
-        </Link>
-      )}
+            </Box>
+          </Badge>
+        </Box>
+      </Link>
     </>
   );
 };

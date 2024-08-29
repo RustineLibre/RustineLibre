@@ -2,8 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import Head from 'next/head';
 import Box from '@mui/material/Box';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
-import {useAccount} from '@contexts/AuthContext';
-import {Repairer} from '@interfaces/Repairer';
 import {CircularProgress, IconButton, Typography} from '@mui/material';
 import {dateObjectAsString} from '@helpers/dateHelper';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -22,7 +20,6 @@ const TourMap = dynamic(() => import('@components/dashboard/tour/TourMap'), {
 
 const Tour = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const {user} = useAccount({});
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);
   const [date, setDate] = useState<Date>(new Date());
@@ -38,8 +35,11 @@ const Tour = () => {
   };
 
   const fetchAppointments = async (fromDate: Date, toDate: Date) => {
+    if (!repairer) {
+      return;
+    }
     setLoading(true);
-    const response = await appointmentResource.getAll(true, {
+    const response = await appointmentResource.getAllByRepairer(repairer, {
       'slotTime[after]': dateObjectAsString(fromDate, false),
       'slotTime[strictly_before]': dateObjectAsString(toDate, false),
       'order[slotTime]': 'ASC',
