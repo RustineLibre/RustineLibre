@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic';
 import {AuthProvider} from '@contexts/AuthContext';
 import {SearchRepairerProvider} from '@contexts/SearchRepairerContext';
 import {UserFormProvider} from '@contexts/UserFormContext';
+import {DashboardRepairerProvider} from '@contexts/DashboardRepairerContext';
 
 const Notifications = dynamic(
   () => import('@components/notifications/Notifications'),
@@ -41,7 +42,9 @@ const Layout = ({
             <A2HSIOS />
             <Notifications />
             <SearchRepairerProvider>
-              <UserFormProvider>{children}</UserFormProvider>
+              <DashboardRepairerProvider>
+                <UserFormProvider>{children}</UserFormProvider>
+              </DashboardRepairerProvider>
             </SearchRepairerProvider>
           </ThemeProvider>
         </AuthProvider>

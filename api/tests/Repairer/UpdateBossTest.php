@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Repairer;
 
+use App\Entity\User;
 use App\Repository\RepairerEmployeeRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -38,7 +40,14 @@ class UpdateBossTest extends AbstractTestCase
 
     public function testUpdateAsBadBoss(): void
     {
-        $this->createClientWithUser($this->repairerEmployees[3]->repairer->owner)->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        $boss = $userRepository->getUsersWithRole('ROLE_BOSS');
+        $owner = $this->repairerEmployees[0]->repairer->owner;
+        $badBoss = array_filter($boss, function (User $user) use ($owner) {
+            return $user !== $owner;
+        });
+        $this->createClientWithUser($badBoss[0])->request('PUT', sprintf('/repairer_change_boss/%s', $this->repairerEmployees[0]->repairer->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'newBoss' => sprintf('/users/%d', $this->repairerEmployees[0]->employee->id),

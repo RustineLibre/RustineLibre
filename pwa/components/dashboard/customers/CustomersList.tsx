@@ -23,8 +23,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import {InputAdornment} from '@mui/material';
 import {useAccount} from '@contexts/AuthContext';
 import {downloadFile} from '@utils/downloadFileLink';
+import {Repairer} from '@interfaces/Repairer';
 
-export const CustomersList = (): JSX.Element => {
+interface CustomersListProps {
+  repairer: Repairer;
+}
+
+export const CustomersList = ({repairer}: CustomersListProps): JSX.Element => {
   const [loadingList, setLoadingList] = useState<boolean>(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -34,7 +39,7 @@ export const CustomersList = (): JSX.Element => {
 
   const downloadCsv = async () =>
     await customerResource
-      .exportCustomerCollectionCsv(user?.repairer?.id ?? null)
+      .exportCustomerCollectionCsv(repairer.id ?? null)
       .then((response: Response) =>
         downloadFile(response, 'customer_collection')
       );
@@ -52,7 +57,7 @@ export const CustomersList = (): JSX.Element => {
       params.page = '1';
     }
 
-    const response = await customerResource.getAll(true, params);
+    const response = await customerResource.getAllByRepairer(repairer, params);
     setCustomers(response['hydra:member']);
     setTotalPages(Math.ceil(response['hydra:totalItems'] / 30));
     setLoadingList(false);
@@ -138,7 +143,7 @@ export const CustomersList = (): JSX.Element => {
                 <TableCell align="left">{customer.telephone}</TableCell>
                 <TableCell align="right">
                   <Link
-                    href={`/sradmin/clients/${customer.id}`}
+                    href={`/sradmin/boutiques/${repairer.id}/clients/${customer.id}`}
                     legacyBehavior
                     passHref>
                     <IconButton color="secondary">

@@ -6,6 +6,7 @@ namespace App\Tests\AutoDiagnostic\Security;
 
 use App\Entity\Appointment;
 use App\Repository\AppointmentRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\AppointmentTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -62,13 +63,28 @@ class CreateTest extends AbstractTestCase
 
     public function testUserCannotCreateAutoDiagnosticIfNotOwner(): void
     {
-        // According to the fixtures, the first appointment is assigned to the user_1 (id:4)
-        $appointment = $this->getAppointment();
+        $appointment = $this->appointmentRepository->getAppointmentWithoutAutoDiagnostic();
+
+        /** @var UserRepository $userRepository */
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $user = $userRepository->createQueryBuilder('u')
+            ->where('u.id != :customer')
+            ->andWhere('CAST(u.roles as TEXT) NOT LIKE :admin')
+            ->andWhere('CAST(u.roles as TEXT) NOT LIKE :boss')
+            ->andWhere('CAST(u.roles as TEXT) NOT LIKE :employee')
+            ->setParameter('customer', $appointment->customer)
+            ->setParameter('admin', '%ROLE_ADMIN%')
+            ->setParameter('boss', '%ROLE_BOSS%')
+            ->setParameter('employee', '%ROLE_EMPLOYEE%')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
         if (null === $appointment) {
             self::fail('Appointment not found');
         }
 
-        $this->createClientAuthAsUser()->request('POST', '/auto_diagnostics', [
+        $this->createClientWithUser($user)->request('POST', '/auto_diagnostics', [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
                 'appointment' => sprintf('/appointments/%d', $appointment->id),

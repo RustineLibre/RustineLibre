@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Discussion\Validator;
 
+use App\Entity\Discussion;
 use App\Repository\RepairerRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UniqueDiscussionValidatorTest extends AbstractTestCase
@@ -28,7 +30,22 @@ class UniqueDiscussionValidatorTest extends AbstractTestCase
     public function testCannotCreateTwoDiscussionForSameRepairerAndCustomer(): void
     {
         $repairer = $this->repairerRepository->findOneBy([]);
-        $customer = $this->userRepository->getUserWithRole('ROLE_USER');
+
+        $queryBuilderIds = $this->userRepository->createQueryBuilder('uid')
+            ->select('uid.id')
+            ->innerJoin(Discussion::class, 'd', Join::WITH, 'd.customer = uid.id')
+            ->where('d.repairer = :repairer')
+            ->addGroupBy('uid.id');
+
+        $queryBuilder = $this->userRepository->createQueryBuilder('u');
+
+        $customer = $queryBuilder
+            ->where($queryBuilder->expr()->notIn('u.id', $queryBuilderIds->getDQL()))
+            ->setMaxResults(1)
+            ->setParameter('repairer', $repairer)
+            ->getQuery()
+            ->getOneOrNullResult();
+
         $client = $this->createClientWithUser($repairer->owner);
 
         $client->request('POST', '/discussions', [

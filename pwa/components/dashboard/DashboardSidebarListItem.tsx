@@ -28,40 +28,42 @@ const DashboardSidebarListItem = ({
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-    <Link href={path} style={{textDecoration: 'none'}}>
-      <ListItem key={text} disablePadding sx={{display: 'block'}}>
-        <ListItemButton
-          sx={{
-            minHeight: 48,
-            justifyContent: open ? 'initial' : 'center',
-            px: 2.5,
-          }}>
-          <ListItemIcon
+    <>
+      <Link href={path} style={{textDecoration: 'none'}}>
+        <ListItem key={text} disablePadding sx={{display: 'block'}}>
+          <ListItemButton
             sx={{
-              minWidth: 0,
-              mr: open ? 2 : 'auto',
-              justifyContent: 'center',
-              color: 'primary.main',
+              minHeight: 48,
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
             }}>
-            {icon}
-          </ListItemIcon>
-          {!isMobile && (
-            <ListItemText
-              disableTypography
-              primary={
-                <Typography
-                  sx={{
-                    color:
-                      path === router.pathname ? 'primary.main' : 'grey.600',
-                  }}>
-                  {text}
-                </Typography>
-              }
-            />
-          )}
-        </ListItemButton>
-      </ListItem>
-    </Link>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 2 : 'auto',
+                justifyContent: 'center',
+                color: 'primary.main',
+              }}>
+              {icon}
+            </ListItemIcon>
+            {!isMobile && (
+              <ListItemText
+                disableTypography
+                primary={
+                  <Typography
+                    sx={{
+                      color:
+                        path === router.asPath ? 'primary.main' : 'grey.600',
+                    }}>
+                    {text}
+                  </Typography>
+                }
+              />
+            )}
+          </ListItemButton>
+        </ListItem>
+      </Link>
+    </>
   );
 };
 

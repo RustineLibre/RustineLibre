@@ -13,10 +13,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerInterventionRepository::class)]
 #[ApiResource(
-    denormalizationContext: ['groups' => [self::WRITE]],
-)]
-#[Post(
-    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
+    operations: [
+        new Post(
+            securityPostValidation: "is_granted('ROLE_ADMIN') or (user.isAssociatedWithRepairer(object.repairer.id) and object.intervention.isAdmin)",
+        ),
+    ],
+    denormalizationContext: ['groups' => [self::WRITE]]
 )]
 class RepairerIntervention
 {
@@ -32,9 +34,10 @@ class RepairerIntervention
     #[Groups([Intervention::READ, self::WRITE])]
     public int $price;
 
+    #[Assert\NotNull]
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'repairerInterventions')]
     #[ORM\JoinColumn]
-    #[Groups([Intervention::READ])]
+    #[Groups([Intervention::READ, self::WRITE])]
     public Repairer $repairer;
 
     #[Assert\NotNull(message: 'repairerIntervention.intervention')]

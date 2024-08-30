@@ -130,24 +130,24 @@ class AssertRepairerOpeningHoursTest extends AbstractTestCase
 
         // reset repairer opening hours
         foreach ($rohs as $roh) {
-            $this->repairerOpeningHoursRepository->remove($roh);
+            $this->repairerOpeningHoursRepository->remove($roh, true);
         }
 
         $this->createClientAuthAsAdmin()->request('POST', '/repairer_opening_hours', [
             'json' => [
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'day' => 'monday',
-                'startTime' => '18:00',
-                'endTime' => '19:00',
+                'startTime' => ':00',
+                'endTime' => '22:00',
             ],
         ]);
 
-        $response = $this->createClientAuthAsAdmin()->request('POST', '/repairer_opening_hours', [
+        $this->createClientAuthAsAdmin()->request('POST', '/repairer_opening_hours', [
             'json' => [
                 'repairer' => sprintf('/repairers/%d', $repairer->id),
                 'day' => 'monday',
-                'startTime' => '19:00',
-                'endTime' => '20:00',
+                'startTime' => '22:00',
+                'endTime' => '23:00',
             ],
         ]);
 

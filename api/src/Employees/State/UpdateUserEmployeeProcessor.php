@@ -12,6 +12,7 @@ use App\Entity\RepairerEmployee;
 use App\Entity\User;
 use App\Repository\RepairerEmployeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -19,13 +20,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @template-implements ProcessorInterface<int>
  */
-final class UpdateUserEmployeeProcessor implements ProcessorInterface
+final readonly class UpdateUserEmployeeProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly RepairerEmployeeRepository $repairerEmployeeRepository,
-        private readonly ValidatorInterface $validator,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private RepairerEmployeeRepository $repairerEmployeeRepository,
+        private ValidatorInterface $validator,
+        private EntityManagerInterface $entityManager,
+        private TranslatorInterface $translator,
+        private Security $security,
     ) {
     }
 
@@ -43,6 +45,10 @@ final class UpdateUserEmployeeProcessor implements ProcessorInterface
             throw new NotFoundHttpException($this->translator->trans('404_notFound.repairer.employee', domain: 'validators'));
         }
 
+        $currentUser = $this->security->getUser();
+        if ($currentUser instanceof User && ($currentUser->isAdmin() || $currentUser->isAssociatedWithRepairer($data->repairer->id))) {
+            $repairerEmployee->repairer = $data->repairer;
+        }
         $repairerEmployee->enabled = boolval($data->enabled);
         $this->validator->validate($repairerEmployee);
 

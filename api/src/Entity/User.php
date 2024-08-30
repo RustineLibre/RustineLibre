@@ -36,14 +36,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    operations: [
+        new Get(security: "is_granted('ROLE_ADMIN') or object == user or is_granted('CUSTOMER_READ', object)"),
+        new Post(security: "is_granted('ROLE_ADMIN') or !user"),
+        new Put(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new Delete(security: "is_granted('ROLE_ADMIN') or object == user"),
+    ],
     normalizationContext: ['groups' => [self::USER_READ]],
     denormalizationContext: ['groups' => [self::USER_WRITE]],
     extraProperties: [
         'standard_put',
-    ]
+    ],
 )]
-#[Get(security: "is_granted('ROLE_ADMIN') or (object == user) or (is_granted('ROLE_BOSS') and is_granted('CUSTOMER_READ', object)) or (is_granted('ROLE_EMPLOYEE') and is_granted('CUSTOMER_READ', object))")]
-#[Post(security: "is_granted('ROLE_ADMIN') or !user")]
 #[Post(
     uriTemplate: '/validation-code',
     controller: UserValidationCodeController::class,
@@ -61,8 +67,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriTemplate: '/resend-valid-code',
     controller: ResendValidationCodeController::class
 )]
-#[Put(security: "is_granted('ROLE_ADMIN') or object == user")]
-#[Patch(security: "is_granted('ROLE_ADMIN') or object == user")]
 #[Get(
     uriTemplate: '/me',
     openapi: new Model\Operation(
@@ -71,13 +75,14 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN') or object == user",
     provider: CurrentUserProvider::class,
 )]
-#[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[GetCollection(
-    uriTemplate: '/customers',
+    uriTemplate: '/repairers/{repairer_id}/customers',
+    uriVariables: ['repairer_id'],
+    requirements: ['repairer_id' => '\d+'],
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
-    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS') or is_granted('ROLE_EMPLOYEE')",
+    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
     name: 'customers_list',
     provider: CustomersProvider::class,
 )]
@@ -91,7 +96,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     security: "is_granted('ROLE_ADMIN')",
     provider: ExportUserCollectionProvider::class
 )]
-#[Delete(security: "is_granted('ROLE_ADMIN') or (object == user)")]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiFilter(UserSearchFilter::class)]
@@ -123,7 +127,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Repairer::REPAIRER_COLLECTION_READ])]
     public ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     #[Groups([self::USER_READ])]
     public array $roles = ['ROLE_USER'];
 
@@ -153,9 +157,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::USER_WRITE])]
     public ?string $city = null;
 
-    #[ORM\OneToOne(mappedBy: 'owner', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Repairer::class, cascade: ['persist', 'remove'])]
     #[Groups([self::USER_READ])]
-    public ?Repairer $repairer = null;
+    public Collection $repairers;
 
     #[Assert\NotBlank(message: 'user.lastName.not_blank')]
     #[Assert\Length(
@@ -205,13 +209,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
+        $this->repairers = new ArrayCollection();
     }
 
     public function __toString(): string
     {
-        return $this->repairer
-            ? $this->repairer->name
-            : ($this->repairerEmployee && $this->repairerEmployee->repairer ? $this->repairerEmployee->repairer->name : sprintf('%s %s', $this->firstName, $this->lastName));
+        return sprintf('%s %s', $this->firstName, $this->lastName);
     }
 
     /**
@@ -263,6 +266,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (in_array(self::ROLE_EMPLOYEE, $this->roles)) {
             return true;
+        }
+
+        return false;
+    }
+
+    public function isAssociatedWithRepairer(int $id): bool
+    {
+        if ($this->isBoss()) {
+            return !$this->repairers->filter(function (Repairer $repairerOfUser) use ($id) {
+                return $repairerOfUser->id === $id;
+            })->isEmpty();
+        }
+
+        if ($this->repairerEmployee && $this->isEmployee()) {
+            return $id === $this->repairerEmployee->repairer->id;
         }
 
         return false;

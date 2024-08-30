@@ -5,25 +5,25 @@ declare(strict_types=1);
 namespace App\Tests\AutoDiagnostic\Security;
 
 use App\Entity\AutoDiagnostic;
+use App\Entity\User;
 use App\Repository\AutoDiagnosticRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class GetTest extends AbstractTestCase
 {
-    /** @var AutoDiagnostic[] */
-    protected array $autoDiagnostics = [];
+    protected AutoDiagnosticRepository $autoDiagnosticRepository;
 
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->autoDiagnostics = static::getContainer()->get(AutoDiagnosticRepository::class)->findAll();
+        $this->autoDiagnosticRepository = $this->getContainer()->get(AutoDiagnosticRepository::class);
     }
 
     public function testUserCanGetAutoDiagnostic(): void
     {
-        $autoDiagnostic = $this->autoDiagnostics[0];
+        $autoDiagnostic = $this->autoDiagnosticRepository->findOneBy([]);
 
         $this->createClientWithUser($autoDiagnostic->appointment->customer)->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
 
@@ -32,7 +32,7 @@ class GetTest extends AbstractTestCase
 
     public function testRepairerCanGetAutoDiagnostic(): void
     {
-        $autoDiagnostic = $this->autoDiagnostics[0];
+        $autoDiagnostic = $this->autoDiagnosticRepository->findOneBy([]);
         $this->createClientWithUser($autoDiagnostic->appointment->repairer->owner)->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
 
         $this->assertResponseIsSuccessful();
@@ -40,7 +40,7 @@ class GetTest extends AbstractTestCase
 
     public function testAdminCanGetAutoDiagnostic(): void
     {
-        $autoDiagnostic = $this->autoDiagnostics[0];
+        $autoDiagnostic = $this->autoDiagnosticRepository->findOneBy([]);
         $this->createClientAuthAsAdmin()->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
 
         $this->assertResponseIsSuccessful();
@@ -55,9 +55,24 @@ class GetTest extends AbstractTestCase
 
     public function testUserCannotGetOtherDiagnostic(): void
     {
-        // According to the fixtures, autoDiagnostics[5] is not assigned to the client auth as user
-        $autoDiagnostic = $this->autoDiagnostics[5];
-        $this->createClientAuthAsUser()->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
+        /** @var AutoDiagnostic $autoDiagnostic */
+        $autoDiagnostic = $this->autoDiagnosticRepository->findOneBy([]);
+
+        /** @var UserRepository $userRepository */
+        $userRepository = self::getContainer()->get(UserRepository::class);
+        /** @var User $user */
+        $user = $userRepository->createQueryBuilder('u')
+            ->where('u.id != :customerId')
+            ->andWhere('u.id != :repairerId')
+            ->andWhere('CAST(u.roles AS TEXT) LIKE :role')
+            ->setParameter('customerId', $autoDiagnostic->appointment->customer->id)
+            ->setParameter('repairerId', $autoDiagnostic->appointment->repairer->owner->id)
+            ->setParameter('role', '%ROLE_USER%')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $this->createClientWithUser($user)->request('GET', sprintf('/auto_diagnostics/%d', $autoDiagnostic->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 }

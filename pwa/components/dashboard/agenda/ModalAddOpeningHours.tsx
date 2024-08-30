@@ -19,17 +19,20 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {RequestBody} from '@interfaces/Resource';
 import {errorRegex} from '@utils/errorRegex';
+import {Repairer} from '@interfaces/Repairer';
 
 type ModalAddOpeningHoursProps = {
   day: string;
   openModal: boolean;
   handleCloseModal: (refresh: boolean | undefined) => void;
+  repairer: Repairer;
 };
 
 const ModalAddOpeningHours = ({
   day,
   openModal,
   handleCloseModal,
+  repairer,
 }: ModalAddOpeningHoursProps): JSX.Element => {
   const [pendingAdd, setPendingAdd] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -59,6 +62,7 @@ const ModalAddOpeningHours = ({
         startTime: startTime,
         endTime: endTime,
         day: day,
+        repairer: `/repairers/${repairer.id}`,
       };
       await openingHoursResource.post(bodyRequest);
       handleCloseModal(true);

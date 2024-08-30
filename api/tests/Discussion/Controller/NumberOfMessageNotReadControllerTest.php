@@ -32,7 +32,7 @@ class NumberOfMessageNotReadControllerTest extends AbstractTestCase
             return $message->sender !== $user && !$message->alreadyRead;
         }));
 
-        $response = $this->createClientAuthAsUser()->request('GET', '/messages_unread')->toArray();
+        $response = $this->createClientAuthAsUser()->request('GET', '/customers/messages_unread')->toArray();
         self::assertArrayHasKey('count', $response);
         self::assertSame($response['count'], $notRead);
     }

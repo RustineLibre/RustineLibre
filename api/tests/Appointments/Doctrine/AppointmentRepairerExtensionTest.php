@@ -10,7 +10,8 @@ use App\Tests\Trait\AppointmentTrait;
 
 class AppointmentRepairerExtensionTest extends AbstractTestCase
 {
-    use AppointmentTrait;
+    //    use AppointmentTrait;
+    private AppointmentRepository $appointmentRepository;
 
     public function setUp(): void
     {
@@ -20,13 +21,9 @@ class AppointmentRepairerExtensionTest extends AbstractTestCase
 
     public function testRepairerGetOnlyHisAppointments(): void
     {
-        $appointment = $this->getAppointment();
+        $appointment = $this->appointmentRepository->findOneBy([]);
 
-        if (!in_array('ROLE_BOSS', $appointment->repairer->owner->getRoles(), true)) {
-            self::fail('The user is not a boss');
-        }
-
-        $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', '/appointments')->toArray();
+        $response = $this->createClientWithUser($appointment->repairer->owner)->request('GET', sprintf('/repairers/%s/appointments', $appointment->repairer->id))->toArray();
 
         self::assertResponseIsSuccessful();
         self::assertGreaterThan(0, count($response['hydra:member']));

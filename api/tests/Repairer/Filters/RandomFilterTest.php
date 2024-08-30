@@ -72,11 +72,17 @@ class RandomFilterTest extends AbstractTestCase
         $this->assertNotSame($idsFromFirstResponse, $idsFromSecondResponse);
 
         // Check repairer type
-        $firstRepairer = static::createClient()->request('GET', $idsFromFirstResponse[0])->toArray();
-        $this->assertEquals('Réparateur itinérant', $firstRepairer['repairerTypes'][0]['name']);
+        $firstRepairerTypes = static::createClient()->request('GET', $idsFromFirstResponse[0])->toArray()['repairerTypes'];
+        $repairerTypesForFirstResponse = array_map(function ($firstRepairerType) {
+            return $firstRepairerType['name'];
+        }, $firstRepairerTypes);
+        self::assertContains('Réparateur itinérant', $repairerTypesForFirstResponse);
 
-        $firstRepairer = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray();
-        $this->assertEquals('Réparateur itinérant', $firstRepairer['repairerTypes'][0]['name']);
+        $secondRepairerTypes = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray()['repairerTypes'];
+        $repairerTypesForSecondResponse = array_map(function ($secondRepairerType) {
+            return $secondRepairerType['name'];
+        }, $secondRepairerTypes);
+        self::assertContains('Réparateur itinérant', $repairerTypesForSecondResponse);
     }
 
     public function testRandomFilterWorkWithAroundFilter(): void

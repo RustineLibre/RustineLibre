@@ -30,16 +30,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import {tabsClasses} from '@mui/material/Tabs';
 
 interface InformationsContainerProps {
-  editRepairer?: Repairer;
+  editRepairer: Repairer;
 }
 
 const InformationsContainer = ({editRepairer}: InformationsContainerProps) => {
   const {user} = useAccount({redirectIfMailNotConfirm: '/login'});
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [repairer, setRepairer] = useState<Repairer>(
-    editRepairer || user?.repairer!
-  );
+  const [repairer, setRepairer] = useState<Repairer>(editRepairer);
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 

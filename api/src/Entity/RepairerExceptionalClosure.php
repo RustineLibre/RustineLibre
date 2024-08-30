@@ -15,6 +15,7 @@ use App\Repairers\Validator\RepairerClosing;
 use App\Repository\RepairerExceptionalClosureRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairerExceptionalClosureRepository::class)]
 #[ApiResource(
@@ -23,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Get]
 #[GetCollection]
-#[Post(security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')")]
+#[Post(securityPostDenormalize: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer.owner == user)")]
 #[Delete(security: "is_granted('ROLE_ADMIN') or (object.repairer.owner == user)")]
 #[ApiFilter(SearchFilter::class, properties: ['repairer' => 'exact'])]
 #[RepairerClosing]
@@ -38,6 +39,7 @@ class RepairerExceptionalClosure
     #[Groups([self::READ])]
     public ?int $id = null;
 
+    #[Assert\NotNull]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Groups([self::WRITE])]

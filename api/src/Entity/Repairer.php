@@ -35,7 +35,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Jsor\Doctrine\PostGIS\Types\PostGISType;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -105,7 +104,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(ProximityFilter::class)]
 #[ApiFilter(RandomFilter::class)] // Should always be last filter of the list
 #[ApiFilter(RepairerSearchFilter::class)]
-#[UniqueEntity('owner')]
 #[RepairerSlots]
 class Repairer
 {
@@ -117,10 +115,10 @@ class Repairer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ, RepairerEmployee::EMPLOYEE_READ])]
     public ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'repairer', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
     public ?User $owner = null;
@@ -137,7 +135,7 @@ class Repairer
         maxMessage: 'repairer.name.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ, RepairerEmployee::EMPLOYEE_READ])]
     public ?string $name = null;
 
     #[Assert\Type('string')]

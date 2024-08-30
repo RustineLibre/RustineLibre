@@ -14,8 +14,6 @@ class PostTest extends DiscussionMessageAbstractTestCase
         $repairer = $this->repairerRepository->findOneBy([]);
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
-        self::assertResponseIsSuccessful();
-
         $this->createClientWithUser($customer)->request('POST', '/discussion_messages', [
             'json' => [
                 'discussion' => sprintf('/discussions/%s', $discussion->id),
@@ -42,11 +40,11 @@ class PostTest extends DiscussionMessageAbstractTestCase
 
     public function testCustomerCannotAddMessageInOtherDiscussion(): void
     {
-        $customer = $this->userRepository->getUserWithRole('ROLE_USER');
+        $customer = $this->userRepository->getUsersWithRole('ROLE_USER');
         $repairer = $this->repairerRepository->findOneBy([]);
-        $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
+        $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer[0]);
 
-        $this->createClientAuthAsUser()->request('POST', '/discussion_messages', [
+        $this->createClientWithUser($customer[1])->request('POST', '/discussion_messages', [
             'json' => [
                 'discussion' => sprintf('/discussions/%s', $discussion->id),
                 'content' => 'Hello',

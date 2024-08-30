@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {appointmentResource} from '@resources/appointmentResource';
 import {openingHoursResource} from '@resources/openingHours';
 import AppointmentActions from '../appointments/AppointmentActions';
@@ -36,6 +36,7 @@ import {getAppointmentStatus} from '@helpers/appointmentStatus';
 import CommentIcon from '@mui/icons-material/Comment';
 import CommentsDisabledIcon from '@mui/icons-material/CommentsDisabled';
 import NextLink from 'next/link';
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 
 type ModalShowAppointmentProps = {
   appointment: Appointment;
@@ -51,6 +52,7 @@ const ModalShowAppointment = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+  const {repairer} = useContext(DashboardRepairerContext);
   const [loadingNewSlot, setLoadingNewSlot] = useState<boolean>(false);
   const [proposeOtherSlot, setProposeOtherSlot] = useState<boolean>(false);
   const [slotsAvailable, setSlotsAvailable] = useState<any>(null);
@@ -183,9 +185,11 @@ const ModalShowAppointment = ({
                 </Typography>
               </Box>
               <Box>
-                {appointment.discussion && (
+                {appointment.discussion && repairer && (
                   <NextLink
-                    href={`/sradmin/messagerie/${appointment.discussion!.id}`}
+                    href={`/sradmin/boutiques/${repairer.id}/messagerie/${
+                      appointment.discussion!.id
+                    }`}
                     legacyBehavior
                     passHref>
                     <Link>
@@ -224,32 +228,34 @@ const ModalShowAppointment = ({
                   <Typography>{appointment.bike.name}</Typography>
                 </Box>
                 <Box>
-                  <NextLink
-                    href={`/sradmin/clients/velos/${appointment.bike.id}`}
-                    legacyBehavior
-                    passHref>
-                    <Link>
-                      {isMobile ? (
-                        <IconButton
-                          color="secondary"
-                          disabled={!appointment.bike}
-                          sx={{
-                            borderRadius: '50%',
-                            padding: '8px',
-                          }}>
-                          <AssignmentIcon />
-                        </IconButton>
-                      ) : (
-                        <Button
-                          size="small"
-                          color="secondary"
-                          disabled={!appointment.bike}
-                          variant="outlined">
-                          Voir le carnet du vélo
-                        </Button>
-                      )}
-                    </Link>
-                  </NextLink>
+                  {repairer && (
+                    <NextLink
+                      href={`/sradmin/boutiques/${repairer.id}/clients/velos/${appointment.bike.id}`}
+                      legacyBehavior
+                      passHref>
+                      <Link>
+                        {isMobile ? (
+                          <IconButton
+                            color="secondary"
+                            disabled={!appointment.bike}
+                            sx={{
+                              borderRadius: '50%',
+                              padding: '8px',
+                            }}>
+                            <AssignmentIcon />
+                          </IconButton>
+                        ) : (
+                          <Button
+                            size="small"
+                            color="secondary"
+                            disabled={!appointment.bike}
+                            variant="outlined">
+                            Voir le carnet du vélo
+                          </Button>
+                        )}
+                      </Link>
+                    </NextLink>
+                  )}
                 </Box>
               </Box>
             )}

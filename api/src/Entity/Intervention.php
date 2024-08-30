@@ -34,7 +34,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[Post(security: "is_granted('ROLE_ADMIN')")]
 #[Post(
     uriTemplate: '/create_repairer_interventions',
-    security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_BOSS')",
+    securityPostValidation: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and user.isAssociatedWithRepairer(object.repairer.id))",
     input: CreateInterventionRepairerDto::class,
     processor: CreateInterventionWithCurrentRepairerProcessor::class,
 )]

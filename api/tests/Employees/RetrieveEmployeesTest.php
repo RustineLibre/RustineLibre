@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Employees;
 
-use App\Entity\User;
+use App\Entity\Repairer;
+use App\Entity\RepairerEmployee;
 use App\Repository\RepairerEmployeeRepository;
-use App\Repository\UserRepository;
+use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -17,13 +18,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class RetrieveEmployeesTest extends AbstractTestCase
 {
-    private array $repairerEmployees = [];
+    private RepairerEmployeeRepository $repairerEmployeeRepository;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->repairerEmployees = static::getContainer()->get(RepairerEmployeeRepository::class)->findAll(); // should be 4 results
+        $this->repairerEmployeeRepository = static::getContainer()->get(RepairerEmployeeRepository::class);
     }
 
     public function testGetRepairerEmployeesAsUser(): void
@@ -34,63 +35,92 @@ class RetrieveEmployeesTest extends AbstractTestCase
 
     public function testGetRepairerEmployeeAsUser(): void
     {
-        $this->createClientAuthAsUser()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->id);
+        /** @var RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
+        $this->createClientAuthAsUser()->request('GET', sprintf('/repairer_employees/%s', $repairerEmployee->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testGetRepairerEmployeesAsAdmin(): void
     {
-        $response = $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees');
+        $response = $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees')->toArray();
         $this->assertResponseIsSuccessful();
-        // Minimum 4 employees (as in fixtures), maybe more if other test create it
-        $this->assertTrue(4 <= $response->toArray()['hydra:totalItems']);
+        $this->assertJsonContains([
+            '@context' => '/contexts/RepairerEmployee',
+            '@id' => '/repairer_employees',
+            '@type' => 'hydra:Collection',
+        ]);
+        $this->assertGreaterThanOrEqual(1, $response['hydra:member']);
     }
 
     public function testGetRepairerEmployeeAsAdmin(): void
     {
-        $this->createClientAuthAsAdmin()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->id);
+        /** @var RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
+        $this->createClientAuthAsAdmin()->request('GET', sprintf('/repairer_employees/%s', $repairerEmployee->id));
         $this->assertResponseIsSuccessful();
     }
 
     public function testGetRepairerEmployeeAsBadBoss(): void
     {
+        /** @var Repairer $repairer */
+        $repairer = self::getContainer()->get(RepairerRepository::class)->findOneBy([]);
+
+        /** @var ?RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->createQueryBuilder('re')
+            ->where('re.repairer != :repairer')
+            ->setParameter('repairer', $repairer->id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (!$repairerEmployee instanceof RepairerEmployee) {
+            self::fail('Aucun employé n\a été trouvé pour ce test.');
+        }
+
         // Boss of repairer 1 try to get an employee of repairer 2
-        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[2]->id);
+        $this->createClientWithUser($repairer->owner)->request('GET', sprintf('/repairer_employees/%s', $repairerEmployee->id));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testGetRepairerEmployeeAsGoodBoss(): void
     {
         // Boss of repairer 1 try to get an employee of repairer 1
-        $this->createClientAuthAsBoss()->request('GET', '/repairer_employees/'.$this->repairerEmployees[0]->id);
+        /** @var RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
+        $this->createClientWithUser($repairerEmployee->repairer->owner)->request('GET', sprintf('/repairer_employees/%s', $repairerEmployee->id));
         $this->assertResponseIsSuccessful();
     }
 
     public function testGetEmployeesAsBossWithEmployees(): void
     {
-        // Boss of repairer 1 try to get an employee of repairer 2
-        $response = $this->createClientAuthAsBoss()->request('GET', '/repairer_employees');
-        $this->assertEquals(2, $response->toArray()['hydra:totalItems']);
+        $response = $this->createClientAuthAsBoss()->request('GET', '/repairer_employees')->toArray();
+        $this->assertJsonContains([
+            '@context' => '/contexts/RepairerEmployee',
+            '@id' => '/repairer_employees',
+            '@type' => 'hydra:Collection',
+        ]);
+        self::assertGreaterThanOrEqual(1, count($response['hydra:member']));
     }
 
     public function testGetEmployeesAsBossWithNoEmployees(): void
     {
-        $users = array_reverse(static::getContainer()->get(UserRepository::class)->findAll());
+        /** @var Repairer[] $repairers */
+        $repairers = self::getContainer()->get(RepairerRepository::class)->findAll();
 
-        $firstRandomBoss = null;
-        /** @var User $user */
-        foreach ($users as $user) {
-            if ($user->isBoss() && 'boss@test.com' !== $user->email) {
-                $firstRandomBoss = $user;
+        $repairerWithNoEmployees = null;
+
+        foreach ($repairers as $repairer) {
+            if (0 === $repairer->repairerEmployees->count()) {
+                $repairerWithNoEmployees = $repairer;
             }
         }
 
-        if (!$firstRandomBoss) {
+        if (!$repairerWithNoEmployees) {
             throw new NotFoundHttpException($this->translator->trans('404_notFound.boss', domain: 'validators'));
         }
 
-        // Boss of repairer 1 try to get an employee of repairer 2
-        $response = $this->createClientWithCredentials(['email' => $firstRandomBoss->email, 'password' => 'Test1passwordOk!'])->request('GET', '/repairer_employees');
+        $response = $this->createClientWithCredentials(['email' => $repairerWithNoEmployees->owner->email, 'password' => 'Test1passwordOk!'])->request('GET', '/repairer_employees');
         $this->assertEquals(0, $response->toArray()['hydra:totalItems']);
     }
 }

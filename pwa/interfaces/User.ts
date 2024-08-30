@@ -11,7 +11,7 @@ export interface User {
   street?: string;
   email: string;
   roles: string[];
-  repairer?: Repairer;
+  repairers: Repairer[];
   repairerEmployee?: RepairerEmployee;
   plainPassword: string;
   lastConnect?: string;

@@ -6,13 +6,16 @@ import {Discussion} from '@interfaces/Discussion';
 import {discussionResource} from '@resources/discussionResource';
 import {isBoss, isEmployee} from '@helpers/rolesHelpers';
 import DiscussionListItem from '@components/messagerie/DiscussionListItem';
+import {Repairer} from '@interfaces/Repairer';
 
 type RepairerDiscussionListProps = {
+  repairer: Repairer;
   display?: any;
   discussionGiven: Discussion | null;
 };
 
 const RepairerDiscussionList = ({
+  repairer,
   display,
   discussionGiven,
 }: RepairerDiscussionListProps): JSX.Element => {
@@ -25,15 +28,6 @@ const RepairerDiscussionList = ({
 
   const fetchDiscussions = async () => {
     if (!user) {
-      return;
-    }
-
-    const repairer = user.repairer
-      ? user.repairer
-      : user.repairerEmployee
-        ? user.repairerEmployee.repairer
-        : null;
-    if (!repairer) {
       return;
     }
 
@@ -56,7 +50,9 @@ const RepairerDiscussionList = ({
 
   useEffect(() => {
     if (discussion) {
-      router.push(`/sradmin/messagerie/${discussion.id}`);
+      router.push(
+        `/sradmin/boutiques/${repairer.id}/messagerie/${discussion.id}`
+      );
     }
   }, [discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -70,7 +66,7 @@ const RepairerDiscussionList = ({
                 key={discussionItem.id}
                 discussionGiven={discussionItem}
                 current={discussion?.id === discussionItem.id}
-                isCustomer={!(isBoss(user) || isEmployee(user))}
+                repairer={repairer}
               />
             );
           })}

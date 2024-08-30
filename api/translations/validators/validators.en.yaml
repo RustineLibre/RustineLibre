@@ -127,7 +127,6 @@ repairer.duration.slot: The duration slot should be one of 30 / 60 / 180 (min).
 400_badRequest.update.employee: You should provide a 'repairer employee' ID to update it.
 400_badRequest.repairer.employee.not.exist: this 'repairer employee' does not exist.
 400_badRequest.intervention.price: Price is required.
-400_badRequest.repairer.create.intervention: You must have a repairer to create an intervention.
 400_badRequest.slot.not.available: This slot is not available.
 400_badRequest.availability.filter: The "availability" filter accepts only "ASC" or "DESC" as value.
 400_badRequest.proximity.filter: The parameters provided in the proximity filter have the wrong format, it should be ?proximity=50.43321,3.03943.

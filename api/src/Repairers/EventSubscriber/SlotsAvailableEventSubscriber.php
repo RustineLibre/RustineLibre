@@ -101,13 +101,13 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         }
 
         // Current user does not have any shop
-        $curentRepairer = $currentUser->repairer ?: ($currentUser->repairerEmployee?->repairer);
-        if (!$curentRepairer) {
+        $currentRepairers = $currentUser->repairerEmployee ? [$currentUser->repairerEmployee->repairer] : $currentUser->repairers->toArray();
+        if (0 >= count($currentRepairers)) {
             throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.repairer.belong.shop', domain: 'validators'));
         }
 
         // This shop is not mine
-        if ($curentRepairer !== $object->repairer) {
+        if (!in_array($object->repairer, $currentRepairers)) {
             throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.repairer.shop.owner', domain: 'validators'));
         }
 
