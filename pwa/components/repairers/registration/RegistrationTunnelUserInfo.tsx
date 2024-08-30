@@ -35,13 +35,16 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
 
   const handleChangeEmail = (event: ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value);
+
     if (!validateEmail(event.target.value)) {
       setEmailError(true);
       setEmailHelperText('Veuillez entrer une adresse email valide.');
-    } else {
-      setEmailError(false);
-      setEmailHelperText('');
+
+      return;
     }
+
+    setEmailError(false);
+    setEmailHelperText('');
   };
 
   const handleNextStep = () => {

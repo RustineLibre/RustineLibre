@@ -367,7 +367,7 @@ export const RegistrationTunnelValidation = () => {
                   component="div"
                   textTransform="capitalize"
                   py={1}>
-                  Nom : {lastName}
+                  Nom : {name}
                 </Typography>
                 <Typography
                   variant="body1"
@@ -460,7 +460,7 @@ export const RegistrationTunnelValidation = () => {
                 size="large"
                 sx={{mt: 2, mx: 'auto'}}>
                 {!pendingRegistration ? (
-                  'Enregistrer cette antenne et continuer'
+                  'Enregistrer et ajouter une nouvelle antenne'
                 ) : (
                   <CircularProgress size={20} sx={{color: 'white'}} />
                 )}
