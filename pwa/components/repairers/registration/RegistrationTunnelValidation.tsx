@@ -33,6 +33,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import {useRouter} from 'next/router';
 import {RepairerCity} from '@interfaces/RepairerCity';
+import {authenticationResource} from '@resources/authenticationResource';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
@@ -160,7 +161,6 @@ export const RegistrationTunnelValidation = () => {
       setPendingRegistration(true);
 
       if (!hasBoss) {
-        /*
         const response = await repairerResource.postRepairerAndUser({
           firstName: firstName,
           lastName: lastName,
@@ -178,24 +178,30 @@ export const RegistrationTunnelValidation = () => {
           latitude: street?.lat ?? city.lat,
           longitude: street?.lon ?? city.lon,
         });
-        setNewBoss(response.owner);*/
-        console.log('première enseigne');
+        setNewBoss(response.owner);
         setHasBoss(true);
       } else {
-        /*        const response = await repairerResource.post({
-          owner: newBoss?.['@id'],
-          name: name,
-          street: street?.name,
-          streetNumber: streetNumber,
-          city: city.name,
-          postcode: city?.postcode,
-          bikeTypesSupported: selectedBikeTypeIRIs,
-          repairerTypes: repairerTypeSelectedIRIs,
-          repairerCities: repairerCities,
-          comment: comment,
-          latitude: street?.lat ?? city.lat,
-          longitude: street?.lon ?? city.lon,
-        });*/
+        const auth = await authenticationResource.authenticate({
+          email: email,
+          password: password,
+        });
+        const response = await repairerResource.post(
+          {
+            owner: newBoss?.['@id'],
+            name: name,
+            street: street?.name,
+            streetNumber: streetNumber,
+            city: city.name,
+            postcode: city?.postcode,
+            bikeTypesSupported: selectedBikeTypeIRIs,
+            repairerTypes: repairerTypeSelectedIRIs,
+            repairerCities: repairerCities,
+            comment: comment,
+            latitude: street?.lat.toString() ?? city.lat,
+            longitude: street?.lon.toString() ?? city.lon,
+          },
+          {Authorization: `Bearer ${auth.token}`}
+        );
       }
 
       setPendingRegistration(false);

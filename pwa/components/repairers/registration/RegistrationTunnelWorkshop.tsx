@@ -65,7 +65,6 @@ export const RegistrationTunnelWorkshop = ({
     tunnelStep,
     stepOneCompleted,
     stepTwoFirstQuestionCompleted,
-    stepTwoCompleted,
     successMessage,
     setSuccessMessage,
     setIsRoving,
