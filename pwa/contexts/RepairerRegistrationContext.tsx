@@ -138,9 +138,7 @@ export const RepairerRegistrationProvider = ({
   const [formCompleted, setFormCompleted] = useState<boolean>(false);
   const [isRoving, setIsRoving] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string>(
-    ''
-  );
+  const [successMessage, setSuccessMessage] = useState<string>('');
 
   return (
     <RepairerRegistrationContext.Provider

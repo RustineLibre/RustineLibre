@@ -39,7 +39,7 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
     if (tunnelStep !== 'choice' || !stepOneCompleted) {
       router.push('/reparateur/inscription');
     }
-  }, []);
+  });
 
   const handleNextStep = () => {
     setTunnelStep('workshop');

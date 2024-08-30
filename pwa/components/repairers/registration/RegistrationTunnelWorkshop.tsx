@@ -206,15 +206,14 @@ export const RegistrationTunnelWorkshop = ({
         ? router.push('/reparateur/inscription/choix-antenne')
         : router.push('/reparateur/inscription');
     }
-  }, []);
+  });
 
   useEffect(() => {
     successMessage &&
       setTimeout(() => {
         setSuccessMessage('');
       }, 5000);
-  }, []);
-
+  });
 
   return (
     <>
