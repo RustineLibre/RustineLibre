@@ -17,13 +17,12 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
   const router = useRouter();
   const {
     choiceValue,
-    tunnelStep,
     stepOneCompleted,
+    setStepOneCompleted,
     setStepTwoFirstQuestionCompleted,
     setChoiceValue,
     setChosen,
     setMultipleWorkShop,
-    setTunnelStep,
   } = useContext(RepairerRegistrationContext);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,19 +35,18 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (tunnelStep !== 'choice' || !stepOneCompleted) {
+    if (!stepOneCompleted) {
       router.push('/reparateur/inscription');
     }
   });
 
   const handleNextStep = () => {
-    setTunnelStep('workshop');
     setStepTwoFirstQuestionCompleted(true);
     router.push('/reparateur/inscription/mon-enseigne');
   };
 
   const handleGoBack = () => {
-    setTunnelStep('user_info');
+    setStepOneCompleted(false);
     router.push('/reparateur/inscription');
   };
 

@@ -8,18 +8,20 @@ import RepairerRegistrationLayout from '@components/layout/RepairerRegistrationL
 
 const RepairerSuccessRegistration: NextPageWithLayout = () => {
   const {
-    tunnelStep,
     stepOneCompleted,
     stepTwoFirstQuestionCompleted,
     stepTwoCompleted,
     formCompleted,
     success,
-    setTunnelStep,
+    setStepOneCompleted,
+    setStepTwoFirstQuestionCompleted,
+    setStepTwoCompleted,
+    setFormCompleted,
   } = useContext(RepairerRegistrationContext);
   const router = useRouter();
 
   useEffect(() => {
-    if (tunnelStep !== 'success' || !formCompleted) {
+    if (!formCompleted) {
       !stepOneCompleted
         ? redirectToFirstStep()
         : !stepTwoFirstQuestionCompleted
@@ -31,22 +33,25 @@ const RepairerSuccessRegistration: NextPageWithLayout = () => {
   });
 
   const redirectToFirstStep = () => {
-    setTunnelStep('user_info');
+    setStepOneCompleted(false);
+    setStepTwoFirstQuestionCompleted(false);
+    setStepTwoCompleted(false);
     router.push('/reparateur/inscription');
   };
 
   const redirectToChoiceStep = () => {
-    setTunnelStep('choice');
+    setStepTwoFirstQuestionCompleted(false);
+    setStepTwoCompleted(false);
     router.push('/reparateur/inscription/choix-antenne');
   };
 
   const redirectToWorkshopStep = () => {
-    setTunnelStep('workshop');
+    setStepTwoCompleted(false);
     router.push('/reparateur/inscription/mon-enseigne');
   };
 
   const redirectToValidationStep = () => {
-    setTunnelStep('validation');
+    setFormCompleted(false);
     router.push('/reparateur/inscription/validation');
   };
   return (
@@ -60,27 +65,53 @@ const RepairerSuccessRegistration: NextPageWithLayout = () => {
         left="0"
         zIndex="-1"
       />
-      <Container>
-        <Paper
-          elevation={4}
-          sx={{
-            maxWidth: 400,
-            p: 4,
-            mt: 4,
-            mb: {xs: 10, md: 12},
-            mx: 'auto',
-          }}>
-          <Box>
-            Votre demande d&apos;inscription a bien été enregistrée. Elle est
-            est désormais en attente de validation et sera rapidement traitée.
-            <Link href="/" legacyBehavior passHref>
-              <Button variant="outlined" sx={{marginTop: '30px'}}>
-                Retour à l&apos;accueil
-              </Button>
-            </Link>
-          </Box>
-        </Paper>
-      </Container>
+      {success && (
+        <Container>
+          <Paper
+            elevation={4}
+            sx={{
+              maxWidth: 400,
+              p: 4,
+              mt: 4,
+              mb: {xs: 10, md: 12},
+              mx: 'auto',
+            }}>
+            <Box>
+              Votre demande d&apos;inscription a bien été enregistrée. Elle est
+              est désormais en attente de validation et sera rapidement traitée.
+              <Link href="/" legacyBehavior passHref>
+                <Button variant="outlined" sx={{marginTop: '30px'}}>
+                  Retour à l&apos;accueil
+                </Button>
+              </Link>
+            </Box>
+          </Paper>
+        </Container>
+      )}
+      {!success && (
+        <Container>
+          <Paper
+            elevation={4}
+            sx={{
+              maxWidth: 400,
+              p: 4,
+              mt: 4,
+              mb: {xs: 10, md: 12},
+              mx: 'auto',
+            }}>
+            <Box>
+              Il semble y avoir eu un problème lors de la création de cette
+              antenne. Veuillez vérifier les champs et rééssayer. Si le problème
+              persiste, merci de contacter l&apos;administrateur du site.
+              <Link href="/inscription/mon-enseigne" legacyBehavior passHref>
+                <Button variant="outlined" sx={{marginTop: '30px'}}>
+                  Retour à la création d&apos;antenne
+                </Button>
+              </Link>
+            </Box>
+          </Paper>
+        </Container>
+      )}
     </>
   );
 };

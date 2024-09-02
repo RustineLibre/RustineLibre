@@ -62,15 +62,14 @@ export const RegistrationTunnelWorkshop = ({
     multipleWorkshop,
     repairerCities,
     isRoving,
-    tunnelStep,
     stepOneCompleted,
     stepTwoFirstQuestionCompleted,
     successMessage,
+    setStepTwoFirstQuestionCompleted,
     setSuccessMessage,
     setIsRoving,
     setStepTwoCompleted,
     setRepairerCities,
-    setTunnelStep,
     setRepairerTypeSelected,
     setSelectedBikeTypes,
     setComment,
@@ -189,23 +188,26 @@ export const RegistrationTunnelWorkshop = ({
   };
 
   const handleGoBack = () => {
-    setTunnelStep('choice');
+    setStepTwoFirstQuestionCompleted(false);
     router.push('/reparateur/inscription/choix-antenne');
   };
 
   const handleNextStep = () => {
     setStepTwoCompleted(true);
-    setTunnelStep('validation');
     router.push('/reparateur/inscription/validation');
   };
 
   useEffect(() => {
-    if (tunnelStep !== 'workshop' || !stepTwoFirstQuestionCompleted) {
-      stepOneCompleted
-        ? router.push('/reparateur/inscription/choix-antenne')
-        : router.push('/reparateur/inscription');
-    }
-  });
+    const timer = setTimeout(() => {
+      if (!stepTwoFirstQuestionCompleted) {
+        stepOneCompleted
+          ? router.push('/reparateur/inscription/choix-antenne')
+          : router.push('/reparateur/inscription');
+      }
+    }, 100); // Délai de 100 ms
+
+    return () => clearTimeout(timer);
+  }, [stepTwoFirstQuestionCompleted, stepOneCompleted, router]);
 
   useEffect(() => {
     successMessage &&

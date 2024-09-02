@@ -14,7 +14,6 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
     lastName,
     email,
     setStepOneCompleted,
-    setTunnelStep,
     setFirstName,
     setLastName,
     setEmail,
@@ -48,7 +47,6 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
   };
 
   const handleNextStep = () => {
-    setTunnelStep('choice');
     setStepOneCompleted(true);
     router.push('/reparateur/inscription/choix-antenne');
   };

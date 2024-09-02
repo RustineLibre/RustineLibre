@@ -8,7 +8,6 @@ interface ProviderProps {
 }
 
 interface RepairerRegistrationContext {
-  tunnelStep: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -53,11 +52,9 @@ interface RepairerRegistrationContext {
   setEmail: (value: string) => void;
   setLastName: (value: string) => void;
   setFirstName: (value: string) => void;
-  setTunnelStep: (value: string) => void;
 }
 
 const initialValue = {
-  tunnelStep: 'user_info',
   firstName: '',
   lastName: '',
   email: '',
@@ -102,7 +99,6 @@ const initialValue = {
   setEmail: () => null,
   setLastName: () => null,
   setFirstName: () => null,
-  setTunnelStep: () => null,
 };
 
 export const RepairerRegistrationContext =
@@ -111,7 +107,6 @@ export const RepairerRegistrationContext =
 export const RepairerRegistrationProvider = ({
   children,
 }: ProviderProps): JSX.Element => {
-  const [tunnelStep, setTunnelStep] = useState<string>('user_info');
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -143,7 +138,6 @@ export const RepairerRegistrationProvider = ({
   return (
     <RepairerRegistrationContext.Provider
       value={{
-        tunnelStep,
         firstName,
         lastName,
         email,
@@ -188,7 +182,6 @@ export const RepairerRegistrationProvider = ({
         setEmail,
         setLastName,
         setFirstName,
-        setTunnelStep,
       }}>
       {children}
     </RepairerRegistrationContext.Provider>

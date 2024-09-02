@@ -41,7 +41,6 @@ export const RegistrationTunnelValidation = () => {
   const {password} = useContext(UserFormContext);
   const router = useRouter();
   const {
-    tunnelStep,
     firstName,
     lastName,
     email,
@@ -59,6 +58,9 @@ export const RegistrationTunnelValidation = () => {
     stepOneCompleted,
     stepTwoFirstQuestionCompleted,
     stepTwoCompleted,
+    setStepOneCompleted,
+    setStepTwoFirstQuestionCompleted,
+    setStepTwoCompleted,
     setFormCompleted,
     setSuccess,
     setSuccessMessage,
@@ -71,7 +73,6 @@ export const RegistrationTunnelValidation = () => {
     setRepairerTypeSelected,
     setComment,
     setSelectedBikeTypes,
-    setTunnelStep,
   } = useContext(RepairerRegistrationContext);
   const [cityInput, setCityInput] = useState<string>('');
   const [citiesList, setCitiesList] = useState<City[]>([]);
@@ -219,7 +220,7 @@ export const RegistrationTunnelValidation = () => {
   const handleSuccess = () => {
     setSuccess(true);
     setFormCompleted(true);
-    setTunnelStep('success');
+    setSuccess(true);
     router.push('/reparateur/inscription/demande-enregistree');
   };
 
@@ -232,7 +233,7 @@ export const RegistrationTunnelValidation = () => {
     setComment('');
     setSelectedBikeTypes([]);
     setRepairerCities([]);
-    setTunnelStep('workshop');
+    setStepTwoCompleted(false);
     setSuccessMessage('Votre antenne a été créée avec succès');
     router.push('/reparateur/inscription/mon-enseigne');
   };
@@ -247,12 +248,12 @@ export const RegistrationTunnelValidation = () => {
   }, [finish]);
 
   const handleGoBack = () => {
-    setTunnelStep('workshop');
+    setStepTwoCompleted(false);
     router.push('/reparateur/inscription/mon-enseigne');
   };
 
   useEffect(() => {
-    if (tunnelStep !== 'validation') {
+    if (!stepTwoCompleted) {
       !stepOneCompleted
         ? redirectToFirstStep()
         : !stepTwoFirstQuestionCompleted
@@ -262,11 +263,14 @@ export const RegistrationTunnelValidation = () => {
   }, []);
 
   const redirectToFirstStep = () => {
-    setTunnelStep('user_info');
+    setStepOneCompleted(false);
+    setStepTwoFirstQuestionCompleted(false);
+    setStepTwoCompleted(false);
     router.push('/reparateur/inscription');
   };
   const redirectToChoiceStep = () => {
-    setTunnelStep('choice');
+    setStepTwoFirstQuestionCompleted(false);
+    setStepTwoCompleted(false);
     router.push('/reparateur/inscription/choix-antenne');
   };
 
