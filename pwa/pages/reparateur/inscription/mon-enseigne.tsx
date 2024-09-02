@@ -15,35 +15,11 @@ type RepairerRegistrationProps = {
 const RepairerWorkshopRegistration: NextPageWithLayout<
   RepairerRegistrationProps
 > = ({bikeTypesFetched = [], repairerTypesFetched = []}) => {
-  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
-  const [repairerTypes, setRepairerTypes] =
-    useState<RepairerType[]>(repairerTypesFetched);
-  const fetchRepairerTypes = async () => {
-    const responseRepairerTypes = await repairerTypeResource.getAll(false);
-    setRepairerTypes(responseRepairerTypes['hydra:member']);
-  };
-
-  useEffect(() => {
-    if (repairerTypes.length === 0) {
-      fetchRepairerTypes();
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchBikeTypes = async () => {
-    const responseBikeTypes = await bikeTypeResource.getAll(false);
-    setBikeTypes(responseBikeTypes['hydra:member']);
-  };
-
-  useEffect(() => {
-    if (bikeTypes.length === 0) {
-      fetchBikeTypes();
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <>
       <RegistrationTunnelWorkshop
-        bikeTypes={bikeTypesFetched}
-        repairerTypes={repairerTypesFetched}
+        bikeTypesFetched={bikeTypesFetched}
+        repairerTypesFetched={repairerTypesFetched}
       />
     </>
   );

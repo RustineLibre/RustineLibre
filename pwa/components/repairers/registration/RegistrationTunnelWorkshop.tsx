@@ -38,17 +38,19 @@ import {RepairerCity} from '@interfaces/RepairerCity';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import Avatar from '@mui/material/Avatar';
 import {useRouter} from 'next/router';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
 
 const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
 
 type WorkshopProps = {
-  bikeTypes: BikeType[];
-  repairerTypes: RepairerType[];
+  bikeTypesFetched: BikeType[];
+  repairerTypesFetched: RepairerType[];
 };
 
 export const RegistrationTunnelWorkshop = ({
-  bikeTypes,
-  repairerTypes,
+  bikeTypesFetched,
+  repairerTypesFetched,
 }: WorkshopProps): JSX.Element => {
   const router = useRouter();
   const {
@@ -81,6 +83,30 @@ export const RegistrationTunnelWorkshop = ({
   const [cityInput, setCityInput] = useState<string>('');
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [streetList, setStreetList] = useState<Street[]>([]);
+  const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
+  const [repairerTypes, setRepairerTypes] =
+    useState<RepairerType[]>(repairerTypesFetched);
+  const fetchRepairerTypes = async () => {
+    const responseRepairerTypes = await repairerTypeResource.getAll(false);
+    setRepairerTypes(responseRepairerTypes['hydra:member']);
+  };
+
+  useEffect(() => {
+    if (repairerTypes.length === 0) {
+      fetchRepairerTypes();
+    }
+  }, [repairerTypes]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const fetchBikeTypes = async () => {
+    const responseBikeTypes = await bikeTypeResource.getAll(false);
+    setBikeTypes(responseBikeTypes['hydra:member']);
+  };
+
+  useEffect(() => {
+    if (bikeTypes.length === 0) {
+      fetchBikeTypes();
+    }
+  }, [bikeTypes]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChangeName = (event: ChangeEvent<HTMLInputElement>): void => {
     setName(event.target.value);
