@@ -55,6 +55,8 @@ pwa:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
+  env:
+    NEXT_PUBLIC_ENTRYPOINT: ""
 
 maildev:
   enabled: false

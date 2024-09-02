@@ -1,8 +1,7 @@
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import RepairerRegistrationLayout from '@components/layout/RepairerRegistrationLayout';
-import React, {ReactElement, useEffect, useState} from 'react';
+import React, {ReactElement} from 'react';
 import {RegistrationTunnelWorkshop} from '@components/repairers/registration/RegistrationTunnelWorkshop';
-import {GetStaticProps} from 'next';
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
 

@@ -192,6 +192,7 @@ jobs:
             --set=php.firebase.authProvider="${{ secrets.fb-auth-provider }}" \
             --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
+            --set=pwa.env.NEXT_PUBLIC_ENTRYPOINT="https://${URL}" \
             --set=postgresql.url="${{ secrets.database-url }}" \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-${CONTEXT}.yml \
