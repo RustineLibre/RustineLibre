@@ -12,8 +12,7 @@ type RepairerRegistrationProps = {
 };
 const RepairerWorkshopRegistration: NextPageWithLayout<
   RepairerRegistrationProps
-> = ({bikeTypesFetched = [], repairerTypesFetched = []}) =>
-(
+> = ({bikeTypesFetched = [], repairerTypesFetched = []}) => (
   <RegistrationTunnelWorkshop
     bikeTypesFetched={bikeTypesFetched}
     repairerTypesFetched={repairerTypesFetched}
