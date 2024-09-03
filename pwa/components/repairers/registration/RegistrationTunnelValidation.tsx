@@ -73,6 +73,7 @@ export const RegistrationTunnelValidation = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [finish, setFinish] = useState<boolean>(false);
   const [newBoss, setNewBoss] = useState<User | null>(null);
+  const [pendingNextStep, setPendingNextStep] = useState<boolean>(false);
 
   const fetchRepairerTypes = async () => {
     const responseRepairerTypes = await repairerTypeResource.getAll(false);
@@ -125,8 +126,6 @@ export const RegistrationTunnelValidation = () => {
       const selectedBikeTypeIRIs: string[] = bikeTypes
         .filter((bikeType) => selectedBikeTypes.includes(bikeType.name))
         .map((bikeType) => bikeType['@id']);
-
-      setPendingRegistration(true);
 
       if (!hasBoss) {
         const response = await repairerResource.postRepairerAndUser({
@@ -193,6 +192,7 @@ export const RegistrationTunnelValidation = () => {
   };
 
   const handleCreateAndContinue = () => {
+    setPendingNextStep(true);
     setName('');
     setCity(null);
     setStreet(null);
@@ -203,9 +203,11 @@ export const RegistrationTunnelValidation = () => {
     setRepairerCities([]);
     setSuccessMessage('Votre antenne a été créée avec succès');
     router.push('/reparateur/inscription/mon-enseigne');
+    setPendingNextStep(false);
   };
   const handleCreateAndFinish = () => {
     setFinish(true);
+    setPendingRegistration(true);
   };
 
   useEffect(() => {
@@ -261,61 +263,9 @@ export const RegistrationTunnelValidation = () => {
           </Typography>
         </Box>
         <Typography variant="h5" component="label" textAlign={'center'}>
-          Veuillez vérifier vos informations et signer la charte avant de
-          valider
+          Veuillez vérifier vos informations
         </Typography>
       </Box>
-      <Card
-        elevation={0}
-        sx={{
-          borderRadius: 6,
-          transition: 'all ease 0.5s',
-          width: '100%',
-          maxWidth: '400px',
-          mx: 'auto',
-          mt: 2,
-          textAlign: 'left',
-          border: '1px solid',
-          borderColor: 'grey.300',
-          p: 0,
-        }}>
-        <Box display="flex" alignItems="center" p={2} gap={2}>
-          <Box display="flex" flexDirection="column" flex={1}>
-            <Box
-              display="flex"
-              flexDirection="row"
-              gap={1}
-              color="text.secondary"
-              justifyContent={'center'}
-              textAlign="center">
-              <Box display="flex" flexDirection={'column'} alignItems="center">
-                <AccountCircleIcon fontSize={'medium'} color="primary" />
-                <Typography
-                  variant="body1"
-                  component="div"
-                  textTransform="capitalize"
-                  py={1}>
-                  Nom : {lastName}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  component="div"
-                  textTransform="capitalize"
-                  py={1}>
-                  Prénom : {firstName}
-                </Typography>
-                <Typography
-                  variant="body1"
-                  component="div"
-                  textTransform="capitalize"
-                  py={1}>
-                  Email : {email}
-                </Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
-      </Card>
       <Card
         elevation={0}
         sx={{
@@ -390,6 +340,38 @@ export const RegistrationTunnelValidation = () => {
           </Box>
         </Box>
       </Card>
+      <Box
+        display="flex"
+        gap={2}
+        alignItems="center"
+        justifyContent={'center'}
+        sx={{mt: 3}}>
+        <Button variant="outlined" onClick={handleGoBack}>
+          Modifier
+        </Button>
+        {isMultipleWorkshop && (
+          <Button
+            disabled={
+              !firstName ||
+              !lastName ||
+              !city ||
+              !repairerTypeSelected ||
+              !name ||
+              !email ||
+              !password ||
+              !selectedBikeTypes.length
+            }
+            color={'secondary'}
+            onClick={handleSubmit}
+            variant="contained">
+            {!pendingNextStep ? (
+              'Ajouter une antenne'
+            ) : (
+              <CircularProgress size={20} sx={{color: 'white'}} />
+            )}
+          </Button>
+        )}
+      </Box>
       <Grid item xs={12}>
         <FormControlLabel
           sx={{
@@ -417,63 +399,33 @@ export const RegistrationTunnelValidation = () => {
           }
         />
       </Grid>
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <Button variant="outlined" onClick={handleGoBack}>
-          Retour
-        </Button>
-        <>
-          {isMultipleWorkshop && (
-            <Button
-              disabled={
-                !firstName ||
-                !lastName ||
-                !city ||
-                !repairerTypeSelected ||
-                !name ||
-                !email ||
-                !password ||
-                !selectedBikeTypes.length ||
-                !acceptChart
-              }
-              onClick={handleSubmit}
-              variant="contained"
-              size="large"
-              sx={{mt: 2, mx: 'auto'}}>
-              {!pendingRegistration ? (
-                'Enregistrer et ajouter une nouvelle antenne'
-              ) : (
-                <CircularProgress size={20} sx={{color: 'white'}} />
-              )}
-            </Button>
-          )}
-
-          <Button
-            disabled={
-              !firstName ||
-              !lastName ||
-              !city ||
-              !repairerTypeSelected ||
-              !name ||
-              !email ||
-              !password ||
-              !selectedBikeTypes.length ||
-              !acceptChart
-            }
-            onClick={handleCreateAndFinish}
-            variant="contained"
-            size="large"
-            sx={{mt: 2, mx: 'auto'}}>
-            {!pendingRegistration ? (
-              isMultipleWorkshop ? (
-                'Enregistrer cette antenne et terminer'
-              ) : (
-                'Créer mon compte'
-              )
+      <Box display="flex" justifyContent="center">
+        <Button
+          disabled={
+            !firstName ||
+            !lastName ||
+            !city ||
+            !repairerTypeSelected ||
+            !name ||
+            !email ||
+            !password ||
+            !selectedBikeTypes.length ||
+            !acceptChart
+          }
+          onClick={handleCreateAndFinish}
+          variant="contained"
+          size="large"
+          sx={{mt: 2, mx: 'auto'}}>
+          {!pendingRegistration ? (
+            isMultipleWorkshop ? (
+              "Terminer l'inscription"
             ) : (
-              <CircularProgress size={20} sx={{color: 'white'}} />
-            )}
-          </Button>
-        </>
+              'Créer mon compte'
+            )
+          ) : (
+            <CircularProgress size={20} sx={{color: 'white'}} />
+          )}
+        </Button>
       </Box>
       {errorMessage && (
         <Typography variant="body1" color="error">
