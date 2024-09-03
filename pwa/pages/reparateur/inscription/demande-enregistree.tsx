@@ -1,5 +1,5 @@
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
-import React, {useContext, useEffect} from 'react';
+import React, {useCallback, useContext, useEffect} from 'react';
 import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext';
 import {useRouter} from 'next/router';
 import {Box, Paper, Button, Container} from '@mui/material';
@@ -20,40 +20,37 @@ const RepairerSuccessRegistration: NextPageWithLayout = () => {
   } = useContext(RepairerRegistrationContext);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!formCompleted) {
-      !stepOneCompleted
-        ? redirectToFirstStep()
-        : !stepTwoFirstQuestionCompleted
-          ? redirectToChoiceStep()
-          : !stepTwoCompleted
-            ? redirectToWorkshopStep()
-            : redirectToValidationStep();
-    }
-  });
-
-  const redirectToFirstStep = () => {
+  const redirectToFirstStep = useCallback(() => {
     setStepOneCompleted(false);
     setStepTwoFirstQuestionCompleted(false);
     setStepTwoCompleted(false);
-    router.push('/reparateur/inscription');
-  };
-
-  const redirectToChoiceStep = () => {
-    setStepTwoFirstQuestionCompleted(false);
-    setStepTwoCompleted(false);
-    router.push('/reparateur/inscription/choix-antenne');
-  };
-
-  const redirectToWorkshopStep = () => {
-    setStepTwoCompleted(false);
-    router.push('/reparateur/inscription/mon-enseigne');
-  };
-
-  const redirectToValidationStep = () => {
     setFormCompleted(false);
-    router.push('/reparateur/inscription/validation');
-  };
+    router.push('/reparateur/inscription');
+  }, [
+    setStepOneCompleted,
+    setStepTwoFirstQuestionCompleted,
+    setStepTwoCompleted,
+    setFormCompleted,
+    router,
+  ]);
+
+  useEffect(() => {
+    if (
+      !formCompleted ||
+      !stepOneCompleted ||
+      !stepTwoFirstQuestionCompleted ||
+      !stepTwoCompleted
+    ) {
+      redirectToFirstStep();
+    }
+  }, [
+    formCompleted,
+    stepOneCompleted,
+    stepTwoFirstQuestionCompleted,
+    stepTwoCompleted,
+    redirectToFirstStep,
+  ]);
+
   return (
     <>
       <Box
@@ -117,6 +114,8 @@ const RepairerSuccessRegistration: NextPageWithLayout = () => {
 };
 
 RepairerSuccessRegistration.getLayout = (page) => (
-  <RepairerRegistrationLayout simple={true}>{page}</RepairerRegistrationLayout>
+  <RepairerRegistrationLayout registrationCompleted={true}>
+    {page}
+  </RepairerRegistrationLayout>
 );
 export default RepairerSuccessRegistration;

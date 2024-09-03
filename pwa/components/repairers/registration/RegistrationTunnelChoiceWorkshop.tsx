@@ -16,29 +16,24 @@ import {useRouter} from 'next/router';
 export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
   const router = useRouter();
   const {
-    choiceValue,
     stepOneCompleted,
-    setStepOneCompleted,
+    isMultipleWorkshop,
     setStepTwoFirstQuestionCompleted,
-    setChoiceValue,
-    setChosen,
-    setMultipleWorkShop,
+    setIsMultipleWorkShop,
   } = useContext(RepairerRegistrationContext);
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChoiceValue(event.target.value);
-    handleSetChoice(event.target.value);
-  };
-  const handleSetChoice = (choice: string) => {
-    setChosen(true);
-    choice === 'Oui' ? setMultipleWorkShop(true) : setMultipleWorkShop(false);
+    const choice = event.target.value;
+    choice === 'true'
+      ? setIsMultipleWorkShop(true)
+      : setIsMultipleWorkShop(false);
   };
 
   useEffect(() => {
     if (!stepOneCompleted) {
       router.push('/reparateur/inscription');
     }
-  });
+  }, [router, stepOneCompleted]);
 
   const handleNextStep = () => {
     setStepTwoFirstQuestionCompleted(true);
@@ -46,7 +41,6 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
   };
 
   const handleGoBack = () => {
-    setStepOneCompleted(false);
     router.push('/reparateur/inscription');
   };
 
@@ -73,10 +67,10 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
             <RadioGroup
               aria-labelledby="demo-error-radios"
               name="quiz"
-              value={choiceValue}
+              value={String(isMultipleWorkshop)}
               onChange={handleRadioChange}>
               <FormControlLabel
-                value="Non"
+                value={'false'}
                 control={<Radio />}
                 label="Non"
                 sx={{
@@ -89,7 +83,7 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
                 }}
               />
               <FormControlLabel
-                value="Oui"
+                value={'true'}
                 control={<Radio />}
                 label="Oui"
                 sx={{
@@ -114,10 +108,7 @@ export const RegistrationTunnelChoiceWorkshop = (): JSX.Element => {
         <Button variant="outlined" onClick={handleGoBack}>
           Retour
         </Button>
-        <Button
-          onClick={handleNextStep}
-          variant="contained"
-          disabled={!choiceValue}>
+        <Button onClick={handleNextStep} variant="contained">
           Suivant
         </Button>
       </Box>

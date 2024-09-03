@@ -3,16 +3,8 @@ import {RepairerType} from '@interfaces/RepairerType';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {UserFormContext} from '@contexts/UserFormContext';
 import {RepairerRegistrationContext} from '@contexts/RepairerRegistrationContext';
-import {
-  City,
-  createCitiesWithGouvAPI,
-  createCitiesWithNominatimAPI,
-} from '@interfaces/City';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {bikeTypeResource} from '@resources/bikeTypeResource';
-import {searchCity} from '@utils/apiCity';
-import {City as NominatimCity} from '@interfaces/Nominatim';
-import {City as GouvCity} from '@interfaces/Gouv';
 import {repairerResource} from '@resources/repairerResource';
 import {errorRegex} from '@utils/errorRegex';
 import {
@@ -35,8 +27,6 @@ import {useRouter} from 'next/router';
 import {RepairerCity} from '@interfaces/RepairerCity';
 import {authenticationResource} from '@resources/authenticationResource';
 
-const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
-
 export const RegistrationTunnelValidation = () => {
   const {password} = useContext(UserFormContext);
   const router = useRouter();
@@ -51,7 +41,7 @@ export const RegistrationTunnelValidation = () => {
     comment,
     repairerTypeSelected,
     selectedBikeTypes,
-    multipleWorkshop,
+    isMultipleWorkshop,
     repairerCities,
     hasBoss,
     isRoving,
@@ -74,8 +64,6 @@ export const RegistrationTunnelValidation = () => {
     setComment,
     setSelectedBikeTypes,
   } = useContext(RepairerRegistrationContext);
-  const [cityInput, setCityInput] = useState<string>('');
-  const [citiesList, setCitiesList] = useState<City[]>([]);
 
   const [acceptChart, setAcceptChart] = useState<boolean>(false);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>([]);
@@ -108,28 +96,7 @@ export const RegistrationTunnelValidation = () => {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const fetchCitiesResult = useCallback(
-    async (cityStr: string) => {
-      const citiesResponse = await searchCity(cityStr, useNominatim);
-      const cities: City[] = useNominatim
-        ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[])
-        : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
-      setCitiesList(cities);
-    },
-    [setCitiesList]
-  );
-
-  useEffect(() => {
-    if (cityInput === '' || cityInput.length < 3) {
-      setCitiesList([]);
-    } else fetchCitiesResult(cityInput);
-  }, [setCitiesList, fetchCitiesResult, cityInput]);
-
-  const handleSubmit = async (
-    event?: React.FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    event?.preventDefault();
-
+  const handleSubmit = async (): Promise<void> => {
     if (
       !firstName ||
       !lastName ||
@@ -186,7 +153,7 @@ export const RegistrationTunnelValidation = () => {
           email: email,
           password: password,
         });
-        const response = await repairerResource.post(
+        await repairerResource.post(
           {
             owner: newBoss?.['@id'],
             name: name,
@@ -207,7 +174,9 @@ export const RegistrationTunnelValidation = () => {
 
       setPendingRegistration(false);
 
-      !multipleWorkshop || finish ? handleSuccess() : handleCreateAndContinue();
+      !isMultipleWorkshop || finish
+        ? handleSuccess()
+        : handleCreateAndContinue();
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
       setTimeout(() => {
@@ -220,7 +189,6 @@ export const RegistrationTunnelValidation = () => {
   const handleSuccess = () => {
     setSuccess(true);
     setFormCompleted(true);
-    setSuccess(true);
     router.push('/reparateur/inscription/demande-enregistree');
   };
 
@@ -233,7 +201,6 @@ export const RegistrationTunnelValidation = () => {
     setComment('');
     setSelectedBikeTypes([]);
     setRepairerCities([]);
-    setStepTwoCompleted(false);
     setSuccessMessage('Votre antenne a été créée avec succès');
     router.push('/reparateur/inscription/mon-enseigne');
   };
@@ -248,31 +215,35 @@ export const RegistrationTunnelValidation = () => {
   }, [finish]);
 
   const handleGoBack = () => {
-    setStepTwoCompleted(false);
     router.push('/reparateur/inscription/mon-enseigne');
   };
 
-  useEffect(() => {
-    if (!stepTwoCompleted) {
-      !stepOneCompleted
-        ? redirectToFirstStep()
-        : !stepTwoFirstQuestionCompleted
-          ? redirectToChoiceStep()
-          : handleGoBack();
-    }
-  }, []);
-
-  const redirectToFirstStep = () => {
+  const redirectToFirstStep = useCallback(() => {
     setStepOneCompleted(false);
     setStepTwoFirstQuestionCompleted(false);
     setStepTwoCompleted(false);
     router.push('/reparateur/inscription');
-  };
-  const redirectToChoiceStep = () => {
-    setStepTwoFirstQuestionCompleted(false);
-    setStepTwoCompleted(false);
-    router.push('/reparateur/inscription/choix-antenne');
-  };
+  }, [
+    router,
+    setStepOneCompleted,
+    setStepTwoCompleted,
+    setStepTwoFirstQuestionCompleted,
+  ]);
+
+  useEffect(() => {
+    if (
+      !stepOneCompleted ||
+      !stepTwoFirstQuestionCompleted ||
+      !stepTwoCompleted
+    ) {
+      redirectToFirstStep();
+    }
+  }, [
+    redirectToFirstStep,
+    stepOneCompleted,
+    stepTwoCompleted,
+    stepTwoFirstQuestionCompleted,
+  ]);
 
   return (
     <>
@@ -451,56 +422,31 @@ export const RegistrationTunnelValidation = () => {
           Retour
         </Button>
         <>
-          {multipleWorkshop && (
-            <>
-              <Button
-                disabled={
-                  !firstName ||
-                  !lastName ||
-                  !city ||
-                  !repairerTypeSelected ||
-                  !name ||
-                  !email ||
-                  !password ||
-                  !selectedBikeTypes.length ||
-                  !acceptChart
-                }
-                onClick={() => handleSubmit()}
-                variant="contained"
-                size="large"
-                sx={{mt: 2, mx: 'auto'}}>
-                {!pendingRegistration ? (
-                  'Enregistrer et ajouter une nouvelle antenne'
-                ) : (
-                  <CircularProgress size={20} sx={{color: 'white'}} />
-                )}
-              </Button>
-              <Button
-                disabled={
-                  !firstName ||
-                  !lastName ||
-                  !city ||
-                  !repairerTypeSelected ||
-                  !name ||
-                  !email ||
-                  !password ||
-                  !selectedBikeTypes.length ||
-                  !acceptChart
-                }
-                onClick={() => handleCreateAndFinish()}
-                variant="contained"
-                size="large"
-                sx={{mt: 2, mx: 'auto'}}>
-                {!pendingRegistration ? (
-                  'Enregistrer cette antenne et terminer'
-                ) : (
-                  <CircularProgress size={20} sx={{color: 'white'}} />
-                )}
-              </Button>
-            </>
+          {isMultipleWorkshop && (
+            <Button
+              disabled={
+                !firstName ||
+                !lastName ||
+                !city ||
+                !repairerTypeSelected ||
+                !name ||
+                !email ||
+                !password ||
+                !selectedBikeTypes.length ||
+                !acceptChart
+              }
+              onClick={handleSubmit}
+              variant="contained"
+              size="large"
+              sx={{mt: 2, mx: 'auto'}}>
+              {!pendingRegistration ? (
+                'Enregistrer et ajouter une nouvelle antenne'
+              ) : (
+                <CircularProgress size={20} sx={{color: 'white'}} />
+              )}
+            </Button>
           )}
-        </>
-        {!multipleWorkshop && (
+
           <Button
             disabled={
               !firstName ||
@@ -518,12 +464,16 @@ export const RegistrationTunnelValidation = () => {
             size="large"
             sx={{mt: 2, mx: 'auto'}}>
             {!pendingRegistration ? (
-              'Créer mon compte'
+              isMultipleWorkshop ? (
+                'Enregistrer cette antenne et terminer'
+              ) : (
+                'Créer mon compte'
+              )
             ) : (
               <CircularProgress size={20} sx={{color: 'white'}} />
             )}
           </Button>
-        )}
+        </>
       </Box>
       {errorMessage && (
         <Typography variant="body1" color="error">

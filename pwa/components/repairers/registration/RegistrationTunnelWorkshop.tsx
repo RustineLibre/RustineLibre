@@ -61,13 +61,12 @@ export const RegistrationTunnelWorkshop = ({
     comment,
     repairerTypeSelected,
     selectedBikeTypes,
-    multipleWorkshop,
+    isMultipleWorkshop,
     repairerCities,
     isRoving,
     stepOneCompleted,
     stepTwoFirstQuestionCompleted,
     successMessage,
-    setStepTwoFirstQuestionCompleted,
     setSuccessMessage,
     setIsRoving,
     setStepTwoCompleted,
@@ -126,19 +125,23 @@ export const RegistrationTunnelWorkshop = ({
   useEffect(() => {
     if (cityInput === '' || cityInput.length < 3) {
       setCitiesList([]);
-    } else fetchCitiesResult(cityInput);
+      return;
+    }
+
+    fetchCitiesResult(cityInput);
   }, [setCitiesList, fetchCitiesResult, cityInput]);
 
-  const handleCityChange = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): Promise<void> => {
+  const handleCityChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setCityInput(event.target.value);
   };
 
   const handleItinerantCityChange = (value: string): void => {
     if (value === '' || value.length < 3) {
       setCitiesList([]);
-    } else fetchCitiesResult(value);
+      return;
+    }
+
+    fetchCitiesResult(value);
   };
 
   const handleCitySelect = (
@@ -156,9 +159,11 @@ export const RegistrationTunnelWorkshop = ({
           name: city.name,
           postcode: city.postcode,
         } as RepairerCity);
-      } else {
-        newRepairerCities.push(city as RepairerCity);
+
+        return;
       }
+
+      newRepairerCities.push(city as RepairerCity);
     });
 
     setRepairerCities(newRepairerCities);
@@ -171,14 +176,16 @@ export const RegistrationTunnelWorkshop = ({
   };
 
   const handleChangeStreet = async (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement>
   ): Promise<void> => {
     const adresseSearch = event.target.value;
+
     if (adresseSearch.length >= 3) {
       const streetApiResponse = await searchStreet(adresseSearch, city);
       setStreetList(streetApiResponse);
     }
   };
+
   const handleChangeComments = (event: ChangeEvent<HTMLInputElement>): void => {
     setComment(event.target.value);
   };
@@ -214,7 +221,6 @@ export const RegistrationTunnelWorkshop = ({
   };
 
   const handleGoBack = () => {
-    setStepTwoFirstQuestionCompleted(false);
     router.push('/reparateur/inscription/choix-antenne');
   };
 
@@ -224,15 +230,9 @@ export const RegistrationTunnelWorkshop = ({
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!stepTwoFirstQuestionCompleted) {
-        stepOneCompleted
-          ? router.push('/reparateur/inscription/choix-antenne')
-          : router.push('/reparateur/inscription');
-      }
-    }, 100); // Délai de 100 ms
-
-    return () => clearTimeout(timer);
+    if (!stepOneCompleted || !stepTwoFirstQuestionCompleted) {
+      router.push('/reparateur/inscription');
+    }
   }, [stepTwoFirstQuestionCompleted, stepOneCompleted, router]);
 
   useEffect(() => {
@@ -263,7 +263,7 @@ export const RegistrationTunnelWorkshop = ({
           </Typography>
         </Box>
         <Typography variant="h5" component="label">
-          {!multipleWorkshop
+          {!isMultipleWorkshop
             ? "Informations de l'enseigne"
             : 'Informations des antennes'}
         </Typography>
@@ -300,7 +300,7 @@ export const RegistrationTunnelWorkshop = ({
                 required
                 {...params}
                 value={cityInput}
-                onChange={(e: any) => handleCityChange(e)}
+                onChange={handleCityChange}
               />
             )}
           />
@@ -322,7 +322,7 @@ export const RegistrationTunnelWorkshop = ({
                   label="Rue"
                   {...params}
                   value={street}
-                  onChange={(e) => handleChangeStreet(e)}
+                  onChange={handleChangeStreet}
                 />
               )}
             />

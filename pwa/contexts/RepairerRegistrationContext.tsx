@@ -18,11 +18,9 @@ interface RepairerRegistrationContext {
   comment: string;
   repairerTypeSelected: string[];
   selectedBikeTypes: string[];
-  multipleWorkshop: boolean;
-  chosen: boolean;
+  isMultipleWorkshop: boolean;
   repairerCities: RepairerCity[] | any;
   hasBoss: boolean;
-  choiceValue: string;
   stepOneCompleted: boolean;
   stepTwoFirstQuestionCompleted: boolean;
   stepTwoCompleted: boolean;
@@ -37,11 +35,9 @@ interface RepairerRegistrationContext {
   setStepTwoCompleted: (value: boolean) => void;
   setStepTwoFirstQuestionCompleted: (value: boolean) => void;
   setStepOneCompleted: (value: boolean) => void;
-  setChoiceValue: (value: string) => void;
   setHasBoss: (value: boolean) => void;
   setRepairerCities: (value: RepairerCity[] | any) => void;
-  setChosen: (value: boolean) => void;
-  setMultipleWorkShop: (value: boolean) => void;
+  setIsMultipleWorkShop: (value: boolean) => void;
   setSelectedBikeTypes: (value: string[]) => void;
   setRepairerTypeSelected: (value: string[]) => void;
   setComment: (value: string) => void;
@@ -65,11 +61,9 @@ const initialValue = {
   comment: '',
   repairerTypeSelected: [],
   selectedBikeTypes: [],
-  multipleWorkshop: false,
-  chosen: false,
+  isMultipleWorkshop: false,
   repairerCities: [],
   hasBoss: false,
-  choiceValue: '',
   stepOneCompleted: false,
   stepTwoFirstQuestionCompleted: false,
   stepTwoCompleted: false,
@@ -84,11 +78,9 @@ const initialValue = {
   setStepTwoCompleted: () => null,
   setStepTwoFirstQuestionCompleted: () => null,
   setStepOneCompleted: () => null,
-  setChoiceValue: () => null,
   setHasBoss: () => null,
   setRepairerCities: () => null,
-  setChosen: () => null,
-  setMultipleWorkShop: () => null,
+  setIsMultipleWorkShop: () => null,
   setSelectedBikeTypes: () => null,
   setRepairerTypeSelected: () => null,
   setComment: () => null,
@@ -115,8 +107,7 @@ export const RepairerRegistrationProvider = ({
   const [street, setStreet] = useState<Street | null>(null);
   const [streetNumber, setStreetNumber] = useState<string>('');
   const [comment, setComment] = useState<string>('');
-  const [chosen, setChosen] = useState<boolean>(false);
-  const [multipleWorkshop, setMultipleWorkShop] = useState<boolean>(false);
+  const [isMultipleWorkshop, setIsMultipleWorkShop] = useState<boolean>(false);
   const [repairerTypeSelected, setRepairerTypeSelected] = useState<string[]>(
     []
   );
@@ -125,7 +116,6 @@ export const RepairerRegistrationProvider = ({
     []
   );
   const [hasBoss, setHasBoss] = useState<boolean>(false);
-  const [choiceValue, setChoiceValue] = useState('');
   const [stepOneCompleted, setStepOneCompleted] = useState<boolean>(false);
   const [stepTwoFirstQuestionCompleted, setStepTwoFirstQuestionCompleted] =
     useState<boolean>(false);
@@ -148,11 +138,9 @@ export const RepairerRegistrationProvider = ({
         comment,
         repairerTypeSelected,
         selectedBikeTypes,
-        multipleWorkshop,
-        chosen,
+        isMultipleWorkshop,
         repairerCities,
         hasBoss,
-        choiceValue,
         stepOneCompleted,
         stepTwoFirstQuestionCompleted,
         stepTwoCompleted,
@@ -167,11 +155,9 @@ export const RepairerRegistrationProvider = ({
         setStepTwoCompleted,
         setStepTwoFirstQuestionCompleted,
         setStepOneCompleted,
-        setChoiceValue,
         setHasBoss,
         setRepairerCities,
-        setChosen,
-        setMultipleWorkShop,
+        setIsMultipleWorkShop,
         setRepairerTypeSelected,
         setSelectedBikeTypes,
         setComment,

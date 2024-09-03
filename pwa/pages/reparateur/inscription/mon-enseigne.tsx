@@ -3,8 +3,6 @@ import RepairerRegistrationLayout from '@components/layout/RepairerRegistrationL
 import React, {ReactElement, useEffect, useState} from 'react';
 import {RegistrationTunnelWorkshop} from '@components/repairers/registration/RegistrationTunnelWorkshop';
 import {GetStaticProps} from 'next';
-import {bikeTypeResource} from '@resources/bikeTypeResource';
-import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
 
@@ -14,16 +12,13 @@ type RepairerRegistrationProps = {
 };
 const RepairerWorkshopRegistration: NextPageWithLayout<
   RepairerRegistrationProps
-> = ({bikeTypesFetched = [], repairerTypesFetched = []}) => {
-  return (
-    <>
-      <RegistrationTunnelWorkshop
-        bikeTypesFetched={bikeTypesFetched}
-        repairerTypesFetched={repairerTypesFetched}
-      />
-    </>
-  );
-};
+> = ({bikeTypesFetched = [], repairerTypesFetched = []}) =>
+(
+  <RegistrationTunnelWorkshop
+    bikeTypesFetched={bikeTypesFetched}
+    repairerTypesFetched={repairerTypesFetched}
+  />
+);
 
 /*export const getStaticProps: GetStaticProps = async () => {
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
@@ -41,10 +36,8 @@ const RepairerWorkshopRegistration: NextPageWithLayout<
   };
 };*/
 
-RepairerWorkshopRegistration.getLayout = (page: ReactElement) => {
-  // here the best is to create a RepairerRegistrationLayout and put the context and the text "Devenir réparateur" in it
-  // this way, the context and the text will be shared with all steps pages
-  return <RepairerRegistrationLayout>{page}</RepairerRegistrationLayout>;
-};
+RepairerWorkshopRegistration.getLayout = (page: ReactElement) => (
+  <RepairerRegistrationLayout>{page}</RepairerRegistrationLayout>
+);
 
 export default RepairerWorkshopRegistration;

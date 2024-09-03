@@ -7,12 +7,12 @@ import LetterR from '@components/common/LetterR';
 
 interface RepairerRegistrationLayoutProps {
   children: ReactElement;
-  simple?: boolean;
+  registrationCompleted?: boolean;
 }
 
 const RepairerRegistrationLayout: React.FC<RepairerRegistrationLayoutProps> = ({
   children,
-  simple = false,
+  registrationCompleted = false,
 }) => {
   return (
     <>
@@ -21,7 +21,7 @@ const RepairerRegistrationLayout: React.FC<RepairerRegistrationLayoutProps> = ({
       </Head>
       <WebsiteLayout>
         <RepairerRegistrationProvider>
-          {simple ? (
+          {registrationCompleted ? (
             children
           ) : (
             <>

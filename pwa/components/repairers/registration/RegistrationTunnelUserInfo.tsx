@@ -18,7 +18,7 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
     setLastName,
     setEmail,
   } = useContext(RepairerRegistrationContext);
-  const {password} = useContext(UserFormContext);
+  const {password, passwordError} = useContext(UserFormContext);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [emailHelperText, setEmailHelperText] = useState<string>('');
 
@@ -113,8 +113,15 @@ export const RegistrationTunnelUserInfo = (): JSX.Element => {
         <Button
           variant="contained"
           onClick={() => handleNextStep()}
-          disabled={!firstName || !lastName || !email || !password}>
-          Etape suivante
+          disabled={
+            !firstName ||
+            !lastName ||
+            !email ||
+            !password ||
+            emailError ||
+            passwordError
+          }>
+          Étape suivante
         </Button>
       </Box>
     </>
