@@ -44,7 +44,16 @@ const AppointmentCreateAddPrestation = ({
         id="service-type"
         value={prestation}
         label={isMobile ? 'Prestation' : 'Type de prestation'}
-        onChange={handleChangePrestation}>
+        onChange={handleChangePrestation}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              maxHeight: 150,
+              overflowY: 'auto',
+            },
+          },
+        }}
+        variant={'outlined'}>
         {interventions.map(({id, description}) => {
           return (
             <MenuItem key={id} value={description}>
