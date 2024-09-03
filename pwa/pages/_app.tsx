@@ -1,18 +1,20 @@
 import Layout from '@components/common/Layout';
 import {AppCacheProvider} from '@mui/material-nextjs/v14-pagesRouter';
 import type {AppProps} from 'next/app';
-import type {DehydratedState} from 'react-query';
-import {Suspense} from 'react';
+import {ReactElement, Suspense} from 'react';
 import '../styles/calendar.css';
 import Analytics from '@components/layout/Analytics';
 import {GoogleOAuthProvider} from '@react-oauth/google';
+import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 
-function MyApp({
-  Component,
-  pageProps,
-  ...props
-}: AppProps<{dehydratedState: DehydratedState}>) {
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+function MyApp({Component, pageProps, ...props}: AppPropsWithLayout) {
   const googleClientId = process.env.GOOGLE_CLIENT_ID;
+
+  const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
   return (
     <AppCacheProvider {...props}>
@@ -22,7 +24,7 @@ function MyApp({
           <Analytics />
         </Suspense>
         <Layout dehydratedState={pageProps.dehydratedState}>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </Layout>
       </GoogleOAuthProvider>
     </AppCacheProvider>
