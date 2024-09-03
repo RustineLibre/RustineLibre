@@ -74,6 +74,6 @@ final class CreateUserRepairerDto
     public ?array $bikeTypesSupported = null;
 
     #[Groups([Repairer::REPAIRER_WRITE])]
-    /** @var RepairerCity[] $repairerCities */
+    /** @var RepairerCity[] */
     public array $repairerCities = [];
 }
