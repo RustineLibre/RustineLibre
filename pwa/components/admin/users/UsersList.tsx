@@ -123,7 +123,7 @@ export const UsersList = (): JSX.Element => {
         label="Chercher..."
         value={searchTerm}
         onChange={handleSearchTermChange}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         inputProps={{maxLength: 180}}
         InputProps={{
           endAdornment: (
