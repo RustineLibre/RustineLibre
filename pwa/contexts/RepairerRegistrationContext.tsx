@@ -28,6 +28,8 @@ interface RepairerRegistrationContext {
   isRoving: boolean;
   success: boolean;
   successMessage: string;
+  counter: number;
+  setCounter: (value: number) => void;
   setSuccessMessage: (value: string) => void;
   setSuccess: (value: boolean) => void;
   setIsRoving: (value: boolean) => void;
@@ -71,6 +73,8 @@ const initialValue = {
   isRoving: false,
   success: false,
   successMessage: '',
+  counter: 1,
+  setCounter: () => null,
   setSuccessMessage: () => null,
   setSuccess: () => null,
   setIsRoving: () => null,
@@ -124,6 +128,7 @@ export const RepairerRegistrationProvider = ({
   const [isRoving, setIsRoving] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
+  const [counter, setCounter] = useState<number>(1);
 
   return (
     <RepairerRegistrationContext.Provider
@@ -148,6 +153,8 @@ export const RepairerRegistrationProvider = ({
         isRoving,
         success,
         successMessage,
+        counter,
+        setCounter,
         setSuccessMessage,
         setSuccess,
         setIsRoving,

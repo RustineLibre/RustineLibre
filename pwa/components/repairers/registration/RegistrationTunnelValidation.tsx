@@ -21,7 +21,6 @@ import Link from 'next/link';
 import {User} from '@interfaces/User';
 import Avatar from '@mui/material/Avatar';
 import StorefrontIcon from '@mui/icons-material/Storefront';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import {useRouter} from 'next/router';
 import {RepairerCity} from '@interfaces/RepairerCity';
@@ -48,6 +47,8 @@ export const RegistrationTunnelValidation = () => {
     stepOneCompleted,
     stepTwoFirstQuestionCompleted,
     stepTwoCompleted,
+      counter,
+      setCounter,
     setStepOneCompleted,
     setStepTwoFirstQuestionCompleted,
     setStepTwoCompleted,
@@ -192,6 +193,7 @@ export const RegistrationTunnelValidation = () => {
   };
 
   const handleCreateAndContinue = () => {
+    setCounter(counter + 1);
     setPendingNextStep(true);
     setName('');
     setCity(null);

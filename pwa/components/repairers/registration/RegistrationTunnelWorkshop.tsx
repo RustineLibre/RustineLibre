@@ -61,12 +61,12 @@ export const RegistrationTunnelWorkshop = ({
     comment,
     repairerTypeSelected,
     selectedBikeTypes,
-    isMultipleWorkshop,
     repairerCities,
     isRoving,
     stepOneCompleted,
     stepTwoFirstQuestionCompleted,
     successMessage,
+    counter,
     setSuccessMessage,
     setIsRoving,
     setStepTwoCompleted,
@@ -259,13 +259,11 @@ export const RegistrationTunnelWorkshop = ({
             textAlign="center"
             color="primary.main"
             pb={2}>
-            Mon enseigne
+            {counter <= 1 ? 'Mon enseigne' : `Enseigne ${counter}`}
           </Typography>
         </Box>
         <Typography variant="h5" component="label">
-          {!isMultipleWorkshop
-            ? "Informations de l'enseigne"
-            : 'Informations des antennes'}
+          "Informations de l'enseigne"
         </Typography>
       </Box>
       <>
