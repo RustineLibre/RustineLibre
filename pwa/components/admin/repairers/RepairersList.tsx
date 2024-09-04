@@ -132,11 +132,14 @@ export const RepairersList = (): JSX.Element => {
         label="Chercher..."
         value={searchTerm}
         onChange={handleSearchTermChange}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         inputProps={{maxLength: 180}}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end">
+            <InputAdornment
+              position="end"
+              onClick={fetchRepairers}
+              sx={{cursor: 'pointer'}}>
               <SearchIcon />
             </InputAdornment>
           ),
