@@ -81,13 +81,15 @@ export const UsersList = (): JSX.Element => {
     setLoadingList(false);
   };
 
-  useEffect(() => {
-    fetchUsers();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   useEffect((): void => {
     fetchUsers();
   }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (searchTerm.length >= 2) {
+      fetchUsers();
+    }
+  }, [searchTerm]);
 
   const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);

@@ -63,6 +63,12 @@ export const RepairersList = (): JSX.Element => {
     fetchRepairers();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (searchTerm.length >= 2) {
+      fetchRepairers();
+    }
+  }, [searchTerm]);
+
   useEffect((): void => {
     fetchRepairers();
   }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
