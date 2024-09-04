@@ -76,7 +76,9 @@ const RepairerSuccessRegistration: NextPageWithLayout = () => {
             Votre demande d&apos;inscription a bien été enregistrée. Elle est
             désormais en attente de validation et sera rapidement traitée.
             <Link href="/" legacyBehavior passHref>
-              <Button variant="outlined" sx={{marginTop: '30px', width: '60%', alignSelf: 'center'}}>
+              <Button
+                variant="outlined"
+                sx={{marginTop: '30px', width: '60%', alignSelf: 'center'}}>
                 Retour à l&apos;accueil
               </Button>
             </Link>
