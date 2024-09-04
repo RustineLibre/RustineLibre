@@ -408,6 +408,7 @@ const ModalAppointmentCreate = ({
             </FormControl>
             {customerType === 'customerWithAccount' && (
               <Autocomplete
+                sx={{mt: 1, mb: 1}}
                 disabled={'' !== customerName}
                 freeSolo
                 value={customerInput}
@@ -431,7 +432,7 @@ const ModalAppointmentCreate = ({
             {customerType === 'customerWithoutAccount' && (
               <TextField
                 disabled={null !== selectedCustomer}
-                sx={{width: '100%'}}
+                sx={{width: '100%', mt: 1, mb: 1}}
                 label="Nom / prénom du client"
                 value={customerName}
                 onChange={(e) => handleCustomerName(e)}
