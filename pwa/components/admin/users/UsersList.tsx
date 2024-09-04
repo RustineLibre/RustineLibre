@@ -127,7 +127,10 @@ export const UsersList = (): JSX.Element => {
         inputProps={{maxLength: 180}}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end">
+            <InputAdornment
+              position="end"
+              onClick={fetchUsers}
+              sx={{cursor: 'pointer'}}>
               <SearchIcon />
             </InputAdornment>
           ),
