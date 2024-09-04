@@ -263,7 +263,7 @@ export const RegistrationTunnelWorkshop = ({
           </Typography>
         </Box>
         <Typography variant="h5" component="label">
-          "Informations de l'enseigne"
+          Informations de l&apos;enseigne
         </Typography>
       </Box>
       <>
