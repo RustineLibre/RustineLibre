@@ -293,34 +293,18 @@ export const RegistrationTunnelValidation = () => {
                 <Avatar sx={{bgcolor: 'primary.main', width: 24, height: 24}}>
                   <StorefrontIcon sx={{color: 'white', fontSize: '1rem'}} />
                 </Avatar>
-                <Typography
-                  variant="body1"
-                  component="div"
-                  textTransform="capitalize"
-                  py={1}>
+                <Typography variant="body1" component="div" py={1}>
                   Nom : {name}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  component="div"
-                  textTransform="capitalize"
-                  py={1}>
+                <Typography variant="body1" component="div" py={1}>
                   Adresse : {streetNumber} {street?.name}, {city?.name} (
                   {city?.postcode})
                 </Typography>
-                <Typography
-                  variant="body1"
-                  component="div"
-                  textTransform="capitalize"
-                  py={1}>
+                <Typography variant="body1" component="div" py={1}>
                   Type de réparateur :{' '}
                   {repairerTypeSelected.map((rt) => rt).join(' / ')}
                 </Typography>
-                <Typography
-                  variant="body1"
-                  component="div"
-                  textTransform="capitalize"
-                  py={1}>
+                <Typography variant="body1" component="div" py={1}>
                   Type de vélo : {selectedBikeTypes.map((bt) => bt).join(' / ')}
                 </Typography>
                 {isRoving && (
