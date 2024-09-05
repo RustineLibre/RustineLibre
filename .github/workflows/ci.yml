@@ -7,6 +7,11 @@ on:
       - dev
   pull_request: ~
   workflow_dispatch: ~
+  workflow_call:
+    secrets:
+      domain:
+        description: Main project deploy domain used in URLs
+        required: true
 
 jobs:
   api-ci:
@@ -42,6 +47,20 @@ jobs:
           push: false
           load: true
           tags: caddy
+      - name: Define wa env
+        run: |
+          set -o pipefail
+          if [[ "${{ github.ref }}" == *"tag"* ]]; then
+              URL=${{ secrets.domain }}
+          else
+            if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+                RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+                URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
+            else
+                URL=preprod.${{ secrets.domain }}
+            fi
+          fi
+          echo "NEXT_PUBLIC_ENTRYPOINT=https://${URL}" >> "$GITHUB_ENV"
       - name: pre-build pwa_dev
         uses: docker/build-push-action@v4
         with:
@@ -52,6 +71,8 @@ jobs:
           cache-to: type=gha,mode=max,scope=pwa_dev
           push: false
           load: true
+          build-args: |
+            NEXT_PUBLIC_ENTRYPOINT=${{ env.NEXT_PUBLIC_ENTRYPOINT }}
       - name: pre-build pwa prod
         uses: docker/build-push-action@v4
         with:
@@ -62,6 +83,8 @@ jobs:
           cache-to: type=gha,mode=max,scope=pwa_prod
           push: false
           load: true
+          build-args: |
+            NEXT_PUBLIC_ENTRYPOINT=${{ env.NEXT_PUBLIC_ENTRYPOINT }}
       - name: Start services
         run: docker compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.test.yml up -d
       - name: Wait for services

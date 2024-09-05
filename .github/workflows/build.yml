@@ -7,6 +7,10 @@ on:
         type: string
         description: The Docker Tags (see docker/metadata-action@v4 for available values)
         required: true
+    secrets:
+      domain:
+        description: Main project deploy domain used in URLs
+        required: true
 
 jobs:
   build-push-php:
@@ -71,10 +75,18 @@ jobs:
       run: |       
         set -o pipefail
         if [[ "${{ github.ref }}" == *"tag"* ]]; then
+            URL=${{ secrets.domain }}
             echo "SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
         else
-            echo "SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
+          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+              RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+              URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
+          else
+              URL=preprod.${{ secrets.domain }}
+          fi
+          echo "SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}" >> "$GITHUB_ENV"
         fi
+        echo "NEXT_PUBLIC_ENTRYPOINT=https://${URL}" >> "$GITHUB_ENV"
     - name: Docker metadata
       id: docker-metadata
       uses: docker/metadata-action@v4
@@ -94,6 +106,7 @@ jobs:
         tags: ${{ steps.docker-metadata.outputs.tags }}
         labels: ${{ steps.docker-metadata.outputs.labels }}
         build-args: |
+          NEXT_PUBLIC_ENTRYPOINT=${{ env.NEXT_PUBLIC_ENTRYPOINT }}
           NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${{ env.SITE_KEY }}
           NEXT_PUBLIC_FIREBASE_API_KEY=${{ vars.FB_API_KEY }}
           NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ vars.FB_AUTH_DOMAIN }}

@@ -40,6 +40,8 @@ jobs:
         type=semver,pattern={{version}}
         type=semver,pattern={{major}}.{{minor}}
         type=sha
+    secrets:
+      domain: ${{ secrets.DOMAIN }}
 
   deploy:
     name: Deploy
