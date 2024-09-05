@@ -35,7 +35,7 @@ spec:
           imagePullPolicy: {{ .Values.pwa.image.pullPolicy }}
           env:
             - name: NEXT_PUBLIC_ENTRYPOINT
-              value: https://{{ .Values.pwa.env.NEXT_PUBLIC_ENTRYPOINT }}
+              value: {{ .Values.pwa.env.NEXT_PUBLIC_ENTRYPOINT }}
           ports:
             - name: http
               containerPort: 3000
