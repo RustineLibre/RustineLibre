@@ -201,9 +201,6 @@ jobs:
             --set=php.google-oauth.client="${{ secrets.google-oauth-client }}" \
             --set=php.google-oauth.secret="${{ secrets.google-oauth-secret }}" \
             --set=php.google-oauth.project_id="${{ secrets.google-oauth-project-id }}" \
-            --set=php.google-oauth.cert_path="${{ vars.GOOGLE_AUTH_PROVIDER_CERT_URL }}" \
-            --set=php.google-oauth.token_uri="${{ vars.GOOGLE_TOKEN_URI }}" \
-            --set=php.google-oauth.auth_uri="${{ vars.GOOGLE_AUTH_URI }}" \
             --set=pwa.env.NEXT_PUBLIC_ENTRYPOINT="https://${URL}" \
             --set=postgresql.url="${{ secrets.database-url }}" \
             --values ./helm/chart/values.yml \

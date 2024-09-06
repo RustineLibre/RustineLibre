@@ -51,11 +51,11 @@ php:
     client: ""
     secret: ""
     project_id: ""
-    redirect_uri: ""
-    javascript_origins: ""
-    cert_path: ""
-    token_uri: ""
-    auth_uri: ""
+    redirect_uri: "https://rustinelibre.fr,https://preprod.rustinelibre.fr,http://localhost,https://localhost"
+    javascript_origins: "https://rustinelibre.fr,https://preprod.rustinelibre.fr,http://localhost,https://localhost"
+    cert_path: "https://www.googleapis.com/oauth2/v1/certs"
+    token_uri: "https://oauth2.googleapis.com/token"
+    auth_uri: "https://accounts.google.com/o/oauth2/auth"
 
 
 pwa:
