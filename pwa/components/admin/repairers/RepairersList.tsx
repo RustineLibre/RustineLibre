@@ -60,18 +60,10 @@ export const RepairersList = (): JSX.Element => {
   };
 
   useEffect(() => {
-    fetchRepairers();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (searchTerm.length >= 2) {
+    if (searchTerm.length === 0 || searchTerm.length >= 2) {
       fetchRepairers();
     }
-  }, [searchTerm]);
-
-  useEffect((): void => {
-    fetchRepairers();
-  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchTerm, currentPage]);
 
   const handleDeleteClick = (repairer: Repairer) => {
     setDeleteDialogOpen(true);
