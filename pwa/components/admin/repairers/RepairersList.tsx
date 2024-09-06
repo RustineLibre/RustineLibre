@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import Link from 'next/link';
 import {repairerResource} from '@resources/repairerResource';
 import ConfirmationModal from '@components/common/ConfirmationModal';
@@ -40,7 +40,7 @@ export const RepairersList = (): JSX.Element => {
   const [selectedRepairerToDelete, setSelectedRepairerToDelete] =
     useState<Repairer | null>(null);
 
-  const fetchRepairers = async () => {
+  const fetchRepairers = useCallback(async () => {
     setLoadingList(true);
     let params = {
       page: `${currentPage ?? 1}`,
@@ -57,13 +57,13 @@ export const RepairersList = (): JSX.Element => {
     setRepairers(response['hydra:member']);
     setTotalPages(Math.ceil(response['hydra:totalItems'] / 30));
     setLoadingList(false);
-  };
+  }, [currentPage, searchTerm]);
 
   useEffect(() => {
     if (searchTerm.length === 0 || searchTerm.length >= 2) {
       fetchRepairers();
     }
-  }, [searchTerm, currentPage]);
+  }, [searchTerm, currentPage, fetchRepairers]);
 
   const handleDeleteClick = (repairer: Repairer) => {
     setDeleteDialogOpen(true);
