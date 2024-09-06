@@ -60,12 +60,10 @@ export const RepairersList = (): JSX.Element => {
   };
 
   useEffect(() => {
-    fetchRepairers();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect((): void => {
-    fetchRepairers();
-  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (searchTerm.length === 0 || searchTerm.length >= 2) {
+      fetchRepairers();
+    }
+  }, [searchTerm, currentPage]);
 
   const handleDeleteClick = (repairer: Repairer) => {
     setDeleteDialogOpen(true);
@@ -132,11 +130,14 @@ export const RepairersList = (): JSX.Element => {
         label="Chercher..."
         value={searchTerm}
         onChange={handleSearchTermChange}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         inputProps={{maxLength: 180}}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end">
+            <InputAdornment
+              position="end"
+              onClick={fetchRepairers}
+              sx={{cursor: 'pointer'}}>
               <SearchIcon />
             </InputAdornment>
           ),

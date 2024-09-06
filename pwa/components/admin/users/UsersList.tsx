@@ -82,12 +82,10 @@ export const UsersList = (): JSX.Element => {
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect((): void => {
-    fetchUsers();
-  }, [currentPage]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (searchTerm.length === 0 || searchTerm.length >= 2) {
+      fetchUsers();
+    }
+  }, [searchTerm, currentPage]);
 
   const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
@@ -123,11 +121,14 @@ export const UsersList = (): JSX.Element => {
         label="Chercher..."
         value={searchTerm}
         onChange={handleSearchTermChange}
-        onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyPress}
         inputProps={{maxLength: 180}}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="end">
+            <InputAdornment
+              position="end"
+              onClick={fetchUsers}
+              sx={{cursor: 'pointer'}}>
               <SearchIcon />
             </InputAdornment>
           ),
