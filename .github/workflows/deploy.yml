@@ -201,8 +201,6 @@ jobs:
             --set=php.google-oauth.client="${{ secrets.google-oauth-client }}" \
             --set=php.google-oauth.secret="${{ secrets.google-oauth-secret }}" \
             --set=php.google-oauth.project_id="${{ secrets.google-oauth-project-id }}" \
-            --set=php.google-oauth.redirect_uri="${{ vars.GOOGLE_REDIRECT_URIS }}" \
-            --set=php.google-oauth.javascript_origins="${{ vars.GOOGLE_JAVASCRIPT_ORIGINS }}" \
             --set=php.google-oauth.cert_path="${{ vars.GOOGLE_AUTH_PROVIDER_CERT_URL }}" \
             --set=php.google-oauth.token_uri="${{ vars.GOOGLE_TOKEN_URI }}" \
             --set=php.google-oauth.auth_uri="${{ vars.GOOGLE_AUTH_URI }}" \
@@ -227,3 +225,5 @@ jobs:
               repo: context.repo.repo,
               body: `Chart has been deployed with this url:\n\`\`\`\n${URL}\n\`\`\``
             })
+# --set=php.google-oauth.redirect_uri="${{ vars.GOOGLE_REDIRECT_URIS }}" \
+# --set=php.google-oauth.javascript_origins="${{ vars.GOOGLE_JAVASCRIPT_ORIGINS }}" \
