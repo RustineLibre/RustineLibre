@@ -274,7 +274,7 @@ spec:
                 configMapKeyRef:
                   name: {{ include "rustinelibre.fullname" . }}
                   key: google-oauth-token-uri
-            - name: GOOGLE_CERT_PATH
+            - name: GOOGLE_AUTH_PROVIDER_CERT_URL
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "rustinelibre.fullname" . }}
