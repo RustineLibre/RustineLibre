@@ -222,5 +222,3 @@ jobs:
               repo: context.repo.repo,
               body: `Chart has been deployed with this url:\n\`\`\`\n${URL}\n\`\`\``
             })
-# --set=php.google-oauth.redirect_uri="${{ vars.GOOGLE_REDIRECT_URIS }}" \
-# --set=php.google-oauth.javascript_origins="${{ vars.GOOGLE_JAVASCRIPT_ORIGINS }}" \
