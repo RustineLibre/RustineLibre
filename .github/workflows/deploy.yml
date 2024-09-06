@@ -51,6 +51,12 @@ on:
       storage-bucket:
         description: GCP storage bucket
         required: true
+      google-oauth-client:
+        required: true
+      google-oauth-secret:
+        required: true
+      google-oauth-project-id:
+        required: true
 jobs:
   meta:
     name: Meta
@@ -192,6 +198,14 @@ jobs:
             --set=php.firebase.authProvider="${{ secrets.fb-auth-provider }}" \
             --set=php.firebase.clientCertUrl="${{ secrets.fb-client-cert-url }}" \
             --set=php.firebase.universeDomain="${{ secrets.fb-universe-domain }}" \
+            --set=php.google-oauth.client="${{ secrets.google-oauth-client }}" \
+            --set=php.google-oauth.secret="${{ secrets.google-oauth-secret }}" \
+            --set=php.google-oauth.project_id="${{ secrets.google-oauth-project-id }}" \
+            --set=php.google-oauth.redirect_uri=${{ vars.GOOGLE_REDIRECT_URIS }}\
+            --set=php.google-oauth.javascript_origins=${{ vars.GOOGLE_JAVASCRIPT_ORIGINS }} \
+            --set=php.google-oauth.cert_path=${{ vars.GOOGLE_CERT_PATH }} \
+            --set=php.google-oauth.token_uri=${{ vars.GOOGLE_TOKEN_URI }} \
+            --set=php.google-oauth.auth_uri=${{ vars.GOOGLE_AUTH_URI }} \
             --set=pwa.env.NEXT_PUBLIC_ENTRYPOINT="https://${URL}" \
             --set=postgresql.url="${{ secrets.database-url }}" \
             --values ./helm/chart/values.yml \

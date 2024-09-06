@@ -70,3 +70,6 @@ jobs:
       fb-universe-domain: ${{ secrets.FIREBASE_UNIVERSE_DOMAIN }}
       database-url: ${{ secrets.DATABASE_URL }}
       storage-bucket: ${{ secrets.STORAGE_BUCKET_NAME }}
+      google-oauth-client: ${{ secrets.GOOGLE_OAUTH_CLIENT }}
+      google-oauth-secret: ${{ secrets.GOOGLE_OAUTH_SECRET }}
+      google-oauth-project-id: ${{ secrets.GOOGLE_OAUTH_PROJECT_ID }}

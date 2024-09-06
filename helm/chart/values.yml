@@ -47,6 +47,15 @@ php:
     authProvider: "!ChangeMe!"
     clientCertUrl: "!ChangeMe!"
     universeDomain: "!ChangeMe!"
+  google-oauth:
+    client: ""
+    secret: ""
+    project_id: ""
+    redirect_uri: ""
+    javascript_origins: ""
+    cert_path: ""
+    token_uri: ""
+    auth_uri: ""
 
 
 pwa:
