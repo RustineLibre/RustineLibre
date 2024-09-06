@@ -545,26 +545,26 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
+// export const getStaticProps: GetStaticProps = async () => {
+//   if (!ENTRYPOINT) {
+//     return {
+//       props: {},
+//     };
+//   }
 
-  const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
+//   const bikeTypesCollection = await bikeTypeResource.getAll(false);
+//   const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
-  const repairerTypesCollection = await repairerTypeResource.getAll(false);
-  const repairerTypesFetched = repairerTypesCollection['hydra:member'];
+//   const repairerTypesCollection = await repairerTypeResource.getAll(false);
+//   const repairerTypesFetched = repairerTypesCollection['hydra:member'];
 
-  return {
-    props: {
-      bikeTypesFetched,
-      repairerTypesFetched,
-    },
-    revalidate: 10,
-  };
-};
+//   return {
+//     props: {
+//       bikeTypesFetched,
+//       repairerTypesFetched,
+//     },
+//     revalidate: 10,
+//   };
+// };
 
 export default SearchRepairer;
