@@ -1,3 +1,4 @@
+import {ADMIN_SIDEBAR_WIDTH} from '@constants/ui';
 import * as React from 'react';
 import {useRouter} from 'next/router';
 import {styled, useTheme, Theme, CSSObject} from '@mui/material/styles';
@@ -19,7 +20,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import MessageIcon from '@mui/icons-material/Message';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
+import SidebarListItem from '@components/sidebar/SidebarListItem';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import Link from 'next/link';
 import {useEffect, useState} from 'react';
@@ -28,7 +29,7 @@ import {contactResource} from '@resources/ContactResource';
 import Badge from '@mui/material/Badge';
 import Logo from '@components/common/Logo';
 
-const drawerWidth = 240;
+const drawerWidth = ADMIN_SIDEBAR_WIDTH;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -200,19 +201,19 @@ const AdminLayout = ({children, updateContactUnread}: DashboardLayoutProps) => {
               </DrawerHeader>
               <Divider />
               <List>
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Réparateurs"
                   open={true}
                   icon={<DirectionsBikeIcon />}
                   path="/admin/reparateurs"
                 />
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Utilisateurs"
                   open={true}
                   icon={<AccountCircleIcon />}
                   path="/admin/utilisateurs"
                 />
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Contact"
                   open={true}
                   icon={
@@ -222,13 +223,13 @@ const AdminLayout = ({children, updateContactUnread}: DashboardLayoutProps) => {
                   }
                   path="/admin/contact"
                 />
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Paramètres"
                   open={true}
                   icon={<FolderSharedIcon />}
                   path="/admin/parametres"
                 />
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Profil"
                   open={true}
                   icon={<CompareArrowsIcon />}
@@ -237,7 +238,7 @@ const AdminLayout = ({children, updateContactUnread}: DashboardLayoutProps) => {
               </List>
               <Divider />
               <List>
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Retourner sur le site"
                   open={true}
                   icon={<ArrowBackIcon />}
