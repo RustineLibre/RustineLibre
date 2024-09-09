@@ -219,44 +219,6 @@ export const RegistrationTunnelWorkshop = ({
     }
   }, [lastRepairerCreated]);
 
-  const fetchOldRepairerTypes = async () => {
-    const oldRepairerTypes: RepairerType[] = [];
-    if (lastRepairerCreated?.repairerTypes) {
-      // On itère sur les IRI dans lastRepairerCreated.repairerTypes
-      lastRepairerCreated.repairerTypes.forEach((iri) => {
-        // On trouve le repairerType correspondant dans repairerTypes en comparant les IRI
-        const matchingRepairerType = repairerTypes.find(
-          (repairerType) => repairerType['@id'] === (iri as unknown as string)
-        );
-
-        // Si un repairerType correspondant est trouvé, on l'ajoute à oldRepairerTypes
-        if (matchingRepairerType) {
-          oldRepairerTypes.push(matchingRepairerType);
-        }
-      });
-
-      setRepairerTypeSelected(oldRepairerTypes.map((rt) => rt.name));
-    }
-  };
-
-  console.log(repairerTypeSelected, selectedBikeTypes);
-  const fetchOldBikeTypes = async () => {
-    const oldBikeTypes: BikeType[] = [];
-    if (lastRepairerCreated?.bikeTypesSupported) {
-      lastRepairerCreated.bikeTypesSupported.forEach((iri) => {
-        const matchingBikeType = bikeTypes.find(
-          (bikeType) => bikeType['@id'] === (iri as unknown as string)
-        );
-
-        if (matchingBikeType) {
-          oldBikeTypes.push(matchingBikeType);
-        }
-      });
-
-      setSelectedBikeTypes(oldBikeTypes.map((bt) => bt.name));
-    }
-  };
-
   const handleChangeBikeRepaired = (
     event: SelectChangeEvent<typeof selectedBikeTypes>
   ) => {
@@ -293,25 +255,106 @@ export const RegistrationTunnelWorkshop = ({
       }, 5000);
   });
 
+  const fetchOldRepairerTypes = () => {
+    const oldRepairerTypes: RepairerType[] = [];
+    if (lastRepairerCreated?.repairerTypes) {
+      // On itère sur les IRI dans lastRepairerCreated.repairerTypes
+      lastRepairerCreated.repairerTypes.forEach((iri) => {
+        // On trouve le repairerType correspondant dans repairerTypes en comparant les IRI
+        const matchingRepairerType = repairerTypes.find(
+          (repairerType) => repairerType['@id'] === (iri as unknown as string)
+        );
+
+        // Si un repairerType correspondant est trouvé, on l'ajoute à oldRepairerTypes
+        if (matchingRepairerType) {
+          oldRepairerTypes.push(matchingRepairerType);
+        }
+      });
+
+      setRepairerTypeSelected(oldRepairerTypes.map((rt) => rt.name));
+    }
+  };
+
+  const fetchOldBikeTypes = () => {
+    const oldBikeTypes: BikeType[] = [];
+    if (lastRepairerCreated?.bikeTypesSupported) {
+      lastRepairerCreated.bikeTypesSupported.forEach((iri) => {
+        const matchingBikeType = bikeTypes.find(
+          (bikeType) => bikeType['@id'] === (iri as unknown as string)
+        );
+
+        if (matchingBikeType) {
+          oldBikeTypes.push(matchingBikeType);
+        }
+      });
+
+      setSelectedBikeTypes(oldBikeTypes.map((bt) => bt.name));
+    }
+  };
+
+  const loadCityFromString = async (cityName: string) => {
+    // Vérifie si la ville existe déjà dans citiesList
+    let matchingCity = citiesList.find(
+      (city) => city.name.toLowerCase() === cityName.toLowerCase()
+    );
+
+    // Si la ville n'est pas trouvée dans citiesList, lance une requête pour la rechercher
+    if (!matchingCity && cityName.length >= 3) {
+      const citiesResponse = await searchCity(cityName, useNominatim);
+      const cities: City[] = useNominatim
+        ? createCitiesWithNominatimAPI(citiesResponse as NominatimCity[])
+        : createCitiesWithGouvAPI(citiesResponse as GouvCity[]);
+
+      matchingCity = cities.find(
+        (city) => city.name.toLowerCase() === cityName.toLowerCase()
+      );
+    }
+  };
+
+  const loadStreetFromString = async (streetName: string, city: City) => {
+    let matchingStreet = streetList.find(
+      (street) => street.name.toLowerCase() === streetName.toLowerCase()
+    );
+
+    if (!matchingStreet && streetName.length >= 3 && city) {
+      const streetApiResponse = await searchStreet(streetName, city);
+      const streets = streetApiResponse;
+
+      matchingStreet = streets.find(
+        (street) => street.name.toLowerCase() === streetName.toLowerCase()
+      );
+    }
+    if (matchingStreet) {
+      setStreet(matchingStreet);
+    }
+  };
+
   useEffect(() => {
     if (lastRepairerCreated && fromGoBack) {
       setName(lastRepairerCreated.name);
-      setCity(
+      if (typeof lastRepairerCreated.city === 'string') {
+        loadCityFromString(lastRepairerCreated.city);
+      } else if (lastRepairerCreated.city) {
+        setCity(lastRepairerCreated.city as unknown as City);
+      }
+      if (
+        typeof lastRepairerCreated.street === 'string' &&
         lastRepairerCreated.city
-          ? (lastRepairerCreated.city as unknown as City)
-          : null
-      );
-      setStreet(
-        lastRepairerCreated.street
-          ? (lastRepairerCreated.street as unknown as Street)
-          : null
-      );
+      ) {
+        loadStreetFromString(
+          lastRepairerCreated.street,
+          lastRepairerCreated.city as unknown as City
+        );
+      } else if (lastRepairerCreated.street) {
+        setStreet(lastRepairerCreated.street as unknown as Street);
+      }
       setComment(lastRepairerCreated.comment!);
       setStreetNumber(lastRepairerCreated.streetNumber!);
+
+      fetchOldRepairerTypes();
+      fetchOldBikeTypes();
+      setRepairerCities(lastRepairerCreated?.repairerCities);
     }
-    fetchOldRepairerTypes();
-    fetchOldBikeTypes();
-    setRepairerCities(lastRepairerCreated?.repairerCities);
   }, [
     fromGoBack,
     lastRepairerCreated,
@@ -521,9 +564,9 @@ export const RegistrationTunnelWorkshop = ({
         display="flex"
         mx="auto"
         justifyContent="space-between">
-          <Button variant="outlined" onClick={handleGoBack}>
-            Retour
-          </Button>
+        <Button variant="outlined" onClick={handleGoBack}>
+          Retour
+        </Button>
         <Button
           onClick={handleNextStep}
           variant="contained"

@@ -190,6 +190,7 @@ export const RegistrationTunnelValidation = () => {
     setPendingRegistration(false);
   };
 
+  console.log(lastRepairerCreated);
   const handleSuccess = () => {
     setSuccess(true);
     setFormCompleted(true);
