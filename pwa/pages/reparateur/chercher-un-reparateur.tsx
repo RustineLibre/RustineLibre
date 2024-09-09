@@ -1,5 +1,4 @@
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
-import {ENTRYPOINT} from '@config/entrypoint';
 import React, {
   useState,
   useEffect,
@@ -546,12 +545,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  if (!ENTRYPOINT) {
-    return {
-      props: {},
-    };
-  }
-
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
   const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
