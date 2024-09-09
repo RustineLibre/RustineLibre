@@ -48,6 +48,8 @@ export const RegistrationTunnelValidation = () => {
     stepTwoFirstQuestionCompleted,
     stepTwoCompleted,
     counter,
+    lastRepairerCreated,
+    setLastRepairerCreated,
     setCounter,
     setStepOneCompleted,
     setStepTwoFirstQuestionCompleted,
@@ -148,12 +150,13 @@ export const RegistrationTunnelValidation = () => {
         });
         setNewBoss(response.owner);
         setHasBoss(true);
+        setLastRepairerCreated(response);
       } else {
         const auth = await authenticationResource.authenticate({
           email: email,
           password: password,
         });
-        await repairerResource.post(
+        const response = await repairerResource.post(
           {
             owner: newBoss?.['@id'],
             name: name,
@@ -170,6 +173,7 @@ export const RegistrationTunnelValidation = () => {
           },
           {Authorization: `Bearer ${auth.token}`}
         );
+        setLastRepairerCreated(response);
       }
 
       setPendingRegistration(false);

@@ -2,6 +2,7 @@ import React, {createContext, ReactNode, useState} from 'react';
 import {City} from '@interfaces/City';
 import {Street} from '@interfaces/Street';
 import {RepairerCity} from '@interfaces/RepairerCity';
+import {Repairer} from '@interfaces/Repairer';
 
 interface ProviderProps {
   children: ReactNode;
@@ -29,6 +30,10 @@ interface RepairerRegistrationContext {
   success: boolean;
   successMessage: string;
   counter: number;
+  lastRepairerCreated: Repairer | null;
+  fromGoBack: boolean;
+  setFromGoBack: (value: boolean) => void;
+  setLastRepairerCreated: (value: Repairer | null) => void;
   setCounter: (value: number) => void;
   setSuccessMessage: (value: string) => void;
   setSuccess: (value: boolean) => void;
@@ -74,6 +79,10 @@ const initialValue = {
   success: false,
   successMessage: '',
   counter: 1,
+  lastRepairerCreated: null,
+  fromGoBack: false,
+  setFromGoBack: () => null,
+  setLastRepairerCreated: () => null,
   setCounter: () => null,
   setSuccessMessage: () => null,
   setSuccess: () => null,
@@ -129,6 +138,9 @@ export const RepairerRegistrationProvider = ({
   const [success, setSuccess] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [counter, setCounter] = useState<number>(1);
+  const [lastRepairerCreated, setLastRepairerCreated] =
+    useState<Repairer | null>(null);
+  const [fromGoBack, setFromGoBack] = useState<boolean>(false);
 
   return (
     <RepairerRegistrationContext.Provider
@@ -154,6 +166,10 @@ export const RepairerRegistrationProvider = ({
         success,
         successMessage,
         counter,
+        lastRepairerCreated,
+        fromGoBack,
+        setFromGoBack,
+        setLastRepairerCreated,
         setCounter,
         setSuccessMessage,
         setSuccess,

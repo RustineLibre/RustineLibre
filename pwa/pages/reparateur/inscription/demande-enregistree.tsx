@@ -72,13 +72,11 @@ const RepairerSuccessRegistration: NextPageWithLayout = () => {
             mb: {xs: 10, md: 12},
             mx: 'auto',
           }}>
-          <Box display={'flex'} flexDirection={'column'}>
+          <Box>
             Votre demande d&apos;inscription a bien été enregistrée. Elle est
             désormais en attente de validation et sera rapidement traitée.
             <Link href="/" legacyBehavior passHref>
-              <Button
-                variant="outlined"
-                sx={{marginTop: '30px', width: '60%', alignSelf: 'center'}}>
+              <Button variant="outlined" sx={{marginTop: '30px'}}>
                 Retour à l&apos;accueil
               </Button>
             </Link>

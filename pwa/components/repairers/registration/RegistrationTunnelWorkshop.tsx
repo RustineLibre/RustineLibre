@@ -67,6 +67,9 @@ export const RegistrationTunnelWorkshop = ({
     stepTwoFirstQuestionCompleted,
     successMessage,
     counter,
+    lastRepairerCreated,
+    fromGoBack,
+    setFromGoBack,
     setSuccessMessage,
     setIsRoving,
     setStepTwoCompleted,
@@ -211,6 +214,49 @@ export const RegistrationTunnelWorkshop = ({
     }
   }, [repairerTypeSelected]);
 
+  useEffect(() => {
+    if (lastRepairerCreated) {
+    }
+  }, [lastRepairerCreated]);
+
+  const fetchOldRepairerTypes = async () => {
+    const oldRepairerTypes: RepairerType[] = [];
+    if (lastRepairerCreated?.repairerTypes) {
+      // On itère sur les IRI dans lastRepairerCreated.repairerTypes
+      lastRepairerCreated.repairerTypes.forEach((iri) => {
+        // On trouve le repairerType correspondant dans repairerTypes en comparant les IRI
+        const matchingRepairerType = repairerTypes.find(
+          (repairerType) => repairerType['@id'] === (iri as unknown as string)
+        );
+
+        // Si un repairerType correspondant est trouvé, on l'ajoute à oldRepairerTypes
+        if (matchingRepairerType) {
+          oldRepairerTypes.push(matchingRepairerType);
+        }
+      });
+
+      setRepairerTypeSelected(oldRepairerTypes.map((rt) => rt.name));
+    }
+  };
+
+  console.log(repairerTypeSelected, selectedBikeTypes);
+  const fetchOldBikeTypes = async () => {
+    const oldBikeTypes: BikeType[] = [];
+    if (lastRepairerCreated?.bikeTypesSupported) {
+      lastRepairerCreated.bikeTypesSupported.forEach((iri) => {
+        const matchingBikeType = bikeTypes.find(
+          (bikeType) => bikeType['@id'] === (iri as unknown as string)
+        );
+
+        if (matchingBikeType) {
+          oldBikeTypes.push(matchingBikeType);
+        }
+      });
+
+      setSelectedBikeTypes(oldBikeTypes.map((bt) => bt.name));
+    }
+  };
+
   const handleChangeBikeRepaired = (
     event: SelectChangeEvent<typeof selectedBikeTypes>
   ) => {
@@ -221,6 +267,11 @@ export const RegistrationTunnelWorkshop = ({
   };
 
   const handleGoBack = () => {
+    if (lastRepairerCreated) {
+      setFromGoBack(true);
+      router.push('/reparateur/inscription/validation');
+      return;
+    }
     router.push('/reparateur/inscription/choix-antenne');
   };
 
@@ -241,6 +292,36 @@ export const RegistrationTunnelWorkshop = ({
         setSuccessMessage('');
       }, 5000);
   });
+
+  useEffect(() => {
+    if (lastRepairerCreated && fromGoBack) {
+      setName(lastRepairerCreated.name);
+      setCity(
+        lastRepairerCreated.city
+          ? (lastRepairerCreated.city as unknown as City)
+          : null
+      );
+      setStreet(
+        lastRepairerCreated.street
+          ? (lastRepairerCreated.street as unknown as Street)
+          : null
+      );
+      setComment(lastRepairerCreated.comment!);
+      setStreetNumber(lastRepairerCreated.streetNumber!);
+    }
+    fetchOldRepairerTypes();
+    fetchOldBikeTypes();
+    setRepairerCities(lastRepairerCreated?.repairerCities);
+  }, [
+    fromGoBack,
+    lastRepairerCreated,
+    setCity,
+    setComment,
+    setName,
+    setRepairerCities,
+    setStreet,
+    setStreetNumber,
+  ]);
 
   return (
     <>
@@ -440,9 +521,9 @@ export const RegistrationTunnelWorkshop = ({
         display="flex"
         mx="auto"
         justifyContent="space-between">
-        <Button variant="outlined" onClick={handleGoBack}>
-          Retour
-        </Button>
+          <Button variant="outlined" onClick={handleGoBack}>
+            Retour
+          </Button>
         <Button
           onClick={handleNextStep}
           variant="contained"
