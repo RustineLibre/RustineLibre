@@ -9,8 +9,6 @@ import Grid2 from '@mui/material/Unstable_Grid2';
 import {RepairerCard} from '@components/repairers/RepairerCard';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import router from 'next/router';
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
-import {ENTRYPOINT} from '@config/entrypoint';
 import FullLoading from '@components/common/FullLoading';
 
 const RepairersList: NextPageWithLayout = ({}) => {

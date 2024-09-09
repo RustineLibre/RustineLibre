@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import {useRouter} from 'next/router';
-import {ENTRYPOINT} from '@config/entrypoint';
 import {repairerResource} from '@resources/repairerResource';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import RepairerPresentation from '@components/repairers/RepairerPresentation';
@@ -59,13 +58,6 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-  if (!ENTRYPOINT) {
-    return {
-      notFound: true,
-      revalidate: 0,
-    };
-  }
-
   if (!params) {
     return {
       notFound: true,

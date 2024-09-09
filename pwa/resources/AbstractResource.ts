@@ -258,6 +258,8 @@ export abstract class AbstractResource<T> {
   }
 
   protected async handleResponse(response: Response, withAuth: boolean = true) {
+    console.log('handleResponse');
+    console.log(response);
     if (response.status === 204) {
       return '';
     }
@@ -336,6 +338,8 @@ export abstract class AbstractResource<T> {
       const response = await fetchFunction();
       result = await this.handleResponse(response, withAuth);
     } catch (e) {
+      console.log('getResult');
+      console.log(e);
       if (e !== 'unauthorized') {
         throw e;
       }
