@@ -27,7 +27,7 @@ readonly class NewAppointmentEmail
                 ->subject('Nouvelle demande de RDV')
                 ->html($this->twig->render('mail/new_appointment.html.twig', [
                     'appointment' => $appointment,
-                    'appointmentUrl' => sprintf('%s/sradmin/boutiques/%d?appointment=%d', $this->webAppUrl, $appointment->repairer->id, $appointment->id),
+                    'appointmentUrl' => sprintf('%s/sradmin/boutiques/%d/agenda?selectedDate=%s', $this->webAppUrl, $appointment->repairer->id, $appointment->slotTime->format('YYYY-mm-dd\TH:i:s')),
                     'firstName' => $appointment->customer->firstName,
                     'lastName' => $appointment->customer->lastName,
                 ]));
