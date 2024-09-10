@@ -274,7 +274,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                   Consulter les créneaux
                 </Button>
               )}
-              {tunnelStep == 'placeChoice' && (
+              {tunnelStep === 'placeChoice' && (
                 <Button
                   variant="outlined"
                   size="small"
@@ -331,7 +331,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                     openingHours={openingHours}
                   />
                 )}
-              {user && repairer && tunnelStep == 'placeChoice' && (
+              {user && repairer && tunnelStep === 'placeChoice' && (
                 <AppointmentPlaceChoice
                   confirmAppointmentPlace={confirmAppointmentPlace}
                 />
