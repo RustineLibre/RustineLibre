@@ -36,7 +36,8 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [loadingHours, setLoadingHours] = useState<boolean>(false);
   const [loadingAppointmentCreate, setLoadingAppointmentCreate] =
     useState<boolean>(false);
-  const [hasMultipleRepairerTypes, setHasMultipleRepairerTypes] = useState<boolean>(false);
+  const [hasMultipleRepairerTypes, setHasMultipleRepairerTypes] =
+    useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
