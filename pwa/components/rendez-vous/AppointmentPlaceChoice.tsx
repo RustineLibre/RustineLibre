@@ -13,12 +13,15 @@ import theme from '../../styles/theme';
 
 interface AppointmentPlaceChoiceProps {
   confirmAppointmentPlace: (choice: string) => void;
+    choice: string;
+    setChoice: (choice: string) => void;
 }
 const AppointmentPlaceChoice = ({
   confirmAppointmentPlace,
+                                    choice,
+    setChoice
 }: AppointmentPlaceChoiceProps) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [choice, setChoice] = useState<string>('workshop');
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let radioChoice = event.target.value;

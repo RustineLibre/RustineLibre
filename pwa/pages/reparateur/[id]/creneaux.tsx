@@ -42,6 +42,7 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
   const [address, setAddress] = useState<string>('');
+  const [choice, setChoice] = useState<string>('workshop');
   const {id} = router.query;
   const {user, isLoadingFetchUser} = useAccount({
     redirectIfMailNotConfirm: router.asPath,
@@ -156,6 +157,17 @@ const RepairerSlots: NextPageWithLayout = () => {
       return;
     }
     setTunnelStep('pinMap');
+  };
+
+  const handleGoBack = () => {
+    if (repairer?.optionalPage && repairer.optionalPage !== '') {
+      setTunnelStep('optionalPage');
+      return;
+    } else if (hasMultipleRepairerTypes) {
+      setTunnelStep(choice === 'workshop' ? 'placeChoice' : 'pinMap');
+      return;
+    }
+    setTunnelStep('slots');
   };
 
   const confirmAppointmentRequest = () => {
@@ -304,13 +316,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                   color="secondary"
                   size="small"
                   sx={{alignSelf: 'flex-start'}}
-                  onClick={() =>
-                    setTunnelStep(
-                      repairer?.optionalPage && repairer.optionalPage !== ''
-                        ? 'optionalPage'
-                        : 'slots'
-                    )
-                  }>
+                  onClick={handleGoBack}>
                   Précédent
                 </Button>
               )}
@@ -334,6 +340,8 @@ const RepairerSlots: NextPageWithLayout = () => {
               {user && repairer && tunnelStep === 'placeChoice' && (
                 <AppointmentPlaceChoice
                   confirmAppointmentPlace={confirmAppointmentPlace}
+                  choice={choice}
+                  setChoice={setChoice}
                 />
               )}
               {user && repairer && tunnelStep == 'optionalPage' && (
