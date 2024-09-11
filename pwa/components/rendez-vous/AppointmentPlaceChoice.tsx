@@ -13,13 +13,13 @@ import theme from '../../styles/theme';
 
 interface AppointmentPlaceChoiceProps {
   confirmAppointmentPlace: (choice: string) => void;
-    choice: string;
-    setChoice: (choice: string) => void;
+  choice: string;
+  setChoice: (choice: string) => void;
 }
 const AppointmentPlaceChoice = ({
   confirmAppointmentPlace,
-                                    choice,
-    setChoice
+  choice,
+  setChoice,
 }: AppointmentPlaceChoiceProps) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
