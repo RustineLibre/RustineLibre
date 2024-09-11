@@ -23,6 +23,7 @@ import NotCyclistModal from '@components/rendez-vous/modals/NotCyclistModal';
 import RepairerPresentationCard from '@components/repairers/RepairerPresentationCard';
 import RecapStep from '@components/rendez-vous/RecapStep';
 import OptionalStep from '@components/rendez-vous/OptionalStep';
+import AppointmentPlaceChoice from '@components/rendez-vous/AppointmentPlaceChoice';
 
 const RepairerSlots: NextPageWithLayout = () => {
   const router = useRouter();
@@ -35,10 +36,13 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [loadingHours, setLoadingHours] = useState<boolean>(false);
   const [loadingAppointmentCreate, setLoadingAppointmentCreate] =
     useState<boolean>(false);
+  const [hasMultipleRepairerTypes, setHasMultipleRepairerTypes] =
+    useState<boolean>(false);
   const [repairer, setRepairer] = useState<Repairer | null>(null);
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
   const [address, setAddress] = useState<string>('');
+  const [choice, setChoice] = useState<string>('workshop');
   const {id} = router.query;
   const {user, isLoadingFetchUser} = useAccount({
     redirectIfMailNotConfirm: router.asPath,
@@ -109,7 +113,14 @@ const RepairerSlots: NextPageWithLayout = () => {
 
   const handleSelectSlot = (day: string, time: string): void => {
     setSlotSelected(day + 'T' + time + ':00.000Z');
-    if (repairer && isRepairerItinerant(repairer)) {
+    if (
+      repairer &&
+      repairer.repairerTypes.length > 1 &&
+      isRepairerItinerant(repairer)
+    ) {
+      setHasMultipleRepairerTypes(true);
+      setTunnelStep('placeChoice');
+    } else if (repairer && isRepairerItinerant(repairer)) {
       setTunnelStep('pinMap');
     } else if (repairer?.optionalPage && repairer.optionalPage !== '') {
       setTunnelStep('optionalPage');
@@ -119,7 +130,15 @@ const RepairerSlots: NextPageWithLayout = () => {
   };
 
   const cancelPinMap = () => {
-    setTunnelStep('slots');
+    if (
+      repairer &&
+      repairer.repairerTypes.length > 1 &&
+      isRepairerItinerant(repairer)
+    ) {
+      setTunnelStep('placeChoice');
+    } else {
+      setTunnelStep('slots');
+    }
   };
 
   const confirmPinMap = () => {
@@ -128,6 +147,27 @@ const RepairerSlots: NextPageWithLayout = () => {
     } else {
       setTunnelStep('confirm');
     }
+  };
+
+  const confirmAppointmentPlace = (choice: string) => {
+    if (choice === 'workshop') {
+      repairer?.optionalPage && repairer.optionalPage !== ''
+        ? setTunnelStep('optionalPage')
+        : setTunnelStep('confirm');
+      return;
+    }
+    setTunnelStep('pinMap');
+  };
+
+  const handleGoBack = () => {
+    if (repairer?.optionalPage && repairer.optionalPage !== '') {
+      setTunnelStep('optionalPage');
+      return;
+    } else if (hasMultipleRepairerTypes) {
+      setTunnelStep(choice === 'workshop' ? 'placeChoice' : 'pinMap');
+      return;
+    }
+    setTunnelStep('slots');
   };
 
   const confirmAppointmentRequest = () => {
@@ -246,7 +286,7 @@ const RepairerSlots: NextPageWithLayout = () => {
                   Consulter les créneaux
                 </Button>
               )}
-              {tunnelStep == 'pinMap' && (
+              {tunnelStep === 'placeChoice' && (
                 <Button
                   variant="outlined"
                   size="small"
@@ -256,19 +296,27 @@ const RepairerSlots: NextPageWithLayout = () => {
                   Retour
                 </Button>
               )}
+              {tunnelStep == 'pinMap' && (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  color="secondary"
+                  sx={{alignSelf: 'flex-start'}}
+                  onClick={
+                    hasMultipleRepairerTypes
+                      ? () => setTunnelStep('placeChoice')
+                      : () => setTunnelStep('slots')
+                  }>
+                  Retour
+                </Button>
+              )}
               {tunnelStep == 'confirm' && (
                 <Button
                   variant="outlined"
                   color="secondary"
                   size="small"
                   sx={{alignSelf: 'flex-start'}}
-                  onClick={() =>
-                    setTunnelStep(
-                      repairer?.optionalPage && repairer.optionalPage !== ''
-                        ? 'optionalPage'
-                        : 'slots'
-                    )
-                  }>
+                  onClick={handleGoBack}>
                   Précédent
                 </Button>
               )}
@@ -289,6 +337,13 @@ const RepairerSlots: NextPageWithLayout = () => {
                     openingHours={openingHours}
                   />
                 )}
+              {user && repairer && tunnelStep === 'placeChoice' && (
+                <AppointmentPlaceChoice
+                  confirmAppointmentPlace={confirmAppointmentPlace}
+                  choice={choice}
+                  setChoice={setChoice}
+                />
+              )}
               {user && repairer && tunnelStep == 'optionalPage' && (
                 <OptionalStep
                   optionalPage={repairer.optionalPage}
