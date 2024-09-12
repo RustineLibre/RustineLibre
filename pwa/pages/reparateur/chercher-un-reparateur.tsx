@@ -1,5 +1,4 @@
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
-import {ENTRYPOINT} from '@config/entrypoint';
 import React, {
   useState,
   useEffect,
@@ -8,7 +7,6 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import {GetStaticProps} from 'next';
 import Head from 'next/head';
 import dynamic from 'next/dynamic';
 import useMediaQuery from '@mui/material/useMediaQuery';

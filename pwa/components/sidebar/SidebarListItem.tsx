@@ -11,25 +11,29 @@ import {
 import theme from 'styles/theme';
 import Link from 'next/link';
 
-interface DashboardSidebarListItemProps {
+interface SidebarListItemProps {
   text: string;
   open: boolean;
   icon: any;
   path: string;
 }
 
-const DashboardSidebarListItem = ({
+const SidebarListItem = ({
   text,
   open,
   icon,
   path,
-}: DashboardSidebarListItemProps): JSX.Element => {
+}: SidebarListItemProps): JSX.Element => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
     <>
-      <Link href={path} style={{textDecoration: 'none'}}>
+      <Link
+        href={path}
+        legacyBehavior
+        passHref
+        style={{textDecoration: 'none'}}>
         <ListItem key={text} disablePadding sx={{display: 'block'}}>
           <ListItemButton
             sx={{
@@ -67,4 +71,4 @@ const DashboardSidebarListItem = ({
   );
 };
 
-export default DashboardSidebarListItem;
+export default SidebarListItem;

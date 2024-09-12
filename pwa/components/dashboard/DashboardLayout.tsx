@@ -1,6 +1,10 @@
+import AppBar from '@components/dashboard/appbar/AppBar';
+import {Sidebar, SidebarHeader} from '@components/dashboard/sidebar/Sidebar';
+import SidebarListItemRepairers from '@components/sidebar/SidebarListItemRepairers';
+import {SR_ADMIN_REPAIRER_PAGE} from '@constants/pages';
 import * as React from 'react';
 import {useRouter} from 'next/router';
-import {styled, Theme, CSSObject, useTheme, alpha} from '@mui/material/styles';
+import {useTheme} from '@mui/material/styles';
 import {
   Box,
   Toolbar,
@@ -10,9 +14,7 @@ import {
   Typography,
   Button,
 } from '@mui/material';
-import MuiDrawer from '@mui/material/Drawer';
-import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
-import DashboardSidebarListItem from '@components/dashboard/DashboardSidebarListItem';
+import SidebarListItem from '@components/sidebar/SidebarListItem';
 import HomeIcon from '@mui/icons-material/Home';
 import ForumIcon from '@mui/icons-material/Forum';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -34,162 +36,26 @@ import {discussionResource} from '@resources/discussionResource';
 import Badge from '@mui/material/Badge';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
-import {Repairer} from '@interfaces/Repairer';
-import MenuItem from '@mui/material/MenuItem';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import Menu, {MenuProps} from '@mui/material/Menu';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
-
-const drawerWidth = 240;
-
-const openedMixin = (theme: Theme): CSSObject => ({
-  width: drawerWidth,
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.enteringScreen,
-  }),
-  overflowX: 'hidden',
-});
-
-const closedMixin = (theme: Theme): CSSObject => ({
-  transition: theme.transitions.create('width', {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
-  [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
-  },
-});
-
-const DrawerHeader = styled('div')(({theme}) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-start',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
-interface AppBarProps extends MuiAppBarProps {
-  open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({theme, open}) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({theme, open}) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
-  }),
-}));
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
 }
 
-const StyledMenu = styled((props: MenuProps) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    {...props}
-  />
-))(({theme}) => ({
-  '& .MuiPaper-root': {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    color:
-      theme.palette.mode === 'light'
-        ? 'rgb(55, 65, 81)'
-        : theme.palette.grey[300],
-    boxShadow:
-      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-    '& .MuiMenu-list': {
-      padding: '4px 0',
-    },
-    '& .MuiMenuItem-root': {
-      '& .MuiSvgIcon-root': {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      '&:active': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
-        ),
-      },
-    },
-  },
-}));
-
 const DashboardLayout = ({children}: DashboardLayoutProps) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = !!anchorEl;
-  const openMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const closeMenu = () => {
-    setAnchorEl(null);
-  };
-  const handleClose = (repairer: Repairer | null = null) => {
-    setAnchorEl(null);
-    if (!repairer) {
-      router.push('/sradmin/boutiques');
-      return;
-    }
-
-    router.push(`/sradmin/boutiques/${repairer.id}`);
-  };
-
   const router = useRouter();
   const {repairer} = useContext(DashboardRepairerContext);
-
-  const {user} = useAccount({
-    redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
-  });
-  const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const {logout} = useAuth();
+  const {user} = useAccount({
+    redirectIfNotFound: `/login?next=${encodeURIComponent(router.asPath)}`,
+  });
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
+
+  const isRepairerPage = router.pathname.includes(SR_ADMIN_REPAIRER_PAGE);
+  const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
 
   const subscribeMercureDiscussions = async (): Promise<void> => {
     const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
@@ -294,82 +160,50 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
             </Toolbar>
           </AppBar>
           <Box sx={{display: 'flex'}}>
-            <Drawer variant={'permanent'} open={!isMobile} anchor="left">
-              <DrawerHeader>
+            <Sidebar variant={'permanent'} open={!isMobile} anchor="left">
+              <SidebarHeader>
                 <Link
                   href="/"
                   style={{height: '35px', display: 'block', margin: '0 auto'}}>
                   <Logo inline color="primary" />
                 </Link>
-              </DrawerHeader>
+              </SidebarHeader>
+
               <Divider />
 
-              {isBoss(user) && (
-                <div
-                  style={{
-                    width: '100%',
-                    margin: '20px 0',
-                    textAlign: 'center',
-                  }}>
+              <List>
+                <SidebarListItem
+                  text="Tableau de bord"
+                  open={true}
+                  icon={<HomeIcon />}
+                  path="/sradmin/boutiques"
+                />
+                {user && isBoss(user) && (
                   <>
-                    <Button
-                      onClick={openMenu}
-                      id="repairer-selection-button"
-                      aria-controls={
-                        open ? 'repairer-selection-menu' : undefined
-                      }
-                      aria-haspopup="true"
-                      aria-expanded={open ? 'true' : undefined}
-                      variant="contained"
-                      disableElevation
-                      endIcon={<KeyboardArrowDownIcon />}>
-                      {repairer ? repairer.name : 'Toutes mes boutiques'}
-                    </Button>
-                    <StyledMenu
-                      id="repairer-selection-menu"
-                      MenuListProps={{
-                        'aria-labelledby': 'repairer-selection-button',
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={closeMenu}>
-                      <MenuItem onClick={() => handleClose(null)} disableRipple>
-                        Toutes mes boutiques
-                      </MenuItem>
-                      <Divider />
-                      {user?.repairers.map((repairer) => (
-                        <MenuItem
-                          key={repairer.id}
-                          onClick={() => handleClose(repairer)}
-                          disableRipple>
-                          {repairer.name}
-                        </MenuItem>
-                      ))}
-                    </StyledMenu>
+                    <SidebarListItemRepairers />
+                    {!isRepairerPage && (
+                      <SidebarListItem
+                        text="Employés"
+                        open={true}
+                        icon={<EngineeringIcon />}
+                        path={`/sradmin/boutiques/employes`}
+                      />
+                    )}
                   </>
-                </div>
-              )}
-
-              {(repairer ||
-                (user &&
-                  user.repairerEmployee &&
-                  user.repairerEmployee.repairer)) && (
-                <>
-                  <List>
-                    <DashboardSidebarListItem
-                      text="Tableau de bord"
-                      open={true}
-                      icon={<HomeIcon />}
-                      path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}`}
-                    />
-                    <DashboardSidebarListItem
+                )}
+                {(repairer ||
+                  (user &&
+                    user.repairerEmployee &&
+                    user.repairerEmployee.repairer)) && (
+                  <>
+                    <SidebarListItem
                       text="Agenda"
                       open={true}
                       icon={<CalendarMonthIcon />}
                       path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/agenda`}
                     />
                     {repairer && isRepairerItinerant(repairer) && (
-                      <DashboardSidebarListItem
+                      <SidebarListItem
                         text="Tournée"
                         open={true}
                         icon={<RouteIcon />}
@@ -377,21 +211,21 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                       />
                     )}
                     <Badge badgeContent={unreadMessages} color="primary">
-                      <DashboardSidebarListItem
+                      <SidebarListItem
                         text="Messages"
                         open={true}
                         icon={<ForumIcon />}
                         path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/messagerie`}
                       />
                     </Badge>
-                    <DashboardSidebarListItem
+                    <SidebarListItem
                       text="Clients"
                       open={true}
                       icon={<FolderSharedIcon />}
                       path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/clients`}
                     />
                     {user && isBoss(user) && (
-                      <DashboardSidebarListItem
+                      <SidebarListItem
                         text="Paramètres Agenda"
                         open={true}
                         icon={<HandymanIcon />}
@@ -399,7 +233,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                       />
                     )}
                     {user && isBoss(user) && (
-                      <DashboardSidebarListItem
+                      <SidebarListItem
                         text="Employés"
                         open={true}
                         icon={<EngineeringIcon />}
@@ -407,32 +241,34 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                       />
                     )}
                     {user && isBoss(user) && (
-                      <DashboardSidebarListItem
+                      <SidebarListItem
                         text="Informations"
                         open={true}
                         icon={<InfoIcon />}
                         path={`/sradmin/boutiques/${repairer?.id}/informations`}
                       />
                     )}
-                  </List>
-                </>
-              )}
-              {repairer && <Divider />}
+                  </>
+                )}
+              </List>
+
+              <Divider />
+
               <List>
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Mon compte"
                   open={true}
                   icon={<AccountCircleIcon />}
                   path="/sradmin/mon-compte"
                 />
-                <DashboardSidebarListItem
+                <SidebarListItem
                   text="Retourner sur le site"
                   open={true}
                   icon={<ArrowBackIcon />}
                   path="/"
                 />
               </List>
-            </Drawer>
+            </Sidebar>
             <Box sx={{flexGrow: 1, width: '80%'}} p={3}>
               {children}
             </Box>
