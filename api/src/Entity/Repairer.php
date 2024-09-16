@@ -115,7 +115,7 @@ class Repairer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Appointment::CUSTOMER_APPOINTMENT_COLLECTION_READ, Discussion::DISCUSSION_READ, User::USER_READ, RepairerEmployee::EMPLOYEE_READ])]
     public ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'repairers')]
@@ -135,7 +135,7 @@ class Repairer
         maxMessage: 'repairer.name.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ, RepairerEmployee::EMPLOYEE_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_COLLECTION_READ, Discussion::DISCUSSION_READ, User::USER_READ, RepairerEmployee::EMPLOYEE_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $name = null;
 
     #[Assert\Type('string')]
@@ -150,23 +150,23 @@ class Repairer
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 800, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_COLLECTION_READ, User::USER_READ])]
     public ?string $street = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 30, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_COLLECTION_READ, User::USER_READ])]
     public ?string $streetNumber = null;
 
     #[Assert\NotBlank(message: 'repairer.city.not_blank')]
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_COLLECTION_READ, User::USER_READ])]
     public ?string $city = null;
 
     #[Assert\Type('string')]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_COLLECTION_READ, User::USER_READ])]
     public ?string $postcode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -220,7 +220,7 @@ class Repairer
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     #[ApiProperty(types: ['https://schema.org/image'])]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Discussion::DISCUSSION_READ, User::USER_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_COLLECTION_READ, Discussion::DISCUSSION_READ, User::USER_READ])]
     public ?MediaObject $thumbnail = null;
 
     #[ORM\ManyToOne(targetEntity: MediaObject::class, cascade: ['remove'])]

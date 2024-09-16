@@ -124,7 +124,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'user.email.not_blank')]
     #[Assert\Email(message: 'user.email.valid')]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Repairer::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Repairer::REPAIRER_COLLECTION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -169,7 +169,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'user.lastName.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank(message: 'user.firstName.not_blank')]
@@ -180,7 +180,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'user.firstName.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
@@ -203,7 +203,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $firebaseToken;
 
     #[ORM\Column(length: 20, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
     public ?string $telephone = null;
 
     public function __construct()

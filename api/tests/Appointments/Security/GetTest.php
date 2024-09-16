@@ -9,6 +9,11 @@ use App\Repository\AppointmentRepository;
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class GetTest extends AbstractTestCase
 {
@@ -23,12 +28,71 @@ class GetTest extends AbstractTestCase
         $this->userRepository = self::getContainer()->get(UserRepository::class);
     }
 
-    public function testAdminCanGetAllAppointments(): void
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanGetAllAppointmentsPaginated(): void
     {
-        $response = $this->createClientAuthAsAdmin()->request('GET', '/appointments')->toArray();
+        $response = $this->createClientAuthAsAdmin()->request('GET', '/appointments');
+
         self::assertResponseIsSuccessful();
-        $iris = array_unique(array_map(static fn ($appointment): string => $appointment['@id'], $response['hydra:member']));
-        self::assertGreaterThanOrEqual(2, count($iris));
+        self::assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
+        self::assertJsonContains([
+            '@context' => '/contexts/Appointment',
+            '@id' => '/appointments',
+            '@type' => 'hydra:Collection',
+            'hydra:totalItems' => 90,
+            'hydra:view' => [
+                '@id' => '/appointments?page=1',
+                '@type' => 'hydra:PartialCollectionView',
+                'hydra:first' => '/appointments?page=1',
+                'hydra:last' => '/appointments?page=3',
+                'hydra:next' => '/appointments?page=2',
+            ],
+        ]);
+
+        $response = $response->toArray();
+
+        // ensure that all required properties are returned
+        foreach ($response['hydra:member'] as $item) {
+            self::assertIsArray($item);
+            self::assertArrayHasKey('@id', $item);
+            self::assertArrayHasKey('@type', $item);
+            self::assertArrayHasKey('id', $item);
+            self::assertArrayHasKey('slotTime', $item);
+            self::assertArrayHasKey('createdAt', $item);
+
+            self::assertArrayHasKey('customer', $item);
+            $customer = $item['customer'];
+            self::assertArrayHasKey('@id', $customer);
+            self::assertArrayHasKey('@type', $customer);
+            self::assertArrayHasKey('email', $customer);
+            self::assertArrayHasKey('lastName', $customer);
+            self::assertArrayHasKey('firstName', $customer);
+
+            self::assertArrayHasKey('repairer', $item);
+            $repairer = $item['repairer'];
+            self::assertArrayHasKey('@id', $repairer);
+            self::assertArrayHasKey('@type', $repairer);
+            self::assertArrayHasKey('id', $repairer);
+            self::assertArrayHasKey('name', $repairer);
+
+            if (!isset($item['autoDiagnostic'])) {
+                continue;
+            }
+
+            self::assertArrayHasKey('autoDiagnostic', $item);
+            $autoDiagnostic = $item['autoDiagnostic'];
+            self::assertArrayHasKey('@id', $autoDiagnostic);
+            self::assertArrayHasKey('@type', $autoDiagnostic);
+            self::assertArrayHasKey('prestation', $autoDiagnostic);
+        }
+
+        self::assertCount(30, $response['hydra:member']);
     }
 
     public function testAdminCanGetOneAppointment(): void

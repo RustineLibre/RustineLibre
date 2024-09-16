@@ -30,7 +30,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer.id)"),
-        new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new GetCollection(
+            normalizationContext: ['groups' => [self::ADMIN_APPOINTMENT_COLLECTION_READ]],
+            security: "is_granted('ROLE_ADMIN')",
+        ),
         new Post(
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
             validationContext: ['groups' => ['default']]
@@ -59,7 +62,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ],
     requirements: ['repairer_id' => '\d+'],
-    normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
+    normalizationContext: ['groups' => [self::REPAIRER_APPOINTMENT_COLLECTION_READ]],
     security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
 )]
 #[ApiResource(
@@ -72,7 +75,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
     ],
     requirements: ['customer_id' => '\d+'],
-    normalizationContext: ['groups' => [self::CUSTOMER_APPOINTMENT_READ]],
+    normalizationContext: ['groups' => [self::CUSTOMER_APPOINTMENT_COLLECTION_READ]],
     security: "is_granted('IS_AUTHENTICATED_FULLY') and !user.isBoss() and !user.isEmployee()",
 )]
 #[ApiResource(
@@ -96,8 +99,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Appointment
 {
     public const APPOINTMENT_READ = 'appointment_read';
+    public const ADMIN_APPOINTMENT_COLLECTION_READ = 'admin:appointment_collection_read';
+    public const REPAIRER_APPOINTMENT_COLLECTION_READ = 'repairer:appointment_collection_read';
+    public const CUSTOMER_APPOINTMENT_COLLECTION_READ = 'customer:appointment_collection_read';
+
     public const APPOINTMENT_WRITE = 'appointment_write';
-    public const CUSTOMER_APPOINTMENT_READ = 'customer_appointment_read';
 
     public const PENDING_REPAIRER = 'pending_repairer';
     public const VALIDATED = 'validated';
@@ -108,69 +114,69 @@ class Appointment
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::APPOINTMENT_READ, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?User $customer = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
     public ?string $customerName = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
     #[Assert\NotBlank(message: 'appointment.repairer.not_blank', groups: ['default'])]
     public Repairer $repairer;
 
     #[ORM\OneToOne(mappedBy: 'appointment', cascade: ['persist', 'remove'])]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?AutoDiagnostic $autoDiagnostic = null;
 
     #[ORM\Column]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
     #[Assert\NotBlank(message: 'appointment.slotTime.not_blank', groups: ['default']), Assert\GreaterThan('now', message: 'appointment.slotTime.greater_than', groups: ['default'])]
     public ?\DateTimeImmutable $slotTime = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ])]
     public ?string $status = self::PENDING_REPAIRER;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
     #[BikeOwner]
     public ?Bike $bike = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
     public ?BikeType $bikeType = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
     public ?string $latitude = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
     public ?string $longitude = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ])]
     public ?string $address = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
     public ?string $comment = null;
 
-    #[Groups([self::APPOINTMENT_READ, self::CUSTOMER_APPOINTMENT_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ])]
     public ?Discussion $discussion = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
