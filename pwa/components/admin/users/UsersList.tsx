@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import Link from 'next/link';
 import {userResource} from '@resources/userResource';
 import ConfirmationModal from '@components/common/ConfirmationModal';
@@ -62,7 +62,7 @@ export const UsersList = (): JSX.Element => {
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoadingList(true);
     let params = {
       page: `${currentPage ?? 1}`,
@@ -79,13 +79,13 @@ export const UsersList = (): JSX.Element => {
     setUsers(response['hydra:member']);
     setTotalPages(Math.ceil(response['hydra:totalItems'] / 30));
     setLoadingList(false);
-  };
+  }, [currentPage, searchTerm]);
 
   useEffect(() => {
     if (searchTerm.length === 0 || searchTerm.length >= 2) {
       fetchUsers();
     }
-  }, [searchTerm, currentPage]);
+  }, [searchTerm, currentPage, fetchUsers]);
 
   const handlePageChange = (event: ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
