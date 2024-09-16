@@ -4,6 +4,9 @@ import React, {ReactElement} from 'react';
 import {RegistrationTunnelWorkshop} from '@components/repairers/registration/RegistrationTunnelWorkshop';
 import {BikeType} from '@interfaces/BikeType';
 import {RepairerType} from '@interfaces/RepairerType';
+import {GetStaticProps} from 'next';
+import {bikeTypeResource} from '@resources/bikeTypeResource';
+import {repairerTypeResource} from '@resources/repairerTypeResource';
 
 type RepairerRegistrationProps = {
   bikeTypesFetched: BikeType[];
@@ -18,7 +21,7 @@ const RepairerWorkshopRegistration: NextPageWithLayout<
   />
 );
 
-/*export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
   const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
@@ -32,7 +35,7 @@ const RepairerWorkshopRegistration: NextPageWithLayout<
     },
     revalidate: 10,
   };
-};*/
+};
 
 RepairerWorkshopRegistration.getLayout = (page: ReactElement) => (
   <RepairerRegistrationLayout>{page}</RepairerRegistrationLayout>

@@ -543,7 +543,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   );
 };
 
-/*export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   if (!ENTRYPOINT) {
     return {
       props: {},
@@ -563,6 +563,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     },
     revalidate: 10,
   };
-};*/
+};
 
 export default SearchRepairer;
