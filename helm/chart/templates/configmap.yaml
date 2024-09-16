@@ -19,3 +19,8 @@ data:
   php-storage-endpoint: {{ .Values.php.storage.endpoint | quote }}
   php-storage-region: {{ .Values.php.storage.region | quote }}
   php-storage-use-path-style-endpoint: {{ .Values.php.storage.usePathStyleEndpoint | quote }}
+  google-oauth-redirection-uri: {{ index .Values.php.google.oauth.redirect_uri | quote }}
+  google-oauth-javascript-origins: {{ .Values.php.google.oauth.javascript_origins | quote }}
+  google-oauth-cert-path: {{ .Values.php.google.oauth.cert_path | quote }}
+  google-oauth-token-uri: {{ .Values.php.google.oauth.token_uri | quote }}
+  google-oauth-auth-uri: {{ .Values.php.google.oauth.auth_uri | quote }}

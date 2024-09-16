@@ -248,7 +248,47 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "rustinelibre.fullname" . }}
-                  key: firebase-universe-domain                
+                  key: firebase-universe-domain
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-client
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-secret
+            - name: GOOGLE_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-project-id
+            - name: GOOGLE_AUTH_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-auth-uri
+            - name: GOOGLE_TOKEN_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-token-uri
+            - name: GOOGLE_AUTH_PROVIDER_CERT_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-cert-path
+            - name: GOOGLE_REDIRECT_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-redirection-uri
+            - name: GOOGLE_JAVASCRIPT_ORIGINS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-javascript-origins
           volumeMounts:
             {{- if .Values.php.medias.persistence.enabled }}
             - mountPath: /srv/app/public/media
