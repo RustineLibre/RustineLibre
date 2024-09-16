@@ -27,6 +27,7 @@ class AppointmentRepairerExtensionTest extends AbstractTestCase
 
         self::assertResponseIsSuccessful();
         self::assertGreaterThan(0, count($response['hydra:member']));
+
         foreach ($response['hydra:member'] as $result) {
             self::assertSame(sprintf('/repairers/%d', $appointment->repairer->id), $result['repairer']['@id']);
         }

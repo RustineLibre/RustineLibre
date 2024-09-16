@@ -41,8 +41,9 @@ class GetTest extends AbstractTestCase
 
     public function testCustomerCanGetAllHisAppointments(): void
     {
+        /** @var ?Appointment $appointment */
         $appointment = $this->appointmentRepository->findOneBy([]);
-        $response = $this->createClientWithUser($appointment->customer)->request('GET', '/appointments')->toArray();
+        $response = $this->createClientWithUser($appointment->customer)->request('GET', sprintf('/customers/%s/appointments', $appointment->customer->id))->toArray();
         $customers = array_map(static function ($appointment) {
             return $appointment['customer']['@id'];
         }, $response['hydra:member']);

@@ -51,7 +51,7 @@ class Discussion
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::DISCUSSION_READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::DISCUSSION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ])]
     public ?int $id = null;
 
     #[Assert\NotNull(message: 'discussion.repairer.not_null')]

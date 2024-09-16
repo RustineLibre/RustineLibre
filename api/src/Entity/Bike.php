@@ -42,7 +42,7 @@ class Bike
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::READ, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ])]
     public ?int $id = null;
 
     #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'bikes')]
@@ -51,16 +51,16 @@ class Bike
     public ?User $owner = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ])]
     public ?string $brand = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
-    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ])]
+    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ])]
     public ?BikeType $bikeType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ, Maintenance::READ])]
+    #[Groups([self::READ, self::WRITE, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, Maintenance::READ])]
     public ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

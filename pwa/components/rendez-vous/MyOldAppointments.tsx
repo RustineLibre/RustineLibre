@@ -20,7 +20,7 @@ const MyOldAppointments = ({
 
   const fetchAppointments = async () => {
     setLoading(true);
-    const response = await appointmentResource.getAll(true, {
+    const response = await appointmentResource.getAllByCustomer(currentUser, {
       customer: currentUser.id,
       'order[slotTime]': 'DESC',
       'slotTime[before]': dateObjectAsString(new Date()),

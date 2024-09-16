@@ -109,7 +109,7 @@ class MediaObject
     public ?User $owner = null;
 
     #[ApiProperty(types: ['https://schema.org/contentUrl'])]
-    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Discussion::DISCUSSION_READ, Appointment::APPOINTMENT_READ, AutoDiagnostic::READ, Appointment::APPOINTMENT_READ, User::USER_READ, WebsiteMedia::READ])]
+    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Discussion::DISCUSSION_READ, Appointment::APPOINTMENT_READ, Appointment::CUSTOMER_APPOINTMENT_READ, AutoDiagnostic::READ, User::USER_READ, WebsiteMedia::READ])]
     public ?string $contentUrl = null;
 
     #[Assert\File(maxSize: '5120k', mimeTypes: self::MIME_TYPE_IMAGE_ACCEPTED, maxSizeMessage: 'mediaObject.file.maxSize', mimeTypesMessage: 'mediaObject.file.image.format', groups: [self::MEDIA_OBJECT_CREATE_IMAGE])]
@@ -118,13 +118,13 @@ class MediaObject
     public ?File $file = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Appointment::APPOINTMENT_READ, AutoDiagnostic::READ, Appointment::APPOINTMENT_READ, User::USER_READ, WebsiteMedia::READ])]
+    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Appointment::APPOINTMENT_READ, AutoDiagnostic::READ, User::USER_READ, WebsiteMedia::READ])]
     public ?string $filePath = null;
 
     #[Assert\Choice(choices: ['private', 'public'], message: 'mediaObject.visibility.not_valid')]
     #[Groups([self::MEDIA_OBJECT_CREATE_IMAGE, self::MEDIA_OBJECT_CREATE_FILE])]
     public string $visibility = 'private';
 
-    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, Appointment::APPOINTMENT_READ, AutoDiagnostic::READ, Appointment::APPOINTMENT_READ, User::USER_READ, WebsiteMedia::READ])]
+    #[Groups([self::MEDIA_OBJECT_READ, Repairer::REPAIRER_READ, Repairer::REPAIRER_COLLECTION_READ, Bike::READ, Maintenance::READ, AutoDiagnostic::READ, Appointment::APPOINTMENT_READ, User::USER_READ, WebsiteMedia::READ])]
     public ?bool $viewable = null;
 }

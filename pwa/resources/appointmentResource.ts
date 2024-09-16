@@ -1,3 +1,4 @@
+import {User} from '@interfaces/User';
 import {AbstractResource} from '@resources/AbstractResource';
 import {Appointment} from '@interfaces/Appointment';
 import {
@@ -39,7 +40,27 @@ class AppointmentResource extends AbstractResource<Appointment> {
   ): Promise<Collection<Appointment>> {
     const doFetch = async () => {
       return await fetch(
-        this.getUrl(`/repairers/${repairer.id}/appointments`, params),
+        this.getUrl(`/repairers/${repairer.id}${this.endpoint}`, params),
+        {
+          headers: {
+            ...this.getDefaultHeaders(true),
+            ...headers,
+          },
+        }
+      );
+    };
+
+    return await this.getResult(doFetch, true);
+  }
+
+  async getAllByCustomer(
+    customer: User,
+    params?: RequestParams,
+    headers?: RequestHeaders
+  ): Promise<Collection<Appointment>> {
+    const doFetch = async () => {
+      return await fetch(
+        this.getUrl(`/customers/${customer.id}${this.endpoint}`, params),
         {
           headers: {
             ...this.getDefaultHeaders(true),
