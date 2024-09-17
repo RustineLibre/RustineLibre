@@ -1,3 +1,4 @@
+import {ENTRYPOINT} from '@config/entrypoint';
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
 import RepairerRegistrationLayout from '@components/layout/RepairerRegistrationLayout';
 import React, {ReactElement} from 'react';
@@ -22,6 +23,8 @@ const RepairerWorkshopRegistration: NextPageWithLayout<
 );
 
 export const getStaticProps: GetStaticProps = async () => {
+  console.log('RepairerWorkshopRegistration => getStaticProps');
+  console.log(ENTRYPOINT);
   const bikeTypesCollection = await bikeTypeResource.getAll(false);
   const bikeTypesFetched = bikeTypesCollection['hydra:member'];
 
