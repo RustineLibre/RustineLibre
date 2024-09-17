@@ -1,4 +1,8 @@
 App\Entity\AutoDiagnostic:
-  autoDiagnostic_{1..10}:
+  autoDiagnostic_1:
+    appointment: '@appointment_1'
+    prestation: 'Électrifier mon vélo'
+
+  autoDiagnostic_{2..10}:
     appointment: '@appointment_<current()>'
     prestation: <autoDiagnosticRandomPrestation()>

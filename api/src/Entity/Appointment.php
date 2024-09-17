@@ -20,6 +20,7 @@ use ApiPlatform\OpenApi\Model;
 use App\Appointments\Validator\AppointmentState;
 use App\Bike\Validator\BikeOwner;
 use App\Controller\AppointmentStatusAction;
+use App\Filter\OrSearchFilter;
 use App\Repository\AppointmentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -93,6 +94,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     requirements: ['id' => '\d+'],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['customer' => 'exact', 'repairer' => 'exact', 'status' => 'exact'])]
+#[ApiFilter(OrSearchFilter::class, properties: ['customer.firstName' => 'ipartial', 'customer.lastName' => 'ipartial', 'customer.email' => 'ipartial', 'repairer.name' => 'ipartial', 'autoDiagnostic.prestation' => 'ipartial'])]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'slotTime'], arguments: ['orderParameterName' => 'order'])]
 #[ApiFilter(DateFilter::class, properties: ['slotTime'])]
 #[AppointmentState]
@@ -119,7 +121,7 @@ class Appointment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(onDelete: 'CASCADE')]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?User $customer = null;
 
     #[ORM\Column(nullable: true)]

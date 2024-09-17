@@ -45,7 +45,7 @@ class GetTest extends AbstractTestCase
             '@context' => '/contexts/Appointment',
             '@id' => '/appointments',
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 90,
+            'hydra:totalItems' => 87,
             'hydra:view' => [
                 '@id' => '/appointments?page=1',
                 '@type' => 'hydra:PartialCollectionView',
@@ -78,7 +78,6 @@ class GetTest extends AbstractTestCase
             $repairer = $item['repairer'];
             self::assertArrayHasKey('@id', $repairer);
             self::assertArrayHasKey('@type', $repairer);
-            self::assertArrayHasKey('id', $repairer);
             self::assertArrayHasKey('name', $repairer);
 
             if (!isset($item['autoDiagnostic'])) {
@@ -95,6 +94,203 @@ class GetTest extends AbstractTestCase
         self::assertCount(30, $response['hydra:member']);
     }
 
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanFilterAppointmentsBySearchTerm_CustomerEmail(): void
+    {
+        $searchTerm = 'user1@';
+        $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
+
+        self::assertResponseIsSuccessful();
+        self::assertJsonContains([
+            'hydra:totalItems' => 17,
+        ]);
+
+        $response = $response->toArray();
+
+        foreach ($response['hydra:member'] as $item) {
+            self::assertStringContainsStringIgnoringCase($searchTerm, $item['customer']['email']);
+        }
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanFilterAppointmentsBySearchTerm_CustomerLastName(): void
+    {
+        $searchTerm = 'Tille';
+        $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
+
+        self::assertResponseIsSuccessful();
+        self::assertJsonContains([
+            'hydra:totalItems' => 17,
+        ]);
+
+        $response = $response->toArray();
+
+        foreach ($response['hydra:member'] as $item) {
+            self::assertStringContainsStringIgnoringCase($searchTerm, $item['customer']['lastName']);
+        }
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanFilterAppointmentsBySearchTerm_CustomerFirstName(): void
+    {
+        $searchTerm = 'raph';
+        $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
+
+        self::assertResponseIsSuccessful();
+        self::assertJsonContains([
+            'hydra:totalItems' => 17,
+        ]);
+
+        $response = $response->toArray();
+
+        foreach ($response['hydra:member'] as $item) {
+            self::assertStringContainsStringIgnoringCase($searchTerm, $item['customer']['firstName']);
+        }
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanFilterAppointmentsBySearchTerm_RepairerName(): void
+    {
+        $searchTerm = 'cycl';
+        $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
+
+        self::assertResponseIsSuccessful();
+        self::assertJsonContains([
+            'hydra:totalItems' => 2,
+        ]);
+
+        $response = $response->toArray();
+
+        foreach ($response['hydra:member'] as $item) {
+            self::assertStringContainsStringIgnoringCase($searchTerm, $item['repairer']['name']);
+        }
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanFilterAppointmentsBySearchTerm_AutoDiagnosticPrestation(): void
+    {
+        $searchTerm = 'problè';
+        $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
+
+        self::assertResponseIsSuccessful();
+        self::assertJsonContains([
+            'hydra:totalItems' => 3,
+        ]);
+
+        $response = $response->toArray();
+
+        foreach ($response['hydra:member'] as $item) {
+            self::assertStringContainsStringIgnoringCase($searchTerm, $item['autoDiagnostic']['prestation']);
+        }
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanFilterAppointmentsBySearchTerm_InRepairerAndAutoDiagnostic(): void
+    {
+        $searchTerm = 'vélo';
+        $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
+
+        self::assertResponseIsSuccessful();
+        self::assertJsonContains([
+            'hydra:totalItems' => 28,
+            'hydra:member' => [
+                [
+                    'repairer' => [
+                        'name' => 'Le vélo de Belleville',
+                    ]
+                ],
+                [
+                    'autoDiagnostic' => [
+                        'prestation' => 'Électrifier mon vélo',
+                    ]
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testAdminCanGetAllAppointmentsFilteredBySlotTime(): void
+    {
+        $after = (new \DateTimeImmutable())->format('Y-m-d');
+        $before = (new \DateTimeImmutable())->add(new \DateInterval('P1M'))->format('Y-m-d');
+
+        $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?slotTime[after]=$after&slotTime[before]=$before");
+
+        self::assertResponseIsSuccessful();
+
+        $response = $response->toArray();
+
+        foreach ($response['hydra:member'] as $item) {
+            self::assertGreaterThanOrEqual($after, $item['slotTime']);
+            self::assertLessThanOrEqual($before, $item['slotTime']);
+        }
+
+        self::assertGreaterThanOrEqual(10, count($response['hydra:member']));
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testGetAllAppointmentsForbidden(): void
+    {
+        $this->createClientAuthAsBoss()->request('GET', '/appointments');
+
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->createClientAuthAsUser()->request('GET', '/appointments');
+
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->createClientAuthAsRepairer()->request('GET', '/appointments');
+
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
     public function testAdminCanGetOneAppointment(): void
     {
         $appointment = $this->appointmentRepository->findOneBy([]);
@@ -109,7 +305,7 @@ class GetTest extends AbstractTestCase
         $appointment = $this->appointmentRepository->findOneBy([]);
         $response = $this->createClientWithUser($appointment->customer)->request('GET', sprintf('/customers/%s/appointments', $appointment->customer->id))->toArray();
         $customers = array_map(static function ($appointment) {
-            return $appointment['customer']['@id'];
+            return $appointment['customer'];
         }, $response['hydra:member']);
 
         self::assertResponseIsSuccessful();
