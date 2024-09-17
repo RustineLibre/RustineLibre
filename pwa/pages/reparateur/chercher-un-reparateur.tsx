@@ -1,4 +1,6 @@
+import {ENTRYPOINT} from '@config/entrypoint';
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
+import {GetStaticProps} from 'next';
 import React, {
   useState,
   useEffect,
