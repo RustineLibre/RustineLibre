@@ -422,74 +422,149 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
                       orientation: {xs: 'horizontal', md: 'vertical'},
                     }}
                   />
-                  <Box width={{xs: '100%', md: '50%'}} ref={listContainerRef}>
-                    <Autocomplete
-                      filterOptions={(options) => options}
-                      freeSolo
-                      value={city}
-                      options={citiesList}
-                      getOptionLabel={(city) =>
-                        typeof city === 'string'
-                          ? city
-                          : `${city.name} (${city.postcode})`
-                      }
-                      onChange={(event, value) => setCity(value as City)}
-                      onInputChange={(event, value) => {
-                        setCityInput(value);
-                      }}
-                      renderInput={(params) => (
-                        <TextField
-                          required
-                          label="Ville ou code postal"
-                          {...params}
-                          size="small"
+                  {isMobile ? (
+                    <>
+                      <Box display={'flex'}>
+                        <Box width="80%" ref={listContainerRef}>
+                          <Autocomplete
+                            filterOptions={(options) => options}
+                            freeSolo
+                            value={city}
+                            options={citiesList}
+                            getOptionLabel={(city) =>
+                              typeof city === 'string'
+                                ? city
+                                : `${city.name} (${city.postcode})`
+                            }
+                            onChange={(event, value) => setCity(value as City)}
+                            onInputChange={(event, value) => {
+                              setCityInput(value);
+                            }}
+                            renderInput={(params) => (
+                              <TextField
+                                required
+                                label="Ville ou code postal"
+                                {...params}
+                                size="small"
+                              />
+                            )}
+                          />
+                        </Box>
+                        <Divider
+                          orientation="vertical"
+                          variant="middle"
+                          flexItem
+                          sx={{
+                            mx: 2,
+                            my: 1,
+                            orientation: 'horizontal',
+                          }}
                         />
-                      )}
-                    />
-                  </Box>
-                  <Divider
-                    orientation="vertical"
-                    variant="middle"
-                    flexItem
-                    sx={{
-                      mx: 2,
-                      my: {xs: 1, md: 0},
-                      orientation: {xs: 'horizontal', md: 'vertical'},
-                    }}
-                  />
-                  <Box width={{xs: '100%', md: '50%'}}>
-                    <FormControl required fullWidth size="small">
-                      <InputLabel id="bikeType-label">
-                        Rayon de recherche
-                      </InputLabel>
-                      <Select
-                        label="Rayon de recherche"
-                        value={searchRadius}
-                        onChange={handleRadiusChange}>
-                        <MenuItem disabled value="">
-                          <em>Rayon de recherche</em>
-                        </MenuItem>
-                        <MenuItem key="5000" value="5000">
-                          5 km
-                        </MenuItem>
-                        <MenuItem key="10000" value="10000">
-                          10 km
-                        </MenuItem>
-                        <MenuItem key="15000" value="15000">
-                          15 km
-                        </MenuItem>
-                        <MenuItem key="20000" value="20000">
-                          20 km
-                        </MenuItem>
-                        <MenuItem key="30000" value="30000">
-                          30 km
-                        </MenuItem>
-                        <MenuItem key="40000" value="40000">
-                          40 km
-                        </MenuItem>
-                      </Select>
-                    </FormControl>
-                  </Box>
+                        <Box width="40%">
+                          <FormControl required size="small">
+                            <InputLabel id="radius-label">Rayon</InputLabel>
+                            <Select
+                              label="Rayon"
+                              value={searchRadius}
+                              onChange={handleRadiusChange}>
+                              <MenuItem disabled value="">
+                                <em>Rayon de recherche</em>
+                              </MenuItem>
+                              <MenuItem key="5000" value="5000">
+                                5 km
+                              </MenuItem>
+                              <MenuItem key="10000" value="10000">
+                                10 km
+                              </MenuItem>
+                              <MenuItem key="15000" value="15000">
+                                15 km
+                              </MenuItem>
+                              <MenuItem key="20000" value="20000">
+                                20 km
+                              </MenuItem>
+                              <MenuItem key="30000" value="30000">
+                                30 km
+                              </MenuItem>
+                              <MenuItem key="40000" value="40000">
+                                40 km
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      </Box>
+                    </>
+                  ) : (
+                    <>
+                      <Box width="50%" ref={listContainerRef}>
+                        <Autocomplete
+                          filterOptions={(options) => options}
+                          freeSolo
+                          value={city}
+                          options={citiesList}
+                          getOptionLabel={(city) =>
+                            typeof city === 'string'
+                              ? city
+                              : `${city.name} (${city.postcode})`
+                          }
+                          onChange={(event, value) => setCity(value as City)}
+                          onInputChange={(event, value) => {
+                            setCityInput(value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              required
+                              label="Ville ou code postal"
+                              {...params}
+                              size="small"
+                            />
+                          )}
+                        />
+                      </Box>
+                      <Divider
+                        orientation="vertical"
+                        variant="middle"
+                        flexItem
+                        sx={{
+                          mx: 2,
+                          my: {xs: 1, md: 0},
+                          orientation: 'vertical',
+                        }}
+                      />
+                      <Box width="50%">
+                        <FormControl required fullWidth size="small">
+                          <InputLabel id="radius-label">
+                            Rayon de recherche
+                          </InputLabel>
+                          <Select
+                            label="Rayon de recherche"
+                            value={searchRadius}
+                            onChange={handleRadiusChange}>
+                            <MenuItem disabled value="">
+                              <em>Rayon de recherche</em>
+                            </MenuItem>
+                            <MenuItem key="5000" value="5000">
+                              5 km
+                            </MenuItem>
+                            <MenuItem key="10000" value="10000">
+                              10 km
+                            </MenuItem>
+                            <MenuItem key="15000" value="15000">
+                              15 km
+                            </MenuItem>
+                            <MenuItem key="20000" value="20000">
+                              20 km
+                            </MenuItem>
+                            <MenuItem key="30000" value="30000">
+                              30 km
+                            </MenuItem>
+                            <MenuItem key="40000" value="40000">
+                              40 km
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    </>
+                  )}
                   <Box
                     display={{xs: 'none', md: 'flex'}}
                     alignItems="center"
