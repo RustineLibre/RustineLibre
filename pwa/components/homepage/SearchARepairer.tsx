@@ -38,6 +38,8 @@ import {
 import ModalSearchRepairer from './ModalSearchRepairer';
 import LetterR from '@components/common/LetterR';
 import {formatCityInput} from '@helpers/formatCityInput';
+import {websiteMediaResource} from '@resources/WebsiteMediaResource';
+import {WebsiteMedia} from '@interfaces/WebsiteMedia';
 
 const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
@@ -47,7 +49,9 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [userAction, setUserAction] = useState<boolean>(false);
-  const [homepagePicture, setHomepagePicture] = useState(null);
+  const [homepagePicture, setHomepagePicture] = useState<WebsiteMedia | null>(
+    null
+  );
   const router = useRouter();
 
   const {
@@ -145,6 +149,18 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
     setCity(null);
     setOpenModal(true);
   };
+
+  const fetchPicture = async () => {
+    const response = await websiteMediaResource.getById(
+      'homepage_main_picture'
+    );
+
+    setHomepagePicture(response);
+  };
+
+  useEffect(() => {
+    fetchPicture();
+  }, []);
 
   return (
     <Box
@@ -396,7 +412,11 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
               <Image
                 fill
                 alt=""
-                src="/img/rustine-libre-reparateur.webp"
+                src={
+                  homepagePicture && homepagePicture.media
+                    ? homepagePicture.media.contentUrl
+                    : '/img/rustine-libre-reparateur.webp'
+                }
                 style={{
                   objectFit: 'cover',
                 }}

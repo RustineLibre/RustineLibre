@@ -45,5 +45,4 @@ class WebsiteMedia
     #[ApiProperty(types: ['https://schema.org/image'])]
     #[Groups([self::READ, self::WRITE])]
     public ?MediaObject $media = null;
-
 }

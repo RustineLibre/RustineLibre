@@ -21,28 +21,28 @@ class WebsiteMediaRepository extends ServiceEntityRepository
         parent::__construct($registry, WebsiteMedia::class);
     }
 
-//    /**
-//     * @return WebsiteMedia[] Returns an array of WebsiteMedia objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('w.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return WebsiteMedia[] Returns an array of WebsiteMedia objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('w')
+    //            ->andWhere('w.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('w.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?WebsiteMedia
-//    {
-//        return $this->createQueryBuilder('w')
-//            ->andWhere('w.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?WebsiteMedia
+    //    {
+    //        return $this->createQueryBuilder('w')
+    //            ->andWhere('w.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }
