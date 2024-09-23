@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import router from 'next/router';
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import {LeafletMouseEvent} from 'leaflet';
@@ -8,7 +8,6 @@ import 'leaflet-defaulticon-compatibility';
 import {RepairerCard} from 'components/repairers/RepairerCard';
 import {PopUpRepairerCard} from 'components/repairers/PopUpRepairerCard';
 import Box from '@mui/material/Box';
-import Grid2 from '@mui/material/Unstable_Grid2';
 import {SearchRepairerContext} from '@contexts/SearchRepairerContext';
 import {Repairer} from '@interfaces/Repairer';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -19,14 +18,45 @@ import {Typography} from '@mui/material';
 export const RepairersResults = (): JSX.Element => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const {city, showMap, setSelectedRepairer, repairers} = useContext(
-    SearchRepairerContext
-  );
+  const {city, showMap, setSelectedRepairer, repairers, searchRadius} =
+    useContext(SearchRepairerContext);
 
   const [mapCenter, setMapCenter] = useState<[number, number]>([
     Number(city?.lat),
     Number(city?.lon),
   ]);
+  const [map, setMap] = useState(null);
+
+  useEffect(() => {
+    if (map) {
+      switch (searchRadius) {
+        case '5000':
+          // @ts-ignore
+          map.setZoom(12);
+          return;
+        case '10000':
+          // @ts-ignore
+          map.setZoom(11);
+          return;
+        case '15000':
+          // @ts-ignore
+          map.setZoom(11);
+          return;
+        case '20000':
+          // @ts-ignore
+          map.setZoom(11);
+          return;
+        case '30000':
+          // @ts-ignore
+          map.setZoom(11);
+          return;
+        case '40000':
+          // @ts-ignore
+          map.setZoom(10);
+          return;
+      }
+    }
+  }, [map, searchRadius]);
 
   const handleSelectRepairer = (id: string) => {
     setSelectedRepairer(id);
@@ -97,6 +127,8 @@ export const RepairersResults = (): JSX.Element => {
           <MapContainer
             center={mapCenter}
             zoom={12}
+            // @ts-ignore
+            ref={setMap}
             scrollWheelZoom={false}
             style={{
               zIndex: 1,
