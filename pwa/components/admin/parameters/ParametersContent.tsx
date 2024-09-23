@@ -5,6 +5,7 @@ import ParametersBikeTypes from '@components/admin/parameters/ParametersBikeType
 import ParametersRepairerTypes from '@components/admin/parameters/ParametersRepairerTypes';
 import InterventionsList from '@components/admin/parameters/interventions/InterventionsList';
 import {ParametersHomepagePicture} from '@components/admin/parameters/ParametersHomepagePicture';
+import {HomepagePictureProvider} from '@contexts/HomepagePictureContext';
 
 export const ParametersContent = (): JSX.Element => {
   return (
@@ -20,7 +21,9 @@ export const ParametersContent = (): JSX.Element => {
           <InterventionsList />
         </Grid>
         <Grid item xs={6}>
-          <ParametersHomepagePicture />
+          <HomepagePictureProvider>
+            <ParametersHomepagePicture />
+          </HomepagePictureProvider>
         </Grid>
       </Grid>
     </Box>

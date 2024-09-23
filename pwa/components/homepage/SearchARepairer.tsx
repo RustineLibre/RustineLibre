@@ -47,6 +47,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [userAction, setUserAction] = useState<boolean>(false);
+  const [homepagePicture, setHomepagePicture] = useState(null);
   const router = useRouter();
 
   const {
