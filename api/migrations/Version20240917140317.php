@@ -7,14 +7,11 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
 final class Version20240917140317 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Add table to manage homepage picture';
     }
 
     public function up(Schema $schema): void
