@@ -1,13 +1,11 @@
 import {
   Box,
-  Card,
   CircularProgress,
   Paper,
-  Stack,
   Typography,
 } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {checkFileSize} from '@helpers/checkFileSize';
 import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {errorRegex} from '@utils/errorRegex';

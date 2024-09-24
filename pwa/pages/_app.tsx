@@ -12,8 +12,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function MyApp({Component, pageProps, ...props}: AppPropsWithLayout) {
-  const googleClientId =
-    '821363302500-6nc8cl1jseugkcl1n9lqjv64rueotfad.apps.googleusercontent.com';
+  const googleClientId = process.env.GOOGLE_CLIENT_ID;
 
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
