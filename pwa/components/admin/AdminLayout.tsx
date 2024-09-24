@@ -28,6 +28,7 @@ import {isAdmin} from '@helpers/rolesHelpers';
 import {contactResource} from '@resources/ContactResource';
 import Badge from '@mui/material/Badge';
 import Logo from '@components/common/Logo';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 const drawerWidth = ADMIN_SIDEBAR_WIDTH;
 
@@ -212,6 +213,12 @@ const AdminLayout = ({children, updateContactUnread}: DashboardLayoutProps) => {
                   open={true}
                   icon={<AccountCircleIcon />}
                   path="/admin/utilisateurs"
+                />
+                <SidebarListItem
+                  text="Statistiques"
+                  open={true}
+                  icon={<BarChartIcon />}
+                  path="/admin/statistiques"
                 />
                 <SidebarListItem
                   text="Contact"
