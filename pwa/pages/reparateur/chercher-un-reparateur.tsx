@@ -1,4 +1,6 @@
+import {ENTRYPOINT} from '@config/entrypoint';
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
+import {GetStaticProps} from 'next';
 import React, {
   useState,
   useEffect,
@@ -618,7 +620,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   );
 };
 
-/*export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   if (!ENTRYPOINT) {
     return {
       props: {},
@@ -638,6 +640,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     },
     revalidate: 10,
   };
-};*/
+};
 
 export default SearchRepairer;

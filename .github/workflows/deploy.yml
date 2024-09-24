@@ -201,7 +201,7 @@ jobs:
             --set=php.google.oauth.client="${{ secrets.google-oauth-client }}" \
             --set=php.google.oauth.secret="${{ secrets.google-oauth-secret }}" \
             --set=php.google.oauth.project_id="${{ secrets.google-oauth-project-id }}" \
-            --set=pwa.env.NEXT_PUBLIC_ENTRYPOINT="https://${URL}" \
+            --set=pwa.env.NEXT_PUBLIC_ENTRYPOINT="http://${RELEASE_NAME}-rustinelibre" \
             --set=postgresql.url="${{ secrets.database-url }}" \
             --values ./helm/chart/values.yml \
             --values ./helm/chart/values-${CONTEXT}.yml \
