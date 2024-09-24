@@ -86,16 +86,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     name: 'customers_list',
     provider: CustomersProvider::class,
 )]
-#[GetCollection(
-    uriTemplate: '/export_users_csv',
-    outputFormats: ['csv' => ['text/csv']],
-    openapi: new Model\Operation(
-        summary: 'Export user collection to csv format',
-    ),
-    normalizationContext: [],
-    security: "is_granted('ROLE_ADMIN')",
-    provider: ExportUserCollectionProvider::class
-)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiFilter(UserSearchFilter::class)]

@@ -8,33 +8,33 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\User\Dto\ExportUserDto;
+use App\User\Resource\UserCsv;
 
 /**
- * @template-implements ProviderInterface<ExportUserDto>
+ * @template-implements ProviderInterface<UserCsv>
  */
 final readonly class ExportUserCollectionProvider implements ProviderInterface
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private UserRepository $repository,
     ) {
     }
 
     /**
-     * @return ExportUserDto[]
+     * @return UserCsv[]
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         /** @var array<array-key, User> $collection */
-        $collection = $this->userRepository->findBy([], ['id' => 'DESC']);
+        $collection = $this->repository->findBy([], ['id' => 'DESC']);
 
         return array_map(static function (User $user) {
-            return new ExportUserDto(
+            return new UserCsv(
                 $user->lastName,
                 $user->firstName,
                 $user->email,
                 $user->telephone ?? '',
-                $user->lastConnect ? $user->lastConnect->format('Y-m-d H:i:s') : '',
+                $user->lastConnect,
             );
         }, $collection);
     }

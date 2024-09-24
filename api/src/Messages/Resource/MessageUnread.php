@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Messages\ApiResource;
+namespace App\Messages\Resource;
 
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Link;
 use App\Entity\Discussion;
@@ -13,7 +12,6 @@ use App\Messages\State\NumberOfMessageNotReadForCustomerProvider;
 use App\Messages\State\NumberOfMessageNotReadForDiscussionProvider;
 use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
 
-#[ApiResource]
 #[Get(
     uriTemplate: '/customers/messages_unread',
     security: 'is_granted("IS_AUTHENTICATED_FULLY")',

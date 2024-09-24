@@ -6,6 +6,7 @@ namespace App\Tests\User;
 
 use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -57,13 +58,16 @@ class ExportUsersCsvTest extends AbstractTestCase
     public function testGetCollectionForbidden(): void
     {
         $this->createClientAuthAsBoss(['Accept' => 'text/csv'])->request('GET', self::ENDPOINT);
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->createClientAuthAsUser(['Accept' => 'text/csv'])->request('GET', self::ENDPOINT);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         $this->createClientAuthAsRepairer(['Accept' => 'text/csv'])->request('GET', self::ENDPOINT);
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         $this->createClientWithCredentials([], ['Accept' => 'text/csv'])->request('GET', self::ENDPOINT);
-        self::assertResponseStatusCodeSame(403);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -75,6 +79,6 @@ class ExportUsersCsvTest extends AbstractTestCase
     public function testGetCollectionUnauthorized(): void
     {
         static::createClient([], ['headers' => ['Accept' => 'text/csv']])->request('GET', self::ENDPOINT);
-        self::assertResponseStatusCodeSame(401);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 }

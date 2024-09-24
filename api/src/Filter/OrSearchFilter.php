@@ -117,7 +117,7 @@ final class OrSearchFilter extends AbstractFilter
             'property' => $properties,
             'type' => Type::BUILTIN_TYPE_STRING,
             'required' => false,
-            'description' => "Filter by $properties using Or condition",
+            'description' => "Filter by $properties using OR condition",
             'openapi' => [
                 'example' => '?search=foo',
                 'allowReserved' => false,

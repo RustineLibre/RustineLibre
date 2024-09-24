@@ -21,11 +21,70 @@ class GetTest extends AbstractTestCase
 
     private UserRepository $userRepository;
 
+    private const EXPORT_APPOINTMENTS_CSV_ENDPOINT = '/export_appointments_csv';
+
     public function setUp(): void
     {
         parent::setUp();
         $this->appointmentRepository = self::getContainer()->get(AppointmentRepository::class);
         $this->userRepository = self::getContainer()->get(UserRepository::class);
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testExportCsvAsRoleAdmin(): void
+    {
+        $response = $this->createClientAuthAsAdmin(['Accept' => 'text/csv'])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
+
+        self::assertResponseIsSuccessful();
+        self::assertResponseHeaderSame('content-type', 'text/csv; charset=utf-8');
+
+        $rows = explode(PHP_EOL, $response->getContent());
+
+        $header = str_getcsv($rows[0]);
+        $expectedHeader = ['Nom', 'Prénom', 'Email', 'Tel', 'Date_création_RDV', 'Date_RDV', 'Prestation', 'Enseigne'];
+        $this->assertEquals($expectedHeader, $header);
+
+        $rowsCount = count($rows) - 2; // -1 for header, -1 for last empty line from csv file
+        $appointmentCount = count($this->appointmentRepository->findAll());
+        $this->assertEquals($appointmentCount, $rowsCount);
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testGetCollectionForbidden(): void
+    {
+        $this->createClientAuthAsBoss(['Accept' => 'text/csv'])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->createClientAuthAsUser(['Accept' => 'text/csv'])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->createClientAuthAsRepairer(['Accept' => 'text/csv'])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->createClientWithCredentials([], ['Accept' => 'text/csv'])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    /**
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function testGetCollectionUnauthorized(): void
+    {
+        static::createClient([], ['headers' => ['Accept' => 'text/csv']])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -290,6 +349,8 @@ class GetTest extends AbstractTestCase
 
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
+
+
 
     public function testAdminCanGetOneAppointment(): void
     {

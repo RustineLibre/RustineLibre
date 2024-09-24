@@ -7,7 +7,7 @@ namespace App\Messages\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\User;
-use App\Messages\ApiResource\MessageUnread;
+use App\Messages\Resource\MessageUnread;
 use App\Repository\DiscussionMessageRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;

@@ -1,3 +1,4 @@
+import {getToken} from '@helpers/localHelper';
 import {User} from '@interfaces/User';
 import {AbstractResource} from '@resources/AbstractResource';
 import {Appointment} from '@interfaces/Appointment';
@@ -71,6 +72,18 @@ class AppointmentResource extends AbstractResource<Appointment> {
     };
 
     return await this.getResult(doFetch, true);
+  }
+
+  async exportAppointmentCollectionCsv(): Promise<Response> {
+    const currentToken = getToken();
+
+    return await fetch('/export_appointments_csv', {
+      headers: {
+        'Content-Type': 'text/csv',
+        Authorization: `Bearer ${currentToken}`,
+      },
+      method: 'GET',
+    });
   }
 }
 
