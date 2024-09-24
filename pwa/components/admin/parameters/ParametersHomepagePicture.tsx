@@ -2,7 +2,8 @@ import {
   Box,
   CircularProgress,
   Paper,
-  Typography, useMediaQuery,
+  Typography,
+  useMediaQuery,
 } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import React, {useEffect, useState} from 'react';
@@ -21,7 +22,8 @@ export const ParametersHomepagePicture = (): JSX.Element => {
 
   const fetchPicture = async () => {
     const response = await websiteMediaResource.getById(
-      'homepage_main_picture'
+      'homepage_main_picture',
+      false
     );
     response ? setOldPicture(response) : setOldPicture(null);
   };

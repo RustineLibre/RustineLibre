@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Head from 'next/head';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {useAccount} from '@contexts/AuthContext';
@@ -15,9 +15,18 @@ import Arg3 from '@public/img/arg3.webp';
 import Image from 'next/image';
 import Link from 'next/link';
 import Faq from '@components/homepage/Faq';
+import {GetStaticProps} from 'next';
+import {websiteMediaResource} from '@resources/WebsiteMediaResource';
 
-const Home = () => {
+type homepageProps = {
+  homepagePictureFetched: string;
+};
+
+const Home = ({homepagePictureFetched = ''}) => {
   const {user} = useAccount({redirectIfMailNotConfirm: '/'});
+  const [homepagePicturePath, setHomepagePicturePath] = useState<string>(
+    homepagePictureFetched
+  );
 
   const args = [
     {
@@ -43,7 +52,7 @@ const Home = () => {
         <title> Réparation vélos Lille métropole | Rustine Libre</title>
       </Head>
       <WebsiteLayout>
-        <SearchARepairer />
+        <SearchARepairer homepagePicturePath={homepagePicturePath} />
         <Container>
           <Box
             gap={{xs: 6, md: 8}}
@@ -103,6 +112,25 @@ const Home = () => {
       </WebsiteLayout>
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  const homepagePicture = await websiteMediaResource.getById(
+    'homepage_main_picture',
+    false
+  );
+
+  const homepagePictureFetched =
+    homepagePicture && homepagePicture.media
+      ? homepagePicture.media.contentUrl
+      : '/img/rustine-libre-reparateur.webp';
+
+  return {
+    props: {
+      homepagePictureFetched,
+    },
+    revalidate: 10,
+  };
 };
 
 export default Home;
