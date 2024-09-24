@@ -1,3 +1,4 @@
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import dayjs, {Dayjs} from 'dayjs';
 import 'dayjs/locale/fr';
@@ -21,7 +22,6 @@ import {
   DialogActions,
 } from '@mui/material';
 import {useTheme} from '@mui/material/styles';
-import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import {frFR} from '@mui/x-date-pickers/locales';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';

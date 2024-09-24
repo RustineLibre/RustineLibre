@@ -1,6 +1,11 @@
 import {Appointment} from '@interfaces/Appointment';
 import {Collection} from '@interfaces/Resource';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import {frFR} from '@mui/x-date-pickers/locales';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {appointmentResource} from '@resources/appointmentResource';
+import dayjs from 'dayjs';
 import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import ConfirmationModal from '@components/common/ConfirmationModal';
 import {
@@ -22,7 +27,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import {formatDate} from '@helpers/dateHelper';
+import {formatDate, padNumber} from '@helpers/dateHelper';
 import {downloadFile} from '@utils/downloadFileLink';
 
 export const AppointmentList = (): React.JSX.Element => {
@@ -35,6 +40,12 @@ export const AppointmentList = (): React.JSX.Element => {
   const [removePending, setRemovePending] = useState<boolean>(false);
   const [selectedAppointmentToDelete, setSelectedAppointmentToDelete] =
     useState<Appointment | undefined>(undefined);
+  const [startSlotTimeFilter, setStartSlotTimeFilter] = useState<
+    string | undefined
+  >(undefined);
+  const [endSlotTimeFilter, setEndSlotTimeFilter] = useState<
+    string | undefined
+  >(undefined);
 
   const handleStates = (response: Collection<Appointment>) => {
     setAppointments(response['hydra:member']);
@@ -49,12 +60,20 @@ export const AppointmentList = (): React.JSX.Element => {
       const params = {
         page: `${currentPage ?? 1}`,
         itemsPerPage: 30,
-        'order[id]': 'DESC',
+        'order[slotTime]': 'DESC',
         ...(!!searchTerm && {search: searchTerm, page: 1}),
+        ...(!!startSlotTimeFilter && {
+          'slotTime[after]': startSlotTimeFilter,
+          page: 1,
+        }),
+        ...(!!endSlotTimeFilter && {
+          'slotTime[before]': endSlotTimeFilter,
+          page: 1,
+        }),
       };
 
       return await appointmentResource.getAll(true, params);
-    }, [currentPage, searchTerm]);
+    }, [currentPage, endSlotTimeFilter, searchTerm, startSlotTimeFilter]);
 
   useEffect(() => {
     if (searchTerm.length === 0 || searchTerm.length >= 3) {
@@ -66,14 +85,54 @@ export const AppointmentList = (): React.JSX.Element => {
     setSearchTerm(e.target.value);
   };
 
-  const handleKeyPress = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleSearchTermKeyPress = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (e.key === 'Enter') {
       await fetchAppointments().then(handleStates);
     }
   };
 
-  const handleCLickOnSearch = async () =>
+  const handleSearchTermCLickOnSearchIcon = async () =>
     await fetchAppointments().then(handleStates);
+
+  const handleDatePickerFilter = (
+    newValue: dayjs.Dayjs | null,
+    startSlotTime: boolean = true
+  ) => {
+    if (newValue && newValue.year() && newValue.month() && newValue.date()) {
+      const month = padNumber(newValue.month() + 1);
+      const day = padNumber(newValue.date());
+      const newDate = `${newValue.year()}-${month}-${day}`;
+
+      if (startSlotTime) {
+        if (endSlotTimeFilter && dayjs(startSlotTimeFilter) > dayjs(newDate)) {
+          return;
+        }
+
+        setStartSlotTimeFilter(newDate);
+
+        return;
+      }
+
+      setEndSlotTimeFilter(newDate);
+    }
+
+    if (
+      !newValue ||
+      isNaN(newValue.year()) ||
+      isNaN(newValue.month()) ||
+      isNaN(newValue.date())
+    ) {
+      if (startSlotTime) {
+        setStartSlotTimeFilter(undefined);
+
+        return;
+      }
+
+      setEndSlotTimeFilter(undefined);
+    }
+  };
 
   const downloadCsv = async () =>
     await appointmentResource
@@ -111,27 +170,82 @@ export const AppointmentList = (): React.JSX.Element => {
 
   return (
     <Box>
-      <TextField
-        label="Chercher..."
-        value={searchTerm}
-        onChange={handleSearchTermChange}
-        onKeyDown={handleKeyPress}
-        inputProps={{maxLength: 180}}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment
-              position="end"
-              onClick={handleCLickOnSearch}
-              sx={{cursor: 'pointer'}}>
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-      />
-      <Button onClick={downloadCsv} variant="contained" sx={{float: 'right'}}>
-        Télécharger au format CSV
-      </Button>
-      <TableContainer elevation={4} component={Paper} sx={{marginTop: '10px'}}>
+      {/* Filters */}
+      <Box sx={{display: 'flex'}}>
+        <Box>
+          <TextField
+            label="Chercher..."
+            value={searchTerm}
+            onChange={handleSearchTermChange}
+            onKeyDown={handleSearchTermKeyPress}
+            inputProps={{maxLength: 180}}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment
+                  position="end"
+                  onClick={handleSearchTermCLickOnSearchIcon}
+                  sx={{cursor: 'pointer'}}>
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
+        <Box sx={{marginLeft: 'auto'}}>
+          <LocalizationProvider
+            localeText={
+              frFR.components.MuiLocalizationProvider.defaultProps.localeText
+            }
+            adapterLocale="fr"
+            dateAdapter={AdapterDayjs}>
+            <Box
+              sx={{
+                display: 'flex',
+              }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row-reverse',
+                  marginRight: '3.5rem',
+                  gap: 1,
+                }}>
+                <DatePicker
+                  minDate={dayjs(startSlotTimeFilter)}
+                  slotProps={{
+                    textField: {
+                      size: 'small',
+                    },
+                  }}
+                  label="Date de fin"
+                  format="DD-MM-YYYY"
+                  onChange={(newValue) =>
+                    handleDatePickerFilter(newValue, false)
+                  }
+                />
+                <Box component="span" sx={{alignSelf: 'center'}}>
+                  -
+                </Box>
+                <DatePicker
+                  {...(!!endSlotTimeFilter && {
+                    maxDate: dayjs(endSlotTimeFilter),
+                  })}
+                  slotProps={{textField: {size: 'small'}}}
+                  label="Date de début"
+                  sx={{width: '40%'}}
+                  format="DD-MM-YYYY"
+                  onChange={(newValue) => handleDatePickerFilter(newValue)}
+                />
+              </Box>
+              <Button onClick={downloadCsv} variant="contained">
+                Télécharger au format CSV
+              </Button>
+            </Box>
+          </LocalizationProvider>
+        </Box>
+      </Box>
+
+      {/* Table */}
+      <TableContainer elevation={2} component={Paper} sx={{marginTop: '2rem'}}>
         <Table aria-label="appointments">
           <TableHead
             sx={{
