@@ -52,6 +52,7 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {Repairer} from '@interfaces/Repairer';
 import ConfirmationReloadDialog from '@components/common/ConfirmationReloadDialog';
+import {usePrevious} from 'ra-core';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -218,6 +219,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       repairerTypes,
       isLoading,
       searchRadius,
+      setCurrentPage,
     ]
   );
 

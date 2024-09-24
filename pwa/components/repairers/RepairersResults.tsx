@@ -58,6 +58,13 @@ export const RepairersResults = (): JSX.Element => {
     }
   }, [map, searchRadius]);
 
+  useEffect(() => {
+    if (map) {
+      // @ts-ignore
+      map.setView([Number(city?.lat), Number(city?.lon)]);
+    }
+  }, [city?.lat, city?.lon, map]);
+
   const handleSelectRepairer = (id: string) => {
     setSelectedRepairer(id);
     document.getElementById(id)?.scrollIntoView({behavior: 'smooth'});
