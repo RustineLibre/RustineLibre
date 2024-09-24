@@ -2,7 +2,7 @@ import {
   Box,
   CircularProgress,
   Paper,
-  Typography,
+  Typography, useMediaQuery,
 } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import React, {useEffect, useState} from 'react';
@@ -11,8 +11,10 @@ import {mediaObjectResource} from '@resources/mediaObjectResource';
 import {errorRegex} from '@utils/errorRegex';
 import {websiteMediaResource} from '@resources/WebsiteMediaResource';
 import {WebsiteMedia} from '@interfaces/WebsiteMedia';
+import theme from '../../../styles/theme';
 
 export const ParametersHomepagePicture = (): JSX.Element => {
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [loadingPhoto, setLoadingPhoto] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [oldPicture, setOldPicture] = useState<WebsiteMedia | null>(null);
@@ -116,7 +118,7 @@ export const ParametersHomepagePicture = (): JSX.Element => {
                 flexDirection="column"
                 alignItems="center"
                 marginBottom={'30px'}
-                width={'30%'}>
+                width={isMobile ? '80%' : '30%'}>
                 <Typography component="p" sx={{mt: 2}} alignContent={'center'}>
                   Sélectionner la photo
                 </Typography>
@@ -134,7 +136,7 @@ export const ParametersHomepagePicture = (): JSX.Element => {
                   style={{
                     cursor: 'pointer',
                     display: 'block',
-                    maxWidth: '400px',
+                    maxWidth: isMobile ? '200px' : '400px',
                   }}
                 />
               </Box>

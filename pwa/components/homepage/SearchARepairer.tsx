@@ -155,7 +155,7 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
       'homepage_main_picture'
     );
 
-    setHomepagePicture(response);
+    response ? setHomepagePicture(response) : setHomepagePicture(null);
   };
 
   useEffect(() => {
