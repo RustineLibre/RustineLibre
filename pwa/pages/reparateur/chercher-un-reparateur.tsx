@@ -99,6 +99,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setTotalItems,
   } = useContext(SearchRepairerContext);
 
+  const prevCurrentPage = usePrevious({currentPage});
+
   const fetchBikeTypes = async () => {
     const responseBikeTypes = await bikeTypeResource.getAll(false);
     setBikeTypes(responseBikeTypes['hydra:member']);
@@ -133,7 +135,10 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   };
 
   const fetchRepairers = useCallback(
-    async (searchRadiusSelected: string | null = null): Promise<void> => {
+    async (
+      page: number = currentPage,
+      searchRadiusSelected: string | null = null
+    ): Promise<void> => {
       if (!selectedBike || !city || isLoading) {
         return;
       }
@@ -200,7 +205,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 
       const response = await repairerResource.getAll(false, params);
       setAllRepairers(response['hydra:member']);
-      setRepairers(getItemsByPage(response['hydra:member'], currentPage));
+      setRepairers(getItemsByPage(response['hydra:member'], page));
       setTotalItems(response['hydra:totalItems']);
       setPendingSearchCity(false);
       setAlreadyFetchApi(true);
@@ -224,30 +229,45 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
   );
 
   useEffect(() => {
-    if (isMobile && city && selectedBike && searchRadius) {
-      fetchRepairers();
+    if (city && selectedBike && searchRadius) {
+      // @ts-ignore
+      if (prevCurrentPage && prevCurrentPage.currentPage !== currentPage) {
+        fetchRepairers();
+        return;
+      }
+      setCurrentPage(1);
+      fetchRepairers(1);
     }
-  }, [city, isMobile, selectedBike]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [city, isMobile, selectedBike, orderBy, repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    setIsLoading(false);
+    if (orderBy) {
+      // @ts-ignore
+      if (prevCurrentPage && prevCurrentPage.currentPage !== currentPage) {
+        fetchRepairers();
+        return;
+      }
+      setCurrentPage(1);
+      fetchRepairers(1);
+    }
+  }, [orderBy]);
+
+  useEffect(() => {
+    setIsLoading(false);
+    // @ts-ignore
+    if (prevCurrentPage && prevCurrentPage.currentPage !== currentPage) {
+      fetchRepairers();
+      return;
+    }
+    setCurrentPage(1);
+    fetchRepairers(1);
+  }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect((): void => {
     setRepairers(getItemsByPage(allRepairers, currentPage));
     scrollToTop();
   }, [currentPage, setCurrentPage]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (city && selectedBike && searchRadius) {
-      fetchRepairers(searchRadius);
-    }
-  }, [
-    searchRadius,
-    city,
-    fetchRepairers,
-    selectedBike,
-    setCity,
-    setSearchRadius,
-    setCityInput,
-    setSelectedBike,
-  ]);
 
   const fetchCitiesResult = useCallback(
     async (cityStr: string) => {
@@ -288,7 +308,8 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       return;
     }
 
-    await fetchRepairers(searchRadius);
+    setCurrentPage(1);
+    await fetchRepairers(1, searchRadius);
   };
 
   const handlePageChange = (pageNumber: number): void => {
@@ -322,18 +343,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
       typeof value === 'string' ? value.split(',') : value
     );
   };
-
-  useEffect(() => {
-    setIsLoading(false);
-    if (orderBy) {
-      fetchRepairers();
-    }
-  }, [orderBy, fetchRepairers]);
-
-  useEffect(() => {
-    setIsLoading(false);
-    fetchRepairers();
-  }, [repairerTypeSelected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (typeof city === 'object') {

@@ -59,7 +59,7 @@ export const RepairersResults = (): JSX.Element => {
   }, [map, searchRadius]);
 
   useEffect(() => {
-    if (map) {
+    if (map && city) {
       // @ts-ignore
       map.setView([Number(city?.lat), Number(city?.lon)]);
     }
