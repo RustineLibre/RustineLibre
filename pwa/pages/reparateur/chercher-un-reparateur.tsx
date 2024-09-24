@@ -52,7 +52,6 @@ import {RepairerType} from '@interfaces/RepairerType';
 import {repairerTypeResource} from '@resources/repairerTypeResource';
 import {Repairer} from '@interfaces/Repairer';
 import ConfirmationReloadDialog from '@components/common/ConfirmationReloadDialog';
-import {usePrevious} from 'ra-core';
 
 type SearchRepairerProps = {
   bikeTypesFetched: BikeType[];
@@ -83,7 +82,6 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     setSelectedBike,
     searchRadius,
     setSearchRadius,
-    repairers,
     allRepairers,
     setRepairers,
     setAllRepairers,
@@ -98,6 +96,14 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
     totalItems,
     setTotalItems,
   } = useContext(SearchRepairerContext);
+
+  function usePrevious(value: any) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
 
   const prevCurrentPage = usePrevious({currentPage});
 
