@@ -132,7 +132,8 @@ const RepairerMessagesContent = ({
                   <>
                     <Typography>{content}</Typography>
                     <Typography fontSize={11} fontStyle="italic" pt={1}>
-                      {formatDate(createdAt)}
+                      {formatDate(createdAt)} - {sender.firstName}{' '}
+                      {sender.lastName}
                     </Typography>
                   </>
                 </Box>

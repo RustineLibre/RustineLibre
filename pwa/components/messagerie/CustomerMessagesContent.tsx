@@ -166,7 +166,8 @@ const CustomerMessagesContent = ({
                               isUser ? 'rgba(255,255,255,0.7)' : 'grey.500'
                             }
                             pt={1}>
-                            {formatDate(createdAt)}
+                            {formatDate(createdAt)} - {sender.firstName}{' '}
+                            {sender.lastName}
                           </Typography>
                         </>
                       </Box>
