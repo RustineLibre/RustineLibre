@@ -24,7 +24,6 @@ use App\Repository\UserRepository;
 use App\User\Filter\UserSearchFilter;
 use App\User\StateProvider\CurrentUserProvider;
 use App\User\StateProvider\CustomersProvider;
-use App\User\StateProvider\ExportUserCollectionProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Repairers\Resource;
 
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model;
 use App\Repairers\State\ExportRepairerCollectionProvider;
 use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use ApiPlatform\OpenApi\Model;
 
 #[GetCollection(
     uriTemplate: '/export_repairers_csv',
