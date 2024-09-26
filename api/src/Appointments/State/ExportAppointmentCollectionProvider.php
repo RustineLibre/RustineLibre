@@ -30,11 +30,11 @@ final readonly class ExportAppointmentCollectionProvider implements ProviderInte
 
         return array_map(static function (Appointment $appointment) {
             return new AppointmentCsv(
-                $appointment->customer->lastName,
-                $appointment->customer->firstName,
-                $appointment->customer->email,
-                $appointment->customer->telephone ?? '',
-                $appointment->customer->createdAt,
+                $appointment->customer ? $appointment->customer->lastName : '',
+                $appointment->customer ? $appointment->customer->firstName : '',
+                $appointment->customer ? $appointment->customer->email : '',
+                $appointment->customer ? $appointment->customer->telephone ?? '' : '',
+                $appointment->customer?->createdAt,
                 $appointment->createdAt,
                 $appointment->slotTime,
                 $appointment->autoDiagnostic ? $appointment->autoDiagnostic->prestation : '',
