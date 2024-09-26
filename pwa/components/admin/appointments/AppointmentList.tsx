@@ -255,11 +255,17 @@ export const AppointmentList = (): React.JSX.Element => {
               },
             }}>
             <TableRow>
-              <TableCell align="left">Nom</TableCell>
-              <TableCell align="left">Prénom</TableCell>
+              <TableCell align="left">Utilisateur</TableCell>
               <TableCell align="left">Email</TableCell>
-              <TableCell align="left">Date de création du rdv</TableCell>
-              <TableCell align="left">Date du rdv</TableCell>
+              <TableCell align="left" width="12%">
+                Inscription
+              </TableCell>
+              <TableCell align="left" width="12%">
+                Création du rdv
+              </TableCell>
+              <TableCell align="left" width="12%">
+                Rdv
+              </TableCell>
               <TableCell align="left">Prestation</TableCell>
               <TableCell align="left">Enseigne</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -274,13 +280,14 @@ export const AppointmentList = (): React.JSX.Element => {
                   '&:last-child td, &:last-child th': {border: 0},
                 }}>
                 <TableCell align="left" component="th" scope="row">
-                  {appointment.customer?.lastName}
-                </TableCell>
-                <TableCell align="left">
+                  {appointment.customer?.lastName}{' '}
                   {appointment.customer?.firstName}
                 </TableCell>
                 <TableCell align="left">
                   {appointment.customer?.email}
+                </TableCell>
+                <TableCell align="left">
+                  {formatDate(appointment.customer?.createdAt ?? undefined)}
                 </TableCell>
                 <TableCell align="left">
                   {formatDate(appointment.createdAt)}

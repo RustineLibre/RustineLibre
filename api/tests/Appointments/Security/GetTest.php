@@ -46,7 +46,7 @@ class GetTest extends AbstractTestCase
         $rows = explode(PHP_EOL, $response->getContent());
 
         $header = str_getcsv($rows[0]);
-        $expectedHeader = ['Nom', 'Prénom', 'Email', 'Tel', 'Date_création_RDV', 'Date_RDV', 'Prestation', 'Enseigne'];
+        $expectedHeader = ['Nom', 'Prénom', 'Email', 'Tel', 'Inscription', 'Création_Rdv', 'Rdv', 'Prestation', 'Enseigne'];
         $this->assertEquals($expectedHeader, $header);
 
         $rowsCount = count($rows) - 2; // -1 for header, -1 for last empty line from csv file
@@ -60,7 +60,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testGetCollectionForbidden(): void
+    public function testExportCsvAsRoleAdminForbidden(): void
     {
         $this->createClientAuthAsBoss(['Accept' => 'text/csv'])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
@@ -81,7 +81,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testGetCollectionUnauthorized(): void
+    public function testExportCsvAsRoleAdminUnauthorized(): void
     {
         static::createClient([], ['headers' => ['Accept' => 'text/csv']])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
         self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
@@ -132,6 +132,7 @@ class GetTest extends AbstractTestCase
             self::assertArrayHasKey('email', $customer);
             self::assertArrayHasKey('lastName', $customer);
             self::assertArrayHasKey('firstName', $customer);
+            self::assertArrayHasKey('createdAt', $customer);
 
             self::assertArrayHasKey('repairer', $item);
             $repairer = $item['repairer'];
@@ -338,19 +339,17 @@ class GetTest extends AbstractTestCase
     public function testGetAllAppointmentsForbidden(): void
     {
         $this->createClientAuthAsBoss()->request('GET', '/appointments');
-
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         $this->createClientAuthAsUser()->request('GET', '/appointments');
-
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
         $this->createClientAuthAsRepairer()->request('GET', '/appointments');
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
+        $this->createClientWithCredentials()->request('GET', '/appointments');
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
-
-
 
     public function testAdminCanGetOneAppointment(): void
     {

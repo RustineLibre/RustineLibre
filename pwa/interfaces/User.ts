@@ -19,4 +19,5 @@ export interface User {
   lastRepairers: Repairer[];
   firebaseToken: string;
   telephone: string;
+  createdAt?: string | null;
 }

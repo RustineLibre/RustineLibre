@@ -34,6 +34,7 @@ final readonly class ExportAppointmentCollectionProvider implements ProviderInte
                 $appointment->customer->firstName,
                 $appointment->customer->email,
                 $appointment->customer->telephone ?? '',
+                $appointment->customer->createdAt,
                 $appointment->createdAt,
                 $appointment->slotTime,
                 $appointment->autoDiagnostic ? $appointment->autoDiagnostic->prestation : '',

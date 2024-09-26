@@ -195,10 +195,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
     public ?string $telephone = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups([Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
+    public ?\DateTimeImmutable $createdAt = null;
+
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
         $this->repairers = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function __toString(): string

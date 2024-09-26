@@ -36,11 +36,15 @@ final class AppointmentCsv
         #[SerializedName('Tel')]
         public string $phoneNumber,
 
-        #[SerializedName('Date_création_RDV')]
+        #[SerializedName('Inscription')]
+        #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'])]
+        public ?\DateTimeImmutable $customerCreatedAt,
+
+        #[SerializedName('Création_Rdv')]
         #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'])]
         public \DateTimeImmutable $createdAt,
 
-        #[SerializedName('Date_RDV')]
+        #[SerializedName('Rdv')]
         #[Context([DateTimeNormalizer::FORMAT_KEY => 'Y-m-d H:i:s'])]
         public \DateTimeImmutable $slotTime,
 
