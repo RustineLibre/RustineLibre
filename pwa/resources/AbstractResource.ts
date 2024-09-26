@@ -336,8 +336,6 @@ export abstract class AbstractResource<T> {
       const response = await fetchFunction();
       result = await this.handleResponse(response, withAuth);
     } catch (e) {
-      console.log('Abstract Resource');
-      console.log(e);
       if (e !== 'unauthorized') {
         throw e;
       }
