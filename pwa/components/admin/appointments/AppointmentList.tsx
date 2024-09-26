@@ -24,6 +24,7 @@ import {
   IconButton,
   InputAdornment,
   Button,
+  Typography,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -256,7 +257,6 @@ export const AppointmentList = (): React.JSX.Element => {
             }}>
             <TableRow>
               <TableCell align="left">Utilisateur</TableCell>
-              <TableCell align="left">Email</TableCell>
               <TableCell align="left" width="12%">
                 Inscription
               </TableCell>
@@ -282,9 +282,10 @@ export const AppointmentList = (): React.JSX.Element => {
                 <TableCell align="left" component="th" scope="row">
                   {appointment.customer?.lastName}{' '}
                   {appointment.customer?.firstName}
-                </TableCell>
-                <TableCell align="left">
-                  {appointment.customer?.email}
+                  <br />
+                  <Typography sx={{color: 'grey'}}>
+                    {appointment.customer?.email}
+                  </Typography>
                 </TableCell>
                 <TableCell align="left">
                   {formatDate(appointment.customer?.createdAt ?? undefined)}

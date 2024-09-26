@@ -60,7 +60,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testExportCsvAsRoleAdminForbidden(): void
+    public function testExportCsvForbidden(): void
     {
         $this->createClientAuthAsBoss(['Accept' => 'text/csv'])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
@@ -81,7 +81,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testExportCsvAsRoleAdminUnauthorized(): void
+    public function testExportCsvUnauthorized(): void
     {
         static::createClient([], ['headers' => ['Accept' => 'text/csv']])->request('GET', self::EXPORT_APPOINTMENTS_CSV_ENDPOINT);
         self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
