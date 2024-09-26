@@ -23,21 +23,24 @@ const RepairerWorkshopRegistration: NextPageWithLayout<
 );
 
 export const getStaticProps: GetStaticProps = async () => {
-  console.log('RepairerWorkshopRegistration => getStaticProps');
-  console.log(ENTRYPOINT);
-  const bikeTypesCollection = await bikeTypeResource.getAll(false);
-  const bikeTypesFetched = bikeTypesCollection['hydra:member'];
-
-  const repairerTypesCollection = await repairerTypeResource.getAll(false);
-  const repairerTypesFetched = repairerTypesCollection['hydra:member'];
-
   return {
-    props: {
-      bikeTypesFetched,
-      repairerTypesFetched,
-    },
-    revalidate: 10,
+    props: {},
   };
+  // console.log('RepairerWorkshopRegistration => getStaticProps');
+  // console.log(ENTRYPOINT);
+  // const bikeTypesCollection = await bikeTypeResource.getAll(false);
+  // const bikeTypesFetched = bikeTypesCollection['hydra:member'];
+  //
+  // const repairerTypesCollection = await repairerTypeResource.getAll(false);
+  // const repairerTypesFetched = repairerTypesCollection['hydra:member'];
+  //
+  // return {
+  //   props: {
+  //     bikeTypesFetched,
+  //     repairerTypesFetched,
+  //   },
+  //   revalidate: 10,
+  // };
 };
 
 RepairerWorkshopRegistration.getLayout = (page: ReactElement) => (

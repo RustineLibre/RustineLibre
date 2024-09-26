@@ -59,39 +59,42 @@ const RepairerPage: NextPageWithLayout<RepairerPageProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-  if (!ENTRYPOINT) {
-    return {
-      notFound: true,
-      revalidate: 0,
-    };
-  }
-
-  if (!params) {
-    return {
-      notFound: true,
-      revalidate: 10,
-    };
-  }
-
-  const {id} = params;
-  if (!id) {
-    return {
-      notFound: true,
-      revalidate: 10,
-    };
-  }
-
-  const repairerProps: Repairer = await repairerResource.getById(
-    id.toString(),
-    false
-  );
-
   return {
-    props: {
-      repairerProps,
-    },
-    revalidate: 10,
+    props: {},
   };
+  // if (!ENTRYPOINT) {
+  //   return {
+  //     notFound: true,
+  //     revalidate: 0,
+  //   };
+  // }
+  //
+  // if (!params) {
+  //   return {
+  //     notFound: true,
+  //     revalidate: 10,
+  //   };
+  // }
+  //
+  // const {id} = params;
+  // if (!id) {
+  //   return {
+  //     notFound: true,
+  //     revalidate: 10,
+  //   };
+  // }
+  //
+  // const repairerProps: Repairer = await repairerResource.getById(
+  //   id.toString(),
+  //   false
+  // );
+  //
+  // return {
+  //   props: {
+  //     repairerProps,
+  //   },
+  //   revalidate: 10,
+  // };
 };
 
 export async function getStaticPaths() {
