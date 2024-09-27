@@ -82,23 +82,10 @@ export const RepairerCard = ({
               variant="h5"
               color="secondary.main"
               component="div"
+              mb={2}
               sx={{wordBreak: 'break-word', transition: 'color ease 0.3s'}}>
               {repairer.name}
             </Typography>
-            {repairer.latitude &&
-              repairer.longitude &&
-              repairer.distance !== null &&
-              router.pathname !== '/liste-des-reparateurs' && (
-                <Typography
-                  variant="caption"
-                  mb={2}
-                  fontWeight={600}
-                  color="primary"
-                  display="flex"
-                  alignItems="center">
-                  <FmdGoodIcon fontSize="small" /> {repairer.distance} m
-                </Typography>
-              )}
             <div>
               <Typography color="text.secondary" variant="body2">
                 {repairer.streetNumber} {repairer.street}
@@ -121,7 +108,7 @@ export const RepairerCard = ({
             alignItems="start">
             <div>
               <Typography
-                color="text.secondary"
+                color="primary"
                 variant="body2"
                 fontWeight={700}
                 component="div">
