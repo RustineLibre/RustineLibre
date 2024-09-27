@@ -82,6 +82,7 @@ export const RepairerCard = ({
               variant="h5"
               color="secondary.main"
               component="div"
+              mb={2}
               sx={{wordBreak: 'break-word', transition: 'color ease 0.3s'}}>
               {repairer.name}
             </Typography>
