@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import router from 'next/router';
 import {MapContainer, TileLayer, Marker, Popup} from 'react-leaflet';
 import {LeafletMouseEvent} from 'leaflet';
@@ -14,6 +14,8 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
 import L from 'leaflet';
 import {Typography} from '@mui/material';
+import UpdateViewOnCitySearch from '@components/map/UpdateViewOnCitySearch';
+import UpdateZoomOnRadiusSearch from '@components/map/UpdateZoomOnRadiusSearch';
 
 export const RepairersResults = (): JSX.Element => {
   const theme = useTheme();
@@ -25,45 +27,6 @@ export const RepairersResults = (): JSX.Element => {
     Number(city?.lat),
     Number(city?.lon),
   ]);
-  const [map, setMap] = useState(null);
-
-  useEffect(() => {
-    if (map) {
-      switch (searchRadius) {
-        case '5000':
-          // @ts-ignore
-          map.setZoom(12);
-          return;
-        case '10000':
-          // @ts-ignore
-          map.setZoom(11);
-          return;
-        case '15000':
-          // @ts-ignore
-          map.setZoom(11);
-          return;
-        case '20000':
-          // @ts-ignore
-          map.setZoom(11);
-          return;
-        case '30000':
-          // @ts-ignore
-          map.setZoom(11);
-          return;
-        case '40000':
-          // @ts-ignore
-          map.setZoom(10);
-          return;
-      }
-    }
-  }, [map, searchRadius]);
-
-  useEffect(() => {
-    if (map && city) {
-      // @ts-ignore
-      map.setView([Number(city?.lat), Number(city?.lon)]);
-    }
-  }, [city?.lat, city?.lon, map]);
 
   const handleSelectRepairer = (id: string) => {
     setSelectedRepairer(id);
@@ -134,14 +97,14 @@ export const RepairersResults = (): JSX.Element => {
           <MapContainer
             center={mapCenter}
             zoom={12}
-            // @ts-ignore
-            ref={setMap}
             scrollWheelZoom={false}
             style={{
               zIndex: 1,
               height: '100%',
               borderRadius: 5,
             }}>
+            <UpdateViewOnCitySearch city={city} />
+            <UpdateZoomOnRadiusSearch searchRadius={searchRadius} />
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {repairers.map((repairer) => {
               if (!repairer.latitude || !repairer.longitude) {
