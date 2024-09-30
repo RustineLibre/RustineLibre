@@ -38,8 +38,16 @@ import {
 import ModalSearchRepairer from './ModalSearchRepairer';
 import LetterR from '@components/common/LetterR';
 import {formatCityInput} from '@helpers/formatCityInput';
+import {websiteMediaResource} from '@resources/WebsiteMediaResource';
 
-const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
+type SearchARepairerProps = {
+  homepagePicturePath: string;
+};
+
+const SearchARepairer = ({
+  bikeTypesFetched = [] as BikeType[],
+  homepagePicturePath = '',
+}) => {
   const useNominatim = process.env.NEXT_PUBLIC_USE_NOMINATIM !== 'false';
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
@@ -47,6 +55,8 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
   const listContainerRef = useRef<HTMLDivElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [userAction, setUserAction] = useState<boolean>(false);
+  const [homepagePicture, setHomepagePicture] =
+    useState<string>(homepagePicturePath);
   const router = useRouter();
 
   const {
@@ -144,6 +154,20 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
     setCity(null);
     setOpenModal(true);
   };
+
+  const fetchPicture = async () => {
+    const response = await websiteMediaResource.getById(
+      'homepage_main_picture'
+    );
+
+    response && response.media
+      ? setHomepagePicture(response.media.contentUrl)
+      : setHomepagePicture('/img/rustine-libre-reparateur.webp');
+  };
+
+  useEffect(() => {
+    if (homepagePicture.length === 0) fetchPicture();
+  }, [homepagePicture.length]);
 
   return (
     <Box
@@ -394,11 +418,12 @@ const SearchARepairer = ({bikeTypesFetched = [] as BikeType[]}) => {
             <Box position="relative" height="100%" width="100%">
               <Image
                 fill
-                alt=""
-                src="/img/rustine-libre-reparateur.webp"
+                alt="Photo d'illustration de la page d'accueil"
+                src={homepagePicture}
                 style={{
                   objectFit: 'cover',
                 }}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </Box>
           </Box>
