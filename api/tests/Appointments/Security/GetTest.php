@@ -96,6 +96,7 @@ class GetTest extends AbstractTestCase
      */
     public function testAdminCanGetAllAppointmentsPaginated(): void
     {
+        $appointments = $this->appointmentRepository->findAll();
         $response = $this->createClientAuthAsAdmin()->request('GET', '/appointments');
 
         self::assertResponseIsSuccessful();
@@ -104,7 +105,7 @@ class GetTest extends AbstractTestCase
             '@context' => '/contexts/Appointment',
             '@id' => '/appointments',
             '@type' => 'hydra:Collection',
-            'hydra:totalItems' => 87,
+            'hydra:totalItems' => count($appointments),
             'hydra:view' => [
                 '@id' => '/appointments?page=1',
                 '@type' => 'hydra:PartialCollectionView',
