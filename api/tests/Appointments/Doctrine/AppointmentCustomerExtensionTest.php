@@ -21,11 +21,13 @@ class AppointmentCustomerExtensionTest extends AbstractTestCase
     public function testCustomerGetOnlyHisAppointments(): void
     {
         $appointment = $this->getAppointment();
-        $response = $this->createClientWithUser($appointment->customer)->request('GET', '/appointments')->toArray();
+        $response = $this->createClientWithUser($appointment->customer)->request('GET', sprintf('/customers/%s/appointments', $appointment->customer->id))->toArray();
 
         self::assertResponseIsSuccessful();
+        self::assertGreaterThan(0, count($response['hydra:member']));
+
         foreach ($response['hydra:member'] as $result) {
-            self::assertSame(sprintf('/users/%d', $appointment->customer->id), $result['customer']['@id']);
+            self::assertSame(sprintf('/users/%d', $appointment->customer->id), $result['customer']);
         }
     }
 }

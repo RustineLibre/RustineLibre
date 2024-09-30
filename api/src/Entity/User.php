@@ -24,7 +24,6 @@ use App\Repository\UserRepository;
 use App\User\Filter\UserSearchFilter;
 use App\User\StateProvider\CurrentUserProvider;
 use App\User\StateProvider\CustomersProvider;
-use App\User\StateProvider\ExportUserCollectionProvider;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -86,16 +85,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     name: 'customers_list',
     provider: CustomersProvider::class,
 )]
-#[GetCollection(
-    uriTemplate: '/export_users_csv',
-    outputFormats: ['csv' => ['text/csv']],
-    openapi: new Model\Operation(
-        summary: 'Export user collection to csv format',
-    ),
-    normalizationContext: [],
-    security: "is_granted('ROLE_ADMIN')",
-    provider: ExportUserCollectionProvider::class
-)]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ApiFilter(UserSearchFilter::class)]
@@ -124,7 +113,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'user.email.not_blank')]
     #[Assert\Email(message: 'user.email.valid')]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Repairer::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Repairer::REPAIRER_COLLECTION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -169,7 +158,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'user.lastName.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $lastName = null;
 
     #[Assert\NotBlank(message: 'user.firstName.not_blank')]
@@ -180,7 +169,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         maxMessage: 'user.firstName.max_length',
     )]
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $firstName = null;
 
     #[ORM\OneToOne(mappedBy: 'employee', cascade: ['persist', 'remove'])]
@@ -203,13 +192,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $firebaseToken;
 
     #[ORM\Column(length: 20, nullable: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Bike::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ])]
     public ?string $telephone = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups([Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
+    public ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
         $this->bikes = new ArrayCollection();
         $this->repairers = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function __toString(): string

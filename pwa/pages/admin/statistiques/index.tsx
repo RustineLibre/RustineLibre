@@ -1,22 +1,22 @@
+import AppointmentList from '@components/admin/appointments/AppointmentList';
 import Head from 'next/head';
 import React from 'react';
 import Box from '@mui/material/Box';
 import AdminLayout from '@components/admin/AdminLayout';
-import RepairersList from '@components/admin/repairers/RepairersList';
 
-const Repairers = () => {
+const Statistics = () => {
   return (
     <>
       <Head>
-        <title>Réparateurs | Rustine Libre</title>
+        <title>Statistiques | Rustine Libre</title>
       </Head>
       <AdminLayout>
         <Box component="main">
-          <RepairersList />
+          <AppointmentList />
         </Box>
       </AdminLayout>
     </>
   );
 };
 
-export default Repairers;
+export default Statistics;

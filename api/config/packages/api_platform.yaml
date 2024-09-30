@@ -14,6 +14,11 @@ api_platform:
         name: Authorization
         type: header
   mapping:
-    paths: ['%kernel.project_dir%/src/Messages/ApiResource']
+    paths: [
+      '%kernel.project_dir%/src/Appointments/Resource',
+      '%kernel.project_dir%/src/Messages/Resource',
+      '%kernel.project_dir%/src/Repairers/Resource',
+      '%kernel.project_dir%/src/User/Resource',
+    ]
   resource_class_directories:
     - '%kernel.project_dir%/src/Entity'

@@ -20,13 +20,13 @@ const MyFutureAppointment = ({
 
   const fetchAppointments = async () => {
     setLoading(true);
-    const validated = await appointmentResource.getAll(true, {
+    const validated = await appointmentResource.getAllByCustomer(currentUser, {
       customer: currentUser.id,
       'order[slotTime]': 'ASC',
       'slotTime[after]': dateObjectAsString(new Date()),
       status: 'validated',
     });
-    const pending = await appointmentResource.getAll(true, {
+    const pending = await appointmentResource.getAllByCustomer(currentUser, {
       customer: currentUser.id,
       'order[slotTime]': 'ASC',
       'slotTime[after]': dateObjectAsString(new Date()),

@@ -8,7 +8,7 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\Discussion;
 use App\Entity\User;
-use App\Messages\ApiResource\MessageUnread;
+use App\Messages\Resource\MessageUnread;
 use App\Repository\DiscussionMessageRepository;
 use App\Repository\DiscussionRepository;
 use Symfony\Bundle\SecurityBundle\Security;

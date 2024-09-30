@@ -638,9 +638,7 @@ const SearchRepairer: NextPageWithLayout<SearchRepairerProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  return {
-    props: {},
-  };
+  /* TODO: to uncomment when container from api will be available at pwa build time */
   // if (!ENTRYPOINT) {
   //   return {
   //     props: {},
@@ -660,6 +658,9 @@ export const getStaticProps: GetStaticProps = async () => {
   //   },
   //   revalidate: 10,
   // };
+  return {
+    props: {},
+  };
 };
 
 export default SearchRepairer;

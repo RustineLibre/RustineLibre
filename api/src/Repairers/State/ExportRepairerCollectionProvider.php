@@ -8,32 +8,32 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use App\Entity\Repairer;
 use App\Entity\RepairerType;
-use App\Repairers\Dto\ExportRepairerDto;
+use App\Repairers\Resource\RepairerCsv;
 use App\Repository\RepairerRepository;
 
 /**
- * @template-implements ProviderInterface<ExportRepairerDto>
+ * @template-implements ProviderInterface<RepairerCsv>
  */
 final readonly class ExportRepairerCollectionProvider implements ProviderInterface
 {
     public function __construct(
-        private RepairerRepository $repairerRepository,
+        private RepairerRepository $repository,
     ) {
     }
 
     /**
-     * @return ExportRepairerDto[]
+     * @return RepairerCsv[]
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
     {
         /** @var array<array-key, Repairer> $collection */
-        $collection = $this->repairerRepository->findBy([], ['id' => 'DESC']);
+        $collection = $this->repository->findBy([], ['id' => 'DESC']);
 
         return array_map(static function (Repairer $repairer) {
             $owner = $repairer->owner;
             $repairerTypes = $repairer->getRepairerTypes();
 
-            return new ExportRepairerDto(
+            return new RepairerCsv(
                 $owner->lastName,
                 $owner->firstName,
                 $owner->email,
@@ -41,8 +41,8 @@ final readonly class ExportRepairerCollectionProvider implements ProviderInterfa
                 $repairer->mobilePhone ?? '',
                 implode(', ', array_map(static fn (RepairerType $repairerType) => $repairerType->name, $repairerTypes->toArray())),
                 $repairer->name,
-                $repairer->createdAt ? $repairer->createdAt->format('Y-m-d H:i:s') : '',
-                $owner->lastConnect ? $owner->lastConnect->format('Y-m-d H:i:s') : '',
+                $repairer->createdAt,
+                $owner->lastConnect,
             );
         }, $collection);
     }

@@ -116,6 +116,7 @@ const AgendaCalendar = ({repairer}: AgendaCalendarProps): JSX.Element => {
 
     setCalendarEvents(appointmentsEvents);
   };
+
   const clickAppointment = async (event: EventImpl) => {
     setOpenModal(true);
     const appointmentFetch = await appointmentResource.get(event.id, true);

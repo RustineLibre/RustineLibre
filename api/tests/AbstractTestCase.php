@@ -57,7 +57,7 @@ abstract class AbstractTestCase extends ApiTestCase
 
     protected function createClientAuthAsUser(array $headers = []): Client
     {
-        return $this->createClientWithCredentials($headers);
+        return $this->createClientWithCredentials([], $headers);
     }
 
     protected function createClientAuthAsRepairer(array $headers = []): Client
