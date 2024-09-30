@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   CircularProgress,
   Paper,
   Typography,
@@ -145,14 +146,19 @@ export const ParametersHomepagePicture = (): JSX.Element => {
             )}
           </label>
         )}
-        <input
-          id="fileUpload"
-          name="fileUpload"
-          type="file"
-          hidden
-          accept={'.png, .jpg, .jpeg'}
-          onChange={(e) => handleFileChange(e)}
-        />
+        <Box sx={{display: 'flex', justifyContent: 'center'}}>
+          <Button variant="contained" component="label" sx={{marginBottom: 3}}>
+            Modifier
+            <input
+              id="fileUpload"
+              name="fileUpload"
+              type="file"
+              hidden
+              accept={'.png, .jpg, .jpeg'}
+              onChange={(e) => handleFileChange(e)}
+            />
+          </Button>
+        </Box>
         <Typography textAlign={'center'}>
           Type de fichier : JPG ou PNG. Taille à respecter : 982 px / 825 px.
           Poids max : 300 ko

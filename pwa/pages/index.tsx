@@ -15,8 +15,6 @@ import Arg3 from '@public/img/arg3.webp';
 import Image from 'next/image';
 import Link from 'next/link';
 import Faq from '@components/homepage/Faq';
-import {GetStaticProps} from 'next';
-import {websiteMediaResource} from '@resources/WebsiteMediaResource';
 
 type homepageProps = {
   homepagePictureFetched: string;
