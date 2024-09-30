@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use App\Repository\WebsiteMediaRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -23,16 +20,13 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => [self::READ]],
     denormalizationContext: ['groups' => [self::WRITE]],
-    extraProperties: [
-        'standard_put',
-    ])]
+)]
 #[Get]
 #[Patch(security: "is_granted('ROLE_ADMIN')")]
-#[GetCollection]
 #[Post(security: "is_granted('ROLE_ADMIN')")]
 #[Delete(security: "is_granted('ROLE_ADMIN')")]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact'])]
-final class WebsiteMedia
+class WebsiteMedia
 {
     public const READ = 'read';
     public const WRITE = 'write';

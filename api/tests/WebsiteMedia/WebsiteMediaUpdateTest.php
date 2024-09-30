@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\WebsiteMedia;
 
-use App\Entity\MediaObject;
 use App\Repository\MediaObjectRepository;
 use App\Repository\WebsiteMediaRepository;
 use App\Tests\AbstractTestCase;
@@ -20,7 +19,6 @@ class WebsiteMediaUpdateTest extends AbstractTestCase
     private MediaObjectRepository $mediaObjectRepository;
 
     private WebsiteMediaRepository $websiteMediaRepository;
-
 
     public function setUp(): void
     {
@@ -41,94 +39,102 @@ class WebsiteMediaUpdateTest extends AbstractTestCase
                     'file' => $file,
                 ],
             ],
-        ]);
+        ])->toArray();
         self::assertResponseIsSuccessful();
-        $mediaResponseId = preg_match('/\/(\d+)(\/|$)/', $mediaResponse->toArray()['@id'], $match);
+        $mediaResponseId = preg_match('/\/(\d+)(\/|$)/', $mediaResponse['@id'], $match);
 
-        //create a website media with the media object and a predefined test id with an admin role
+        // create a website media with the media object and a predefined test id with an admin role
         $client->request('POST', '/website_media', [
             'headers' => ['Content-Type' => 'application/ld+json'],
             'json' => [
                 'id' => self::WEBSITE_MEDIA_ID,
-                'media' => $mediaResponse->toArray()['@id'],
-            ]
+                'media' => $mediaResponse['@id'],
+            ],
         ]);
 
         self::assertResponseIsSuccessful();
 
         // Check if created website media exist
         $websiteMediaCreated = $this->websiteMediaRepository->findOneBy(['id' => self::WEBSITE_MEDIA_ID]);
-        self::assertNotEmpty($websiteMediaCreated);
+        self::assertNotNull($websiteMediaCreated);
 
-        $newMedia = $this->mediaObjectRepository->findAll();
+        $newMediaResponse = $client->request('POST', '/media_objects/images', [
+            'headers' => ['Content-Type' => 'multipart/form-data'],
+            'extra' => [
+                'files' => [
+                    'file' => $file,
+                ],
+            ],
+        ])->toArray();
 
-        $newMedia = $newMedia[0]->id !== $mediaResponseId ? $newMedia[0] : $newMedia[1];
+        self::assertResponseIsSuccessful();
 
-        $client->request('PATCH', '/website_media/' . $websiteMediaCreated->id, [
+        $client->request('PATCH', '/website_media/'.$websiteMediaCreated->id, [
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
-                'media' => sprintf('/media_objects/%s', $newMedia->id),
-            ]
+                'media' => $newMediaResponse['@id'],
+            ],
         ]);
 
         self::assertResponseIsSuccessful();
 
-        // Check if created website media exist
-        $websiteMediaUpdated = $this->websiteMediaRepository->findOneBy(['id' => self::WEBSITE_MEDIA_ID]);
-        self::assertNotSame($websiteMediaUpdated->media->id, $mediaResponseId);
+        $this->websiteMediaRepository = self::getContainer()->get(WebsiteMediaRepository::class);
 
+        // Check if created website media exist
+        $websiteMediaUpdated = $this->websiteMediaRepository->find(self::WEBSITE_MEDIA_ID);
+
+        self::assertNotSame($websiteMediaUpdated->media->id, $mediaResponseId);
     }
 
     public function testUpdateByBoss(): void
     {
         $websiteMediaCreated = $this->websiteMediaRepository->findOneBy(['id' => self::WEBSITE_MEDIA_ID]);
-        self::assertNotEmpty($websiteMediaCreated);
+        self::assertNotNull($websiteMediaCreated);
 
         $mediaObject = $this->mediaObjectRepository->findOneBy(['id' => $websiteMediaCreated->media->id]);
 
-        self::assertNotEmpty($mediaObject);
+        self::assertNotNull($mediaObject);
 
         $newMedia = $this->mediaObjectRepository->findAll();
 
         $newMedia = $newMedia[0]->id !== $mediaObject->id ? $newMedia[0] : $newMedia[1];
 
-        $this->createClientAuthAsBoss()->request('PATCH', '/website_media/' . $websiteMediaCreated->id, [
+        $this->createClientAuthAsBoss()->request('PATCH', '/website_media/'.$websiteMediaCreated->id, [
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
                 'media' => sprintf('/media_objects/%s', $newMedia->id),
-            ]
+            ],
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-
     }
 
     public function testUpdateByUser(): void
     {
         $websiteMediaCreated = $this->websiteMediaRepository->findOneBy(['id' => self::WEBSITE_MEDIA_ID]);
-        self::assertNotEmpty($websiteMediaCreated);
+        self::assertNotNull($websiteMediaCreated);
 
         $mediaObject = $this->mediaObjectRepository->findOneBy(['id' => $websiteMediaCreated->media->id]);
 
-        self::assertNotEmpty($mediaObject);
+        self::assertNotNull($mediaObject);
 
         $newMedia = $this->mediaObjectRepository->findAll();
 
         $newMedia = $newMedia[0]->id !== $mediaObject->id ? $newMedia[0] : $newMedia[1];
 
-        $this->createClientAuthAsUser()->request('PATCH', '/website_media/' . $websiteMediaCreated->id, [
+        $this->createClientAuthAsUser()->request('PATCH', '/website_media/'.$websiteMediaCreated->id, [
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
                 'media' => sprintf('/media_objects/%s', $newMedia->id),
-            ]
+            ],
         ]);
 
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        //delete objects created by tests
+        // delete objects created by tests
         $this->createClientAuthAsAdmin()->request('DELETE', sprintf('/website_media/%s', $websiteMediaCreated->id));
         // Check if both objects are well deleted
-        self::assertEmpty($this->websiteMediaRepository->findOneBy(['id' => self::WEBSITE_MEDIA_ID]));
-        self::assertEmpty($this->mediaObjectRepository->findOneBy(['id' => $mediaObject->id]));
+        self::assertNull($this->websiteMediaRepository->findOneBy(['id' => self::WEBSITE_MEDIA_ID]));
+        self::assertNull($this->mediaObjectRepository->findOneBy(['id' => $mediaObject->id]));
     }
 }

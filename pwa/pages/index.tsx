@@ -114,7 +114,8 @@ const Home = ({homepagePictureFetched = ''}) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+/* TODO: to uncomment when container from api will be available at pwa build time */
+/* export const getStaticProps: GetStaticProps = async () => {
   const homepagePicture = await websiteMediaResource.getById(
     'homepage_main_picture',
     false
@@ -132,5 +133,5 @@ export const getStaticProps: GetStaticProps = async () => {
     revalidate: 10,
   };
 };
-
+*/
 export default Home;
