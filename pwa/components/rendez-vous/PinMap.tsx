@@ -77,6 +77,9 @@ const PinMap = ({
   useEffect(() => {
     if (cityInput === '' || cityInput.length < 2) {
       setCitiesList([]);
+      setStreetSelected(null);
+      setLatitudeCalculate(null);
+      setLongitudeCalculate(null);
     } else fetchCitiesResult(cityInput);
   }, [setCitiesList, fetchCitiesResult, cityInput]);
 
