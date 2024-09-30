@@ -12,6 +12,7 @@ export interface Appointment {
   customer: User | null;
   customerName: string | null;
   createdAt?: string;
+  customerPhoneWithoutAccount?: string | null;
   repairer: Repairer;
   autoDiagnostic?: AutoDiagnostic;
   slotTime: string;
