@@ -53,7 +53,11 @@ export const MapPositionUser = ({
 
   return (
     <Box>
-      <Typography pb={2} textAlign="center">
+      <Typography
+        pb={2}
+        textAlign="center"
+        fontSize={18}
+        sx={{fontWeight: 'bold'}}>
         Merci d&apos;indiquer à quel niveau de la rue vous vous situerez
       </Typography>
       <Box width={'100%'} height={{xs: '250px', sm: '350px', md: '500px'}}>
