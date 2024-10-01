@@ -21,7 +21,7 @@ final readonly class NewAppointmentNotification
             title: 'Nouvelle demande de RDV',
             body: $appointment->slotTime->format('d-m-Y H:i'),
             params: [
-                'route' => sprintf('/sradmin?appointment=%s', $appointment->id),
+                'route' => sprintf('/sradmin/boutiques/%d/agenda?selectedDate=%s', $appointment->repairer->id, $appointment->slotTime->format('Y-m-d\TH:i:s')),
             ]
         );
 
