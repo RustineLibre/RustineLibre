@@ -22,11 +22,16 @@ export const ParametersHomepagePicture = (): JSX.Element => {
   const [oldPicture, setOldPicture] = useState<WebsiteMedia | null>(null);
 
   const fetchPicture = async () => {
-    const response = await websiteMediaResource.getById(
-      'homepage_main_picture',
-      false
-    );
-    response ? setOldPicture(response) : setOldPicture(null);
+    try {
+      const response = await websiteMediaResource.getById(
+        'homepage_main_picture',
+        false
+      );
+
+      setOldPicture(response);
+    } catch (e) {
+      setOldPicture(null);
+    }
   };
 
   useEffect(() => {

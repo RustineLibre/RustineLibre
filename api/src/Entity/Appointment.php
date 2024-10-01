@@ -129,7 +129,7 @@ class Appointment
     public ?string $customerName = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE])]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
     public ?string $customerPhoneWithoutAccount = null;
 
     #[ORM\ManyToOne]
