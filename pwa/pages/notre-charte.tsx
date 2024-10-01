@@ -30,33 +30,35 @@ const OurCharter: NextPageWithLayout = () => {
                 Préambule
               </Typography>
               <Typography component="p">
-                En 2022, des réparateurs du Nord Pas-de-Calais se sont réunis,
-                sous l’impulsion d’un projet européen soutenu par l’Apes, pour
+                En 2022, des réparateurs du Nord et du Pas-de-Calais se sont
+                réunis, sous l&apos;impulsion d’un projet européen soutenu par
+                l&apos;Apes (Acteurs pour une économie solidaire), pour
                 développer un outil numérique respectueux de l’humain, dans une
                 logique de Commun.
               </Typography>
               <Typography component="p">
-                Le collectif est constitué d’associations d’aide à la réparation
-                , de réparateurs exerçants seuls, et d’ateliers de réparation
-                regroupant plusieurs réparateurs. Nos fonctionnements sont
-                différents mais nos objectifs sont les mêmes : mutualisation,
-                transition écologique et sociétale, coopération... Nous mettons
-                notre expérience et nos compétences au service des cyclistes.
+                Le collectif est constitué d&apos;associations d’aide à la
+                réparation, de réparateur·ice·s exerçants seul·e·s, et
+                d’ateliers de réparation regroupant plusieurs réparateur·ice·s.
+                Nos fonctionnements sont différents mais nos objectifs sont les
+                mêmes : mutualisation, transition écologique et sociétale,
+                coopération… Nous mettons notre expérience et nos compétences au
+                service des cyclistes.
               </Typography>
               <Typography component="p">
                 Nous proposons des solutions de réparation, du conseil, de la
-                formation, qui rendront les usagers du vélo de plus en plus
+                formation, qui rendront les usager·e·s du vélo de plus en plus
                 autonomes
               </Typography>
               <Typography component="p">
-                Cette présente charte expose nos engagements vis à vis des
-                utilisateurs de l’application et permettront à d’autres de se
-                reconnaître et de nous rejoindre !
+                Cette présente charte expose nos engagements vis-à-vis des
+                utilisateur·ice·s de l&apos;application et permettront à
+                d’autres de se reconnaître et de nous rejoindre !
               </Typography>
             </Box>
             <Box>
               <Typography component="h3" fontWeight={600} color="primary">
-                1. Engagements professionnels
+                1. Engagements des ateliers de réparation
               </Typography>
               <List
                 sx={{
@@ -68,7 +70,7 @@ const OurCharter: NextPageWithLayout = () => {
                   sx={{
                     display: 'list-item',
                   }}>
-                  garantir la sécurité du cycliste
+                  garantir la sécurité des cyclistes
                 </ListItem>
                 <ListItem
                   sx={{
@@ -99,8 +101,7 @@ const OurCharter: NextPageWithLayout = () => {
             </Box>
             <Box>
               <Typography component="h3" fontWeight={600} color="primary">
-                2. Engagements sur les pratiques des différents acteurs de la
-                réparation
+                1 bis. Engagements des ateliers d&apos;aide à la réparation
               </Typography>
               <List
                 sx={{
@@ -112,8 +113,65 @@ const OurCharter: NextPageWithLayout = () => {
                   sx={{
                     display: 'list-item',
                   }}>
-                  faire partie d’une structure qui se reconnaît et s’inscrit
-                  dans les pratiques de l’économie sociale et solidaire
+                  accueillir sans discrimination des cyclistes voulant apprendre
+                  à réparer eux-mêmes leurs vélos
+                </ListItem>
+                <ListItem
+                  sx={{
+                    display: 'list-item',
+                  }}>
+                  les ateliers associatifs s’engagent sur du conseil, de
+                  l&apos;aide et des moyens pour réparer les vélos des
+                  adhérents, dans une démarche d’accompagnement et de
+                  transmission de savoir
+                </ListItem>
+                <ListItem
+                  sx={{
+                    display: 'list-item',
+                  }}>
+                  les réparateur.rice.s bénévoles et/ ou salariés font de leur
+                  mieux pour répondre aux demandes, remettre en état de
+                  fonctionnement les vélos, sans obligation de résultat, ni
+                  engager leur responsabilité sur des dommages éventuels suite à
+                  leur accompagnement
+                </ListItem>
+                <ListItem
+                  sx={{
+                    display: 'list-item',
+                  }}>
+                  de l&apos;information relatives à la sécurité (attitudes,
+                  équipements, réparations) seront préconisées, sans pourtant
+                  engager la responsabilité de l&apos;atelier suite à la
+                  participation à un atelier d&apos;aide à la réparation
+                </ListItem>
+                <ListItem
+                  sx={{
+                    display: 'list-item',
+                  }}>
+                  proposer une charte et/ ou un règlement intérieur accessibles
+                  et transparents pour expliquer leur fonctionnement propre, qui
+                  doit être consulté et accepté
+                </ListItem>
+              </List>
+            </Box>
+            <Box>
+              <Typography component="h3" fontWeight={600} color="primary">
+                2. Engagements sur les pratiques des différent·e·s acteur·ice·s
+                de la réparation
+              </Typography>
+              <List
+                sx={{
+                  listStyleType: 'disc',
+                  pl: 4,
+                  py: 0,
+                }}>
+                <ListItem
+                  sx={{
+                    display: 'list-item',
+                  }}>
+                  faire partie d&apos;une structure qui se reconnaît et
+                  s&apos;inscrit dans les pratiques de l&apos;économie sociale
+                  et solidaire
                 </ListItem>
                 <ListItem
                   sx={{
@@ -125,15 +183,15 @@ const OurCharter: NextPageWithLayout = () => {
                   sx={{
                     display: 'list-item',
                   }}>
-                  favoriser un cadre de travail respectueux de l’humain et de
-                  son épanouissement ainsi que de la législation en vigueur
+                  favoriser un cadre de travail respectueux de l&apos;humain et
+                  de son épanouissement ainsi que de la législation en vigueur
                 </ListItem>
                 <ListItem
                   sx={{
                     display: 'list-item',
                   }}>
                   mettre en valeur et développer les compétences de réparation
-                  des réparateurs et des usagers
+                  des réparateurs et des cyclistes
                 </ListItem>
                 <ListItem
                   sx={{
@@ -145,13 +203,14 @@ const OurCharter: NextPageWithLayout = () => {
                   sx={{
                     display: 'list-item',
                   }}>
-                  vouloir s’inscrire dans le développement de son territoire
+                  vouloir s&apos;inscrire dans le développement de son
+                  territoire
                 </ListItem>
               </List>
             </Box>
             <Box>
               <Typography component="h3" fontWeight={600} color="primary">
-                3. Engagement dans le collectif de réparateurs
+                3. Engagement dans le collectif de réparateur·ice·s
               </Typography>
               <List
                 sx={{
@@ -175,13 +234,13 @@ const OurCharter: NextPageWithLayout = () => {
                   sx={{
                     display: 'list-item',
                   }}>
-                  participer au bon fonctionnement de l’application
+                  participer au bon fonctionnement de l&apos;application
                 </ListItem>
                 <ListItem
                   sx={{
                     display: 'list-item',
                   }}>
-                  s’inscrire dans une démarche de mutualisation
+                  s&apos;inscrire dans une démarche de mutualisation
                 </ListItem>
                 <ListItem
                   sx={{
@@ -206,7 +265,7 @@ const OurCharter: NextPageWithLayout = () => {
                   sx={{
                     display: 'list-item',
                   }}>
-                  participer à une logique d’accès au vélo pour tou.te.s
+                  participer à une logique d&apos;accès au vélo pour tou.te.s
                 </ListItem>
                 <ListItem
                   sx={{
@@ -219,8 +278,8 @@ const OurCharter: NextPageWithLayout = () => {
                   sx={{
                     display: 'list-item',
                   }}>
-                  être associés à moyen terme à l’élaboration des politiques
-                  publiques en matière de mobilité et de formation
+                  être associés à moyen terme à l&apos;élaboration des
+                  politiques publiques en matière de mobilité et de formation
                   professionnelle
                 </ListItem>
               </List>
