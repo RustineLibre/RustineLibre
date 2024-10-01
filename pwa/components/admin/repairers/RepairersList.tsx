@@ -54,11 +54,10 @@ export const RepairersList = (): JSX.Element => {
     );
 
     const eventSource = new EventSource(hub);
-    console.log('function mercureSubscribe')
-    eventSource.onmessage = (event) => {
-      console.log('eventSource.onmessage')
-      console.log(event);
-      // fetchMessages();
+    eventSource.onmessage = ({data}: {data: string}) => {
+      const newRepairer: Repairer = JSON.parse(data);
+
+      setRepairers((repairers) => [newRepairer, ...repairers]);
     };
 
     return eventSource;
@@ -90,14 +89,12 @@ export const RepairersList = (): JSX.Element => {
   }, [searchTerm, currentPage, fetchRepairers]);
 
   useEffect(() => {
-    if (repairers.length > 0) {
-      mercureSubscribe().then(setEventSource);
-    }
+    mercureSubscribe().then(setEventSource);
 
     return () => {
       eventSource && eventSource.close();
     };
-  }, [repairers, mercureSubscribe]);
+  }, [mercureSubscribe]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDeleteClick = (repairer: Repairer) => {
     setDeleteDialogOpen(true);
@@ -198,7 +195,13 @@ export const RepairersList = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loadingList && <CircularProgress sx={{ml: 5, mt: 5}} />}
+            {loadingList && (
+              <TableRow>
+                <TableCell>
+                  <CircularProgress sx={{ml: 5, mt: 5}} />
+                </TableCell>
+              </TableRow>
+            )}
             {repairers.map((repairer) => (
               <TableRow
                 key={repairer.id}
