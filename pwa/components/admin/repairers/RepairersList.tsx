@@ -1,3 +1,4 @@
+import {ENTRYPOINT} from '@config/entrypoint';
 import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import Link from 'next/link';
 import {repairerResource} from '@resources/repairerResource';
@@ -37,8 +38,31 @@ export const RepairersList = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
+  const [eventSource, setEventSource] = useState<EventSource | undefined>(
+    undefined
+  );
   const [selectedRepairerToDelete, setSelectedRepairerToDelete] =
     useState<Repairer | null>(null);
+
+  const mercureSubscribe = useCallback(async (): Promise<EventSource> => {
+    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+    const hub = new URL(hubUrl);
+
+    hub.searchParams.append(
+      'topic',
+      `${ENTRYPOINT}${repairerResource.getEndpoint()}`
+    );
+
+    const eventSource = new EventSource(hub);
+    console.log('function mercureSubscribe')
+    eventSource.onmessage = (event) => {
+      console.log('eventSource.onmessage')
+      console.log(event);
+      // fetchMessages();
+    };
+
+    return eventSource;
+  }, []);
 
   const fetchRepairers = useCallback(async () => {
     setLoadingList(true);
@@ -64,6 +88,16 @@ export const RepairersList = (): JSX.Element => {
       fetchRepairers();
     }
   }, [searchTerm, currentPage, fetchRepairers]);
+
+  useEffect(() => {
+    if (repairers.length > 0) {
+      mercureSubscribe().then(setEventSource);
+    }
+
+    return () => {
+      eventSource && eventSource.close();
+    };
+  }, [repairers, mercureSubscribe]);
 
   const handleDeleteClick = (repairer: Repairer) => {
     setDeleteDialogOpen(true);
