@@ -92,6 +92,28 @@ class PostTest extends SlotsTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
+    public function testBossCanCreateAppointmentForCustomerWithoutAccount(): void
+    {
+        $client = $this->createClientWithUser($this->repairerWithAppointment->owner);
+
+        $slots = $client->request('GET', sprintf('/repairer_get_slots_available/%d', $this->repairerWithAppointment->id))->toArray();
+        $slotTime = sprintf('%s %s', array_key_first($slots), $slots[array_key_first($slots)][0]);
+
+        $response = $client->request('POST', '/appointments', [
+            'json' => [
+                'slotTime' => \DateTimeImmutable::createFromFormat('Y-m-d H:i', $slotTime)->format('Y-m-d H:i:s'),
+                'repairer' => sprintf('/repairers/%d', $this->repairerWithAppointment->id),
+                'customerName' => 'Foo Customer',
+                'customerPhoneWithoutAccount' => '0669908100'
+            ],
+        ])->toArray();
+
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
+
+        self::assertEquals('Foo Customer', $response['customerName']);
+        self::assertEquals('0669908100', $response['customerPhoneWithoutAccount']);
+    }
+
     public function testBossCannotCreateAppointmentForOtherUser(): void
     {
         $client = $this->createClientWithUser($this->repairerWithoutAppointment->owner);

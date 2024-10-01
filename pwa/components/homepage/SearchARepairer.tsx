@@ -156,13 +156,16 @@ const SearchARepairer = ({
   };
 
   const fetchPicture = async () => {
-    const response = await websiteMediaResource.getById(
-      'homepage_main_picture'
-    );
+    try {
+      const response = await websiteMediaResource.getById(
+        'homepage_main_picture',
+        false
+      );
 
-    response && response.media
-      ? setHomepagePicture(response.media.contentUrl)
-      : setHomepagePicture('/img/rustine-libre-reparateur.webp');
+      setHomepagePicture(response.media?.contentUrl ?? '');
+    } catch (e) {
+      setHomepagePicture('/img/rustine-libre-reparateur.webp');
+    }
   };
 
   useEffect(() => {

@@ -9,6 +9,7 @@ use App\Entity\RepairerEmployee;
 use App\Repository\RepairerEmployeeRepository;
 use App\Repository\RepairerRepository;
 use App\Tests\AbstractTestCase;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -18,6 +19,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class RetrieveEmployeesTest extends AbstractTestCase
 {
+    use RefreshDatabaseTrait;
+
     private RepairerEmployeeRepository $repairerEmployeeRepository;
 
     public function setUp(): void

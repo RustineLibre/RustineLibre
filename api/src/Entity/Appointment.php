@@ -128,6 +128,10 @@ class Appointment
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
     public ?string $customerName = null;
 
+    #[ORM\Column(nullable: true)]
+    #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ])]
+    public ?string $customerPhoneWithoutAccount = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Groups([self::APPOINTMENT_READ, self::APPOINTMENT_WRITE, self::REPAIRER_APPOINTMENT_COLLECTION_READ, self::CUSTOMER_APPOINTMENT_COLLECTION_READ, self::ADMIN_APPOINTMENT_COLLECTION_READ])]

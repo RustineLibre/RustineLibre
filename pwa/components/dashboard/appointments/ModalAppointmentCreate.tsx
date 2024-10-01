@@ -72,6 +72,8 @@ const ModalAppointmentCreate = ({
   const [customerType, setCustomerType] = useState<string>('');
   const [customerInput, setCustomerInput] = useState<string>('');
   const [customerName, setCustomerName] = useState<string>('');
+  const [customerPhoneWithoutAccount, setCustomerPhoneWithoutAccount] =
+    useState<string>('');
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
     null
   );
@@ -139,6 +141,7 @@ const ModalAppointmentCreate = ({
   const handleCustomerType = (event: SelectChangeEvent): void => {
     setSelectedCustomer(null);
     setCustomerName('');
+    setCustomerPhoneWithoutAccount('');
     setCustomerInput('');
     setCustomerType(event.target.value);
   };
@@ -155,6 +158,12 @@ const ModalAppointmentCreate = ({
     setCustomerName(event.target.value);
   };
 
+  const handleCustomerPhoneWithoutAccount = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
+    setCustomerPhoneWithoutAccount(event.target.value);
+  };
+
   const handleSelectCustomer = (customer: Customer): void => {
     setSelectedCustomer(customer);
   };
@@ -165,12 +174,16 @@ const ModalAppointmentCreate = ({
       slotTime: slotSelected,
       customer: typeof customer !== 'string' ? customer['@id'] : null,
       customerName: typeof customer === 'string' ? customer : null,
+      customerPhoneWithoutAccount:
+        typeof customer === 'string' ? customerPhoneWithoutAccount : null,
     };
+
     if (isItinerantRepairer && address && latitude && longitude) {
       requestBody['address'] = address;
       requestBody['latitude'] = latitude.toString();
       requestBody['longitude'] = longitude.toString();
     }
+
     const appointment = await appointmentResource.post(requestBody);
     setNewAppointment(appointment);
     setLoading(false);
@@ -181,32 +194,40 @@ const ModalAppointmentCreate = ({
       setErrorMessage(
         'Vous devez sélectionner un compte client ou indiquer son nom et son prénom.'
       );
+
       return;
     }
+
     setLoading(true);
+
     try {
       await createAppointment(selectedCustomer ?? customerName);
       setDetails(true);
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
+
     setLoading(false);
   };
 
   const handleCreateAppointmentWithoutDetails = async () => {
-    if (!customerName && null === selectedCustomer) {
+    if (null === selectedCustomer && !customerName) {
       setErrorMessage(
         'Vous devez sélectionner un compte client ou indiquer son nom et son prénom.'
       );
+
       return;
     }
+
     setLoadingWithoutDetails(true);
+
     try {
       await createAppointment(selectedCustomer ?? customerName);
       handleSuccess();
     } catch (e: any) {
       setErrorMessage(e.message?.replace(errorRegex, '$2'));
     }
+
     setLoadingWithoutDetails(false);
   };
 
@@ -425,7 +446,7 @@ const ModalAppointmentCreate = ({
                     label="Compte client"
                     {...params}
                     value={customerInput}
-                    onChange={(e) => handleCustomerChange(e)}
+                    onChange={handleCustomerChange}
                   />
                 )}
               />
@@ -436,7 +457,16 @@ const ModalAppointmentCreate = ({
                 sx={{width: '100%', mt: 1, mb: 1}}
                 label="Nom / prénom du client"
                 value={customerName}
-                onChange={(e) => handleCustomerName(e)}
+                onChange={handleCustomerName}
+              />
+            )}
+            {customerType === 'customerWithoutAccount' && (
+              <TextField
+                disabled={null !== selectedCustomer}
+                sx={{width: '100%', mt: 1, mb: 1}}
+                label="Téléphone"
+                value={customerPhoneWithoutAccount}
+                onChange={handleCustomerPhoneWithoutAccount}
               />
             )}
           </Box>

@@ -1,3 +1,4 @@
+import {Phone} from '@mui/icons-material';
 import React, {useContext, useEffect, useState} from 'react';
 import {appointmentResource} from '@resources/appointmentResource';
 import {openingHoursResource} from '@resources/openingHours';
@@ -175,7 +176,7 @@ const ModalShowAppointment = ({
               alignItems="center">
               <Box display="flex" gap={2}>
                 <AccountCircleIcon color="primary" />
-                <Typography>Client:</Typography>
+                <Typography>Client :</Typography>
                 <Typography>
                   {appointment.customer
                     ? `${appointment.customer.firstName} ${appointment.customer.lastName}`
@@ -224,7 +225,7 @@ const ModalShowAppointment = ({
                 alignItems="center">
                 <Box display="flex" gap={2}>
                   <PedalBikeIcon color="primary" />
-                  <Typography>Vélo:</Typography>
+                  <Typography>Vélo :</Typography>
                   <Typography>{appointment.bike.name}</Typography>
                 </Box>
                 <Box>
@@ -262,7 +263,7 @@ const ModalShowAppointment = ({
             {appointment.address && (
               <Box display="flex" gap={2}>
                 <LocationOnIcon color="primary" />
-                <Typography>Adresse:</Typography>
+                <Typography>Adresse :</Typography>
                 <Typography>{appointment.address}</Typography>
               </Box>
             )}
@@ -272,7 +273,7 @@ const ModalShowAppointment = ({
               alignItems="center">
               <Box display="flex" gap={2}>
                 <CalendarMonthIcon color="primary" />
-                <Typography>Date:</Typography>{' '}
+                <Typography>Date :</Typography>{' '}
                 {formatDate(appointment.slotTime)}
               </Box>
               <Box>
@@ -315,7 +316,7 @@ const ModalShowAppointment = ({
             </Box>
             <Box display="flex" gap={2}>
               <CheckCircleOutlineIcon color="primary" />
-              <Typography>Status:</Typography>
+              <Typography>Status :</Typography>
               <Typography>
                 {getAppointmentStatus(appointment.status)}
               </Typography>
@@ -323,8 +324,17 @@ const ModalShowAppointment = ({
             {appointment.bikeType && (
               <Box display="flex" gap={2}>
                 <PedalBikeIcon color="primary" />
-                <Typography>Type de vélo:</Typography>
+                <Typography>Type de vélo :</Typography>
                 <Typography>{appointment.bikeType.name}</Typography>
+              </Box>
+            )}
+            {appointment.customerPhoneWithoutAccount && (
+              <Box display="flex" gap={2}>
+                <Phone color="primary" />
+                <Typography>Téléphone :</Typography>
+                <Typography>
+                  {appointment.customerPhoneWithoutAccount}
+                </Typography>
               </Box>
             )}
           </Box>
