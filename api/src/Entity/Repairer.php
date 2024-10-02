@@ -203,7 +203,7 @@ class Repairer
 
     #[ORM\Column]
     #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ, User::USER_READ])]
-    #[ApiProperty(security: "is_granted('ROLE_ADMIN')")]
+    #[ApiProperty(securityPostDenormalize: "is_granted('ROLE_ADMIN')")]
     #[ApiFilter(BooleanFilter::class)]
     public ?bool $enabled = false;
 

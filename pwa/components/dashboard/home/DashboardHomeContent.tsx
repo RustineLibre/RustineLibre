@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Box} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import DashboardNextAppointments from '@components/dashboard/home/DashboardNextAppointments';
 import DashboardWaitingAppointments from '@components/dashboard/home/DashboardWaitingAppointments';
@@ -66,9 +66,24 @@ export const DashboardHomeContent = ({
     return response['hydra:member'];
   };
 
+  console.log(repairer);
+
   return (
     <Box>
-      {repairer && (
+      {!repairer.enabled && (
+        <Box display={'flex'} justifyContent={'center'}>
+          <Typography
+            textAlign={'center'}
+            fontWeight={'bold'}
+            width={'50%'}
+            marginTop={5}>
+            Votre demande a bien été reçue. Elle est en cours de traitement par
+            l&apos;équipe Rustine Libre. Dès validation, vous serez tenu
+            informé.
+          </Typography>
+        </Box>
+      )}
+      {repairer.enabled && (
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <DashboardNextAppointments
