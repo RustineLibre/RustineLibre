@@ -12,7 +12,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 function MyApp({Component, pageProps, ...props}: AppPropsWithLayout) {
-  const googleClientId = process.env.GOOGLE_CLIENT_ID;
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
   const getLayout = Component.getLayout ?? ((page: ReactElement) => page);
 
