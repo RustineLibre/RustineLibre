@@ -36,6 +36,11 @@ spec:
           env:
             - name: NEXT_PUBLIC_ENTRYPOINT
               value: {{ .Values.pwa.env.NEXT_PUBLIC_ENTRYPOINT }}
+            - name: NEXT_PUBLIC_GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rustinelibre.fullname" . }}
+                  key: google-oauth-client
           ports:
             - name: http
               containerPort: 3000
