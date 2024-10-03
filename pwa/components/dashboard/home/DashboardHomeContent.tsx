@@ -1,3 +1,5 @@
+import {ENTRYPOINT} from '@config/entrypoint';
+import {repairerResource} from '@resources/repairerResource';
 import React, {useCallback, useEffect, useState} from 'react';
 import {Box, Typography} from '@mui/material';
 import Grid from '@mui/material/Grid';
@@ -26,6 +28,9 @@ export const DashboardHomeContent = ({
   const [appointmentsNext, setAppointmentsNext] = useState<Appointment[]>([]);
   const [appointmentsWaiting, setAppointmentsWaiting] = useState<Appointment[]>(
     []
+  );
+  const [eventSource, setEventSource] = useState<EventSource | undefined>(
+    undefined
   );
 
   const fetchNextAppointments = async () => {
@@ -65,6 +70,45 @@ export const DashboardHomeContent = ({
     );
     return response['hydra:member'];
   };
+
+  const mercureSubscribe = useCallback(async (): Promise<EventSource> => {
+    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+    const hub = new URL(hubUrl);
+
+    hub.searchParams.append(
+      'topic',
+      `${ENTRYPOINT}${repairerResource.getEndpoint()}/${repairer.id}${appointmentResource.getEndpoint()}`
+    );
+
+    const eventSource = new EventSource(hub);
+    eventSource.onmessage = ({data}: {data: string}) => {
+      const newWaitingAppointment: Appointment = JSON.parse(data);
+
+      setAppointmentsWaiting((appointmentsWaiting) => {
+        const index = appointmentsWaiting.findIndex(
+          (waitingAppointment) =>
+            waitingAppointment.id === newWaitingAppointment.id
+        );
+
+        if (-1 !== index) {
+          appointmentsWaiting[index] = newWaitingAppointment;
+          return [...appointmentsWaiting];
+        }
+
+        return [newWaitingAppointment, ...appointmentsWaiting];
+      });
+    };
+
+    return eventSource;
+  }, []);
+
+  useEffect(() => {
+    mercureSubscribe().then(setEventSource);
+
+    return () => {
+      eventSource && eventSource.close();
+    };
+  }, [mercureSubscribe]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>
