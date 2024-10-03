@@ -42,6 +42,8 @@ jobs:
         type=sha
     secrets:
       domain: ${{ secrets.DOMAIN }}
+      google-oauth-client: ${{ secrets.GOOGLE_CLIENT_ID }}
+
 
   deploy:
     name: Deploy
