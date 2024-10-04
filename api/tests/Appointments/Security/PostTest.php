@@ -104,7 +104,7 @@ class PostTest extends SlotsTestCase
                 'slotTime' => \DateTimeImmutable::createFromFormat('Y-m-d H:i', $slotTime)->format('Y-m-d H:i:s'),
                 'repairer' => sprintf('/repairers/%d', $this->repairerWithAppointment->id),
                 'customerName' => 'Foo Customer',
-                'customerPhoneWithoutAccount' => '0669908100'
+                'customerPhoneWithoutAccount' => '0669908100',
             ],
         ])->toArray();
 

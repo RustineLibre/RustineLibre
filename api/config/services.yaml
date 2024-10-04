@@ -69,3 +69,8 @@ services:
                 credentials:
                     key: '%storage_key%'
                     secret: '%storage_secret%'
+
+    App\Repairers\Serializer\RepairerEnabledContextBuilder:
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@App\Repairers\Serializer\RepairerEnabledContextBuilder.inner' ]
+        autoconfigure: false

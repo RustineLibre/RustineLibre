@@ -194,7 +194,8 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                 {((repairer && repairer.enabled) ||
                   (user &&
                     user.repairerEmployee &&
-                    user.repairerEmployee.repairer)) && (
+                    user.repairerEmployee.repairer &&
+                    user.repairerEmployee.repairer.enabled)) && (
                   <>
                     <SidebarListItem
                       text="Agenda"

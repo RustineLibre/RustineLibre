@@ -162,7 +162,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testAdminCanFilterAppointmentsBySearchTerm_CustomerEmail(): void
+    public function testAdminCanFilterAppointmentsBySearchTermCustomerEmail(): void
     {
         $searchTerm = 'user1@';
         $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
@@ -186,7 +186,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testAdminCanFilterAppointmentsBySearchTerm_CustomerLastName(): void
+    public function testAdminCanFilterAppointmentsBySearchTermCustomerLastName(): void
     {
         $searchTerm = 'Tille';
         $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
@@ -210,7 +210,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testAdminCanFilterAppointmentsBySearchTerm_CustomerFirstName(): void
+    public function testAdminCanFilterAppointmentsBySearchTermCustomerFirstName(): void
     {
         $searchTerm = 'raph';
         $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
@@ -234,7 +234,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testAdminCanFilterAppointmentsBySearchTerm_RepairerName(): void
+    public function testAdminCanFilterAppointmentsBySearchTermRepairerName(): void
     {
         $searchTerm = 'cycl';
         $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
@@ -258,7 +258,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testAdminCanFilterAppointmentsBySearchTerm_AutoDiagnosticPrestation(): void
+    public function testAdminCanFilterAppointmentsBySearchTermAutoDiagnosticPrestation(): void
     {
         $searchTerm = 'problè';
         $response = $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
@@ -282,7 +282,7 @@ class GetTest extends AbstractTestCase
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
      */
-    public function testAdminCanFilterAppointmentsBySearchTerm_InRepairerAndAutoDiagnostic(): void
+    public function testAdminCanFilterAppointmentsBySearchTermInRepairerAndAutoDiagnostic(): void
     {
         $searchTerm = 'vélo';
         $this->createClientAuthAsAdmin()->request('GET', "/appointments?search=$searchTerm");
@@ -294,12 +294,12 @@ class GetTest extends AbstractTestCase
                 [
                     'repairer' => [
                         'name' => 'Le vélo de Belleville',
-                    ]
+                    ],
                 ],
                 [
                     'autoDiagnostic' => [
                         'prestation' => 'Électrifier mon vélo',
-                    ]
+                    ],
                 ],
             ],
         ]);

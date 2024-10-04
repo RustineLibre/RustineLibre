@@ -66,52 +66,35 @@ export const DashboardHomeContent = ({
     return response['hydra:member'];
   };
 
-  console.log(repairer);
-
   return (
     <Box>
-      {!repairer.enabled && (
-        <Box display={'flex'} justifyContent={'center'}>
-          <Typography
-            textAlign={'center'}
-            fontWeight={'bold'}
-            width={'50%'}
-            marginTop={5}>
-            Votre demande a bien été reçue. Elle est en cours de traitement par
-            l&apos;équipe Rustine Libre. Dès validation, vous serez tenu
-            informé.
-          </Typography>
-        </Box>
-      )}
-      {repairer.enabled && (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <DashboardNextAppointments
-              repairer={repairer}
-              appointmentsNext={appointmentsNext}
-              fetchNextAppointments={fetchNextAppointments}
-              loadingListNext={loadingListNext}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <DashboardWaitingAppointments
-              repairer={repairer}
-              appointmentsWaiting={appointmentsWaiting}
-              fetchNextAppointments={fetchNextAppointments}
-              fetchWaitingAppointments={fetchWaitingAppointments}
-              loadingListWait={loadingListWait}
-            />
-          </Grid>
-          {isBoss(currentUser) && (
-            <Grid item xs={12} mt={2}>
-              <DashboardHomeEmployees
-                currentBoss={currentUser}
-                repairer={repairer}
-              />
-            </Grid>
-          )}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <DashboardNextAppointments
+            repairer={repairer}
+            appointmentsNext={appointmentsNext}
+            fetchNextAppointments={fetchNextAppointments}
+            loadingListNext={loadingListNext}
+          />
         </Grid>
-      )}
+        <Grid item xs={12} md={6}>
+          <DashboardWaitingAppointments
+            repairer={repairer}
+            appointmentsWaiting={appointmentsWaiting}
+            fetchNextAppointments={fetchNextAppointments}
+            fetchWaitingAppointments={fetchWaitingAppointments}
+            loadingListWait={loadingListWait}
+          />
+        </Grid>
+        {isBoss(currentUser) && (
+          <Grid item xs={12} mt={2}>
+            <DashboardHomeEmployees
+              currentBoss={currentUser}
+              repairer={repairer}
+            />
+          </Grid>
+        )}
+      </Grid>
     </Box>
   );
 };
