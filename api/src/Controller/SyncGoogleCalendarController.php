@@ -49,7 +49,7 @@ class SyncGoogleCalendarController extends AbstractController
         }
 
         $this->client->setClientId($this->googleClientId);
-        $this->client->setRedirectUri("postmessage");
+        $this->client->setRedirectUri('postmessage');
 
         $accessToken = $this->client->fetchAccessTokenWithAuthCode($requestContent['code']);
 
