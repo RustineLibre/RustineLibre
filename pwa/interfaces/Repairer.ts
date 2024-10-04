@@ -34,4 +34,5 @@ export interface Repairer {
   optionalPage?: string;
   durationSlot?: number;
   numberOfSlots?: number;
+  isConnectedToGoogle: boolean;
 }
