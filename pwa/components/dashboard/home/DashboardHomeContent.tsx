@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Box} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import Grid from '@mui/material/Grid';
 import DashboardNextAppointments from '@components/dashboard/home/DashboardNextAppointments';
 import DashboardWaitingAppointments from '@components/dashboard/home/DashboardWaitingAppointments';
@@ -68,35 +68,33 @@ export const DashboardHomeContent = ({
 
   return (
     <Box>
-      {repairer && (
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <DashboardNextAppointments
-              repairer={repairer}
-              appointmentsNext={appointmentsNext}
-              fetchNextAppointments={fetchNextAppointments}
-              loadingListNext={loadingListNext}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <DashboardWaitingAppointments
-              repairer={repairer}
-              appointmentsWaiting={appointmentsWaiting}
-              fetchNextAppointments={fetchNextAppointments}
-              fetchWaitingAppointments={fetchWaitingAppointments}
-              loadingListWait={loadingListWait}
-            />
-          </Grid>
-          {isBoss(currentUser) && (
-            <Grid item xs={12} mt={2}>
-              <DashboardHomeEmployees
-                currentBoss={currentUser}
-                repairer={repairer}
-              />
-            </Grid>
-          )}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <DashboardNextAppointments
+            repairer={repairer}
+            appointmentsNext={appointmentsNext}
+            fetchNextAppointments={fetchNextAppointments}
+            loadingListNext={loadingListNext}
+          />
         </Grid>
-      )}
+        <Grid item xs={12} md={6}>
+          <DashboardWaitingAppointments
+            repairer={repairer}
+            appointmentsWaiting={appointmentsWaiting}
+            fetchNextAppointments={fetchNextAppointments}
+            fetchWaitingAppointments={fetchWaitingAppointments}
+            loadingListWait={loadingListWait}
+          />
+        </Grid>
+        {isBoss(currentUser) && (
+          <Grid item xs={12} mt={2}>
+            <DashboardHomeEmployees
+              currentBoss={currentUser}
+              repairer={repairer}
+            />
+          </Grid>
+        )}
+      </Grid>
     </Box>
   );
 };

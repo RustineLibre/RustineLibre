@@ -62,7 +62,11 @@ const RepairersList = ({repairers}: RepairersListProps) => {
                 ) : (
                   <>
                     <Link
-                      href={`/sradmin/boutiques/${repairer.id}/edit`}
+                      href={
+                        repairer.enabled
+                          ? `/sradmin/boutiques/${repairer.id}/edit`
+                          : `/sradmin/boutiques/${repairer.id}`
+                      }
                       legacyBehavior
                       passHref>
                       <IconButton color="secondary">

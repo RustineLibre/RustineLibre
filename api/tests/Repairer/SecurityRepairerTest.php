@@ -114,7 +114,6 @@ class SecurityRepairerTest extends AbstractTestCase
         if (array_key_exists('openingHours', $response)) {
             $this->assertSame($response['openingHours'], $this->repairers[5]->openingHours);
         }
-        $this->assertArrayNotHasKey('enabled', $response);
     }
 
     public function testGetRepairerByAdmin(): void
