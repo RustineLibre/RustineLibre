@@ -1,5 +1,6 @@
 import {Repairer} from '@interfaces/Repairer';
 import {
+  Box,
   CircularProgress,
   IconButton,
   Paper,
@@ -9,6 +10,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  useMediaQuery,
 } from '@mui/material';
 import React, {useState} from 'react';
 import Link from 'next/link';
@@ -16,11 +18,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForeverSharp';
 import ConfirmationModal from '@components/common/ConfirmationModal';
 import {repairerResource} from '@resources/repairerResource';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import theme from '../../../styles/theme';
 
 interface RepairersListProps {
   repairers: Repairer[];
 }
 const RepairersList = ({repairers}: RepairersListProps) => {
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
 
@@ -61,6 +66,34 @@ const RepairersList = ({repairers}: RepairersListProps) => {
                   <CircularProgress />
                 ) : (
                   <>
+                    <Box display={isMobile ? 'flex' : 'block'}>
+                      <Link
+                        href={`/sradmin/boutiques/${repairer.id}`}
+                        legacyBehavior
+                        passHref>
+                        <IconButton
+                          color="secondary"
+                          size={isMobile ? 'small' : 'medium'}>
+                          <RemoveRedEyeIcon />
+                        </IconButton>
+                      </Link>
+                      <Link
+                        href={`/sradmin/boutiques/${repairer.id}/edit`}
+                        legacyBehavior
+                        passHref>
+                        <IconButton
+                          color="secondary"
+                          size={isMobile ? 'small' : 'medium'}>
+                          <EditIcon color="secondary" />
+                        </IconButton>
+                      </Link>
+                      <IconButton
+                        onClick={() => setDeleteDialogOpen(true)}
+                        color="secondary"
+                        size={isMobile ? 'small' : 'medium'}>
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Box>
                     <Link
                       href={
                         repairer.enabled

@@ -176,7 +176,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                   text="Tableau de bord"
                   open={true}
                   icon={<HomeIcon />}
-                  path="/sradmin/boutiques"
+                  path="/sradmin/dashboard"
                 />
                 {user && isBoss(user) && (
                   <>

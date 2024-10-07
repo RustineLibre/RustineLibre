@@ -30,69 +30,91 @@ const SidebarListItemRepairers = (): React.JSX.Element => {
 
   return (
     <>
-      <ListItemButton
-        sx={{
-          minHeight: 48,
-          px: 2.5,
-        }}
-        onClick={() => setToggleRepairers(!toggleRepairers)}>
-        <ListItemIcon
-          sx={{
-            minWidth: 0,
-            mr: 2,
-            justifyContent: 'center',
-            color: 'primary.main',
-          }}>
-          <StorefrontIcon />
-        </ListItemIcon>
-        {!isMobile && (
-          <ListItemText
-            disableTypography
-            primary={<Typography color="grey.600">Boutiques</Typography>}
-          />
-        )}
-        {toggleRepairers ? <ExpandMore /> : <ExpandLess />}
-      </ListItemButton>
-      <Collapse in={toggleRepairers} timeout="auto" unmountOnExit>
-        <List
-          component="div"
-          disablePadding
-          sx={{
-            marginBottom: 1,
-          }}>
-          {user?.repairers.map((repairer) => (
-            <Link
-              key={repairer.id}
-              href={`/sradmin/boutiques/${repairer.id}`}
-              passHref
-              legacyBehavior>
-              <ListItemButton
-                component="a"
-                sx={{
-                  paddingTop: 0.5,
-                  paddingBottom: 0.5,
-                }}>
-                <ListItemText
-                  disableTypography={true}
-                  primary={repairer.name}
-                  sx={{
-                    '::before': {
-                      content: '"-"',
-                      display: 'inline-flex',
-                      marginLeft: 3,
-                      marginRight: 2,
-                    },
-                    color: isRepairerSelected(repairer)
-                      ? 'primary.main'
-                      : 'grey.600',
-                    whiteSpace: 'normal',
-                  }}
-                />
-              </ListItemButton>
-            </Link>
-          ))}
-        </List>
-      </Collapse>
+      {!isMobile && (
+        <>
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              px: 2.5,
+            }}
+            onClick={() => setToggleRepairers(!toggleRepairers)}>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: 2,
+                justifyContent: 'center',
+                color: 'primary.main',
+              }}>
+              <StorefrontIcon />
+            </ListItemIcon>
+            <ListItemText
+              disableTypography
+              primary={<Typography color="grey.600">Boutiques</Typography>}
+            />
+            {toggleRepairers ? <ExpandMore /> : <ExpandLess />}
+          </ListItemButton>
+          <Collapse in={toggleRepairers} timeout="auto" unmountOnExit>
+            <List
+              component="div"
+              disablePadding
+              sx={{
+                marginBottom: 1,
+              }}>
+              {user?.repairers.map((repairer) => (
+                <Link
+                  key={repairer.id}
+                  href={`/sradmin/boutiques/${repairer.id}`}
+                  passHref
+                  legacyBehavior>
+                  <ListItemButton
+                    component="a"
+                    sx={{
+                      paddingTop: 0.5,
+                      paddingBottom: 0.5,
+                    }}>
+                    <ListItemText
+                      disableTypography={true}
+                      primary={repairer.name}
+                      sx={{
+                        '::before': {
+                          content: '"-"',
+                          display: 'inline-flex',
+                          marginLeft: 3,
+                          marginRight: 2,
+                        },
+                        color: isRepairerSelected(repairer)
+                          ? 'primary.main'
+                          : 'grey.600',
+                        whiteSpace: 'normal',
+                      }}
+                    />
+                  </ListItemButton>
+                </Link>
+              ))}
+            </List>
+          </Collapse>
+        </>
+      )}
+      {isMobile && (
+        <>
+          <ListItemButton
+            href={'/sradmin/boutiques'}
+            sx={{
+              minHeight: 48,
+              px: 2.5,
+            }}>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: 2,
+                justifyContent: 'center',
+                color: 'primary.main',
+              }}>
+              <StorefrontIcon />
+            </ListItemIcon>
+          </ListItemButton>
+        </>
+      )}
     </>
   );
 };
