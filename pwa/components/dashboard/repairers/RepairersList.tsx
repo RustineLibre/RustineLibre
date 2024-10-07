@@ -78,12 +78,14 @@ const RepairersList = ({repairers}: RepairersListProps) => {
                         </IconButton>
                       </Link>
                       <Link
-                        href={`/sradmin/boutiques/${repairer.id}/edit`}
+                        href={
+                          repairer.enabled
+                            ? `/sradmin/boutiques/${repairer.id}/edit`
+                            : `/sradmin/boutiques/${repairer.id}`
+                        }
                         legacyBehavior
                         passHref>
-                        <IconButton
-                          color="secondary"
-                          size={isMobile ? 'small' : 'medium'}>
+                        <IconButton color="secondary">
                           <EditIcon color="secondary" />
                         </IconButton>
                       </Link>
@@ -94,23 +96,6 @@ const RepairersList = ({repairers}: RepairersListProps) => {
                         <DeleteForeverIcon />
                       </IconButton>
                     </Box>
-                    <Link
-                      href={
-                        repairer.enabled
-                          ? `/sradmin/boutiques/${repairer.id}/edit`
-                          : `/sradmin/boutiques/${repairer.id}`
-                      }
-                      legacyBehavior
-                      passHref>
-                      <IconButton color="secondary">
-                        <EditIcon color="secondary" />
-                      </IconButton>
-                    </Link>
-                    <IconButton
-                      onClick={() => setDeleteDialogOpen(true)}
-                      color="secondary">
-                      <DeleteForeverIcon />
-                    </IconButton>
                   </>
                 )}
                 <ConfirmationModal
