@@ -43,8 +43,8 @@ const Dashboard = () => {
               </Typography>
               <Typography textAlign={'center'} width={'50%'} marginTop={3}>
                 Votre demande a bien été reçue. Elle est en cours de traitement
-                par l&apos;équipe Rustine Libre. Dès validation, vous serez tenu
-                informé.
+                par l&apos;équipe Rustine&nbsp;Libre. Dès validation, vous serez
+                tenu informé.
               </Typography>
             </Box>
           )}
