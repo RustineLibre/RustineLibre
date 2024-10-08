@@ -20,6 +20,7 @@ final class Version20240917140317 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_3D4611C0EA9FDD75 ON website_media (media_id)');
         $this->addSql('ALTER TABLE website_media ADD CONSTRAINT FK_3D4611C0EA9FDD75 FOREIGN KEY (media_id) REFERENCES media_object (id) ON DELETE SET NULL NOT DEFERRABLE INITIALLY IMMEDIATE');
     }
+
     public function down(Schema $schema): void
     {
         $this->addSql('CREATE SCHEMA public');

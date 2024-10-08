@@ -269,6 +269,12 @@ class Repairer
     #[ORM\Column(length: 250, nullable: true)]
     public ?string $googleRefreshToken = null;
 
+    #[Groups([User::USER_READ, self::REPAIRER_READ, self::REPAIRER_COLLECTION_READ])]
+    public function getIsConnectedToGoogle(): bool
+    {
+        return null !== $this->googleAccessToken;
+    }
+
     public function __construct()
     {
         $this->bikeTypesSupported = new ArrayCollection();

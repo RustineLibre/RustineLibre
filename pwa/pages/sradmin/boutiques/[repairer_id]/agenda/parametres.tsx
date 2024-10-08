@@ -7,6 +7,7 @@ import ExceptionalClosure from '@components/dashboard/agenda/ExceptionalClosure'
 import Error404 from '@pages/404';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
 import {NextPageWithLayout} from '@interfaces/NextPageWithLayout';
+import GoogleAgendaLogin from '@components/dashboard/agenda/GoogleAgendaLogin';
 
 const AgendaParameters: NextPageWithLayout = () => {
   const {repairer, repairerNotFound} = useContext(DashboardRepairerContext);
@@ -30,12 +31,16 @@ const AgendaParameters: NextPageWithLayout = () => {
           <Tabs value={tabValue} onChange={handleChangeTab}>
             <Tab label="Jours et plages horaires" />
             <Tab label="Fermetures exceptionnelles" />
+            <Tab label="Connexion Google Agenda" />
           </Tabs>
 
           <Box sx={{marginTop: 3}}>
             {repairer && tabValue === 0 && <OpeningHours repairer={repairer} />}
             {repairer && tabValue === 1 && (
               <ExceptionalClosure repairer={repairer} />
+            )}
+            {repairer && tabValue === 2 && (
+              <GoogleAgendaLogin repairer={repairer} />
             )}
           </Box>
         </Box>

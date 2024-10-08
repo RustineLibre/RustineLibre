@@ -1,53 +1,57 @@
-import React from 'react';
-import {GoogleLogin, CredentialResponse} from '@react-oauth/google';
+import React, {useContext} from 'react';
+import {useGoogleLogin} from '@react-oauth/google';
 import {getToken} from '@helpers/localHelper';
 import {Repairer} from '@interfaces/Repairer';
+import {Button} from '@mui/material';
+import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {repairerResource} from '@resources/repairerResource';
 
 type GoogleCalendarSyncProps = {
-  repairer: Repairer | null;
-};
-
-type GoogleDataType = {
-  google_oauth_url: string;
+  repairer: Repairer;
 };
 
 const GoogleCalendarSync = ({repairer}: GoogleCalendarSyncProps) => {
-  const handleLoginSuccess = (response: CredentialResponse) => {
-    if (response.credential) {
-      const currentToken = getToken();
-      fetch('/google/auth/url', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${currentToken}`,
-        },
-        body: JSON.stringify({
-          tokenId: response.credential,
-          repairer: repairer ? repairer.id : '',
-        }),
+  const {setRepairer} = useContext(DashboardRepairerContext);
+  const handleLoginSuccess = (code: string) => {
+    const currentToken = getToken();
+    fetch('/google/sync/callback', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${currentToken}`,
+      },
+      body: JSON.stringify({
+        code: code,
+        repairer: repairer ? repairer.id : '',
+      }),
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          setRepairer(await repairerResource.getById(repairer.id));
+        }
       })
-        .then((response) => response.json())
-        .then((data: GoogleDataType) => {
-          console.log(data);
-
-          window.open(data.google_oauth_url, '_blank');
-        })
-        .catch((error) => {
-          console.error('Error syncing with Google Calendar:', error);
-        });
-    }
+      .catch((error) => {
+        console.error('Error syncing with Google Calendar:', error);
+      });
   };
 
   const handleLoginFailure = (error: any) => {
     console.error('Google Login Failure:', error);
   };
 
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => handleLoginSuccess(codeResponse.code),
+    onError: (error) => handleLoginFailure(error),
+    flow: 'auth-code',
+  });
+
   return (
     <div>
-      <GoogleLogin
-        onSuccess={handleLoginSuccess}
-        onError={() => handleLoginFailure}
-      />
+      <Button variant={'outlined'} onClick={() => login()}>
+        {repairer.isConnectedToGoogle
+          ? 'Changer de compte'
+          : 'Se connecter avec Google'}
+      </Button>
     </div>
   );
 };
