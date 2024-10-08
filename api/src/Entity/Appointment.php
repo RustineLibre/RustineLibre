@@ -51,7 +51,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     paginationClientItemsPerPage: true,
     extraProperties: [
         'standard_put',
-    ]
+    ],
 )]
 #[ApiResource(
     uriTemplate: '/repairers/{repairer_id}/appointments',

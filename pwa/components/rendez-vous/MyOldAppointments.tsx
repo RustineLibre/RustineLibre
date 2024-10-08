@@ -56,7 +56,7 @@ const MyOldAppointments = ({
           },
           placeContent: 'center',
         }}>
-        {[...appointments, ...appointments].map((appointment) => (
+        {appointments.map((appointment) => (
           <OldAppointmentCard
             key={appointment.id}
             appointment={appointment}
