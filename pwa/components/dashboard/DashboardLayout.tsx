@@ -217,6 +217,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         open={true}
                         icon={<ForumIcon />}
                         path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/messagerie`}
+                        prefetch={false}
                       />
                     </Badge>
                     <SidebarListItem
