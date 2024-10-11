@@ -53,7 +53,9 @@ export const RepairersList = (): JSX.Element => {
       `${ENTRYPOINT}${repairerResource.getEndpoint()}`
     );
 
-    const eventSource = new EventSource(hub);
+    const eventSource = new EventSource(hub, {
+      withCredentials: true,
+    });
     eventSource.onmessage = ({data}: {data: string}) => {
       const newRepairer: Repairer = JSON.parse(data);
 
