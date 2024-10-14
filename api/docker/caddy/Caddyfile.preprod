@@ -70,3 +70,7 @@ route {
     encode zstd gzip
     file_server
 }
+
+route /.well-known/mercure?topic=* {
+    request_header -Authorization
+}
