@@ -104,7 +104,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
         fetchDiscussions();
       }
     }
-  }, [countUnread, fetchDiscussions, router, user]);
+  }, [repairer, router, user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (discussions.length > 0) {
