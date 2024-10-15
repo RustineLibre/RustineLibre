@@ -55,7 +55,8 @@ const YourRights = (): JSX.Element => {
           n’existe pas d’autre fondement juridique au traitement. <br />
           Vous pouvez également retirer à tout moment votre consentement au
           partage de vos informations Google Calendar avec notre application en
-          déconnectant votre compte Google de nos services.
+          déconnectant votre compte Google de nos services sur votre espace
+          Google Agenda.
         </Typography>
         <Typography>
           Cette obligation ne s’applique pas dans la mesure où ce traitement est

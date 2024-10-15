@@ -177,7 +177,7 @@ const ProcessingOfYourData = (): JSX.Element => {
         </Typography>
         <Typography>
           En tant que réparateur, vous avez la possibilité de synchroniser votre
-          agenda google avec l&apos;agenda de l&apos;application.
+          agenda Google avec l&apos;agenda de l&apos;application.
         </Typography>
         <Typography variant="h5" color="secondary" paddingLeft="10px">
           2.7.1 - Données Google Calendar
@@ -236,11 +236,12 @@ const ProcessingOfYourData = (): JSX.Element => {
           les circonstances suivantes :
         </Typography>
         <Typography paddingLeft="10px">
-          Partage avec Google : <br />
+          Partage avec Google <br />
           En connectant votre compte Google à notre application, certaines
           données de votre calendrier seront partagées avec Google conformément
-          aux conditions de l&apos;API Google Calendar. L&apos;utilisation de ces données
-          par Google est régie par les politiques de confidentialité de Google.
+          aux conditions de l&apos;API Google Calendar. L&apos;utilisation de
+          ces données par Google est régie par les politiques de confidentialité
+          de Google.
         </Typography>
       </Box>
     </Box>
