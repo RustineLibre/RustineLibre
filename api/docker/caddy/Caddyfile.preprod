@@ -71,6 +71,9 @@ route {
     file_server
 }
 
-route /.well-known/mercure* method GET query topic=* {
-    request_header -Authorization
+@mercure_topics {
+    method GET
+    query topic=*
+    path /.well-known/mercure*
 }
+request_header @mercure_topics -Authorization
