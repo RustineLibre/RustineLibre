@@ -72,5 +72,7 @@ route {
 }
 
 route /.well-known/mercure* {
+    method GET
+    query topic=*
     request_header -Authorization
 }
