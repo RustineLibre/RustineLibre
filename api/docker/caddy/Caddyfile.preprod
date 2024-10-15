@@ -71,6 +71,6 @@ route {
     file_server
 }
 
-route /.well-known/mercure?topic=* {
+route /.well-known/mercure* {
     request_header -Authorization
 }
