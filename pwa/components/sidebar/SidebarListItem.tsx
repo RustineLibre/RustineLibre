@@ -46,7 +46,10 @@ const SidebarListItem = ({
                 minWidth: 0,
                 mr: open ? 2 : 'auto',
                 justifyContent: 'center',
-                color: 'primary.main',
+                color:
+                  isMobile && path === router.asPath
+                    ? 'primary.main'
+                    : 'grey.600',
               }}>
               {icon}
             </ListItemIcon>
