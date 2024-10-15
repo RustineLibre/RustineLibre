@@ -170,6 +170,79 @@ const ProcessingOfYourData = (): JSX.Element => {
           Vos mots de passe sont chiffrés.
         </Typography>
       </Box>
+      <Box display="flex" flexDirection="column" gap={1}>
+        <Typography variant="h5" color="secondary">
+          2.7 - Les spécificités liées à l&apos;utilisation de Google Calendar
+          (Disponible pour les réparateurs)
+        </Typography>
+        <Typography>
+          En tant que réparateur, vous avez la possibilité de synchroniser votre
+          agenda google avec l&apos;agenda de l&apos;application.
+        </Typography>
+        <Typography variant="h5" color="secondary" paddingLeft="10px">
+          2.7.1 - Données Google Calendar
+        </Typography>
+        <Typography paddingLeft="10px">
+          Lorsque vous connectez votre compte Google à notre application pour
+          synchroniser votre agenda avec Google Calendar, nous accédons aux
+          informations suivantes à travers l&apos;API Google Calendar : <br />
+          a) les événements de votre agenda. <br />
+          b) les détails des événements (comme la date, l&apos;heure, la
+          description et le lieu des événements).
+        </Typography>
+        <Typography paddingLeft="10px">
+          Ces informations sont utilisées uniquement pour vous permettre de
+          visualiser et de gérer les rendez-vous créés dans notre application à
+          partir de votre calendrier Google et pour synchroniser les
+          informations de votre calendrier entre Google et notre application.
+          Nous n&apos;utilisons pas ces informations à d&apos;autres fins que
+          celles décrites ici.
+        </Typography>
+      </Box>
+      <Box display="flex" flexDirection="column" gap={1}>
+        <Typography variant="h5" color="secondary" paddingLeft="10px">
+          2.7.2 - Autres données personnelles
+        </Typography>
+        <Typography paddingLeft="10px">
+          En plus des données liées à Google Calendar, nous pouvons également
+          collecter certaines informations personnelles, telles que : <br />
+          Votre nom, adresse e-mail, numéro de téléphone, et toute autre
+          information nécessaire à la gestion des rendez-vous sur la plateforme.{' '}
+          <br />
+        </Typography>
+        <Typography paddingLeft="10px">
+          Ces informations sont utilisées pour : <br />
+          Faciliter la prise de rendez-vous entre vous et vos clients.
+          <br />
+          Vous notifier de nouveaux rendez-vous, annulations ou modifications
+          via l&apos;application.
+        </Typography>
+        <Typography paddingLeft="10px">
+          Ces informations sont utilisées uniquement pour vous permettre de
+          visualiser et de gérer les rendez-vous créés dans notre application à
+          partir de votre calendrier Google et pour synchroniser les
+          informations de votre calendrier entre Google et notre application.
+          Nous n&apos;utilisons pas ces informations à d&apos;autres fins que
+          celles décrites ici.
+        </Typography>
+      </Box>
+      <Box display="flex" flexDirection="column" gap={1}>
+        <Typography variant="h5" color="secondary" paddingLeft="10px">
+          2.7.3 - Partage et divulgation des informations
+        </Typography>
+        <Typography paddingLeft="10px">
+          Nous ne vendons ni ne louons vos informations personnelles à des
+          tiers. Cependant, nous pouvons partager des données utilisateur dans
+          les circonstances suivantes :
+        </Typography>
+        <Typography paddingLeft="10px">
+          Partage avec Google : <br />
+          En connectant votre compte Google à notre application, certaines
+          données de votre calendrier seront partagées avec Google conformément
+          aux conditions de l&apos;API Google Calendar. L&apos;utilisation de ces données
+          par Google est régie par les politiques de confidentialité de Google.
+        </Typography>
+      </Box>
     </Box>
   );
 };
