@@ -47,7 +47,7 @@ const SidebarListItem = ({
                 mr: open ? 2 : 'auto',
                 justifyContent: 'center',
                 color:
-                  isMobile && path === router.asPath
+                  !isMobile || path === router.asPath
                     ? 'primary.main'
                     : 'grey.600',
               }}>
