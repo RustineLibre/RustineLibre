@@ -52,7 +52,11 @@ const YourRights = (): JSX.Element => {
           sont plus nécessaires au regard des finalités pour lesquelles elles
           ont été collectées ou traitées d’une autre manière ; b) vous avez
           retiré votre consentement sur lequel est fondé le traitement et il
-          n’existe pas d’autre fondement juridique au traitement.
+          n’existe pas d’autre fondement juridique au traitement. <br />
+          Vous pouvez également retirer à tout moment votre consentement au
+          partage de vos informations Google Calendar avec notre application en
+          déconnectant votre compte Google de nos services sur votre espace
+          Google Agenda.
         </Typography>
         <Typography>
           Cette obligation ne s’applique pas dans la mesure où ce traitement est
