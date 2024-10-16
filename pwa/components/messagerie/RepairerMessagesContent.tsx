@@ -34,14 +34,15 @@ const RepairerMessagesContent = ({
     setMessageToSend(event.target.value);
   };
 
-  const subscribeMercureDiscussion = async (): Promise<void> => {
+  const subscribeMercureDiscussion = async (): Promise<EventSource> => {
     const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
     const hub = new URL(hubUrl);
     hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
     const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
+    eventSource.onmessage = () => {
       fetchMessages();
     };
+    return eventSource;
   };
 
   const handleSendMessage = async (): Promise<void> => {
@@ -90,12 +91,12 @@ const RepairerMessagesContent = ({
 
   useEffect(() => {
     fetchMessages();
-    subscribeMercureDiscussion();
+    const eventSourcePromise = subscribeMercureDiscussion();
+    return () => {
+      eventSourcePromise &&
+        eventSourcePromise.then((eventSource) => eventSource.close());
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    fetchMessages();
-  }, [currentPage, discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box width="100%">
