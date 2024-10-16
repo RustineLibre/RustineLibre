@@ -74,7 +74,7 @@ maildev:
 mailer:
   # is set automaticaly if maildev is enabled
   dsn: change_me
-  sender: nepasrepondre@rustinelibre.fr
+  sender: contact@rustinelibre.fr
 
 repairerUpdateFirstSlotAvailable:
   enabled: true
