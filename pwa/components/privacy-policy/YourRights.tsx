@@ -48,12 +48,13 @@ const YourRights = (): JSX.Element => {
         <Typography>
           Vous avez le droit d’obtenir l’effacement, dans les meilleurs délais,
           de données à caractère personnel vous concernant, lorsque l’un des
-          motifs suivants s’applique : a) les données à caractère personnel ne
-          sont plus nécessaires au regard des finalités pour lesquelles elles
-          ont été collectées ou traitées d’une autre manière ; b) vous avez
-          retiré votre consentement sur lequel est fondé le traitement et il
-          n’existe pas d’autre fondement juridique au traitement. <br />
-          Vous pouvez également retirer à tout moment votre consentement au
+          motifs suivants s&apos;applique : a) les données à caractère personnel
+          ne sont plus nécessaires au regard des finalités pour lesquelles elles
+          ont été collectées ou traitées d’une autre manière ;<br />
+          b) vous avez retiré votre consentement sur lequel est fondé le
+          traitement et il n’existe pas d’autre fondement juridique au
+          traitement ; <br />
+          c) vous pouvez également retirer à tout moment votre consentement au
           partage de vos informations Google Calendar avec notre application en
           déconnectant votre compte Google de nos services sur votre espace
           Google Agenda.
