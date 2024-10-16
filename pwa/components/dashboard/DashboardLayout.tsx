@@ -171,7 +171,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
               <Divider />
 
-              <List>
+              <List sx={{marginTop: isMobile ? 2 : 0}}>
                 <SidebarListItem
                   text="Tableau de bord"
                   open={true}

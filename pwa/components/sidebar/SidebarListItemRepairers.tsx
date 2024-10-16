@@ -108,7 +108,10 @@ const SidebarListItemRepairers = (): React.JSX.Element => {
                 minWidth: 0,
                 mr: 2,
                 justifyContent: 'center',
-                color: 'primary.main',
+                color:
+                  '/sradmin/boutiques' === router.asPath
+                    ? 'primary.main'
+                    : 'grey.600',
               }}>
               <StorefrontIcon />
             </ListItemIcon>
