@@ -40,11 +40,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
     denormalizationContext: ['groups' => ['admin_only']],
+    mercure: true,
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
     extraProperties: [
         'standard_put',
-    ]
+    ],
 )]
 #[Get(normalizationContext: ['groups' => [self::REPAIRER_READ]])]
 #[GetCollection(normalizationContext: ['groups' => [self::REPAIRER_COLLECTION_READ]])]

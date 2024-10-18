@@ -31,22 +31,24 @@ const CustomerMessagesContent = ({
   const [messages, setMessages] = useState<DiscussionMessage[]>([]);
   const [messageToSend, setMessageToSend] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
   const handleMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
     setMessageToSend(event.target.value);
   };
 
-  const subscribeMercureDiscussion = async (): Promise<void> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
-    hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
-      fetchMessages();
-    };
-    router.events.on('routeChangeStart', () => {
-      eventSource.close();
-    });
+  const subscribeMercureDiscussion = async (): Promise<EventSource | null> => {
+    if (null === eventSource) {
+      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+      const hub = new URL(hubUrl);
+      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+      const currentEventSource = new EventSource(hub);
+      currentEventSource.onmessage = (event) => {
+        fetchMessages();
+      };
+      setEventSource(currentEventSource);
+    }
+    return eventSource;
   };
 
   const handleSendMessage = async (): Promise<void> => {
@@ -95,8 +97,14 @@ const CustomerMessagesContent = ({
   }, [messages]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    fetchMessages();
-    subscribeMercureDiscussion();
+    const eventSourcePromise = subscribeMercureDiscussion();
+
+    return () => {
+      eventSourcePromise &&
+        eventSourcePromise.then(
+          (eventSource) => eventSource && eventSource.close()
+        );
+    };
   }, [discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {

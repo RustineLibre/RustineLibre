@@ -104,7 +104,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
         fetchDiscussions();
       }
     }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [repairer, router, user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (discussions.length > 0) {
@@ -217,6 +217,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         open={true}
                         icon={<ForumIcon />}
                         path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/messagerie`}
+                        prefetch={false}
                       />
                     </Badge>
                     <SidebarListItem

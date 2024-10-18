@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repairers\State;
 
+use ApiPlatform\Doctrine\Common\State\PersistProcessor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use ApiPlatform\Validator\ValidatorInterface;
@@ -11,17 +12,16 @@ use App\Emails\NewRepairerEmail;
 use App\Entity\Repairer;
 use App\Entity\User;
 use App\Repairers\Dto\CreateUserRepairerDto;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @template-implements ProcessorInterface<int>
  */
-final class CreateUserRepairerProcessor implements ProcessorInterface
+final readonly class CreateUserRepairerProcessor implements ProcessorInterface
 {
     public function __construct(
-        private readonly ValidatorInterface $validator,
-        private readonly EntityManagerInterface $entityManager,
-        private readonly NewRepairerEmail $newRepairerEmail
+        private PersistProcessor $baseProcessor,
+        private ValidatorInterface $validator,
+        private NewRepairerEmail $newRepairerEmail
     ) {
     }
 
@@ -68,14 +68,10 @@ final class CreateUserRepairerProcessor implements ProcessorInterface
         // Validate the new entity
         $this->validator->validate($repairer);
 
-        // Persist and flush
-        $this->entityManager->persist($repairer);
-        $this->entityManager->flush();
-
         // Send Email
         $this->newRepairerEmail->sendAdminNewRepairerEmail($repairer);
         $this->newRepairerEmail->sendRepairerEmail($repairer);
 
-        return $repairer;
+        return $this->baseProcessor->process($repairer, $operation, $uriVariables, $context);
     }
 }

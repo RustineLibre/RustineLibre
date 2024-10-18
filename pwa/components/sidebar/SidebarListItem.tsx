@@ -16,6 +16,7 @@ interface SidebarListItemProps {
   open: boolean;
   icon: any;
   path: string;
+  prefetch?: boolean;
 }
 
 const SidebarListItem = ({
@@ -23,6 +24,7 @@ const SidebarListItem = ({
   open,
   icon,
   path,
+  prefetch = true,
 }: SidebarListItemProps): JSX.Element => {
   const router = useRouter();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -33,6 +35,7 @@ const SidebarListItem = ({
         href={path}
         legacyBehavior
         passHref
+        prefetch={prefetch}
         style={{textDecoration: 'none'}}>
         <ListItem key={text} disablePadding sx={{display: 'block'}}>
           <ListItemButton
