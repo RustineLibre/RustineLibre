@@ -38,32 +38,32 @@ export const RepairersList = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
-  const [eventSource, setEventSource] = useState<EventSource | undefined>(
-    undefined
-  );
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
   const [selectedRepairerToDelete, setSelectedRepairerToDelete] =
     useState<Repairer | null>(null);
 
-  const mercureSubscribe = useCallback(async (): Promise<EventSource> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
+  const mercureSubscribe =
+    useCallback(async (): Promise<EventSource | null> => {
+      if (null === eventSource) {
+        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+        const hub = new URL(hubUrl);
 
-    hub.searchParams.append(
-      'topic',
-      `${ENTRYPOINT}${repairerResource.getEndpoint()}`
-    );
+        hub.searchParams.append(
+          'topic',
+          `${ENTRYPOINT}${repairerResource.getEndpoint()}`
+        );
 
-    const eventSource = new EventSource(hub, {
-      withCredentials: true,
-    });
-    eventSource.onmessage = ({data}: {data: string}) => {
-      const newRepairer: Repairer = JSON.parse(data);
+        const currentEventSource = new EventSource(hub);
+        currentEventSource.onmessage = ({data}: {data: string}) => {
+          const newRepairer: Repairer = JSON.parse(data);
 
-      setRepairers((repairers) => [newRepairer, ...repairers]);
-    };
+          setRepairers((repairers) => [newRepairer, ...repairers]);
+        };
+        setEventSource(currentEventSource);
+      }
 
-    return eventSource;
-  }, []);
+      return eventSource;
+    }, [eventSource]);
 
   const fetchRepairers = useCallback(async () => {
     setLoadingList(true);
@@ -91,12 +91,14 @@ export const RepairersList = (): JSX.Element => {
   }, [searchTerm, currentPage, fetchRepairers]);
 
   useEffect(() => {
-    mercureSubscribe().then(setEventSource);
+    const eventSourcePromise = mercureSubscribe();
 
     return () => {
-      eventSource && eventSource.close();
+      eventSourcePromise.then(
+        (eventSource) => eventSource && eventSource.close()
+      );
     };
-  }, [mercureSubscribe]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDeleteClick = (repairer: Repairer) => {
     setDeleteDialogOpen(true);
