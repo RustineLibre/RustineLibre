@@ -9,28 +9,32 @@ import {Discussion} from '@interfaces/Discussion';
 import {Repairer} from '@interfaces/Repairer';
 
 type DiscussionListItemProps = {
-  discussionGiven: Discussion;
+  discussion: Discussion;
   repairer: Repairer | null;
   current?: boolean;
 };
 
 const DiscussionListItem = ({
-  discussionGiven,
+  discussion,
   repairer,
   current,
 }: DiscussionListItemProps): JSX.Element => {
   const [unreadCounter, setUnreadCounter] = useState<number>(0);
-  const [discussion, setDiscussion] = useState<Discussion>(discussionGiven);
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
-  const subscribeMercureDiscussion = async (): Promise<void> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
-    hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
-      countUnreadMessagesFromDiscussion();
-      refreshDiscussion();
-    };
+  const subscribeMercureDiscussion = async (): Promise<EventSource | null> => {
+    if (null === eventSource) {
+      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+      const hub = new URL(hubUrl);
+      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+      const currentEventSource = new EventSource(hub);
+      currentEventSource.onmessage = (event) => {
+        countUnreadMessagesFromDiscussion();
+      };
+      setEventSource(currentEventSource);
+    }
+
+    return eventSource;
   };
 
   const countUnreadMessagesFromDiscussion = async (): Promise<void> => {
@@ -41,19 +45,16 @@ const DiscussionListItem = ({
     setUnreadCounter(countUnread.count);
   };
 
-  const refreshDiscussion = async (): Promise<void> => {
-    const refreshDiscussion = await discussionResource.get(
-      discussion['@id'],
-      true
-    );
-    if (refreshDiscussion) {
-      setDiscussion(refreshDiscussion);
-    }
-  };
-
   useEffect(() => {
     countUnreadMessagesFromDiscussion();
-    subscribeMercureDiscussion();
+    const eventSourcePromise = subscribeMercureDiscussion();
+
+    return () => {
+      eventSourcePromise &&
+        eventSourcePromise.then(
+          (eventSource) => eventSource && eventSource.close()
+        );
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

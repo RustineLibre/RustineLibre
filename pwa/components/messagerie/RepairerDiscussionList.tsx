@@ -64,7 +64,7 @@ const RepairerDiscussionList = ({
             return (
               <DiscussionListItem
                 key={discussionItem.id}
-                discussionGiven={discussionItem}
+                discussion={discussionItem}
                 current={discussion?.id === discussionItem.id}
                 repairer={repairer}
               />

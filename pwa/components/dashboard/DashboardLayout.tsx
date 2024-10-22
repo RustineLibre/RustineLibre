@@ -53,21 +53,27 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   });
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
   const isRepairerPage = router.pathname.includes(SR_ADMIN_REPAIRER_PAGE);
   const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
 
-  const subscribeMercureDiscussions = async (): Promise<void> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
-    discussions.map((discussion) => {
-      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-    });
+  const subscribeMercureDiscussions = async (): Promise<EventSource | null> => {
+    if (null === eventSource) {
+      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+      const hub = new URL(hubUrl);
+      discussions.map((discussion) => {
+        hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+      });
 
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
-      countUnread();
-    };
+      const currentEventSource = new EventSource(hub);
+      currentEventSource.onmessage = (event) => {
+        countUnread();
+      };
+      setEventSource(currentEventSource);
+    }
+
+    return eventSource;
   };
 
   const countUnread = async (): Promise<void> => {
@@ -108,7 +114,13 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
   useEffect(() => {
     if (discussions.length > 0) {
-      subscribeMercureDiscussions();
+      const eventSourcePromise = subscribeMercureDiscussions();
+      return () => {
+        eventSourcePromise &&
+          eventSourcePromise.then(
+            (eventSource) => eventSource && eventSource.close()
+          );
+      };
     }
   }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 

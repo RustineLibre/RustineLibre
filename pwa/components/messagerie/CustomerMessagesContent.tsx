@@ -71,7 +71,6 @@ const CustomerMessagesContent = ({
   };
 
   const fetchMessages = async () => {
-    if (!user) return;
     const response = await discussionMessageResource.getAll(true, {
       discussion: discussion['@id'],
       page: currentPage,
@@ -109,7 +108,7 @@ const CustomerMessagesContent = ({
 
   useEffect(() => {
     fetchMessages();
-  }, [currentPage, discussion]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [currentPage, discussion, user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box
