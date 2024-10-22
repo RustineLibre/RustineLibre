@@ -29,9 +29,7 @@ export const DashboardHomeContent = ({
   const [appointmentsWaiting, setAppointmentsWaiting] = useState<Appointment[]>(
     []
   );
-  const [eventSource, setEventSource] = useState<EventSource | undefined>(
-    undefined
-  );
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
   const fetchNextAppointments = async () => {
     setLoadingListNext(true);
@@ -71,44 +69,51 @@ export const DashboardHomeContent = ({
     return response['hydra:member'];
   };
 
-  const mercureSubscribe = useCallback(async (): Promise<EventSource> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
+  const mercureSubscribe =
+    useCallback(async (): Promise<EventSource | null> => {
+      if (null === eventSource) {
+        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+        const hub = new URL(hubUrl);
 
-    hub.searchParams.append(
-      'topic',
-      `${ENTRYPOINT}${repairerResource.getEndpoint()}/${repairer.id}${appointmentResource.getEndpoint()}`
-    );
-
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = ({data}: {data: string}) => {
-      const newWaitingAppointment: Appointment = JSON.parse(data);
-
-      setAppointmentsWaiting((appointmentsWaiting) => {
-        const index = appointmentsWaiting.findIndex(
-          (waitingAppointment) =>
-            waitingAppointment.id === newWaitingAppointment.id
+        hub.searchParams.append(
+          'topic',
+          `${ENTRYPOINT}${repairerResource.getEndpoint()}/${repairer.id}${appointmentResource.getEndpoint()}`
         );
 
-        if (-1 !== index) {
-          appointmentsWaiting[index] = newWaitingAppointment;
-          return [...appointmentsWaiting];
-        }
+        const currentEventSource = new EventSource(hub);
+        currentEventSource.onmessage = ({data}: {data: string}) => {
+          const newWaitingAppointment: Appointment = JSON.parse(data);
 
-        return [newWaitingAppointment, ...appointmentsWaiting];
-      });
-    };
+          setAppointmentsWaiting((appointmentsWaiting) => {
+            const index = appointmentsWaiting.findIndex(
+              (waitingAppointment) =>
+                waitingAppointment.id === newWaitingAppointment.id
+            );
 
-    return eventSource;
-  }, []);
+            if (-1 !== index) {
+              appointmentsWaiting[index] = newWaitingAppointment;
+              return [...appointmentsWaiting];
+            }
+
+            return [newWaitingAppointment, ...appointmentsWaiting];
+          });
+        };
+
+        setEventSource(currentEventSource);
+      }
+
+      return eventSource;
+    }, [eventSource]);
 
   useEffect(() => {
-    mercureSubscribe().then(setEventSource);
+    const eventSourcePromise = mercureSubscribe();
 
     return () => {
-      eventSource && eventSource.close();
+      eventSourcePromise.then(
+        (eventSource) => eventSource && eventSource.close()
+      );
     };
-  }, [mercureSubscribe]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Box>

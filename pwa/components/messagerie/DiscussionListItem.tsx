@@ -50,10 +50,9 @@ const DiscussionListItem = ({
     const eventSourcePromise = subscribeMercureDiscussion();
 
     return () => {
-      eventSourcePromise &&
-        eventSourcePromise.then(
-          (eventSource) => eventSource && eventSource.close()
-        );
+      eventSourcePromise.then(
+        (eventSource) => eventSource && eventSource.close()
+      );
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

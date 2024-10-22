@@ -99,10 +99,9 @@ const CustomerMessagesContent = ({
     const eventSourcePromise = subscribeMercureDiscussion();
 
     return () => {
-      eventSourcePromise &&
-        eventSourcePromise.then(
-          (eventSource) => eventSource && eventSource.close()
-        );
+      eventSourcePromise.then(
+        (eventSource) => eventSource && eventSource.close()
+      );
     };
   }, [discussion]); // eslint-disable-line react-hooks/exhaustive-deps
 

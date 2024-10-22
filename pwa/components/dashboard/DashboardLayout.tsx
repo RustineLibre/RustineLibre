@@ -116,10 +116,9 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     if (discussions.length > 0) {
       const eventSourcePromise = subscribeMercureDiscussions();
       return () => {
-        eventSourcePromise &&
-          eventSourcePromise.then(
-            (eventSource) => eventSource && eventSource.close()
-          );
+        eventSourcePromise.then(
+          (eventSource) => eventSource && eventSource.close()
+        );
       };
     }
   }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
