@@ -9,7 +9,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   strategy:
+    {{- if .Values.php.medias.persistence.enabled }}
     type: Recreate
+    {{- else }}
+    type: RollingUpdate
+    {{- end }}
   selector:
     matchLabels:
       {{- include "rustinelibre.selectorLabels" . | nindent 6 }}
