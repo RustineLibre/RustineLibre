@@ -357,4 +357,8 @@ export abstract class AbstractResource<T> {
 
     return result;
   }
+
+  public getEndpoint(): string {
+    return this.endpoint;
+  }
 }

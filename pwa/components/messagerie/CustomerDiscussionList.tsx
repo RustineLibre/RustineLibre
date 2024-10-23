@@ -58,7 +58,7 @@ const CustomerDiscussionList = ({
               <DiscussionListItem
                 key={discussionItem.id}
                 current={discussionItem.id === discussion?.id}
-                discussionGiven={discussionItem}
+                discussion={discussionItem}
                 repairer={null}
               />
             );

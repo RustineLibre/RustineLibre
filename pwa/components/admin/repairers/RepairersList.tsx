@@ -1,3 +1,4 @@
+import {ENTRYPOINT} from '@config/entrypoint';
 import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import Link from 'next/link';
 import {repairerResource} from '@resources/repairerResource';
@@ -37,8 +38,32 @@ export const RepairersList = (): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [removePending, setRemovePending] = useState<boolean>(false);
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
   const [selectedRepairerToDelete, setSelectedRepairerToDelete] =
     useState<Repairer | null>(null);
+
+  const mercureSubscribe =
+    useCallback(async (): Promise<EventSource | null> => {
+      if (null === eventSource) {
+        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+        const hub = new URL(hubUrl);
+
+        hub.searchParams.append(
+          'topic',
+          `${ENTRYPOINT}${repairerResource.getEndpoint()}`
+        );
+
+        const currentEventSource = new EventSource(hub);
+        currentEventSource.onmessage = ({data}: {data: string}) => {
+          const newRepairer: Repairer = JSON.parse(data);
+
+          setRepairers((repairers) => [newRepairer, ...repairers]);
+        };
+        setEventSource(currentEventSource);
+      }
+
+      return eventSource;
+    }, [eventSource]);
 
   const fetchRepairers = useCallback(async () => {
     setLoadingList(true);
@@ -64,6 +89,16 @@ export const RepairersList = (): JSX.Element => {
       fetchRepairers();
     }
   }, [searchTerm, currentPage, fetchRepairers]);
+
+  useEffect(() => {
+    const eventSourcePromise = mercureSubscribe();
+
+    return () => {
+      eventSourcePromise.then(
+        (eventSource) => eventSource && eventSource.close()
+      );
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDeleteClick = (repairer: Repairer) => {
     setDeleteDialogOpen(true);
@@ -164,7 +199,13 @@ export const RepairersList = (): JSX.Element => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {loadingList && <CircularProgress sx={{ml: 5, mt: 5}} />}
+            {loadingList && (
+              <TableRow>
+                <TableCell>
+                  <CircularProgress sx={{ml: 5, mt: 5}} />
+                </TableCell>
+              </TableRow>
+            )}
             {repairers.map((repairer) => (
               <TableRow
                 key={repairer.id}

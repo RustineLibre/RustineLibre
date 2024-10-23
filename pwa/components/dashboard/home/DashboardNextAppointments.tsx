@@ -23,7 +23,6 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import ModalShowAppointment from '@components/dashboard/agenda/ModalShowAppointment';
 import AddIcon from '@mui/icons-material/Add';
-import LogoutIcon from '@mui/icons-material/Logout';
 import {Repairer} from '@interfaces/Repairer';
 import ModalAppointmentCreate from '@components/dashboard/appointments/ModalAppointmentCreate';
 import {getAutodiagBikeName} from '@helpers/appointmentStatus';

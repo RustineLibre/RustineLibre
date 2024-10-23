@@ -13,6 +13,7 @@ import {
   ListItem,
   Typography,
   Button,
+  BadgeProps,
 } from '@mui/material';
 import SidebarListItem from '@components/sidebar/SidebarListItem';
 import HomeIcon from '@mui/icons-material/Home';
@@ -37,6 +38,7 @@ import Badge from '@mui/material/Badge';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {styled} from '@mui/material/styles';
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -53,21 +55,27 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
   });
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
   const isRepairerPage = router.pathname.includes(SR_ADMIN_REPAIRER_PAGE);
   const isBossOrEmployee = user && (isBoss(user) || isEmployee(user));
 
-  const subscribeMercureDiscussions = async (): Promise<void> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
-    discussions.map((discussion) => {
-      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-    });
+  const subscribeMercureDiscussions = async (): Promise<EventSource | null> => {
+    if (null === eventSource) {
+      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+      const hub = new URL(hubUrl);
+      discussions.map((discussion) => {
+        hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+      });
 
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
-      countUnread();
-    };
+      const currentEventSource = new EventSource(hub);
+      currentEventSource.onmessage = (event) => {
+        countUnread();
+      };
+      setEventSource(currentEventSource);
+    }
+
+    return eventSource;
   };
 
   const countUnread = async (): Promise<void> => {
@@ -104,11 +112,16 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
         fetchDiscussions();
       }
     }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [repairer, router, user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (discussions.length > 0) {
-      subscribeMercureDiscussions();
+      const eventSourcePromise = subscribeMercureDiscussions();
+      return () => {
+        eventSourcePromise.then(
+          (eventSource) => eventSource && eventSource.close()
+        );
+      };
     }
   }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -120,6 +133,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     await logout();
     await router.push(`/login?next=${encodeURIComponent(router.asPath)}`);
   };
+
+  const StyledBadge = styled(Badge)<BadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+      top: 23,
+    },
+  }));
 
   return (
     <>
@@ -211,14 +230,15 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/tour`}
                       />
                     )}
-                    <Badge badgeContent={unreadMessages} color="primary">
+                    <StyledBadge badgeContent={unreadMessages} color="primary">
                       <SidebarListItem
                         text="Messages"
                         open={true}
                         icon={<ForumIcon />}
                         path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/messagerie`}
+                        prefetch={false}
                       />
-                    </Badge>
+                    </StyledBadge>
                     <SidebarListItem
                       text="Clients"
                       open={true}

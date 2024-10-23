@@ -27,18 +27,24 @@ const Footer = ({user}: FooterProps): JSX.Element => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [discussions, setDiscussions] = useState<Discussion[]>([]);
   const [unreadMessages, setUnreadMessages] = useState<number>(0);
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
-  const subscribeMercureDiscussions = async (): Promise<void> => {
-    const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-    const hub = new URL(hubUrl);
-    discussions.map((discussion) => {
-      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-    });
+  const subscribeMercureDiscussions = async (): Promise<EventSource | null> => {
+    if (null === eventSource) {
+      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
+      const hub = new URL(hubUrl);
+      discussions.map((discussion) => {
+        hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
+      });
 
-    const eventSource = new EventSource(hub);
-    eventSource.onmessage = (event) => {
-      countUnread();
-    };
+      const currentEventSource = new EventSource(hub);
+      currentEventSource.onmessage = () => {
+        countUnread();
+      };
+      setEventSource(currentEventSource);
+    }
+
+    return eventSource;
   };
 
   const countUnread = async (): Promise<void> => {
@@ -66,15 +72,17 @@ const Footer = ({user}: FooterProps): JSX.Element => {
 
   useEffect(() => {
     countUnread();
-
-    if (user) {
-      fetchDiscussions();
-    }
-  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
+    fetchDiscussions();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (discussions.length > 0) {
-      subscribeMercureDiscussions();
+      const eventSourcePromise = subscribeMercureDiscussions();
+      return () => {
+        eventSourcePromise.then(
+          (eventSource) => eventSource && eventSource.close()
+        );
+      };
     }
   }, [discussions]); // eslint-disable-line react-hooks/exhaustive-deps
 

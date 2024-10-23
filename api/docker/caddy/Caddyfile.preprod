@@ -70,3 +70,10 @@ route {
     encode zstd gzip
     file_server
 }
+
+@mercure_topics {
+    method GET
+    query topic=*
+    path /.well-known/mercure*
+}
+request_header @mercure_topics -Authorization
