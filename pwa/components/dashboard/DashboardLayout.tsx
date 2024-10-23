@@ -13,6 +13,7 @@ import {
   ListItem,
   Typography,
   Button,
+  BadgeProps,
 } from '@mui/material';
 import SidebarListItem from '@components/sidebar/SidebarListItem';
 import HomeIcon from '@mui/icons-material/Home';
@@ -37,6 +38,7 @@ import Badge from '@mui/material/Badge';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
 import {DashboardRepairerContext} from '@contexts/DashboardRepairerContext';
+import {styled} from '@mui/material/styles';
 
 interface DashboardLayoutProps {
   children?: React.ReactNode;
@@ -132,6 +134,12 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
     await router.push(`/login?next=${encodeURIComponent(router.asPath)}`);
   };
 
+  const StyledBadge = styled(Badge)<BadgeProps>(() => ({
+    '& .MuiBadge-badge': {
+      top: 23,
+    },
+  }));
+
   return (
     <>
       {isBossOrEmployee && (
@@ -222,7 +230,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/tour`}
                       />
                     )}
-                    <Badge badgeContent={unreadMessages} color="primary">
+                    <StyledBadge badgeContent={unreadMessages} color="primary">
                       <SidebarListItem
                         text="Messages"
                         open={true}
@@ -230,7 +238,7 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
                         path={`/sradmin/boutiques/${repairer?.id ?? user?.repairerEmployee?.repairer.id}/messagerie`}
                         prefetch={false}
                       />
-                    </Badge>
+                    </StyledBadge>
                     <SidebarListItem
                       text="Clients"
                       open={true}
