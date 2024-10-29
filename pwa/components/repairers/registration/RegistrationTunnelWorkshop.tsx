@@ -84,6 +84,9 @@ export const RegistrationTunnelWorkshop = ({
   const [citiesList, setCitiesList] = useState<City[]>([]);
   const [streetList, setStreetList] = useState<Street[]>([]);
   const [bikeTypes, setBikeTypes] = useState<BikeType[]>(bikeTypesFetched);
+  const [streetFieldErrorMessage, setStreetFieldErrorMessage] = useState<
+    string | null
+  >(null);
   const [repairerTypes, setRepairerTypes] =
     useState<RepairerType[]>(repairerTypesFetched);
   const fetchRepairerTypes = async () => {
@@ -315,9 +318,21 @@ export const RegistrationTunnelWorkshop = ({
                   ? streetObject
                   : `${streetObject.name} (${streetObject.city})`
               }
-              onChange={(event, value) => setStreet(value as Street)}
+              onChange={(event, value) => {
+                setStreet(value as Street);
+                setStreetFieldErrorMessage(null);
+              }}
               renderInput={(params) => (
                 <TextField
+                  onBlur={() => {
+                    if (!street) {
+                      setStreetFieldErrorMessage(
+                        'Vous devez chercher et sélectionner la rue de votre enseigne de réparation.'
+                      );
+                    }
+                  }}
+                  error={!!streetFieldErrorMessage}
+                  helperText={streetFieldErrorMessage}
                   label="Rue"
                   {...params}
                   value={street}
