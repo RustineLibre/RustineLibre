@@ -327,7 +327,7 @@ export const RegistrationTunnelWorkshop = ({
                   onBlur={() => {
                     if (!street) {
                       setStreetFieldErrorMessage(
-                        'Vous devez chercher et sélectionner la rue de votre enseigne de réparation.'
+                        'Vous devez sélectionner une adresse parmi celles proposées.'
                       );
                     }
                   }}
