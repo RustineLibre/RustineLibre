@@ -31,10 +31,7 @@ const AgendaParameters: NextPageWithLayout = () => {
           <Tabs value={tabValue} onChange={handleChangeTab}>
             <Tab label="Jours et plages horaires" />
             <Tab label="Fermetures exceptionnelles" />
-            {/* To uncomment when google will allow the agenda synchronization */}
-            {/*
             <Tab label="Connexion Google Agenda" />
-            */}
           </Tabs>
 
           <Box sx={{marginTop: 3}}>
@@ -42,10 +39,9 @@ const AgendaParameters: NextPageWithLayout = () => {
             {repairer && tabValue === 1 && (
               <ExceptionalClosure repairer={repairer} />
             )}
-            {/* To uncomment when google will allow the agenda synchronization */}
-            {/*            {repairer && tabValue === 2 && (
+            {repairer && tabValue === 2 && (
               <GoogleAgendaLogin repairer={repairer} />
-            )}*/}
+            )}
           </Box>
         </Box>
       </DashboardLayout>
