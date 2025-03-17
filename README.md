@@ -27,9 +27,9 @@ Les tags/releases sont déployées sur [rustinelibre.fr](https://rustinelibre.fr
 ```shell
 git clone git@github.com:RustineLibre/RustineLibre.git   # Clone du projet
 cd RustineLibre              # Se place dans le dossier du projet
-docker-compose build         # Installation du projet
-docker-compose up -d         # Lance les containers
-docker-compose exec php sh   # "Entrer" dans le container PHP
+docker compose build         # Installation du projet
+docker compose up -d         # Lance les containers
+docker compose exec php sh   # "Entrer" dans le container PHP
 ```
 
 La préprod est protégée par un mot de passe
