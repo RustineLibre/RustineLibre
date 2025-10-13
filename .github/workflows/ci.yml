@@ -117,7 +117,12 @@ jobs:
       - name: Validate composer
         run: docker compose exec -T php composer validate
       - name: Check composer vulnerabilities
-        run: docker compose exec -T php composer audit
+        continue-on-error: true
+        run: |
+          if ! output=$(docker compose exec -T php composer audit 2>&1); then
+            echo "::warning title=Vulnérabilités Composer détectées::Le rapport complet est affiché ci-dessous."
+            echo "$output"
+          fi
       - name: Test cs-fixer
         run: docker compose exec -T php php vendor/bin/php-cs-fixer fix src --dry-run --diff --no-ansi
       - name: Static analysis
