@@ -21,7 +21,7 @@ jobs:
  
     steps:
     - name: Build/Push
-      uses: coopTilleuls/action-docker-build-push@v10
+      uses: coopTilleuls/action-docker-build-push@v12
       with:
         IMAGE_NAME: rustinelibre-php
         BUILD_CONTEXT: api
@@ -38,7 +38,7 @@ jobs:
 
     steps:
     - name: Build/Push Preprod
-      uses: coopTilleuls/action-docker-build-push@v10
+      uses: coopTilleuls/action-docker-build-push@v12
       with:
         IMAGE_NAME: rustinelibre-caddy
         BUILD_CONTEXT: api
@@ -55,7 +55,7 @@ jobs:
 
     steps:
     - name: Build/Push Prod
-      uses: coopTilleuls/action-docker-build-push@v10
+      uses: coopTilleuls/action-docker-build-push@v12
       with:
         IMAGE_NAME: rustinelibre-caddy
         BUILD_CONTEXT: api
