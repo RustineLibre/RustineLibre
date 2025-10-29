@@ -29,8 +29,10 @@ final readonly class NumberOfMessageNotReadForDiscussionProvider implements Prov
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): MessageUnread
     {
-        /** @var ?User $user */
         $user = $this->security->getUser();
+        if (!($user instanceof User && $this->security->isGranted("MESSAGE_UNREAD_BY_DISCUSSION", $uriVariables['discussion_id']))) {
+            throw new NotFoundHttpException('Discussion not found');
+        }
 
         if (!$discussionId = $uriVariables['discussion_id']) {
             throw new BadRequestHttpException('Discussion id must be provided');
