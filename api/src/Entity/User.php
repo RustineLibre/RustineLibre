@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -76,12 +77,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[GetCollection(
     uriTemplate: '/repairers/{repairer_id}/customers',
-    uriVariables: ['repairer_id'],
+    uriVariables: ['repairer_id' => new Link(
+        toProperty: 'repairer',
+        fromClass: Repairer::class,
+    ),],
     requirements: ['repairer_id' => '\d+'],
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
-    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
     name: 'customers_list',
     provider: CustomersProvider::class,
 )]
