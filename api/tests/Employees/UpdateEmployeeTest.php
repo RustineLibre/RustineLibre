@@ -73,7 +73,6 @@ class UpdateEmployeeTest extends AbstractTestCase
      */
     public function testUpdateAsGoodBoss(): void
     {
-        $this->markTestIncomplete('fix later');
         /** @var RepairerEmployee $repairerEmployee */
         $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
         $response = $this->createClientWithUser($repairerEmployee->repairer->owner)->request('PUT', sprintf('/employee_and_user/%s', $repairerEmployee->id), [
