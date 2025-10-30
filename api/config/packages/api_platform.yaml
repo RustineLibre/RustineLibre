@@ -1,10 +1,22 @@
 api_platform:
   title: Rustine Libre
   version: 1.0.0
+  formats:
+    jsonld: [ 'application/ld+json' ]
+  docs_formats:
+    jsonld: [ 'application/ld+json' ]
+    jsonopenapi: [ 'application/vnd.openapi+json' ]
+    html: [ 'text/html' ]
+  patch_formats:
+    json: [ "application/merge-patch+json" ]
   # Mercure integration, remove if unwanted
   mercure: ~
   # Good cache defaults for REST APIs
   defaults:
+    input_formats:
+      json: [ 'application/json', "application/merge-patch+json" ]
+      jsonld: [ 'application/ld+json' ]
+      form: [ 'application/x-www-form-urlencoded', 'multipart/form-data' ]
     stateless: true
     cache_headers:
       vary: ['Content-Type', 'Authorization', 'Origin']

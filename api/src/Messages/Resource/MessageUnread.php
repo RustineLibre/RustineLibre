@@ -30,6 +30,7 @@ use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
     provider: NumberOfMessageNotReadForRepairerProvider::class,
 )]
 #[Get(
+
     uriTemplate: '/messages_unread/{discussion_id}',
     uriVariables: [
         'discussion_id' => new Link(
@@ -38,7 +39,6 @@ use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
         ),
     ],
     requirements: ['discussion_id' => '\d+'],
-    security: 'is_granted("MESSAGE_UNREAD_BY_DISCUSSION", discussion_id)',
     provider: NumberOfMessageNotReadForDiscussionProvider::class,
 )]
 final class MessageUnread
