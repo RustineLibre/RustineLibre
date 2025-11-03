@@ -37,10 +37,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 )]
 #[Put(
     uriTemplate: '/employee_and_user/{id}',
-    inputFormats: [
-        'json' => ['application/json', 'application/ld+json'],
-        'form' => ['application/x-www-form-urlencoded', 'multipart/form-data'],
-    ],
     security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.repairer.owner == user)",
     input: CreateUserEmployeeDto::class,
     processor: UpdateUserEmployeeProcessor::class
