@@ -28,7 +28,6 @@ class MailConfirmationTest extends AbstractTestCase
 
     public function testValidCode(): void
     {
-        $this->markTestIncomplete("There is a todo in the controller to change the valid code when mail is OK.");
         /** @var User $userTest */
         $userTest = self::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
 
