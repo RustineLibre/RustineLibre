@@ -70,6 +70,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Put(
     uriTemplate: '/repairer_change_boss/{id}',
+    normalizationContext: ['groups' => [self::REPAIRER_READ, RepairerEmployee::BOSS_UPDATE_READ]],
     denormalizationContext: ['groups' => [self::REPAIRER_WRITE]],
     security: "is_granted('ROLE_ADMIN') or (object.owner == user and object.enabled == true)",
     input: UpdateRepairerBossDto::class,

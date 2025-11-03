@@ -52,11 +52,12 @@ class RepairerEmployee
 {
     public const EMPLOYEE_READ = 'employee_read';
     public const EMPLOYEE_WRITE = 'employee_write';
+    public const BOSS_UPDATE_READ = 'boss_update_read';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups([self::EMPLOYEE_READ])]
+    #[Groups([self::EMPLOYEE_READ, self::BOSS_UPDATE_READ])]
     public ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'repairerEmployees')]
@@ -66,7 +67,7 @@ class RepairerEmployee
 
     #[ORM\OneToOne(inversedBy: 'repairerEmployee', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE])]
+    #[Groups([self::EMPLOYEE_READ, self::EMPLOYEE_WRITE, self::BOSS_UPDATE_READ])]
     public ?User $employee = null;
 
     #[ORM\Column]

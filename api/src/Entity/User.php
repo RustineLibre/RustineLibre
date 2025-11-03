@@ -53,7 +53,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Post(
     uriTemplate: '/validation-code',
     controller: UserValidationCodeController::class,
-    security: "is_granted('IS_AUTHENTICATED_FULLY')"
+    security: "is_granted('IS_AUTHENTICATED_FULLY')",
+    validate: false,
 )]
 #[Post(
     uriTemplate: '/forgot-password',
@@ -80,7 +81,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriVariables: ['repairer_id' => new Link(
         toProperty: 'repairer',
         fromClass: Repairer::class,
-    ),],
+    ), ],
     requirements: ['repairer_id' => '\d+'],
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
@@ -109,7 +110,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
-    #[Groups([self::USER_READ, self::CUSTOMER_READ, Maintenance::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Bike::READ])]
+    #[Groups([self::USER_READ, self::CUSTOMER_READ, Maintenance::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Bike::READ, RepairerEmployee::EMPLOYEE_READ, RepairerEmployee::BOSS_UPDATE_READ])]
     public int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH, maxMessage: 'user.email.length')]
@@ -120,7 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $email = null;
 
     #[ORM\Column(type: 'json')]
-    #[Groups([self::USER_READ])]
+    #[Groups([self::USER_READ, RepairerEmployee::BOSS_UPDATE_READ])]
     public array $roles = ['ROLE_USER'];
 
     #[Assert\Type('boolean')]
