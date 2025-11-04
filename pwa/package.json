@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
-    "@playwright/test": "^1.46.1",
+    "@playwright/test": "^1.56.1",
     "@popperjs/core": "^2.11.8",
     "@types/jest": "^29.5.12",
     "@types/node": "^18.19.45",
