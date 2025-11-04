@@ -44,6 +44,7 @@ final class UserSearchFilter extends AbstractFilter
         if (!$this->properties) {
             return [];
         }
+
         return [
             'userSearch' => [
             'type' => Type::BUILTIN_TYPE_STRING,

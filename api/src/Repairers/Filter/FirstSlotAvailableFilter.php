@@ -42,6 +42,7 @@ class FirstSlotAvailableFilter extends AbstractFilter
         if (!$this->properties) {
             return [];
         }
+
         return [
             'availability' => [
             'type' => Type::BUILTIN_TYPE_STRING,
