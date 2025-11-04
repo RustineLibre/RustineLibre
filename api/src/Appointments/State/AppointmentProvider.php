@@ -4,11 +4,13 @@ namespace App\Appointments\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use App\Entity\Appointment;
 use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+/** @implements ProviderInterface<Appointment> */
 class AppointmentProvider implements ProviderInterface
 {
     public function __construct(
@@ -19,6 +21,9 @@ class AppointmentProvider implements ProviderInterface
     ) {
     }
 
+    /**
+     * @return iterable<Appointment>
+     */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
     {
         $user = $this->security->getUser();

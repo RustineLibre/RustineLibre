@@ -14,7 +14,7 @@ use App\Entity\User;
 use App\Repairers\Dto\CreateUserRepairerDto;
 
 /**
- * @template-implements ProcessorInterface<int>
+ * @implements ProcessorInterface<CreateUserRepairerDto, Repairer>
  */
 final readonly class CreateUserRepairerProcessor implements ProcessorInterface
 {

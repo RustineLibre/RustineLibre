@@ -46,21 +46,17 @@ final class RepairerSearchFilter extends AbstractFilter
             return [];
         }
 
-        $description = [];
-        foreach ($this->properties as $property => $strategy) {
-            $description['repairerSearch'] = [
-                'type' => Type::BUILTIN_TYPE_STRING,
-                'required' => false,
-                'description' => 'Filter to get repairers by name or email',
-                'openapi' => [
-                    'example' => '/repairerSearch=raphael',
-                    'allowReserved' => false,
-                    'allowEmptyValue' => true,
-                    'explode' => false,
-                ],
-            ];
-        }
-
-        return $description;
+        return [
+            'repairerSearch' => [
+            'type' => Type::BUILTIN_TYPE_STRING,
+            'required' => false,
+            'description' => 'Filter to get repairers by name or email',
+            'openapi' => [
+                'example' => '/repairerSearch=raphael',
+                'allowReserved' => false,
+                'allowEmptyValue' => true,
+                'explode' => false,
+            ],
+        ]];
     }
 }

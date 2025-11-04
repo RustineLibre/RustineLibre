@@ -32,21 +32,17 @@ class OwnerFilter extends AbstractFilter
             return [];
         }
 
-        $description = [];
-        foreach ($this->properties as $strategy) {
-            $description['owner'] = [
-                'type' => Type::BUILTIN_TYPE_STRING,
-                'required' => false,
-                'description' => 'Allow to filter by boss ID',
-                'openapi' => [
-                    'example' => '/interventions?owner=12',
-                    'allowReserved' => false,
-                    'allowEmptyValue' => false,
-                    'explode' => false,
-                ],
-            ];
-        }
-
-        return $description;
+        return [
+            'owner' => [
+            'type' => Type::BUILTIN_TYPE_STRING,
+            'required' => false,
+            'description' => 'Allow to filter by boss ID',
+            'openapi' => [
+                'example' => '/interventions?owner=12',
+                'allowReserved' => false,
+                'allowEmptyValue' => false,
+                'explode' => false,
+            ],
+        ]];
     }
 }
