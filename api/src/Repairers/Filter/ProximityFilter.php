@@ -51,7 +51,7 @@ final class ProximityFilter extends AbstractFilter
         }
 
         $description = [];
-        foreach ($this->properties as $property) {
+        foreach (array_keys($this->properties) as $property) {
             $description['proximity'] = [
                 'property' => $property,
                 'type' => Type::BUILTIN_TYPE_STRING,
