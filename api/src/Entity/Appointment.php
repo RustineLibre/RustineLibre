@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
+use App\Appointments\State\AppointmentProvider;
 use App\Appointments\Validator\AppointmentState;
 use App\Bike\Validator\BikeOwner;
 use App\Controller\AppointmentStatusAction;
@@ -55,7 +56,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[ApiResource(
     uriTemplate: '/repairers/{repairer_id}/appointments',
-    operations: [new GetCollection()],
+    operations: [new GetCollection(
+        provider: AppointmentProvider::class,
+    )],
     uriVariables: [
         'repairer_id' => new Link(
             toProperty: 'repairer',
@@ -64,7 +67,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     requirements: ['repairer_id' => '\d+'],
     normalizationContext: ['groups' => [self::REPAIRER_APPOINTMENT_COLLECTION_READ]],
-    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
 )]
 #[ApiResource(
     uriTemplate: '/customers/{customer_id}/appointments',

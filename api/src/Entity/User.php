@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
@@ -37,7 +38,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN') or object == user or is_granted('CUSTOMER_READ', object)"),
-        new Post(security: "is_granted('ROLE_ADMIN') or !user"),
+        new Post(
+            security: "is_granted('ROLE_ADMIN') or !user",
+            validationContext: ['groups' => ['Default', self::USER_WRITE]],
+        ),
         new Put(security: "is_granted('ROLE_ADMIN') or object == user"),
         new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
@@ -52,7 +56,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Post(
     uriTemplate: '/validation-code',
     controller: UserValidationCodeController::class,
-    security: "is_granted('IS_AUTHENTICATED_FULLY')"
+    security: "is_granted('IS_AUTHENTICATED_FULLY')",
+    validate: false,
 )]
 #[Post(
     uriTemplate: '/forgot-password',
@@ -64,7 +69,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Post(
     uriTemplate: '/resend-valid-code',
-    controller: ResendValidationCodeController::class
+    controller: ResendValidationCodeController::class,
+    validate: false,
 )]
 #[Get(
     uriTemplate: '/me',
@@ -76,12 +82,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[GetCollection(
     uriTemplate: '/repairers/{repairer_id}/customers',
-    uriVariables: ['repairer_id'],
+    uriVariables: ['repairer_id' => new Link(
+        toProperty: 'repairer',
+        fromClass: Repairer::class,
+    ), ],
     requirements: ['repairer_id' => '\d+'],
     openapi: new Model\Operation(
         summary: 'Retrieves customers from my repair\'s shop',
         description: 'Retrieves customers from my repair\'s shop'),
-    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
     name: 'customers_list',
     provider: CustomersProvider::class,
 )]
@@ -106,7 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\Column(type: 'integer', unique: true)]
     #[ORM\GeneratedValue]
-    #[Groups([self::USER_READ, self::CUSTOMER_READ, Maintenance::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Bike::READ])]
+    #[Groups([self::USER_READ, self::CUSTOMER_READ, Maintenance::READ, DiscussionMessage::MESSAGE_READ, Discussion::DISCUSSION_READ, Bike::READ, RepairerEmployee::EMPLOYEE_READ, RepairerEmployee::BOSS_UPDATE_READ])]
     public int $id;
 
     #[Assert\Length(max: self::EMAIL_MAX_LENGTH, maxMessage: 'user.email.length')]
@@ -117,7 +125,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public ?string $email = null;
 
     #[ORM\Column(type: 'json')]
-    #[Groups([self::USER_READ])]
+    #[Groups([self::USER_READ, RepairerEmployee::BOSS_UPDATE_READ])]
     public array $roles = ['ROLE_USER'];
 
     #[Assert\Type('boolean')]

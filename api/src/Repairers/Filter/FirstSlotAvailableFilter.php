@@ -43,21 +43,17 @@ class FirstSlotAvailableFilter extends AbstractFilter
             return [];
         }
 
-        $description = [];
-        foreach ($this->properties as $property => $strategy) {
-            $description['availability'] = [
-                'type' => Type::BUILTIN_TYPE_STRING,
-                'required' => false,
-                'description' => 'Order by first available slot.',
-                'openapi' => [
-                    'example' => '/repairers?availability=ASC|DESC',
-                    'allowReserved' => false,
-                    'allowEmptyValue' => false,
-                    'explode' => false,
-                ],
-            ];
-        }
-
-        return $description;
+        return [
+            'availability' => [
+            'type' => Type::BUILTIN_TYPE_STRING,
+            'required' => false,
+            'description' => 'Order by first available slot.',
+            'openapi' => [
+                'example' => '/repairers?availability=ASC|DESC',
+                'allowReserved' => false,
+                'allowEmptyValue' => false,
+                'explode' => false,
+            ],
+        ]];
     }
 }

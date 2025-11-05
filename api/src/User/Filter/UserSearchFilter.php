@@ -45,21 +45,17 @@ final class UserSearchFilter extends AbstractFilter
             return [];
         }
 
-        $description = [];
-        foreach ($this->properties as $property => $strategy) {
-            $description['userSearch'] = [
-                'type' => Type::BUILTIN_TYPE_STRING,
-                'required' => false,
-                'description' => 'Filter to get user by first name, last name or email',
-                'openapi' => [
-                    'example' => '/userSearch=raphael',
-                    'allowReserved' => false,
-                    'allowEmptyValue' => true,
-                    'explode' => false,
-                ],
-            ];
-        }
-
-        return $description;
+        return [
+            'userSearch' => [
+            'type' => Type::BUILTIN_TYPE_STRING,
+            'required' => false,
+            'description' => 'Filter to get user by first name, last name or email',
+            'openapi' => [
+                'example' => '/userSearch=raphael',
+                'allowReserved' => false,
+                'allowEmptyValue' => true,
+                'explode' => false,
+            ],
+        ]];
     }
 }

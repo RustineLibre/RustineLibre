@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**
- * @template-implements ProcessorInterface<int>
+ * @implements ProcessorInterface<CreateUserEmployeeDto, RepairerEmployee>
  */
 final readonly class CreateUserEmployeeProcessor implements ProcessorInterface
 {

@@ -66,14 +66,14 @@ class UserResource extends AbstractResource<User> {
     return await this.getResult(doFetch);
   }
 
-  async resendValidationCode(): Promise<User> {
+  async resendValidationCode(body: RequestBody = {}): Promise<User> {
     const doFetch = async () => {
       return await fetch(this.getUrl(`/resend-valid-code`), {
         headers: {
           ...this.getDefaultHeaders(true),
         },
         method: 'POST',
-        body: JSON.stringify({}),
+        body: JSON.stringify(body),
       });
     };
 

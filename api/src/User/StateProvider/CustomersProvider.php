@@ -15,6 +15,7 @@ use App\Repository\AppointmentRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -35,8 +36,11 @@ final class CustomersProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        /** @var ?User $user */
         $user = $this->security->getUser();
+        if (!($user instanceof User && $this->security->isGranted('IS_AUTHENTICATED_FULLY') && $user->isAssociatedWithRepairer($uriVariables['repairer_id']))) {
+            throw new AccessDeniedHttpException('Access Denied.');
+        }
+
         $repairerId = $uriVariables['repairer_id'] ?? null;
         $repairerFromEmployee = $user?->repairerEmployee?->repairer->id == $repairerId ? $user?->repairerEmployee?->repairer : null;
         $repairersFromBoss = array_filter($user?->repairers->toArray(), function (Repairer $repairer) use ($repairerId) {

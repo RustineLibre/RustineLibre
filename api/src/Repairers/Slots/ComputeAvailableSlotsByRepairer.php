@@ -44,7 +44,7 @@ final class ComputeAvailableSlotsByRepairer
             return $slots;
         }
 
-        foreach ($slots as $day => $openingHours) {
+        foreach (array_keys($slots) as $day) {
             $dayDate = new \DateTime($day);
 
             foreach ($exeptionalClosures as $exeptionalClosure) {

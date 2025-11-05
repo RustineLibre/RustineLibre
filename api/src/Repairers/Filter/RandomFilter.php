@@ -32,21 +32,17 @@ class RandomFilter extends AbstractFilter
             return [];
         }
 
-        $description = [];
-        foreach ($this->properties as $property => $strategy) {
-            $description['random'] = [
-                'type' => Type::BUILTIN_TYPE_STRING,
-                'required' => false,
-                'description' => 'Filter to get data with random order. This filter should be placed in entity only at latest to avoid overide of other filters.',
-                'openapi' => [
-                    'example' => '/repairers?sort=random',
-                    'allowReserved' => false,
-                    'allowEmptyValue' => false,
-                    'explode' => false,
-                ],
-            ];
-        }
-
-        return $description;
+        return [
+            'random' => [
+            'type' => Type::BUILTIN_TYPE_STRING,
+            'required' => false,
+            'description' => 'Filter to get data with random order. This filter should be placed in entity only at latest to avoid overide of other filters.',
+            'openapi' => [
+                'example' => '/repairers?sort=random',
+                'allowReserved' => false,
+                'allowEmptyValue' => false,
+                'explode' => false,
+            ],
+        ]];
     }
 }

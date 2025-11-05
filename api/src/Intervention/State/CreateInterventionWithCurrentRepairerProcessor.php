@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @template-implements ProcessorInterface<int>
+ * @implements ProcessorInterface<CreateInterventionRepairerDto, Intervention>
  */
 final readonly class CreateInterventionWithCurrentRepairerProcessor implements ProcessorInterface
 {

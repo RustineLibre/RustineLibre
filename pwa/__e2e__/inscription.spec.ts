@@ -9,10 +9,12 @@ test('register with good entries', async ({page}) => {
   // on remplit et soumet le formulaire
   await page.type('input[name="firstName"]', randomString);
   await page.type('input[name="lastName"]', randomString);
+  await page.type('input[name="telephone"]', '0601020304');
   await page.type('input[name="email"]', `${randomString}@test.com`);
   await page.type('input[name="password"]', 'Test1passwordOk!');
   await page.type('input[name="street"]', '50 rue des pommiers');
   await page.type('input[name="city"]', 'Lille');
+  await page.click('input[type="checkbox"]'); // accepter les CGU
   await page.click('button[type="submit"]');
 
   // on vérifie qu'un message indique qu'il faut entrer une code de validation
@@ -22,7 +24,7 @@ test('register with good entries', async ({page}) => {
   await expect(pendingCodeMessage).toBeVisible();
 
   // on vérifie que le champs pour entrer le code de validation est bien visible
-  const codeInput = await page.locator('input[type="number"]');
+  const codeInput = await page.locator('input[type="text"]');
   await expect(codeInput).toBeVisible();
 
   // on vérifie qu'un lien pou renvoyer le code de validation est bien visible
@@ -60,10 +62,12 @@ test('register with already used email', async ({page}) => {
   // on remplit et soumet le formulaire
   await page.type('input[name="firstName"]', 'Boss');
   await page.type('input[name="lastName"]', 'Boss');
+  await page.type('input[name="telephone"]', '0601020304');
   await page.type('input[name="email"]', `boss@test.com`);
   await page.type('input[name="password"]', 'Test1passwordOk!');
   await page.type('input[name="street"]', '50 rue des pommiers');
   await page.type('input[name="city"]', 'Lille');
+  await page.click('input[type="checkbox"]'); // accepter les CGU
   await page.click('button[type="submit"]');
 
   const errorMessage = await page.getByText(
