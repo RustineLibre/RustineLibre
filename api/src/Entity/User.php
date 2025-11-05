@@ -38,7 +38,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN') or object == user or is_granted('CUSTOMER_READ', object)"),
-        new Post(security: "is_granted('ROLE_ADMIN') or !user"),
+        new Post(
+            security: "is_granted('ROLE_ADMIN') or !user",
+            validationContext: ['groups' => [self::USER_WRITE]],
+        ),
         new Put(security: "is_granted('ROLE_ADMIN') or object == user"),
         new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
@@ -66,7 +69,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 )]
 #[Post(
     uriTemplate: '/resend-valid-code',
-    controller: ResendValidationCodeController::class
+    controller: ResendValidationCodeController::class,
+    validationContext: ['groups' => []],
 )]
 #[Get(
     uriTemplate: '/me',
@@ -94,7 +98,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(UserSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: ['firstName' => 'ipartial', 'lastName' => 'ipartial'])]
 #[ApiFilter(OrderFilter::class, properties: ['id'], arguments: ['orderParameterName' => 'order'])]
-#[UniqueEntity('email', message: 'user.email.unique')]
+#[UniqueEntity('email', message: 'user.email.unique', groups: [self::USER_WRITE])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public const ROLE_BOSS = 'ROLE_BOSS';

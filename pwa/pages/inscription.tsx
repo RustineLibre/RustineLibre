@@ -152,7 +152,12 @@ const Registration: NextPageWithLayout = ({}) => {
 
   const resendCode = async () => {
     setResendPending(true);
-    const response = await userResource.resendValidationCode();
+    // @ts-ignore
+    const response = await userResource.resendValidationCode({
+      email: user?.email,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+    });
     setResendPending(false);
 
     if (response) {
