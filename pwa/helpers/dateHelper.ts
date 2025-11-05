@@ -34,7 +34,7 @@ export const formatDateInSelect = (dateString: string | undefined): string => {
 };
 
 export const isPast = (targetDate: string): boolean => {
-  const currentDate = new Date();
+  const currentDate = getDateObjectFromString(new Date().toISOString());
   const parsedTargetDate = getDateObjectFromString(targetDate);
 
   if (isNaN(parsedTargetDate.getTime())) {
