@@ -38,7 +38,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Get(security: "is_granted('ROLE_ADMIN') or object == user or is_granted('CUSTOMER_READ', object)"),
-        new Post(security: "is_granted('ROLE_ADMIN') or !user"),
+        new Post(
+            security: "is_granted('ROLE_ADMIN') or !user",
+            validationContext: ['groups' => ['Default', self::USER_WRITE]],
+        ),
         new Put(security: "is_granted('ROLE_ADMIN') or object == user"),
         new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
         new GetCollection(security: "is_granted('ROLE_ADMIN')"),
