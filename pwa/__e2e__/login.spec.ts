@@ -8,7 +8,7 @@ test('authentication success', async ({page}) => {
   await page.getByRole('button', {name: 'Se connecter'}).click();
 
   await expect(page, 'La page doit être redirigée vers /sradmin').toHaveURL(
-    '/sradmin'
+    '/sradmin/boutiques'
   );
 });
 
