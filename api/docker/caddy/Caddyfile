@@ -33,6 +33,17 @@ log
 
 route {
     root * /srv/app/public
+
+    @isBingbot {
+        header User-Agent *bingbot*
+    }
+
+    handle @isBingbot {
+         reverse_proxy http://{$PWA_UPSTREAM} {
+             trusted_proxies private_ranges
+         }
+    }
+
     mercure {
         # Transport to use (default to Bolt)
         transport_url {$MERCURE_TRANSPORT_URL:bolt:///data/mercure.db}
