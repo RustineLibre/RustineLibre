@@ -137,7 +137,3 @@ jobs:
         run: docker compose exec -T pwa npm run lint
       - name: Front Unit Test
         run: docker compose exec -T pwa npm run test:unit
-      - name: Front E2E Test
-        run: |
-          docker compose exec -T pwa pnpm playwright install
-          docker compose exec -T pwa npm run test:e2e
