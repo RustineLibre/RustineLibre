@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bbe113b32d71180754c10ff6a06efaf2",
+    "content-hash": "27d161e74e99947801d224ee5c6a3813",
     "packages": [
         {
             "name": "api-platform/core",
@@ -6012,26 +6012,33 @@
         },
         {
             "name": "spatie/opening-hours",
-            "version": "2.41.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/opening-hours.git",
-                "reference": "2113e289b16340b24ea0743a7179ebc9dcbe5e64"
+                "reference": "c89d2b15e51ed2bd9073025dc3b82551848bf87e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/opening-hours/zipball/2113e289b16340b24ea0743a7179ebc9dcbe5e64",
-                "reference": "2113e289b16340b24ea0743a7179ebc9dcbe5e64",
+                "url": "https://api.github.com/repos/spatie/opening-hours/zipball/c89d2b15e51ed2bd9073025dc3b82551848bf87e",
+                "reference": "c89d2b15e51ed2bd9073025dc3b82551848bf87e",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.0 || ^8.0"
+                "php": "^8.2"
             },
             "require-dev": {
-                "kylekatarnls/multi-tester": "^1.1",
-                "phpunit/phpunit": "^6.5"
+                "kylekatarnls/multi-tester": "^2.5",
+                "phpunit/phpunit": "^11.2"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev",
+                    "dev-3.x": "3.x-dev",
+                    "dev-master": "4.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Spatie\\OpeningHours\\": "src"
@@ -6047,6 +6054,11 @@
                     "email": "sebastian@spatie.be",
                     "homepage": "https://spatie.be",
                     "role": "Developer"
+                },
+                {
+                    "name": "kylekatarnls",
+                    "homepage": "https://github.com/kylekatarnls",
+                    "role": "Developer"
                 }
             ],
             "description": "A helper to query and format a set of opening hours",
@@ -6060,9 +6072,9 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/opening-hours/issues",
-                "source": "https://github.com/spatie/opening-hours/tree/2.41.0"
+                "source": "https://github.com/spatie/opening-hours/tree/4.2.1"
             },
-            "time": "2023-06-12T19:54:57+00:00"
+            "time": "2025-05-24T16:39:27+00:00"
         },
         {
             "name": "symfony/asset",
