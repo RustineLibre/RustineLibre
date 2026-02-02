@@ -20,7 +20,7 @@
         "kreait/firebase-bundle": "^5.0",
         "league/flysystem-aws-s3-v3": "^3.15",
         "league/flysystem-bundle": "^3.1",
-        "lexik/jwt-authentication-bundle": "^2.19.1",
+        "lexik/jwt-authentication-bundle": "^3.2.0",
         "nelmio/alice": "^3.13.4",
         "nelmio/cors-bundle": "^2.3.1",
         "oro/doctrine-extensions": "^2.0.2",
