@@ -5,7 +5,7 @@ on:
     inputs:
       tags:
         type: string
-        description: The Docker Tags (see docker/metadata-action@v4 for available values)
+        description: The Docker Tags (see docker/metadata-action@v6 for available values)
         required: true
     secrets:
       domain:
@@ -92,7 +92,7 @@ jobs:
         echo "NEXT_PUBLIC_ENTRYPOINT=https://${URL}" >> "$GITHUB_ENV"
     - name: Docker metadata
       id: docker-metadata
-      uses: docker/metadata-action@v4
+      uses: docker/metadata-action@v6
       with:
         images: ${{ vars.IMAGE_REPOSITORY_NAME }}/${{ vars.PWA_IMAGE_NAME }}
         tags: |
