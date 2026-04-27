@@ -21,7 +21,7 @@
     "@emotion/server": "^11.11.0",
     "@emotion/styled": "^11.14.1",
     "@fontsource-variable/pathway-extreme": "^5.2.8",
-    "@fontsource/poppins": "^4.5.10",
+    "@fontsource/poppins": "^5.2.7",
     "@fontsource/roboto": "^4.5.8",
     "@fullcalendar/core": "^6.1.19",
     "@fullcalendar/daygrid": "^6.1.19",
