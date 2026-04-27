@@ -28,7 +28,7 @@
     "@fullcalendar/interaction": "^6.1.19",
     "@fullcalendar/react": "^6.1.19",
     "@fullcalendar/timegrid": "^6.1.19",
-    "@marsidev/react-turnstile": "^0.2.4",
+    "@marsidev/react-turnstile": "^1.5.1",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.16.6",
