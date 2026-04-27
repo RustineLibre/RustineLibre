@@ -22,7 +22,7 @@
     "@emotion/styled": "^11.14.1",
     "@fontsource-variable/pathway-extreme": "^5.2.8",
     "@fontsource/poppins": "^4.5.10",
-    "@fontsource/roboto": "^4.5.8",
+    "@fontsource/roboto": "^5.2.10",
     "@fullcalendar/core": "^6.1.20",
     "@fullcalendar/daygrid": "^6.1.19",
     "@fullcalendar/interaction": "^6.1.19",

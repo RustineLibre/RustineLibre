@@ -67,8 +67,8 @@ importers:
         specifier: ^4.5.10
         version: 4.5.10
       '@fontsource/roboto':
-        specifier: ^4.5.8
-        version: 4.5.8
+        specifier: ^5.2.10
+        version: 5.2.10
       '@fullcalendar/core':
         specifier: ^6.1.20
         version: 6.1.20
@@ -1346,8 +1346,8 @@ packages:
   '@fontsource/poppins@4.5.10':
     resolution: {integrity: sha512-oYZVHsnlwV3VWM1SE/m6SUxVh0QLk5+2wB+lBiXcI7N/0KVQWmV9YykaPqfJHBLvmdya+MAOnv+BQHeLU1vOOw==}
 
-  '@fontsource/roboto@4.5.8':
-    resolution: {integrity: sha512-CnD7zLItIzt86q4Sj3kZUiLcBk1dSk81qcqgMGaZe7SQ1P8hFNxhMl5AZthK1zrDM5m74VVhaOpuMGIL4gagaA==}
+  '@fontsource/roboto@5.2.10':
+    resolution: {integrity: sha512-8HlA5FtSfz//oFSr2eL7GFXAiE7eIkcGOtx7tjsLKq+as702x9+GU7K95iDeWFapHC4M2hv9RrpXKRTGGBI8Zg==}
 
   '@fullcalendar/core@6.1.20':
     resolution: {integrity: sha512-1cukXLlePFiJ8YKXn/4tMKsy0etxYLCkXk8nUCFi11nRONF2Ba2CD5b21/ovtOO2tL6afTJfwmc1ed3HG7eB1g==}
@@ -7082,7 +7082,7 @@ snapshots:
 
   '@fontsource/poppins@4.5.10': {}
 
-  '@fontsource/roboto@4.5.8': {}
+  '@fontsource/roboto@5.2.10': {}
 
   '@fullcalendar/core@6.1.20':
     dependencies:
