@@ -5,3 +5,6 @@ App\Entity\Discussion:
     discussion_2:
         repairer: '@repairer_2'
         customer: '@user_1'
+    discussion_set_read:
+        repairer: '@repairer_1'
+        customer: '@user_set_read_test'
