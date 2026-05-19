@@ -62,6 +62,15 @@ App\Entity\User:
     emailConfirmed: true
     street: <address()>
     city: <city()>
+  user_set_read_test:
+    roles: ["ROLE_USER"]
+    email: "set_read_test@test.com"
+    firstName: 'SetRead'
+    lastName: 'Test'
+    plainPassword: "Test1passwordOk!"
+    emailConfirmed: true
+    street: <address()>
+    city: <city()>
   user_not_confirm{21..25}:
     roles: ["ROLE_USER"]
     email: <email()>

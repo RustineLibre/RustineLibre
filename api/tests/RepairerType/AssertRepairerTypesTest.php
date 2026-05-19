@@ -22,7 +22,7 @@ class AssertRepairerTypesTest extends AbstractTestCase
     {
         $this->createClientAuthAsAdmin()->request('POST', '/repairer_types', ['json' => [
         ]]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -34,9 +34,9 @@ class AssertRepairerTypesTest extends AbstractTestCase
     public function testPostShortName(): void
     {
         $this->createClientAuthAsAdmin()->request('POST', '/repairer_types', ['json' => [
-             'name' => 'a',
-         ]]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+            'name' => 'a',
+        ]]);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -50,7 +50,7 @@ class AssertRepairerTypesTest extends AbstractTestCase
         $this->createClientAuthAsAdmin()->request('POST', '/repairer_types', ['json' => [
             'name' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing.',
         ]]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',

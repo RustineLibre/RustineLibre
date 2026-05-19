@@ -1,14 +1,15 @@
 #syntax=docker/dockerfile:1.4
 # Base stage for dev and build
-FROM node:24-alpine as builder_base
+FROM node:26-alpine as builder_base
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /srv/app
 
-RUN corepack enable && \
-	corepack prepare --activate pnpm@latest && \
+RUN npm install -g corepack && \
+	corepack enable && \
+	corepack prepare pnpm@9.4.0 --activate && \
 	pnpm config -g set store-dir /.pnpm-store
 
 # Next.js collects completely anonymous telemetry data about general usage.

@@ -14,7 +14,7 @@ class OwnerFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'owner';
 
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
     {
         if (self::PROPERTY_NAME !== $property) {
             return;
@@ -34,15 +34,15 @@ class OwnerFilter extends AbstractFilter
 
         return [
             'owner' => [
-            'type' => Type::BUILTIN_TYPE_STRING,
-            'required' => false,
-            'description' => 'Allow to filter by boss ID',
-            'openapi' => [
-                'example' => '/interventions?owner=12',
-                'allowReserved' => false,
-                'allowEmptyValue' => false,
-                'explode' => false,
-            ],
-        ]];
+                'type' => Type::BUILTIN_TYPE_STRING,
+                'required' => false,
+                'description' => 'Allow to filter by boss ID',
+                'openapi' => [
+                    'example' => '/interventions?owner=12',
+                    'allowReserved' => false,
+                    'allowEmptyValue' => false,
+                    'explode' => false,
+                ],
+            ]];
     }
 }

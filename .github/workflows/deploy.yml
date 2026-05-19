@@ -98,7 +98,7 @@ jobs:
           workload_identity_provider: '${{ secrets.workload-identity-provider }}'
 
       - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v1
+        uses: google-github-actions/setup-gcloud@v3
         with:
           project_id: ${{ secrets.project-id }}
 
@@ -209,7 +209,7 @@ jobs:
           echo "URL=$URL" >> $GITHUB_OUTPUT
 
       - name: Output deployment URL
-        uses: actions/github-script@v6
+        uses: actions/github-script@v9
         if: github.event_name == 'pull_request'
         env:
           URL: ${{ steps.deploy.outputs.URL }}

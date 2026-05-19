@@ -23,7 +23,7 @@ class MailConfirmationTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testValidCode(): void
@@ -38,6 +38,6 @@ class MailConfirmationTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_CREATED);
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 }

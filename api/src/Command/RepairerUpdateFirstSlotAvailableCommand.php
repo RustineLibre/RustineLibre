@@ -19,7 +19,7 @@ class RepairerUpdateFirstSlotAvailableCommand extends Command
 {
     public function __construct(
         private readonly UpdateOldFirstSlotAvailableService $updateOldFirstSlotAvailableService,
-        string $name = null,
+        ?string $name = null,
     ) {
         parent::__construct($name);
     }

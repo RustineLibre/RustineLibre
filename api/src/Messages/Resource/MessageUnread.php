@@ -26,7 +26,7 @@ use App\Messages\State\NumberOfMessageNotReadForRepairerProvider;
         ),
     ],
     requirements: ['repairer_id' => '\d+'],
-    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(repairer_id)',
+    security: 'is_granted("IS_AUTHENTICATED_FULLY") and user.isAssociatedWithRepairer(request.attributes.get("repairer_id"))',
     provider: NumberOfMessageNotReadForRepairerProvider::class,
 )]
 #[Get(

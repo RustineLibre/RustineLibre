@@ -18,7 +18,7 @@ final class FirstSlotAvailableCalculator
     /**
      * @param ?array<string, array<int, string>> $slotsAvailable
      */
-    public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false, array $slotsAvailable = null): void
+    public function setFirstSlotAvailable(Repairer $repairer, ?bool $flush = false, ?array $slotsAvailable = null): void
     {
         if (null === $slotsAvailable) {
             $slotsAvailable = $this->computeAvailableSlotsByRepairer->buildArrayOfAvailableSlots(repairer: $repairer);

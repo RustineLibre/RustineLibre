@@ -20,12 +20,12 @@ final class AroundFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'around';
 
-    public function __construct(private readonly TranslatorInterface $translator, ManagerRegistry $managerRegistry, LoggerInterface $logger = null, array $properties = null, NameConverterInterface $nameConverter = null)
+    public function __construct(private readonly TranslatorInterface $translator, ManagerRegistry $managerRegistry, ?LoggerInterface $logger = null, ?array $properties = null, ?NameConverterInterface $nameConverter = null)
     {
         parent::__construct($managerRegistry, $logger, $properties, $nameConverter);
     }
 
-    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void
+    protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
     {
         if (self::PROPERTY_NAME !== $property) {
             return;
@@ -70,15 +70,15 @@ final class AroundFilter extends AbstractFilter
 
         return [
             'around' => [
-            'type' => Type::BUILTIN_TYPE_STRING,
-            'required' => false,
-            'description' => 'Filter to get points around given GPS coordinates and radius in meters.',
-            'openapi' => [
-                'example' => '/repairers?around[city]=latitude,longitude,radius',
-                'allowReserved' => false,
-                'allowEmptyValue' => true,
-                'explode' => false,
-            ],
-        ]];
+                'type' => Type::BUILTIN_TYPE_STRING,
+                'required' => false,
+                'description' => 'Filter to get points around given GPS coordinates and radius in meters.',
+                'openapi' => [
+                    'example' => '/repairers?around[city]=latitude,longitude,radius',
+                    'allowReserved' => false,
+                    'allowEmptyValue' => true,
+                    'explode' => false,
+                ],
+            ]];
     }
 }

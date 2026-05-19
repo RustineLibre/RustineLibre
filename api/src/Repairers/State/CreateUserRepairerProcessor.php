@@ -21,7 +21,7 @@ final readonly class CreateUserRepairerProcessor implements ProcessorInterface
     public function __construct(
         private PersistProcessor $baseProcessor,
         private ValidatorInterface $validator,
-        private NewRepairerEmail $newRepairerEmail
+        private NewRepairerEmail $newRepairerEmail,
     ) {
     }
 

@@ -20,6 +20,7 @@
 .github/
 docs/
 public/bundles/
+public/media/
 tests/
 var/
 vendor/

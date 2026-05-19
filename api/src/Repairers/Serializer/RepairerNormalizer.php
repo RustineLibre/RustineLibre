@@ -25,7 +25,7 @@ final class RepairerNormalizer implements NormalizerInterface, NormalizerAwareIn
     /**
      * @param Repairer $object
      */
-    public function normalize($object, string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
+    public function normalize($object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $context[self::ALREADY_CALLED] = true;
 
@@ -38,7 +38,7 @@ final class RepairerNormalizer implements NormalizerInterface, NormalizerAwareIn
         return $this->normalizer->normalize($object, $format, $context);
     }
 
-    public function supportsNormalization($data, string $format = null, array $context = []): bool
+    public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
         if (isset($context[self::ALREADY_CALLED])) {
             return false;

@@ -64,8 +64,8 @@ class SearchFilterTest extends AbstractTestCase
         $this->createClientWithUser($newRepairer->owner)->request('PATCH', '/repairers/'.$newRepairer->id, [
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
-            'repairerTypes' => ['/repairer_types/'.$this->repairerTypes[1]->id],
-        ]]);
+                'repairerTypes' => ['/repairer_types/'.$this->repairerTypes[1]->id],
+            ]]);
 
         // Check if the first response have one element less
         $newResponse1 = static::createClient()->request('GET', '/repairers?repairerTypes.id='.$this->repairerTypes[0]->id);
@@ -101,8 +101,8 @@ class SearchFilterTest extends AbstractTestCase
         $lastResponse = $this->createClientWithUser($newRepairer->owner)->request('PATCH', '/repairers/'.$newRepairer->id, [
             'headers' => ['Content-Type' => 'application/merge-patch+json'],
             'json' => [
-            'repairerTypes' => ['/repairer_types/'.$this->repairerTypes[1]->id, '/repairer_types/'.$this->repairerTypes[0]->id],
-        ]]);
+                'repairerTypes' => ['/repairer_types/'.$this->repairerTypes[1]->id, '/repairer_types/'.$this->repairerTypes[0]->id],
+            ]]);
 
         // Check if first response is equal
         $newResponse1 = static::createClient()->request('GET', '/repairers?repairerTypes.id='.$this->repairerTypes[0]->id);

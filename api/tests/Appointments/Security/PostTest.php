@@ -129,7 +129,7 @@ class PostTest extends SlotsTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         self::assertJsonContains([
             'hydra:title' => 'An error occurred',
             'hydra:description' => $this->translator->trans('403_access.denied.customer', domain: 'validators'),
@@ -169,7 +169,7 @@ class PostTest extends SlotsTestCase
                 'customer' => sprintf('/users/%d', $this->userWithoutAppointment->id),
             ],
         ]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         self::assertJsonContains([
             'hydra:title' => 'An error occurred',
             'hydra:description' => $this->translator->trans('403_access.denied.customer', domain: 'validators'),

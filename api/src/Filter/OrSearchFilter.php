@@ -25,8 +25,8 @@ final class OrSearchFilter extends AbstractFilter
         QueryBuilder $queryBuilder,
         QueryNameGeneratorInterface $queryNameGenerator,
         string $resourceClass,
-        Operation $operation = null,
-        array $context = []
+        ?Operation $operation = null,
+        array $context = [],
     ): void {
         if (self::FILTER_KEY !== $property || !$value) {
             return;

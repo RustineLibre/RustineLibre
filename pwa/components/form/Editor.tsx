@@ -20,7 +20,7 @@ const Editor = ({content, setContent}: EditorProps): JSX.Element => {
       <Box sx={{mt: 2, mb: 1}}>
         <CKEditor
           editor={ClassicEditor}
-          data={content}
+          data={content ?? undefined}
           onChange={(event, editor) => {
             const data: string = editor.getData();
             setContent(data);

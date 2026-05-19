@@ -36,7 +36,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -59,7 +59,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -73,14 +73,14 @@ class AssertUserTest extends AbstractTestCase
         $client = self::createClient();
 
         $client->request('POST', '/users', [
-           'headers' => ['Content-Type' => 'application/json'],
-           'json' => [
-               'email' => 'good@les-tilleuls.coop',
-               // Password with at least one uppercase, one lowercase, one number and one special character
-               'plainPassword' => 'Test1passwordOk!',
-               'firstName' => 'Leon',
-               'lastName' => 'Bruxelles',
-           ],
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'good@les-tilleuls.coop',
+                // Password with at least one uppercase, one lowercase, one number and one special character
+                'plainPassword' => 'Test1passwordOk!',
+                'firstName' => 'Leon',
+                'lastName' => 'Bruxelles',
+            ],
         ]);
 
         $this->assertResponseIsSuccessful();
@@ -100,7 +100,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -123,7 +123,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -147,7 +147,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -169,7 +169,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -192,7 +192,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -215,7 +215,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -324,7 +324,7 @@ class AssertUserTest extends AbstractTestCase
             ],
         ]);
 
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',

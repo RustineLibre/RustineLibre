@@ -25,7 +25,7 @@ class GenerateGoogleAuthCredentialsCommand extends Command
         private string $googleAuthProviderCertUrl,
         private string $googleRedirectUris,
         private string $googleJavascriptOrigins,
-        string $name = null,
+        ?string $name = null,
     ) {
         parent::__construct($name);
     }

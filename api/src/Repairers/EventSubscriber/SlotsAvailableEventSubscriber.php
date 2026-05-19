@@ -31,7 +31,7 @@ readonly class SlotsAvailableEventSubscriber implements EventSubscriberInterface
         private ComputeAvailableSlotsByRepairer $computeAvailableSlotsByRepairer,
         private AppointmentRepository $appointmentRepository,
         private Security $security,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
     ) {
     }
 

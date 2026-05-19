@@ -42,12 +42,12 @@ class SecurityDisabledRepairerTest extends AbstractTestCase
     public function testPutByRepairerDisabledFail(): void
     {
         self::createClientWithUser($this->disabledRepairer->owner)->request('PUT', sprintf('/repairers/%s', $this->disabledRepairer->id), [
-             'headers' => ['Content-Type' => 'application/json'],
-             'json' => [
-                 'name' => 'New Name',
-                 'description' => 'test put disabled failed',
-             ],
-         ]);
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'name' => 'New Name',
+                'description' => 'test put disabled failed',
+            ],
+        ]);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }

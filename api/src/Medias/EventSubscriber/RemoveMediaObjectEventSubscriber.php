@@ -22,7 +22,7 @@ class RemoveMediaObjectEventSubscriber implements EventSubscriberInterface
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly MediaObjectRepository $mediaObjectRepository
+        private readonly MediaObjectRepository $mediaObjectRepository,
     ) {
         $phpDocExtractor = new PhpDocExtractor();
         $reflectionExtractor = new ReflectionExtractor();

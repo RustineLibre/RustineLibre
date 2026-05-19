@@ -31,7 +31,7 @@ final readonly class UpdateRepairerBossProcessor implements ProcessorInterface
         private ValidatorInterface $validator,
         private EntityManagerInterface $entityManager,
         private TranslatorInterface $translator,
-        private Security $security
+        private Security $security,
     ) {
     }
 
