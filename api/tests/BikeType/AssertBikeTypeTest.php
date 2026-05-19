@@ -22,7 +22,7 @@ class AssertBikeTypeTest extends AbstractTestCase
     {
         $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
         ]]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -36,7 +36,7 @@ class AssertBikeTypeTest extends AbstractTestCase
         $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
             'name' => 'a',
         ]]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',
@@ -50,7 +50,7 @@ class AssertBikeTypeTest extends AbstractTestCase
         $this->createClientAuthAsAdmin()->request('POST', '/bike_types', ['json' => [
             'name' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean mas',
         ]]);
-        self::assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
         self::assertJsonContains([
             '@context' => '/contexts/ConstraintViolationList',
             '@type' => 'ConstraintViolationList',

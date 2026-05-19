@@ -27,7 +27,7 @@ final class CustomersProvider implements ProviderInterface
         private readonly Security $security,
         private readonly UserRepository $userRepository,
         private readonly AppointmentRepository $appointmentRepository,
-        #[TaggedIterator('api_platform.doctrine.orm.query_extension.collection')] private readonly iterable $collectionExtensions = []
+        #[TaggedIterator('api_platform.doctrine.orm.query_extension.collection')] private readonly iterable $collectionExtensions = [],
     ) {
     }
 

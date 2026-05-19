@@ -167,7 +167,7 @@ class SecurityRepairerTest extends AbstractTestCase
                 'name' => 'Deuxième atelier du même boss',
             ],
         ]);
-        $this->assertResponseStatusCodeSame(RESPONSE::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public function testOwnerCreatedByUser(): void
@@ -229,12 +229,12 @@ class SecurityRepairerTest extends AbstractTestCase
 
         // Valid user role given
         $response = self::createClientWithUser($repairer->owner)->request('PUT', sprintf('/repairers/%s', $repairer->id), [
-             'headers' => ['Content-Type' => 'application/json'],
-             'json' => [
-                 'name' => 'New Name',
-                 'description' => 'test slug by put',
-             ],
-         ]);
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'name' => 'New Name',
+                'description' => 'test slug by put',
+            ],
+        ]);
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
 
         $response = $response->toArray();

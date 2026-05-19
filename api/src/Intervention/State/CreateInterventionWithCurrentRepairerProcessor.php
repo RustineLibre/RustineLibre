@@ -24,7 +24,7 @@ final readonly class CreateInterventionWithCurrentRepairerProcessor implements P
     public function __construct(
         private Security $security,
         private EntityManagerInterface $entityManager,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
     ) {
     }
 

@@ -26,7 +26,7 @@ class SyncGoogleCalendarController extends AbstractController
         private readonly GoogleSync $googleSync,
         private readonly EntityManagerInterface $entityManager,
         private string $googleClientId,
-        private ?Client $client = null
+        private ?Client $client = null,
     ) {
         $this->client = new Client();
         $this->client->setApplicationName('Rustine libre');

@@ -24,7 +24,7 @@ class AppointmentProvider implements ProviderInterface
     /**
      * @return iterable<Appointment>
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|null|object
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $user = $this->security->getUser();
 
