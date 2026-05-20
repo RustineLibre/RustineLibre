@@ -1,0 +1,1348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="6.16.1@f1f5de594dc76faf8784e02d3dc4716c91c6f6ac">
+  <file src="src/Appointments/Doctrine/AppointmentCustomerExtension.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AppointmentCustomerExtension]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Appointments/EventSubscriber/AppointmentWorkflowEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AppointmentWorkflowEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Appointments/EventSubscriber/InjectCustomerEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[InjectCustomerEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Appointments/EventSubscriber/NotifyNewAppointmentSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[NotifyNewAppointmentSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Appointments/EventSubscriber/PublishNewAppointmentForListOnAppointmentCreatedEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[PublishNewAppointmentForListOnAppointmentCreatedEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Appointments/EventSubscriber/SyncGoogleNewAppointmentSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[SyncGoogleNewAppointmentSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Appointments/Resource/AppointmentCsv.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$createdAt]]></code>
+      <code><![CDATA[$customerCreatedAt]]></code>
+      <code><![CDATA[$customerEmail]]></code>
+      <code><![CDATA[$customerFirstName]]></code>
+      <code><![CDATA[$customerLastName]]></code>
+      <code><![CDATA[$phoneNumber]]></code>
+      <code><![CDATA[$prestation]]></code>
+      <code><![CDATA[$repairerName]]></code>
+      <code><![CDATA[$slotTime]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Appointments/Serializer/AppointmentDiscussionNormalizer.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function normalize($object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null]]></code>
+      <code><![CDATA[public function supportsNormalization($data, ?string $format = null, array $context = []): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AppointmentDiscussionNormalizer]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Appointments/Services/AppointmentsCanceller.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Appointments/Services/GoogleSync.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$projectDir]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="src/Appointments/State/AppointmentProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Appointments/State/ExportAppointmentCollectionProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Appointments/Validator/AppointmentState.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getTargets(): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Appointments/Validator/AppointmentStateValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AppointmentStateValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/AutoDiagnostics/Validator/AutoDiagnosticAppointment.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$mode]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/AutoDiagnostics/Validator/AutoDiagnosticAppointmentValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[AutoDiagnosticAppointmentValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Bike/Doctrine/BikeOwnerExtension.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[BikeOwnerExtension]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Bike/EventSubscriber/BikeOwnerEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[BikeOwnerEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Bike/Validator/BikeOwnerValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[BikeOwnerValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Command/CancelAppointmentsPastOrDelayedCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[CancelAppointmentsPastOrDelayedCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Command/GenerateFirebaseCredentialsCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[GenerateFirebaseCredentialsCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Command/GenerateGoogleAuthCredentialsCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[GenerateGoogleAuthCredentialsCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Command/RepairerUpdateFirstSlotAvailableCommand.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function execute(InputInterface $input, OutputInterface $output): int]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerUpdateFirstSlotAvailableCommand]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Contact/EventSubscriber/ContactEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[ContactEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Controller/AppointmentStatusAction.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Controller/BuildRepairerSlotsAvailableAction.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedParam>
+      <code><![CDATA[$request]]></code>
+    </UnusedParam>
+  </file>
+  <file src="src/Controller/CreateMediaObjectAction.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Controller/CustomerCsvController.php">
+    <UnusedClass>
+      <code><![CDATA[CustomerCsvController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Controller/ForgotPasswordController.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Controller/ReadMessageController.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Controller/ResendValidationCodeController.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedParam>
+      <code><![CDATA[$request]]></code>
+    </UnusedParam>
+  </file>
+  <file src="src/Controller/ResetPasswordController.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Controller/SitemapController.php">
+    <UnusedClass>
+      <code><![CDATA[SitemapController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Controller/SyncGoogleCalendarController.php">
+    <UnusedClass>
+      <code><![CDATA[SyncGoogleCalendarController]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Controller/UserValidationCodeController.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Emails/AppointmentChangeTimeEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$repairer]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Emails/AppointmentRefusedEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Emails/ConfirmationEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Emails/ForgotPasswordEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Emails/NewAccountEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Emails/NewAppointmentEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Emails/NewContactEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$mailerSender]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="src/Emails/NewRepairerEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$mailerSender]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="src/Emails/ValidationCodeEmail.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Employees/Doctrine/BossExtension.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[BossExtension]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Employees/EventSubscriber/EmployeeSendPasswordEventSubscriber.php">
+    <UnusedClass>
+      <code><![CDATA[EmployeeSendPasswordEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Employees/State/CreateUserEmployeeProcessor.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process($data, Operation $operation, array $uriVariables = [], array $context = []): RepairerEmployee]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Employees/State/UpdateUserEmployeeProcessor.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process($data, Operation $operation, array $uriVariables = [], array $context = []): RepairerEmployee]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Entity/Appointment.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getStatus]]></code>
+      <code><![CDATA[setStatus]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$address]]></code>
+      <code><![CDATA[$bike]]></code>
+      <code><![CDATA[$bikeType]]></code>
+      <code><![CDATA[$comment]]></code>
+      <code><![CDATA[$customerPhoneWithoutAccount]]></code>
+      <code><![CDATA[$discussion]]></code>
+      <code><![CDATA[$googleSync]]></code>
+      <code><![CDATA[$latitude]]></code>
+      <code><![CDATA[$longitude]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/AutoDiagnostic.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$appointment]]></code>
+      <code><![CDATA[$comment]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$photo]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/Bike.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$bikeType]]></code>
+      <code><![CDATA[$brand]]></code>
+      <code><![CDATA[$createdAt]]></code>
+      <code><![CDATA[$description]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$picture]]></code>
+      <code><![CDATA[$transmissionPicture]]></code>
+      <code><![CDATA[$wheelPicture]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/BikeType.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[addRepairer]]></code>
+      <code><![CDATA[removeRepairer]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/Contact.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$alreadyRead]]></code>
+      <code><![CDATA[$content]]></code>
+      <code><![CDATA[$createdAt]]></code>
+      <code><![CDATA[$email]]></code>
+      <code><![CDATA[$firstName]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$lastName]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/Discussion.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$createdAt]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/DiscussionMessage.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$alreadyRead]]></code>
+      <code><![CDATA[$createdAt]]></code>
+      <code><![CDATA[$id]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/Intervention.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[canAccess]]></code>
+      <code><![CDATA[getRepairerInterventions]]></code>
+      <code><![CDATA[removeRepairerIntervention]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$description]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$isAdmin]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/Maintenance.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$author]]></code>
+      <code><![CDATA[$description]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$invoice]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$photo]]></code>
+      <code><![CDATA[$repairDate]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/MediaObject.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$contentUrl]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$owner]]></code>
+      <code><![CDATA[$viewable]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/RefreshToken.php">
+    <UnusedClass>
+      <code><![CDATA[RefreshToken]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Entity/Repairer.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[addRepairerEmployee]]></code>
+      <code><![CDATA[addRepairerIntervention]]></code>
+      <code><![CDATA[getIsConnectedToGoogle]]></code>
+      <code><![CDATA[getRepairerCities]]></code>
+      <code><![CDATA[removeRepairerCity]]></code>
+      <code><![CDATA[removeRepairerEmployee]]></code>
+      <code><![CDATA[removeRepairerIntervention]]></code>
+      <code><![CDATA[removeRepairerType]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$city]]></code>
+      <code><![CDATA[$comment]]></code>
+      <code><![CDATA[$country]]></code>
+      <code><![CDATA[$description]]></code>
+      <code><![CDATA[$descriptionPicture]]></code>
+      <code><![CDATA[$distance]]></code>
+      <code><![CDATA[$firstSlotAvailable]]></code>
+      <code><![CDATA[$gpsPoint]]></code>
+      <code><![CDATA[$openingHours]]></code>
+      <code><![CDATA[$optionalPage]]></code>
+      <code><![CDATA[$postcode]]></code>
+      <code><![CDATA[$slug]]></code>
+      <code><![CDATA[$street]]></code>
+      <code><![CDATA[$streetNumber]]></code>
+      <code><![CDATA[$thumbnail]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/RepairerCity.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$gpsPoint]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$name]]></code>
+      <code><![CDATA[$postcode]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/RepairerEmployee.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$enabled]]></code>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$sinceDate]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/RepairerExceptionalClosure.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$id]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/RepairerIntervention.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$price]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/RepairerOpeningHours.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$id]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/RepairerType.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$id]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/User.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function eraseCredentials(): void]]></code>
+      <code><![CDATA[public function getPassword(): string]]></code>
+      <code><![CDATA[public function getRoles(): array]]></code>
+      <code><![CDATA[public function getUserIdentifier(): string]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$bikes]]></code>
+      <code><![CDATA[$city]]></code>
+      <code><![CDATA[$emailConfirmed]]></code>
+      <code><![CDATA[$lastRepairers]]></code>
+      <code><![CDATA[$street]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Entity/WebsiteMedia.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$id]]></code>
+      <code><![CDATA[$media]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Filter/OrSearchFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Flysystem/MediaObjectManager.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Intervention/Filter/OwnerFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Intervention/State/CreateInterventionWithCurrentRepairerProcessor.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): Intervention]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Maintenance/Doctrine/MaintenanceExtension.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MaintenanceExtension]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Maintenance/EventSubscriber/MaintenanceAuthorEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MaintenanceAuthorEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Maintenance/Validator/MaintenanceCanWrite.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getTargets(): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Maintenance/Validator/MaintenanceCanWriteValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MaintenanceCanWriteValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Maintenance/Voters/MaintenanceVoter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function supports(string $attribute, mixed $subject): bool]]></code>
+      <code><![CDATA[protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MaintenanceVoter]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Medias/EventSubscriber/RemoveFileEventSubscriber.php">
+    <UnusedClass>
+      <code><![CDATA[RemoveFileEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Medias/EventSubscriber/RemoveMediaObjectEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RemoveMediaObjectEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Medias/Serializer/MediaObjectNormalizer.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function normalize($object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null]]></code>
+      <code><![CDATA[public function supportsNormalization($data, ?string $format = null, array $context = []): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MediaObjectNormalizer]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Mercure/MercurePublisher.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Messages/EventSubscriber/CreateDiscussionEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[CreateDiscussionEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Messages/EventSubscriber/InjectSenderEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[InjectSenderEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Messages/EventSubscriber/NewMessageEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[NewMessageEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Messages/EventSubscriber/UpdateDiscussionLastMessageEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[UpdateDiscussionLastMessageEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Messages/Helpers/DiscussionManager.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Messages/Resource/MessageUnread.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$count]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Messages/State/NumberOfMessageNotReadForCustomerProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): MessageUnread]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Messages/State/NumberOfMessageNotReadForDiscussionProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): MessageUnread]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Messages/State/NumberOfMessageNotReadForRepairerProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): MessageUnread]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Messages/Validator/UniqueDiscussion.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getTargets(): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Messages/Validator/UniqueDiscussionValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[UniqueDiscussionValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Messages/Voter/MessageUnreadByDiscussionVoter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function supports(string $attribute, mixed $subject): bool]]></code>
+      <code><![CDATA[protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[MessageUnreadByDiscussionVoter]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Notifications/AppointmentChangeTimeNotification.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Notifications/AppointmentConfirmNotification.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Notifications/AppointmentRefusedNotification.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Notifications/FirebaseNotifier.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Notifications/NewAppointmentNotification.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Notifications/NewMessageNotification.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Notifications/Notification.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$color]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/OpenApi/OpenApiFactory.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function __invoke(array $context = []): OpenApi]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[OpenApiFactory]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/Doctrine/RepairerClosingExtension.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerClosingExtension]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/Doctrine/RepairerOpeningsExtension.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerOpeningsExtension]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/EventSubscriber/GpsPointEventSubscriber.php">
+    <UnusedClass>
+      <code><![CDATA[GpsPointEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/EventSubscriber/PublishNewRepairerForListOnRepairerCreatedEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[PublishNewRepairerForListOnRepairerCreatedEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/EventSubscriber/RepairerEnabledEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerEnabledEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/EventSubscriber/RepairerEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/EventSubscriber/SlotsAvailableEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[SlotsAvailableEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/EventSubscriber/SlugEventSubscriber.php">
+    <UnusedClass>
+      <code><![CDATA[SlugEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/Filter/AroundFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/Filter/FirstSlotAvailableFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/Filter/ProximityFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/Filter/RandomFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Repairers/Filter/RepairerSearchFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/Resource/RepairerCsv.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$createdAt]]></code>
+      <code><![CDATA[$email]]></code>
+      <code><![CDATA[$firstName]]></code>
+      <code><![CDATA[$lastConnect]]></code>
+      <code><![CDATA[$lastName]]></code>
+      <code><![CDATA[$phoneNumber]]></code>
+      <code><![CDATA[$repairerName]]></code>
+      <code><![CDATA[$repairerPhoneNumber]]></code>
+      <code><![CDATA[$types]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/Repairers/Serializer/RepairerEnabledContextBuilder.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerEnabledContextBuilder]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/Serializer/RepairerNormalizer.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function normalize($object, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null]]></code>
+      <code><![CDATA[public function supportsNormalization($data, ?string $format = null, array $context = []): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerNormalizer]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/Service/UpdateOldFirstSlotAvailableService.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/Slots/ComputeAvailableSlotsByRepairer.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/Slots/FirstSlotAvailableCalculator.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/State/CreateUserRepairerProcessor.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process($data, Operation $operation, array $uriVariables = [], array $context = []): Repairer]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/State/ExportRepairerCollectionProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/State/UpdateRepairerBossProcessor.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function process($data, Operation $operation, array $uriVariables = [], array $context = []): RepairerEmployee]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Repairers/Validator/RepairerClosing.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getTargets(): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Repairers/Validator/RepairerClosingValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerClosingValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/Validator/RepairerOpenings.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getTargets(): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Repairers/Validator/RepairerOpeningsValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerOpeningsValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repairers/Validator/RepairerSlots.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function getTargets(): string]]></code>
+    </MissingOverrideAttribute>
+  </file>
+  <file src="src/Repairers/Validator/RepairerSlotsValidator.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function validate($value, Constraint $constraint): void]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[RepairerSlotsValidator]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Repository/AppointmentRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getAppointmentWithoutAutoDiagnostic]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$customer]]></code>
+      <code><![CDATA[$end]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$repairer]]></code>
+      <code><![CDATA[$repairer]]></code>
+      <code><![CDATA[$start]]></code>
+      <code><![CDATA[$user]]></code>
+      <code><![CDATA[$userRepairer]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/AutoDiagnosticRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/BikeRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getBikeFromAnUser]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/BikeTypeRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/ContactRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/DiscussionMessageRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$discussion]]></code>
+      <code><![CDATA[$discussion]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$repairerId]]></code>
+      <code><![CDATA[$user]]></code>
+      <code><![CDATA[$user]]></code>
+      <code><![CDATA[$user]]></code>
+      <code><![CDATA[$user]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/DiscussionRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/InterventionRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/MaintenanceRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/MediaObjectRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/RepairerCityRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/RepairerEmployeeRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/RepairerExceptionalClosureRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$from]]></code>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$repairer]]></code>
+      <code><![CDATA[$to]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/RepairerInterventionRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/RepairerOpeningHoursRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$repairer]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/RepairerRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getRepairerIdWithMultipleCustomerAppointments]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$ids]]></code>
+      <code><![CDATA[$latitude]]></code>
+      <code><![CDATA[$longitude]]></code>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$repairer]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/RepairerTypeRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[remove]]></code>
+      <code><![CDATA[save]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/UserRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+      <code><![CDATA[getUserWithRole]]></code>
+      <code><![CDATA[getUserWithoutRepairer]]></code>
+      <code><![CDATA[remove]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$entity]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$flush]]></code>
+      <code><![CDATA[$idsQb]]></code>
+      <code><![CDATA[$idsQb]]></code>
+      <code><![CDATA[$registry]]></code>
+      <code><![CDATA[$repairer]]></code>
+      <code><![CDATA[$repairer]]></code>
+      <code><![CDATA[$role]]></code>
+      <code><![CDATA[$role]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Repository/WebsiteMediaRepository.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedParam>
+      <code><![CDATA[$registry]]></code>
+    </PossiblyUnusedParam>
+  </file>
+  <file src="src/Resources/Services/Faker/AutoDiagnosticPrestationProvider.php">
+    <UnusedClass>
+      <code><![CDATA[AutoDiagnosticPrestationProvider]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Resources/Services/Faker/DateTimeImmutableProvider.php">
+    <UnusedClass>
+      <code><![CDATA[DateTimeImmutableProvider]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/User/EventSubscriber/HashPasswordSubscriber.php">
+    <UnusedClass>
+      <code><![CDATA[HashPasswordSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/User/EventSubscriber/HashUpdatePlainPasswordEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[HashUpdatePlainPasswordEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/User/EventSubscriber/LastConnectEventSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents()]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[LastConnectEventSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/User/EventSubscriber/UpdateRoleSubscriber.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public static function getSubscribedEvents(): array]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[UpdateRoleSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/User/EventSubscriber/ValidationCodeSubscriber.php">
+    <UnusedClass>
+      <code><![CDATA[ValidationCodeSubscriber]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/User/Filter/UserSearchFilter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void]]></code>
+      <code><![CDATA[public function getDescription(string $resourceClass): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/User/Resource/UserCsv.php">
+    <PossiblyUnusedProperty>
+      <code><![CDATA[$email]]></code>
+      <code><![CDATA[$firstName]]></code>
+      <code><![CDATA[$lastConnect]]></code>
+      <code><![CDATA[$lastName]]></code>
+      <code><![CDATA[$phoneNumber]]></code>
+    </PossiblyUnusedProperty>
+  </file>
+  <file src="src/User/StateProvider/CurrentUserProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): ?User]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/User/StateProvider/CustomersProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/User/StateProvider/ExportUserCollectionProvider.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[public function provide(Operation $operation, array $uriVariables = [], array $context = []): array]]></code>
+    </MissingOverrideAttribute>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[__construct]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/User/Voters/CustomerVoter.php">
+    <MissingOverrideAttribute>
+      <code><![CDATA[protected function supports(string $attribute, mixed $subject): bool]]></code>
+      <code><![CDATA[protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool]]></code>
+    </MissingOverrideAttribute>
+    <UnusedClass>
+      <code><![CDATA[CustomerVoter]]></code>
+    </UnusedClass>
+  </file>
+</files>
