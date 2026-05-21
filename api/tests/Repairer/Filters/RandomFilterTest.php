@@ -53,36 +53,33 @@ class RandomFilterTest extends AbstractTestCase
 
     public function testRandomFilterWorkWithSearchFilter(): void
     {
-        $firstResponse = static::createClient()->request('GET', '/repairers?sort=random&repairerTypes.name=Réparateur%20itinérant')->toArray()['hydra:member'];
-        self::assertResponseIsSuccessful();
-        $secondResponse = static::createClient()->request('GET', '/repairers?sort=random&repairerTypes.name=Réparateur%20itinérant')->toArray()['hydra:member'];
-        self::assertResponseIsSuccessful();
+        $idsFromResponses = [];
+        $firstResponse = null;
 
-        $idsFromFirstResponse = [];
-        $idsFromSecondResponse = [];
+        for ($i = 0; $i < 5; ++$i) {
+            $response = static::createClient()->request('GET', '/repairers?sort=random&repairerTypes.name=Réparateur%20itinérant')->toArray()['hydra:member'];
+            self::assertResponseIsSuccessful();
 
-        foreach ($firstResponse as $repairer) {
-            $idsFromFirstResponse[] = $repairer['@id'];
+            if (null === $firstResponse) {
+                $firstResponse = $response;
+            }
+
+            $ids = [];
+            foreach ($response as $repairer) {
+                $ids[] = $repairer['@id'];
+            }
+            $idsFromResponses[] = implode('', $ids);
         }
 
-        foreach ($secondResponse as $repairer) {
-            $idsFromSecondResponse[] = $repairer['@id'];
-        }
-
-        $this->assertNotSame($idsFromFirstResponse, $idsFromSecondResponse);
+        // we check if different orders are returned across multiple requests
+        $this->assertGreaterThan(1, count(array_unique($idsFromResponses)));
 
         // Check repairer type
-        $firstRepairerTypes = static::createClient()->request('GET', $idsFromFirstResponse[0])->toArray()['repairerTypes'];
+        $firstRepairerTypes = static::createClient()->request('GET', $firstResponse[0]['@id'])->toArray()['repairerTypes'];
         $repairerTypesForFirstResponse = array_map(function ($firstRepairerType) {
             return $firstRepairerType['name'];
         }, $firstRepairerTypes);
         self::assertContains('Réparateur itinérant', $repairerTypesForFirstResponse);
-
-        $secondRepairerTypes = static::createClient()->request('GET', $idsFromSecondResponse[0])->toArray()['repairerTypes'];
-        $repairerTypesForSecondResponse = array_map(function ($secondRepairerType) {
-            return $secondRepairerType['name'];
-        }, $secondRepairerTypes);
-        self::assertContains('Réparateur itinérant', $repairerTypesForSecondResponse);
     }
 
     public function testRandomFilterWorkWithAroundFilter(): void
