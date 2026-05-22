@@ -57,7 +57,7 @@
     "@playwright/test": "^1.60.0",
     "@popperjs/core": "^2.11.8",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.9.0",
+    "@types/node": "^25.9.1",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "eslint": "^8.57.1",
