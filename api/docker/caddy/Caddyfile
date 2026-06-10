@@ -41,7 +41,10 @@ route {
 
     mercure {
         # Transport to use (default to Bolt)
-        transport_url {$MERCURE_TRANSPORT_URL:bolt:///data/mercure.db}
+        # Since Mercure 0.17 the `transport_url` directive is replaced by a `transport` block.
+        transport bolt {
+            path /data/mercure.db
+        }
         # Publisher JWT key
         publisher_jwt {env.MERCURE_PUBLISHER_JWT_KEY} {env.MERCURE_PUBLISHER_JWT_ALG}
         # Subscriber JWT key
