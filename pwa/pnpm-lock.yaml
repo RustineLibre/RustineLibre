@@ -130,8 +130,8 @@ importers:
         specifier: ^0.1.2
         version: 0.1.2
       leaflet-geosearch:
-        specifier: ^3.11.1
-        version: 3.11.1
+        specifier: ^4.4.0
+        version: 4.4.0
       next:
         specifier: ^14.2.35
         version: 14.2.35(@babel/core@7.29.0)(@playwright/test@1.60.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3763,8 +3763,8 @@ packages:
   leaflet-defaulticon-compatibility@0.1.2:
     resolution: {integrity: sha512-IrKagWxkTwzxUkFIumy/Zmo3ksjuAu3zEadtOuJcKzuXaD76Gwvg2Z1mLyx7y52ykOzM8rAH5ChBs4DnfdGa6Q==}
 
-  leaflet-geosearch@3.11.1:
-    resolution: {integrity: sha512-cILLFLmn8C3MtGhaafGqY7CuhUG2+bGyUgfPHgNgW6fs4EvYyiIO88nO2ZqR7Hy6Ba089haLkhODpZR+/fRrPQ==}
+  leaflet-geosearch@4.4.0:
+    resolution: {integrity: sha512-Pt/3JU0Oxvk+5ccGChNOV8yxk+Vl+3P83drGwW8/6ugF+K7zKPkx3naGDbPdhfeUmy+QuSCeVdvjN1jLCgwbaQ==}
 
   leaflet@1.9.4:
     resolution: {integrity: sha512-nxS1ynzJOmOlHp+iL3FyWqK89GtNL8U8rvlMOsQdTTssxZwCXh8N2NB3GDQOL+YR3XnWyZAxwQixURb+FA74PA==}
@@ -9989,7 +9989,7 @@ snapshots:
 
   leaflet-defaulticon-compatibility@0.1.2: {}
 
-  leaflet-geosearch@3.11.1:
+  leaflet-geosearch@4.4.0:
     optionalDependencies:
       '@googlemaps/js-api-loader': 1.16.10
       leaflet: 1.9.4
