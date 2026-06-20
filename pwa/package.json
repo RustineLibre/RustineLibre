@@ -38,7 +38,7 @@
     "@types/leaflet": "^1.9.21",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.20",
-    "firebase": "^10.14.1",
+    "firebase": "^12.13.0",
     "formik": "^2.4.9",
     "isomorphic-unfetch": "^3.1.0",
     "leaflet": "^1.9.4",
