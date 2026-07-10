@@ -6159,16 +6159,16 @@
         },
         {
             "name": "spatie/opening-hours",
-            "version": "4.2.1",
+            "version": "4.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/opening-hours.git",
-                "reference": "c89d2b15e51ed2bd9073025dc3b82551848bf87e"
+                "reference": "ed5f8ff72b20e8544dad841b8d146796d202726d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/opening-hours/zipball/c89d2b15e51ed2bd9073025dc3b82551848bf87e",
-                "reference": "c89d2b15e51ed2bd9073025dc3b82551848bf87e",
+                "url": "https://api.github.com/repos/spatie/opening-hours/zipball/ed5f8ff72b20e8544dad841b8d146796d202726d",
+                "reference": "ed5f8ff72b20e8544dad841b8d146796d202726d",
                 "shasum": ""
             },
             "require": {
@@ -6176,7 +6176,7 @@
             },
             "require-dev": {
                 "kylekatarnls/multi-tester": "^2.5",
-                "phpunit/phpunit": "^11.2"
+                "phpunit/phpunit": "^11.5.43 || ^12.4.2"
             },
             "type": "library",
             "extra": {
@@ -6219,9 +6219,9 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/opening-hours/issues",
-                "source": "https://github.com/spatie/opening-hours/tree/4.2.1"
+                "source": "https://github.com/spatie/opening-hours/tree/4.2.2"
             },
-            "time": "2025-05-24T16:39:27+00:00"
+            "time": "2026-07-09T19:41:40+00:00"
         },
         {
             "name": "symfony/asset",
