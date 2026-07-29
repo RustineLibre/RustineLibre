@@ -73,7 +73,7 @@
         "sort-packages": true,
         "audit": {
             "ignore": {
-                "PKSA-3ncz-km6v-5vjr": "CVE-2026-49858 affects api-platform/core >=2.6.0,<4.1.29, so no 3.x release fixes it. Not reachable here: only the jsonld format is enabled (config/packages/api_platform.yaml), so the vulnerable JSON:API and HAL item normalizers are never registered. Blocking otherwise: composer refuses to load the package at all, which makes any global composer update impossible. Re-evaluate when upgrading to API Platform 4."
+                "PKSA-3ncz-km6v-5vjr": "CVE-2026-49858 (CVSS 5.9) affects api-platform/core >=2.6.0,<4.1.29, so no 3.x release fixes it, and composer's block-insecure otherwise refuses to load the package at all, which makes any global composer update impossible. Not exploitable here: the advisory requires four conditions to coincide, and the first three each fail independently. (1) The vulnerable ApiPlatform\\JsonApi\\Serializer\\ItemNormalizer and ApiPlatform\\Hal\\Serializer\\ItemNormalizer are unreachable: only the jsonld format is enabled in config/packages/api_platform.yaml and no resource overrides it, so format negotiation rejects JSON:API and HAL. (2) No property uses #[ApiProperty(security: ...)], which is the user-dependent predicate the stale componentsCache would leak. (3) We run classic PHP-FPM (see the Dockerfile CMD), not a long-running worker runtime, so the normalizer cache never survives across requests. Re-evaluate if any of those change, and drop this entry when upgrading to API Platform 4."
             }
         },
         "allow-plugins": {
