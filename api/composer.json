@@ -71,6 +71,11 @@
             "*": "dist"
         },
         "sort-packages": true,
+        "audit": {
+            "ignore": {
+                "PKSA-3ncz-km6v-5vjr": "CVE-2026-49858 affects api-platform/core >=2.6.0,<4.1.29, so no 3.x release fixes it. Not reachable here: only the jsonld format is enabled (config/packages/api_platform.yaml), so the vulnerable JSON:API and HAL item normalizers are never registered. Blocking otherwise: composer refuses to load the package at all, which makes any global composer update impossible. Re-evaluate when upgrading to API Platform 4."
+            }
+        },
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
@@ -118,7 +123,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "^6.3",
+            "require": "^6.4",
             "docker": false
         }
     }
