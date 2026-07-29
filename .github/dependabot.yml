@@ -16,6 +16,13 @@ updates:
       symfony:
         patterns:
           - "symfony/*"
+    # The API targets the Symfony 6.4 LTS line (see extra.symfony.require in
+    # api/composer.json). Without this bound, Dependabot bumps transitive
+    # symfony/* packages to 7.x while flex keeps the rest on 6.4, which
+    # produces an uninstallable composer.lock. Drop it when migrating to 7.4.
+    ignore:
+      - dependency-name: "symfony/*"
+        versions: [">=7.0"]
 
   - package-ecosystem: "npm"
     directory: "/pwa"
