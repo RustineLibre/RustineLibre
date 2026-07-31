@@ -37,7 +37,7 @@
     "@react-oauth/google": "^0.12.2",
     "@types/leaflet": "^1.9.21",
     "clsx": "^2.1.1",
-    "dayjs": "^1.11.20",
+    "dayjs": "^1.11.21",
     "firebase": "^10.14.1",
     "formik": "^2.4.9",
     "isomorphic-unfetch": "^4.0.2",
