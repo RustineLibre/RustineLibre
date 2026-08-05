@@ -1,4 +1,14 @@
-name: Dependabot auto-merge
+# Auto-merge of Dependabot PRs, gated by the DEPENDABOT_AUTOMERGE repo variable.
+# The level lives only in the variable, so changing it requires no commit:
+#
+#   absent  no automatic merge
+#   patch   production patches and development dependencies
+#   minor   patches, minors and development dependencies
+#
+# Any other value, and a missing variable, merge nothing. Major bumps never
+# auto-merge whatever the level: they get the needs-human label instead.
+name: Auto-merge Dependabot PRs
+
 on: pull_request
 
 permissions:
@@ -6,18 +16,33 @@ permissions:
   pull-requests: write
 
 jobs:
-  dependabot:
+  auto-merge:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'RustineLibre/RustineLibre'
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.actor == 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository && github.repository == 'RustineLibre/RustineLibre' && !github.event.pull_request.draft
     steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
+      - uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
+        id: meta
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Enable auto-merge for Dependabot PRs
-        if: steps.metadata.outputs.update-type == 'version-update:semver-patch'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge
+        if: |
+          contains(fromJSON('["patch","minor"]'), vars.DEPENDABOT_AUTOMERGE) &&
+          steps.meta.outputs.update-type != 'version-update:semver-major' &&
+          (steps.meta.outputs.dependency-type == 'direct:development' ||
+           steps.meta.outputs.update-type == 'version-update:semver-patch' ||
+           (vars.DEPENDABOT_AUTOMERGE == 'minor' &&
+            steps.meta.outputs.update-type == 'version-update:semver-minor'))
         run: gh pr merge --auto --merge "$PR_URL"
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Not gated on the switch: labelling has no side effect and feeds the
+      # human queue right away, without waiting for merges to be enabled.
+      - name: Flag major
+        if: steps.meta.outputs.update-type == 'version-update:semver-major'
+        run: gh pr edit "$PR_URL" --add-label "needs-human"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
