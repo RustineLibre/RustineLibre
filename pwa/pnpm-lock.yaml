@@ -46,8 +46,8 @@ importers:
         specifier: ^43.3.1
         version: 43.3.1
       '@ckeditor/ckeditor5-react':
-        specifier: ^9.5.0
-        version: 9.5.0(ckeditor5@43.3.1)(react@18.3.1)
+        specifier: ^11.2.0
+        version: 11.2.0(react@18.3.1)
       '@emotion/cache':
         specifier: ^11.14.0
         version: 11.14.0
@@ -908,8 +908,8 @@ packages:
   '@ckeditor/ckeditor5-indent@43.3.1':
     resolution: {integrity: sha512-CPU50tumKH7rJ6f9QEB/LHSyzKul9xP/43F1IesvOBWnOkAxQ2QI51oORT5WdKn4B0Z56ojAm48Q/ZUtsef+3w==}
 
-  '@ckeditor/ckeditor5-integrations-common@2.3.1':
-    resolution: {integrity: sha512-YcNvRhPMBIHjExmSVGypx98N8E5AiESUZTBzphrzstfxtunJFFVvFJ3KuzHwKLaBUPs7YIpqS6cNVft1gFRH7Q==}
+  '@ckeditor/ckeditor5-integrations-common@2.4.1':
+    resolution: {integrity: sha512-DKBMAoKuNWebCFQurX748FP/D8QzfQs7cW5BCJVYRjz0bgbhV33Wj15zKVtByaNLLLOy/fKcYPGHv06KVc4k/Q==}
     peerDependencies:
       ckeditor5: 43.3.1
 
@@ -943,11 +943,10 @@ packages:
   '@ckeditor/ckeditor5-paste-from-office@43.3.1':
     resolution: {integrity: sha512-LLf1KB11jeYLDpQPq0d2QVPxQxp9kEibPAF4rGD4stPpRx9d+DbwmE59Y5wVASKvYJo+yNpR9CGWsE4ZgjwTWw==}
 
-  '@ckeditor/ckeditor5-react@9.5.0':
-    resolution: {integrity: sha512-0NEBg3EDQaQDwj9xswC34qspDiNgXMIn41lZ3pjNx915NWRabqQDnR5a8TisPaOlx3gHnIdOXJ0BH1wRHsJxhQ==}
-    engines: {node: '>=18.0.0'}
+  '@ckeditor/ckeditor5-react@11.2.0':
+    resolution: {integrity: sha512-EZrwjyAf8L3p+4E2v3rRb2XMKgFogojla84xmW9LoUyloayurJ1TlifNhmRGmS2paeUGxqRDHjBA0yn+SsTdLg==}
     peerDependencies:
-      ckeditor5: 43.3.1
+      ckeditor5: '>=46.0.0 || ^0.0.0-nightly || ^0.0.0-internal'
       react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   '@ckeditor/ckeditor5-remove-format@43.3.1':
@@ -6321,9 +6320,7 @@ snapshots:
       '@ckeditor/ckeditor5-utils': 43.3.1
       ckeditor5: 43.3.1
 
-  '@ckeditor/ckeditor5-integrations-common@2.3.1(ckeditor5@43.3.1)':
-    dependencies:
-      ckeditor5: 43.3.1
+  '@ckeditor/ckeditor5-integrations-common@2.4.1': {}
 
   '@ckeditor/ckeditor5-language@43.3.1':
     dependencies:
@@ -6414,10 +6411,9 @@ snapshots:
       '@ckeditor/ckeditor5-engine': 43.3.1
       ckeditor5: 43.3.1
 
-  '@ckeditor/ckeditor5-react@9.5.0(ckeditor5@43.3.1)(react@18.3.1)':
+  '@ckeditor/ckeditor5-react@11.2.0(react@18.3.1)':
     dependencies:
-      '@ckeditor/ckeditor5-integrations-common': 2.3.1(ckeditor5@43.3.1)
-      ckeditor5: 43.3.1
+      '@ckeditor/ckeditor5-integrations-common': 2.4.1
       react: 18.3.1
 
   '@ckeditor/ckeditor5-remove-format@43.3.1':
