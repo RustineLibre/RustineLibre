@@ -64,8 +64,8 @@ importers:
         specifier: ^5.2.8
         version: 5.2.8
       '@fontsource/poppins':
-        specifier: ^5.2.7
-        version: 5.2.7
+        specifier: ^5.3.0
+        version: 5.3.0
       '@fontsource/roboto':
         specifier: ^5.2.10
         version: 5.2.10
@@ -1319,8 +1319,8 @@ packages:
   '@fontsource-variable/pathway-extreme@5.2.8':
     resolution: {integrity: sha512-q+iwV9yx/NAt2egyh6aVDvBIj83Buv9QMOeWRA7GwPliLezipVNv+eMvV5CrcCYwXkYwvYAwhjDpmrFy5xZ/yA==}
 
-  '@fontsource/poppins@5.2.7':
-    resolution: {integrity: sha512-6uQyPmseo4FgI97WIhA4yWRlNaoLk4vSDK/PyRwdqqZb5zAEuc+Kunt8JTMcsHYUEGYBtN15SNkMajMdqUSUmg==}
+  '@fontsource/poppins@5.3.0':
+    resolution: {integrity: sha512-cms1nM7U6SN8epIV1WMVOV8VsA645aSm3wHfzIQnkk188U341ThbJGSl2Sv54V29gnDbT2arMPfLzvVIIVCceQ==}
 
   '@fontsource/roboto@5.2.10':
     resolution: {integrity: sha512-8HlA5FtSfz//oFSr2eL7GFXAiE7eIkcGOtx7tjsLKq+as702x9+GU7K95iDeWFapHC4M2hv9RrpXKRTGGBI8Zg==}
@@ -4821,8 +4821,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  terser@5.49.0:
-    resolution: {integrity: sha512-SNiDnXyHSrxVcIOtVbULzcTmniUiwcV7Nwdyj1twVubeTmbjoa8p69KKDpfkdoOavuM4/GRm1+ykI8qqnavHoA==}
+  terser@5.49.2:
+    resolution: {integrity: sha512-rGbJiKeQ4WDe3EXlDAIaQcwftVfv2Q8o1awFNfvXolJYKkb1AuZY1RTOmqx4LJXZENbWZA7eIsYGHuEzHsi1nQ==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -7010,7 +7010,7 @@ snapshots:
 
   '@fontsource-variable/pathway-extreme@5.2.8': {}
 
-  '@fontsource/poppins@5.2.7': {}
+  '@fontsource/poppins@5.3.0': {}
 
   '@fontsource/roboto@5.2.10': {}
 
@@ -11082,7 +11082,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.3.3
-      terser: 5.49.0
+      terser: 5.49.2
       webpack: 5.93.0(postcss@8.5.14)
     optionalDependencies:
       postcss: 8.5.14
@@ -11094,7 +11094,7 @@ snapshots:
       commander: 2.20.3
       source-map-support: 0.5.21
 
-  terser@5.49.0:
+  terser@5.49.2:
     dependencies:
       '@jridgewell/source-map': 0.3.11
       acorn: 8.18.0
