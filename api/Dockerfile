@@ -104,8 +104,8 @@ RUN rm -f .env.local.php
 FROM caddy:2.11.4-builder-alpine AS app_caddy_builder
 
 RUN xcaddy build \
-	--with github.com/dunglas/mercure/caddy \
-	--with github.com/dunglas/vulcain/caddy
+	--with github.com/dunglas/mercure/caddy@v0.24.2 \
+	--with github.com/dunglas/vulcain/caddy@v1.4.3
 
 # Caddy image
 FROM caddy:2.11.4-alpine AS app_caddy
