@@ -105,7 +105,8 @@ FROM caddy:2.11.4-builder-alpine AS app_caddy_builder
 
 RUN xcaddy build \
 	--with github.com/dunglas/mercure/caddy@v0.24.2 \
-	--with github.com/dunglas/vulcain/caddy@v1.4.3
+	--with github.com/dunglas/vulcain/caddy@v1.4.3 \
+	--replace google.golang.org/grpc=google.golang.org/grpc@v1.83.2
 
 # Caddy image
 FROM caddy:2.11.4-alpine AS app_caddy
