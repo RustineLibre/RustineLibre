@@ -26,6 +26,7 @@ const Editor = ({content, setContent}: EditorProps): JSX.Element => {
             setContent(data);
           }}
           config={{
+            licenseKey: 'GPL',
             placeholder: 'Description...',
             toolbar: [
               'heading',
