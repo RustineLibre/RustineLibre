@@ -14,6 +14,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use App\Controller\ReadMessageController;
+use App\Mercure\MercurePublisher;
 use App\Messages\Validator\UniqueDiscussion;
 use App\Repository\DiscussionRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,7 +31,12 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => [self::DISCUSSION_READ]],
     denormalizationContext: ['groups' => [self::DISCUSSION_WRITE]],
-    mercure: true,
+    mercure: [
+        'private' => true,
+        // The customer and repairer IRIs grant access to the update, see MercureSubscriberTopics
+        'topics' => ['@=iri(object)', '@=iri(object.customer)', '@=iri(object.repairer)'],
+        'normalization_context' => ['groups' => [MercurePublisher::IDENTIFIER_ONLY]],
+    ],
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
 )]

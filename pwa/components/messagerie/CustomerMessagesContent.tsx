@@ -13,6 +13,7 @@ import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
 import {DiscussionMessage} from '@interfaces/DiscussionMessage';
 import {discussionResource} from '@resources/discussionResource';
+import {mercureResource} from '@resources/mercureResource';
 import {Send} from '@mui/icons-material';
 import router, {useRouter} from 'next/router';
 
@@ -39,14 +40,15 @@ const CustomerMessagesContent = ({
 
   const subscribeMercureDiscussion = async (): Promise<EventSource | null> => {
     if (null === eventSource) {
-      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-      const hub = new URL(hubUrl);
-      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-      const currentEventSource = new EventSource(hub);
+      const currentEventSource = await mercureResource.subscribe([
+        `${ENTRYPOINT}${discussion['@id']}`,
+      ]);
       currentEventSource.onmessage = (event) => {
         fetchMessages();
       };
       setEventSource(currentEventSource);
+
+      return currentEventSource;
     }
     return eventSource;
   };

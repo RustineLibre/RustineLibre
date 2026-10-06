@@ -120,5 +120,8 @@ COPY --from=app_caddy_builder --link /usr/bin/caddy /usr/bin/caddy
 COPY --from=app_php --link /srv/app/public public/
 COPY --link docker/caddy/Caddyfile /etc/caddy/Caddyfile
 
+# The Mercure history is purged on every start (deployment)
+CMD ["sh", "-c", "rm -f /data/mercure.db && exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
+
 FROM app_caddy as app_caddypreprod
 COPY --link docker/caddy/Caddyfile.preprod /etc/caddy/Caddyfile

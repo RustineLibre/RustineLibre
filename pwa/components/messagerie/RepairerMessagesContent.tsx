@@ -14,6 +14,7 @@ import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
 import {DiscussionMessage} from '@interfaces/DiscussionMessage';
 import {discussionResource} from '@resources/discussionResource';
+import {mercureResource} from '@resources/mercureResource';
 
 type MessagesContentProps = {
   discussion: Discussion;
@@ -37,14 +38,15 @@ const RepairerMessagesContent = ({
 
   const subscribeMercureDiscussion = async (): Promise<EventSource | null> => {
     if (null === eventSource) {
-      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-      const hub = new URL(hubUrl);
-      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-      const currentEventSource = new EventSource(hub);
+      const currentEventSource = await mercureResource.subscribe([
+        `${ENTRYPOINT}${discussion['@id']}`,
+      ]);
       currentEventSource.onmessage = () => {
         fetchMessages();
       };
       setEventSource(currentEventSource);
+
+      return currentEventSource;
     }
 
     return eventSource;
