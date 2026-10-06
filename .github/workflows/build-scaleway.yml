@@ -13,7 +13,7 @@ on:
         required: true
       REGISTRY_USER:
         required: true
-      REGISTRY_PASSWOR:
+      REGISTRY_PASSWORD:
         required: true
 
 # Memes images que build.yml, mais poussees sur le registry Scaleway. Le flavor prefix
