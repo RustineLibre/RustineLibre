@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Bike\Security;
 
+use App\Entity\Bike;
+use App\Entity\User;
+use App\Repository\AppointmentRepository;
 use App\Repository\BikeRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\BikeTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -87,5 +91,52 @@ class GetTest extends AbstractTestCase
 
         // Check that all bikes are not from the same owner
         self::assertGreaterThan(1, count(array_unique($owners)));
+    }
+
+    public function testBossGetCollectionOnlyContainsBikesOfHisCustomers(): void
+    {
+        $boss = $this->getBoss();
+        $response = $this->createClientWithUser($boss)->request('GET', '/bikes')->toArray();
+
+        self::assertResponseIsSuccessful();
+        $expected = array_filter($this->bikeRepository->findAll(), fn (Bike $bike) => $this->isOwnBikeOrCustomerBike($bike, $boss));
+        self::assertSame(count($expected), $response['hydra:totalItems']);
+        self::assertLessThan(count($this->bikeRepository->findAll()), $response['hydra:totalItems']);
+        foreach ($response['hydra:member'] as $bikeResponse) {
+            self::assertTrue($this->isOwnBikeOrCustomerBike($this->bikeRepository->find($bikeResponse['id']), $boss));
+        }
+    }
+
+    public function testBossCanGetBikesOfHisCustomer(): void
+    {
+        $boss = $this->getBoss();
+        $customer = self::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
+        $response = $this->createClientWithUser($boss)->request('GET', sprintf('/bikes?owner=%d', $customer->id))->toArray();
+
+        self::assertResponseIsSuccessful();
+        self::assertGreaterThan(0, $response['hydra:totalItems']);
+        self::assertSame(count($this->bikeRepository->findBy(['owner' => $customer])), $response['hydra:totalItems']);
+    }
+
+    public function testBossCannotGetBikesOfAUserWhoIsNotHisCustomer(): void
+    {
+        $boss = $this->getBoss();
+        $bikes = array_filter($this->bikeRepository->findAll(), fn (Bike $bike) => !$this->isOwnBikeOrCustomerBike($bike, $boss));
+        $owner = array_shift($bikes)->owner;
+        $response = $this->createClientWithUser($boss)->request('GET', sprintf('/bikes?owner=%d', $owner->id))->toArray();
+
+        self::assertResponseIsSuccessful();
+        self::assertSame(0, $response['hydra:totalItems']);
+    }
+
+    private function getBoss(): User
+    {
+        return self::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'boss@test.com']);
+    }
+
+    private function isOwnBikeOrCustomerBike(Bike $bike, User $user): bool
+    {
+        return $bike->owner->id === $user->id
+            || null !== self::getContainer()->get(AppointmentRepository::class)->findOneByCustomerAndUserRepairer($bike->owner, $user);
     }
 }

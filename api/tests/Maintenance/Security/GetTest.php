@@ -135,8 +135,44 @@ class GetTest extends AbstractTestCase
 
     public function testGetMaintenanceCollectionWithPagination(): void
     {
-        $response = $this->createClientWithUser($this->appointment->repairer->owner)->request('GET', '/maintenances?itemsPerPage=6')->toArray();
+        $response = $this->createClientAuthAsAdmin()->request('GET', '/maintenances?itemsPerPage=6')->toArray();
         $this->assertResponseIsSuccessful();
         $this->assertCount(6, $response['hydra:member']);
+    }
+
+    public function testBossGetCollectionOnlyContainsMaintenancesOfHisCustomers(): void
+    {
+        $boss = $this->getBossOfCustomer($this->owner);
+        $response = $this->createClientWithUser($boss)->request('GET', '/maintenances?itemsPerPage=1000')->toArray();
+
+        $this->assertResponseIsSuccessful();
+        $expected = array_filter($this->maintenances, fn (Maintenance $maintenance) => $this->isOwnOrCustomerMaintenance($maintenance, $boss));
+        self::assertSame(count($expected), $response['hydra:totalItems']);
+        self::assertLessThan(count($this->maintenances), $response['hydra:totalItems']);
+        foreach ($response['hydra:member'] as $maintenanceResponse) {
+            self::assertTrue($this->isOwnOrCustomerMaintenance($this->maintenanceRepository->find($maintenanceResponse['id']), $boss));
+        }
+    }
+
+    public function testBossCannotGetMaintenancesOfABikeOfAnotherCustomer(): void
+    {
+        $boss = $this->getBossOfCustomer($this->owner);
+        $maintenances = array_filter($this->maintenances, fn (Maintenance $maintenance) => !$this->isOwnOrCustomerMaintenance($maintenance, $boss));
+        $bike = array_shift($maintenances)->bike;
+        $response = $this->createClientWithUser($boss)->request('GET', sprintf('/maintenances?bike=%d', $bike->id))->toArray();
+
+        $this->assertResponseIsSuccessful();
+        self::assertSame(0, $response['hydra:totalItems']);
+    }
+
+    private function getBossOfCustomer(User $customer): User
+    {
+        return static::getContainer()->get(AppointmentRepository::class)->findOneBy(['customer' => $customer])->repairer->owner;
+    }
+
+    private function isOwnOrCustomerMaintenance(Maintenance $maintenance, User $user): bool
+    {
+        return $maintenance->bike->owner->id === $user->id
+            || null !== static::getContainer()->get(AppointmentRepository::class)->findOneByCustomerAndUserRepairer($maintenance->bike->owner, $user);
     }
 }
