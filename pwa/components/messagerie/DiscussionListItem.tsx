@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {discussionResource} from '@resources/discussionResource';
+import {mercureResource} from '@resources/mercureResource';
 import {Avatar, Box, CardMedia, Typography, Badge} from '@mui/material';
 import {formatDate} from '@helpers/dateHelper';
 import {Discussion} from '@interfaces/Discussion';
@@ -24,14 +25,15 @@ const DiscussionListItem = ({
 
   const subscribeMercureDiscussion = async (): Promise<EventSource | null> => {
     if (null === eventSource) {
-      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-      const hub = new URL(hubUrl);
-      hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-      const currentEventSource = new EventSource(hub);
+      const currentEventSource = await mercureResource.subscribe([
+        `${ENTRYPOINT}${discussion['@id']}`,
+      ]);
       currentEventSource.onmessage = (event) => {
         countUnreadMessagesFromDiscussion();
       };
       setEventSource(currentEventSource);
+
+      return currentEventSource;
     }
 
     return eventSource;
