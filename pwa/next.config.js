@@ -8,11 +8,8 @@ const nextConfig = withPWA({
   swcMinify: true,
   output: 'standalone',
   images: {
+    unoptimized: true,
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
       {
         protocol: 'https',
         hostname: 'storage.googleapis.com',
