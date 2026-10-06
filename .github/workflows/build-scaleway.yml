@@ -1,0 +1,241 @@
+name: Build Scaleway
+
+on:
+  workflow_call:
+    inputs:
+      tags:
+        type: string
+        description: The Docker Tags (see docker/metadata-action@v6 for available values)
+        required: true
+    secrets:
+      domain:
+        description: Main project deploy domain used in URLs
+        required: true
+      SCW_USERNAME:
+        required: true
+      SCW_SECRET_KEY:
+        required: true
+
+# Memes images que build.yml, mais poussees sur le registry Scaleway. Le flavor prefix
+# (prod-/nonprod-) est indispensable : l'ArgoCD Image Updater
+# (opentofu-scaleway-infra-mut/2_environments/3_k8s_objects/argocd_sites.tf,
+# allowTags = "regexp:^${terraform.workspace}-") ne suit que les tags
+# "prod-sha-xxxxxxx"/"nonprod-sha-xxxxxxx".
+env:
+  REGISTRY: rg.fr-par.scw.cloud
+  IMAGE_REPOSITORY: rg.fr-par.scw.cloud/infra-mut-cr-scw
+  TAG_FLAVOR: |
+    prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
+
+jobs:
+  # php et pwa sont construits et scannes (Trivy) dans un seul job : comme l'ArgoCD Image
+  # Updater deploie chaque image des qu'un tag apparait dans le registre, on ne doit pousser
+  # ni l'une ni l'autre avant d'etre sur que les deux builds ont reussi, pour eviter de
+  # deployer un site avec un back et un front desynchronises.
+  build-push-php-pwa:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+
+    - name: Login to Scaleway Container Registry
+      uses: docker/login-action@v4
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.SCW_USERNAME }}
+        password: ${{ secrets.SCW_SECRET_KEY }}
+
+    - name: Docker meta (php)
+      id: meta-php
+      uses: docker/metadata-action@v6
+      with:
+        images: ${{ env.IMAGE_REPOSITORY }}/rustinelibre
+        tags: ${{ inputs.tags }}
+        flavor: ${{ env.TAG_FLAVOR }}
+
+    - name: Build php image locally
+      uses: docker/build-push-action@v7
+      with:
+        context: api
+        target: app_php
+        tags: ${{ steps.meta-php.outputs.tags }}
+        labels: ${{ steps.meta-php.outputs.labels }}
+        load: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-php
+          type=gha,scope=refs/heads/main-php
+        cache-to: |
+          type=gha,scope=${{ github.ref }}-php,mode=max
+
+    - name: Scan php image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ fromJSON(steps.meta-php.outputs.json).tags[0] }}
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH
+        trivyignores: .trivyignore
+
+    - name: Define Env
+      run: |
+        set -o pipefail
+        if [[ "${{ github.ref }}" == *"tag"* ]]; then
+            URL=${{ secrets.domain }}
+            SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}
+        else
+          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
+              RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+              URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
+          else
+              URL=preprod.${{ secrets.domain }}
+          fi
+          SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}
+        fi
+        # Build args partages entre le build local (scan) et le push de l'image pwa
+        {
+          echo "PWA_BUILD_ARGS<<EOF"
+          echo "NEXT_PUBLIC_ENTRYPOINT=https://${URL}"
+          echo "NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY=${SITE_KEY}"
+          echo "NEXT_PUBLIC_FIREBASE_API_KEY=${{ vars.FB_API_KEY }}"
+          echo "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${{ vars.FB_AUTH_DOMAIN }}"
+          echo "NEXT_PUBLIC_FIREBASE_PROJECT_ID=${{ vars.FB_PROJECT_ID }}"
+          echo "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=${{ vars.FB_STORAGE_BUCKET }}"
+          echo "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ vars.FB_MESSAGING_SENDER_ID }}"
+          echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ vars.FB_APP_ID }}"
+          echo "NEXT_PUBLIC_VAPID_KEY=${{ vars.VAPID_KEY }}"
+          echo "NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}"
+          echo "EOF"
+        } >> "$GITHUB_ENV"
+
+    - name: Docker meta (pwa)
+      id: meta-pwa
+      uses: docker/metadata-action@v6
+      with:
+        images: ${{ env.IMAGE_REPOSITORY }}/rustinelibre-pwa
+        tags: ${{ inputs.tags }}
+        flavor: ${{ env.TAG_FLAVOR }}
+
+    - name: Build pwa image locally
+      uses: docker/build-push-action@v7
+      with:
+        context: pwa
+        target: prod
+        pull: true
+        load: true
+        tags: ${{ steps.meta-pwa.outputs.tags }}
+        labels: ${{ steps.meta-pwa.outputs.labels }}
+        build-args: ${{ env.PWA_BUILD_ARGS }}
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-pwa
+          type=gha,scope=refs/heads/main-pwa
+        cache-to: |
+          type=gha,scope=${{ github.ref }}-pwa,mode=max
+
+    # Non bloquant pour le moment : Next.js est en v13 (voir package.json), ce qui laisse des
+    # CVE connues sans correctif possible sans montee de version majeure. On garde le scan
+    # pour reperer toute regression supplementaire dans les logs.
+    - name: Scan pwa image with Trivy
+      uses: aquasecurity/trivy-action@master
+      continue-on-error: true
+      with:
+        image-ref: ${{ fromJSON(steps.meta-pwa.outputs.json).tags[0] }}
+        exit-code: '0'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH
+        trivyignores: .trivyignore
+
+    - name: Push php image
+      uses: docker/build-push-action@v7
+      with:
+        context: api
+        target: app_php
+        tags: ${{ steps.meta-php.outputs.tags }}
+        labels: ${{ steps.meta-php.outputs.labels }}
+        push: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-php
+          type=gha,scope=refs/heads/main-php
+
+    - name: Push pwa image
+      uses: docker/build-push-action@v7
+      with:
+        context: pwa
+        target: prod
+        push: true
+        tags: ${{ steps.meta-pwa.outputs.tags }}
+        labels: ${{ steps.meta-pwa.outputs.labels }}
+        build-args: ${{ env.PWA_BUILD_ARGS }}
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-pwa
+          type=gha,scope=refs/heads/main-pwa
+
+  # On attend que php et pwa aient ete construits/scannes avec succes avant de construire caddy.
+  # Tag de release => prod (app_caddy), sinon preprod (app_caddypreprod).
+  build-push-caddy:
+    needs: [build-push-php-pwa]
+    runs-on: ubuntu-latest
+    env:
+      CADDY_TARGET: ${{ github.ref_type == 'tag' && 'app_caddy' || 'app_caddypreprod' }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v4
+
+    - name: Login to Scaleway Container Registry
+      uses: docker/login-action@v4
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ secrets.SCW_USERNAME }}
+        password: ${{ secrets.SCW_SECRET_KEY }}
+
+    - name: Docker meta
+      id: meta
+      uses: docker/metadata-action@v6
+      with:
+        images: ${{ env.IMAGE_REPOSITORY }}/rustinelibre-caddy
+        tags: ${{ inputs.tags }}
+        flavor: ${{ env.TAG_FLAVOR }}
+
+    - name: Build caddy image locally
+      uses: docker/build-push-action@v7
+      with:
+        context: api
+        target: ${{ env.CADDY_TARGET }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        load: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-caddy
+          type=gha,scope=refs/heads/main-caddy
+        cache-to: |
+          type=gha,scope=${{ github.ref }}-caddy,mode=max
+
+    - name: Scan caddy image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: os,library
+        severity: CRITICAL,HIGH
+        trivyignores: .trivyignore
+
+    - name: Push caddy image
+      uses: docker/build-push-action@v7
+      with:
+        context: api
+        target: ${{ env.CADDY_TARGET }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        push: true
+        cache-from: |
+          type=gha,scope=${{ github.ref }}-caddy
+          type=gha,scope=refs/heads/main-caddy
