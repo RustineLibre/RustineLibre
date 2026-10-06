@@ -2,20 +2,17 @@
 # Adapted from https://github.com/dunglas/symfony-docker
 
 # Prod image
-FROM php:8.2.19-fpm-alpine AS app_php
+FROM php:8.4-fpm-alpine3.24 AS app_php
 
 ENV APP_ENV=prod
 
 WORKDIR /srv/app
 
-# needed for security update until base image is updated
-RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto3 libssl3 libexpat
-
 # php extensions installer: https://github.com/mlocati/docker-php-extension-installer
 COPY --from=mlocati/php-extension-installer --link /usr/bin/install-php-extensions /usr/local/bin/
 
-# persistent / runtime deps
-RUN apk upgrade && apk add --no-cache \
+# persistent / runtime deps (apk upgrade pulls Alpine fixes published after the base image)
+RUN apk upgrade --no-cache && apk add --no-cache \
 		acl \
 		fcgi \
 		file \

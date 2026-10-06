@@ -1,0 +1,102 @@
+name: PHP image
+
+# Scans the PHP image on every API change and rebuilds it weekly from a freshly
+# pulled base image, without build cache, so Alpine/PHP security patches land.
+
+on:
+  pull_request:
+    paths:
+      - 'api/**'
+      - '.trivyignore'
+      - '.github/workflows/php-image.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'api/**'
+      - '.trivyignore'
+      - '.github/workflows/php-image.yml'
+  schedule:
+    # Every Monday at 04:00 UTC
+    - cron: '0 4 * * 1'
+  workflow_dispatch: ~
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Trivy scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Build api/app_php
+        uses: docker/build-push-action@v7
+        with:
+          context: 'api'
+          file: 'api/Dockerfile'
+          target: 'app_php'
+          pull: true
+          no-cache: true
+          push: false
+          load: true
+          tags: rustinelibre-php:scan
+      - name: Run Trivy vulnerability scanner
+        # v0.36.0, pinned by SHA (tags of this action were hijacked in 2026-03)
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
+        with:
+          version: v0.74.0
+          image-ref: rustinelibre-php:scan
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+          trivyignores: .trivyignore
+
+  rebuild:
+    name: Weekly rebuild
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - image: rustinelibre-php
+            target: app_php
+          - image: rustinelibre-caddy
+            target: app_caddypreprod
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Login to registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io/rustinelibre
+          username: _json_key
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker metadata
+        id: docker-metadata
+        uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/rustinelibre/${{ matrix.image }}
+          tags: |
+            type=raw,value=main
+            type=schedule,pattern=weekly-{{date 'YYYYMMDD'}}
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          context: 'api'
+          file: 'api/Dockerfile'
+          target: ${{ matrix.target }}
+          pull: true
+          no-cache: true
+          push: true
+          tags: ${{ steps.docker-metadata.outputs.tags }}
+          labels: ${{ steps.docker-metadata.outputs.labels }}

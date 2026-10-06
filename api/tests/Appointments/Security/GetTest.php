@@ -241,7 +241,7 @@ class GetTest extends AbstractTestCase
 
         self::assertResponseIsSuccessful();
         self::assertJsonContains([
-            'hydra:totalItems' => 2,
+            'hydra:totalItems' => 3,
         ]);
 
         $response = $response->toArray();
@@ -265,7 +265,7 @@ class GetTest extends AbstractTestCase
 
         self::assertResponseIsSuccessful();
         self::assertJsonContains([
-            'hydra:totalItems' => 3,
+            'hydra:totalItems' => 7,
         ]);
 
         $response = $response->toArray();
@@ -293,12 +293,12 @@ class GetTest extends AbstractTestCase
             'hydra:member' => [
                 [
                     'repairer' => [
-                        'name' => 'Le vélo de Belleville',
+                        'name' => 'Retape mon vélo',
                     ],
                 ],
                 [
                     'autoDiagnostic' => [
-                        'prestation' => 'Électrifier mon vélo',
+                        'prestation' => 'Problème de vitesse',
                     ],
                 ],
             ],
