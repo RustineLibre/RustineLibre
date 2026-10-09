@@ -2,7 +2,7 @@
 # Adapted from https://github.com/dunglas/symfony-docker
 
 # Prod image
-FROM php:8.4-fpm-alpine3.24 AS app_php
+FROM php:8.5-fpm-alpine3.24 AS app_php
 
 ENV APP_ENV=prod
 
