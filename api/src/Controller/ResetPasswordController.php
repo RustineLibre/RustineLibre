@@ -25,11 +25,11 @@ final class ResetPasswordController
     public function __invoke(Request $request): JsonResponse
     {
         $requestContent = json_decode($request->getContent(), true);
-        if (!array_key_exists('token', $requestContent)) {
+        if (!is_array($requestContent) || !isset($requestContent['token']) || !is_string($requestContent['token']) || '' === $requestContent['token']) {
             throw new BadRequestHttpException($this->translator->trans('400_no_token', domain: 'validators'));
         }
 
-        if (!array_key_exists('password', $requestContent)) {
+        if (!isset($requestContent['password']) || !is_string($requestContent['password'])) {
             throw new BadRequestHttpException($this->translator->trans('400_no_password', domain: 'validators'));
         }
 
