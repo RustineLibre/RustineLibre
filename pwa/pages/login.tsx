@@ -17,6 +17,7 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import {isAdmin, isBoss, isEmployee} from '@helpers/rolesHelpers';
+import {getSafeReturnPath} from '@helpers/returnPathHelper';
 import NextLink from 'next/link';
 
 const Login: NextPageWithLayout = ({}) => {
@@ -29,9 +30,7 @@ const Login: NextPageWithLayout = ({}) => {
   const {user} = useAccount({});
   const {login} = useAuth();
   const router = useRouter();
-  const next = Array.isArray(router.query.next)
-    ? router.query.next.join('')
-    : router.query.next || '/';
+  const next = getSafeReturnPath(router.query.next);
 
   useEffect(() => {
     // Si l'utilisateur est connecté et son mail validé.
