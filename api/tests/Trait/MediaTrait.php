@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Trait;
 
 use App\Entity\MediaObject;
+use App\Entity\User;
 use App\Repository\MediaObjectRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -26,6 +27,18 @@ trait MediaTrait
             $media->filePath = 'ratpi.png';
             $this->mediaRepository->save($media, true);
         }
+
+        return $media;
+    }
+
+    /**
+     * A media can only be attached to a resource by its owner.
+     */
+    public function getMediaOwnedBy(User $user): MediaObject
+    {
+        $media = $this->getMedia();
+        $media->owner = $user;
+        $this->mediaRepository->save($media, true);
 
         return $media;
     }
