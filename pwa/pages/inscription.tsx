@@ -25,6 +25,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import {User} from '@interfaces/User';
 import {errorRegex} from '@utils/errorRegex';
 import {isBoss} from '@helpers/rolesHelpers';
+import {getSafeReturnPath} from '@helpers/returnPathHelper';
 
 const Registration: NextPageWithLayout = ({}) => {
   const [pendingRegistration, setPendingRegistration] =
@@ -46,11 +47,7 @@ const Registration: NextPageWithLayout = ({}) => {
 
   useEffect(() => {
     if (user && user.emailConfirmed) {
-      const next = Array.isArray(router.query.next)
-        ? router.query.next.join('')
-        : router.query.next || '/';
-
-      router.push(next);
+      router.push(getSafeReturnPath(router.query.next));
     } else if (user && !user.emailConfirmed) {
       // Si l'utilisateur est un réparateur, mais que son compte n'a pas encore été validé, on le redirige vers la page de
       // login qui lui affiche un message d'attente de validation

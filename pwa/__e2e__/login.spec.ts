@@ -60,3 +60,28 @@ test('can click on register link', async ({page}) => {
     '/inscription'
   );
 });
+
+test('the return url cannot run a script', async ({page}) => {
+  let dialogOpened = false;
+  page.on('dialog', async (dialog) => {
+    dialogOpened = true;
+    await dialog.dismiss();
+  });
+
+  await page.goto('/login?next=javascript:alert(1)');
+  await page.getByRole('textbox', {name: 'email'}).fill('user1@test.com');
+  await page.getByLabel('Mot de passe *').fill('Test1passwordOk!');
+  await page.getByRole('button', {name: 'Se connecter'}).click();
+
+  await expect(page, 'La page doit revenir à l’accueil').toHaveURL('/');
+  expect(dialogOpened).toBe(false);
+});
+
+test('the return url cannot leave the website', async ({page}) => {
+  await page.goto('/login?next=https://evil.example/phishing');
+  await page.getByRole('textbox', {name: 'email'}).fill('user1@test.com');
+  await page.getByLabel('Mot de passe *').fill('Test1passwordOk!');
+  await page.getByRole('button', {name: 'Se connecter'}).click();
+
+  await expect(page, 'La page doit revenir à l’accueil').toHaveURL('/');
+});
