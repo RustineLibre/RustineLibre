@@ -25,8 +25,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
     types: ['https://schema.org/MediaObject'],
     normalizationContext: ['groups' => [self::MEDIA_OBJECT_READ]]
 )]
-#[Get]
-#[Delete(security: "is_granted('ROLE_ADMIN') or object.owner == user")]
+#[Get(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.owner == user)")]
+#[Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.owner == user)")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Post(
     uriTemplate: '/media_objects/images',

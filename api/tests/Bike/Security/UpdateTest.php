@@ -28,8 +28,8 @@ class UpdateTest extends AbstractTestCase
 
     public function testUserCanUpdateHisBike(): void
     {
-        $media = $this->getMedia();
         $bike = $this->getBike();
+        $media = $this->getMediaOwnedBy($bike->owner);
         $bikeType = $this->getBikeType();
 
         $this->createClientWithUser($bike->owner)->request('PUT', sprintf('/bikes/%d', $bike->id), [
