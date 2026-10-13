@@ -122,6 +122,7 @@ class AppointmentRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('a')
             ->setMaxResults(1)
+            ->innerJoin('a.repairer', 'enabled_repairer', 'WITH', 'enabled_repairer.enabled = true')
             ->where('a.customer = :customer')
             ->setParameter('customer', $customer);
 
