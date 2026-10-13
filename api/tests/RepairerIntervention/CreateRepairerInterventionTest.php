@@ -4,25 +4,27 @@ declare(strict_types=1);
 
 namespace App\Tests\RepairerIntervention;
 
-use App\Repository\RepairerRepository;
 use App\Tests\Intervention\InterventionAbstractTestCase;
+use App\Tests\Trait\TenantScenarioTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class CreateRepairerInterventionTest extends InterventionAbstractTestCase
 {
-    private RepairerRepository $repairerRepository;
+    use TenantScenarioTrait;
 
-    public function setUp(): void
+    protected function tearDown(): void
     {
-        parent::setUp();
-        $this->repairerRepository = self::getContainer()->get(RepairerRepository::class);
+        $this->cleanUpTenantScenario();
+        parent::tearDown();
     }
 
     public function testBossCanLinkRepairerToAdminIntervention(): void
     {
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $this->createTenantScenario();
+        // A boss only manages the repairers that are enabled: use a known enabled repairer and its boss
+        $repairer = $this->scenario['repairerA'];
         $id = $this->getAdminIntervention()->id;
-        $client = $this->createClientWithUser($repairer->owner);
+        $client = $this->createClientWithUser($this->scenario['bossA']);
         $response = $client->request('POST', '/repairer_interventions', [
             'json' => [
                 'repairer' => sprintf('/repairers/%s', $repairer->id),
@@ -48,6 +50,21 @@ class CreateRepairerInterventionTest extends InterventionAbstractTestCase
             'json' => [
                 'repairer' => sprintf('/repairers/%s', $boss1->repairers->toArray()[0]->id),
                 'intervention' => sprintf('/interventions/%s', $intervention2->id),
+                'price' => 100,
+            ],
+        ]);
+
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    public function testBossOfAPendingRepairerCannotLinkItToAnIntervention(): void
+    {
+        $this->createTenantScenario();
+        $id = $this->getAdminIntervention()->id;
+        $this->createClientWithUser($this->scenario['bossP'])->request('POST', '/repairer_interventions', [
+            'json' => [
+                'repairer' => sprintf('/repairers/%s', $this->scenario['repairerP']->id),
+                'intervention' => sprintf('/interventions/%s', $id),
                 'price' => 100,
             ],
         ]);
