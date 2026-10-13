@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer.id)"),
+        new Get(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or user.isAssociatedWithRepairer(object.repairer.id))"),
         new GetCollection(
             normalizationContext: ['groups' => [self::ADMIN_APPOINTMENT_COLLECTION_READ]],
             security: "is_granted('ROLE_ADMIN')",
@@ -41,10 +41,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             validationContext: ['groups' => ['default']]
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user",
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)",
             validationContext: ['groups' => ['default']],
         ),
-        new Delete(security: "is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user"),
+        new Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)"),
     ],
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
@@ -89,7 +89,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Model\Operation(
                 summary: 'Update appointment status',
                 description: 'Request body should contains a transition propery which is one of the following transition : validated_by_repairer, validated_by_cyclist, refused, propose_another_slot, cancellation'),
-            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user",
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user)",
             validationContext: ['groups' => ['transition']],
         ),
     ],
