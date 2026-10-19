@@ -101,4 +101,33 @@ class RepairerSerializationTest extends AbstractTestCase
         $this->assertResponseIsSuccessful();
         $this->assertCount(6, $response['hydra:member']);
     }
+
+    public function testRepairerCollectionDoesNotExposeOwnerToAnonymous(): void
+    {
+        $this->assertCollectionHasNoOwner(self::createClient());
+    }
+
+    public function testRepairerCollectionDoesNotExposeOwnerToUser(): void
+    {
+        $this->assertCollectionHasNoOwner(self::createClientAuthAsUser());
+    }
+
+    public function testRepairerCollectionExposesOwnerEmailToAdmin(): void
+    {
+        $members = self::createClientAuthAsAdmin()->request('GET', '/repairers?itemsPerPage=10')->toArray()['hydra:member'];
+        $this->assertResponseIsSuccessful();
+
+        $this->assertArrayHasKey('email', $members[0]['owner']);
+    }
+
+    private function assertCollectionHasNoOwner(\ApiPlatform\Symfony\Bundle\Test\Client $client): void
+    {
+        $response = $client->request('GET', '/repairers?itemsPerPage=10');
+        $this->assertResponseIsSuccessful();
+
+        foreach ($response->toArray()['hydra:member'] as $repairer) {
+            $this->assertArrayNotHasKey('owner', $repairer);
+        }
+        $this->assertStringNotContainsString('lastConnect', $response->getContent());
+    }
 }

@@ -121,7 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'user.email.not_blank')]
     #[Assert\Email(message: 'user.email.valid')]
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Repairer::REPAIRER_COLLECTION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
+    #[Groups([self::USER_READ, self::USER_WRITE, RepairerEmployee::EMPLOYEE_READ, self::CUSTOMER_READ, Appointment::APPOINTMENT_READ, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ, Repairer::REPAIRER_ADMIN_COLLECTION_READ, Appointment::ADMIN_APPOINTMENT_COLLECTION_READ])]
     public ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -192,7 +192,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public array $lastRepairers = [];
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups([self::USER_READ, Repairer::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::USER_READ, Repairer::REPAIRER_ADMIN_COLLECTION_READ])]
     public ?\DateTimeImmutable $lastConnect = null;
 
     #[ORM\Column(length: 255, nullable: true)]

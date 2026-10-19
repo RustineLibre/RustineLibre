@@ -253,7 +253,7 @@ export const RepairersList = (): JSX.Element => {
                   />
                 </TableCell>
                 <TableCell align="center">
-                  {repairer.owner.lastConnect &&
+                  {repairer.owner?.lastConnect &&
                     formatDate(repairer.owner.lastConnect)}
                 </TableCell>
                 <TableCell align="right">
