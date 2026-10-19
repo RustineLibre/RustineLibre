@@ -2,11 +2,6 @@ name: Build Scaleway
 
 on:
   workflow_call:
-    inputs:
-      tags:
-        type: string
-        description: The Docker Tags (see docker/metadata-action@v6 for available values)
-        required: true
     secrets:
       domain:
         description: Main project deploy domain used in URLs
@@ -16,16 +11,17 @@ on:
       REGISTRY_PASSWORD:
         required: true
 
-# Memes images que build.yml, mais poussees sur le registry Scaleway. Le flavor prefix
-# (prod-/nonprod-) est indispensable : l'ArgoCD Image Updater
+# Memes images que build.yml, mais poussees sur le registry Scaleway, avec un unique tag
+# "prod-sha-xxxxxxx" (tag git) ou "nonprod-sha-xxxxxxx" (main) : l'ArgoCD Image Updater
 # (opentofu-scaleway-infra-mut/2_environments/3_k8s_objects/argocd_sites.tf,
-# allowTags = "regexp:^${terraform.workspace}-") ne suit que les tags
-# "prod-sha-xxxxxxx"/"nonprod-sha-xxxxxxx".
+# allowTags = "regexp:^${terraform.workspace}-") ne suit que ces tags.
+# Le prefixe est porte par le tag lui-meme et non par le flavor : type=sha a un prefixe
+# par defaut ("sha-") qui ecrase le prefixe global du flavor.
 env:
   REGISTRY: rg.fr-par.scw.cloud
   IMAGE_REPOSITORY: rg.fr-par.scw.cloud/infra-mut-cr-scw
-  TAG_FLAVOR: |
-    prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }},onlatest=true
+  IMAGE_TAGS: type=sha,prefix=${{ github.ref_type == 'tag' && 'prod-' || 'nonprod-' }}sha-
+  TAG_FLAVOR: latest=false
 
 jobs:
   # php et pwa sont construits et scannes (Trivy) dans un seul job : comme l'ArgoCD Image
@@ -53,7 +49,7 @@ jobs:
       uses: docker/metadata-action@v6
       with:
         images: ${{ env.IMAGE_REPOSITORY }}/rustinelibre
-        tags: ${{ inputs.tags }}
+        tags: ${{ env.IMAGE_TAGS }}
         flavor: ${{ env.TAG_FLAVOR }}
 
     - name: Build php image locally
@@ -87,12 +83,7 @@ jobs:
             URL=${{ secrets.domain }}
             SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}
         else
-          if [ "$GITHUB_EVENT_NAME" == "pull_request" ]; then
-              RELEASE_NAME=pr-$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-              URL=${RELEASE_NAME}.preprod.${{ secrets.domain }}
-          else
-              URL=preprod.${{ secrets.domain }}
-          fi
+          URL=preprod.${{ secrets.domain }}
           SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}
         fi
         # Build args partages entre le build local (scan) et le push de l'image pwa
@@ -116,7 +107,7 @@ jobs:
       uses: docker/metadata-action@v6
       with:
         images: ${{ env.IMAGE_REPOSITORY }}/rustinelibre-pwa
-        tags: ${{ inputs.tags }}
+        tags: ${{ env.IMAGE_TAGS }}
         flavor: ${{ env.TAG_FLAVOR }}
 
     - name: Build pwa image locally
@@ -201,7 +192,7 @@ jobs:
       uses: docker/metadata-action@v6
       with:
         images: ${{ env.IMAGE_REPOSITORY }}/rustinelibre-caddy
-        tags: ${{ inputs.tags }}
+        tags: ${{ env.IMAGE_TAGS }}
         flavor: ${{ env.TAG_FLAVOR }}
 
     - name: Build caddy image locally
