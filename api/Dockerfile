@@ -103,7 +103,9 @@ FROM caddy:2.11.7-builder-alpine AS app_caddy_builder
 RUN xcaddy build \
 	--with github.com/dunglas/mercure/caddy@v0.24.2 \
 	--with github.com/dunglas/vulcain/caddy@v1.4.3 \
-	--replace google.golang.org/grpc=google.golang.org/grpc@v1.83.2
+	--replace google.golang.org/grpc=google.golang.org/grpc@v1.83.2 \
+	--replace github.com/getkin/kin-openapi=github.com/getkin/kin-openapi@v0.149.0 \
+	--replace golang.org/x/net=golang.org/x/net@v0.60.0
 
 # Caddy image
 FROM caddy:2.11.7-alpine AS app_caddy
