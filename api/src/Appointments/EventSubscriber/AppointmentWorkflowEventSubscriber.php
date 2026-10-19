@@ -57,9 +57,7 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
 
-        if (!$this->security->isGranted(User::ROLE_ADMIN) && !$this->security->isGranted(User::ROLE_BOSS) && !$this->security->isGranted(User::ROLE_EMPLOYEE)) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain: 'validators'));
-        }
+        $this->denyUnlessRepairerStaff($appointment);
 
         $appointment->status = Appointment::VALIDATED;
         $this->entityManager->flush();
@@ -80,18 +78,10 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
 
     public function onProposeNewSlot(Event $event): void
     {
-        /** @var ?User $user */
-        $user = $this->security->getUser();
-
-        if (
-            null === $user
-            || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
-        ) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain: 'validators'));
-        }
-
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
+
+        $this->denyUnlessRepairerStaff($appointment);
 
         $contentRequest = json_decode($this->requestStack->getCurrentRequest()->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -117,18 +107,10 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
 
     public function onRefused(Event $event): void
     {
-        /** @var ?User $user */
-        $user = $this->security->getUser();
-
-        if (
-            null === $user
-            || !($user->isAdmin() || $user->isBoss() || $user->isEmployee())
-        ) {
-            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain: 'validators'));
-        }
-
         /** @var Appointment $appointment */
         $appointment = $event->getSubject();
+
+        $this->denyUnlessRepairerStaff($appointment);
 
         // Update appointment
         $appointment->status = Appointment::REFUSED;
@@ -137,6 +119,19 @@ readonly class AppointmentWorkflowEventSubscriber implements EventSubscriberInte
         $this->firstSlotAvailableCalculator->setFirstSlotAvailable(repairer: $appointment->repairer, flush: true);
         $this->appointmentRefusedEmail->sendRefusedAppointmentEmail(appointment: $appointment);
         $this->appointmentRefusedNotification->sendRefusedAppointmentNotification(appointment: $appointment);
+    }
+
+    /**
+     * Repairer-side transitions are reserved to admins and to the owner or employees of the appointment's repairer.
+     */
+    private function denyUnlessRepairerStaff(Appointment $appointment): void
+    {
+        /** @var ?User $user */
+        $user = $this->security->getUser();
+
+        if (null === $user || !($user->isAdmin() || $user->isAssociatedWithRepairer($appointment->repairer->id))) {
+            throw new AccessDeniedHttpException($this->translator->trans('403_access.denied.role', domain: 'validators'));
+        }
     }
 
     public function onCancellation(Event $event): void

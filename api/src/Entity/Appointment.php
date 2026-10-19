@@ -38,12 +38,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Post(
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
-            validationContext: ['groups' => ['default']]
+            validationContext: ['groups' => ['default', 'Default']]
         ),
         new Put(
             security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)",
             securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.customer == previous_object.customer and object.repairer == previous_object.repairer)",
-            validationContext: ['groups' => ['default']],
+            validationContext: ['groups' => ['default', 'Default']],
         ),
         new Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)"),
     ],
