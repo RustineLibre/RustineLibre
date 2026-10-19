@@ -102,6 +102,7 @@ class Repairer
     public const REPAIRER_READ = 'repairer_read';
     public const REPAIRER_WRITE = 'repairer_write';
     public const REPAIRER_COLLECTION_READ = 'repairer_collection_read';
+    public const REPAIRER_ADMIN_COLLECTION_READ = 'repairer_admin_collection_read';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -112,7 +113,7 @@ class Repairer
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'], inversedBy: 'repairers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_COLLECTION_READ])]
+    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE, self::REPAIRER_ADMIN_COLLECTION_READ])]
     public ?User $owner = null;
 
     #[ORM\ManyToMany(targetEntity: RepairerType::class)]
