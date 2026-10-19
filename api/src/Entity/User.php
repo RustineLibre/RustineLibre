@@ -279,15 +279,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+     * Ids of the enabled repairers the user works for (as boss or employee).
+     * A repairer still waiting for approval never gives access to anything.
+     *
      * @return list<int|null>
      */
     public function associatedRepairerIds(): array
     {
         if ($this->isBoss()) {
-            return $this->repairers->map(fn (Repairer $repairer) => $repairer->id)->getValues();
+            return $this->repairers
+                ->filter(fn (Repairer $repairer) => true === $repairer->enabled)
+                ->map(fn (Repairer $repairer) => $repairer->id)
+                ->getValues();
         }
 
-        if ($this->repairerEmployee && $this->isEmployee()) {
+        if ($this->repairerEmployee && $this->isEmployee() && true === $this->repairerEmployee->repairer?->enabled) {
             return [$this->repairerEmployee->repairer->id];
         }
 
