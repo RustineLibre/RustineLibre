@@ -78,7 +78,7 @@ class UpdateEmployeeTest extends AbstractTestCase
         $response = $this->createClientWithUser($repairerEmployee->repairer->owner)->request('PUT', sprintf('/employee_and_user/%s', $repairerEmployee->id), [
             'headers' => ['Content-Type' => 'application/json'],
             'json' => [
-                'email' => 'michel@test.com',
+                'email' => $repairerEmployee->employee->email,
                 'firstName' => 'Michel',
                 'lastName' => 'Michel Michel',
                 'enabled' => true,
@@ -91,8 +91,68 @@ class UpdateEmployeeTest extends AbstractTestCase
         $responseData = $response->toArray();
         $this->assertEquals('Michel', $responseData['employee']['firstName']);
         $this->assertEquals('Michel Michel', $responseData['employee']['lastName']);
-        $this->assertEquals('michel@test.com', $responseData['employee']['email']);
         $this->assertTrue($responseData['enabled']);
+    }
+
+    /**
+     * @return array<string, array{0: array<string, string>}>
+     */
+    public static function credentialsProvider(): array
+    {
+        return [
+            'email' => [['email' => 'takeover@test.com']],
+            'password' => [['plainPassword' => 'Test1passwordOk!']],
+        ];
+    }
+
+    /**
+     * @dataProvider credentialsProvider
+     *
+     * @param array<string, string> $credentials
+     */
+    public function testBossCannotChangeCredentialsOfEmployeeAccount(array $credentials): void
+    {
+        /** @var RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
+        $employee = $repairerEmployee->employee;
+        $email = $employee->email;
+        $passwordHash = $employee->password;
+
+        $this->createClientWithUser($repairerEmployee->repairer->owner)->request('PUT', sprintf('/employee_and_user/%s', $repairerEmployee->id), [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'firstName' => 'Michel',
+                'lastName' => 'Michel',
+                'enabled' => true,
+                'repairer' => sprintf('/repairers/%s', $repairerEmployee->repairer->id),
+            ] + $credentials,
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        static::getContainer()->get('doctrine')->getManager()->clear();
+        $reloaded = $this->repairerEmployeeRepository->find($repairerEmployee->id)->employee;
+        $this->assertSame($email, $reloaded->email);
+        $this->assertSame($passwordHash, $reloaded->password);
+    }
+
+    public function testAdminCanChangeEmailOfEmployeeAccount(): void
+    {
+        /** @var RepairerEmployee $repairerEmployee */
+        $repairerEmployee = $this->repairerEmployeeRepository->findOneBy([]);
+        $response = $this->createClientAuthAsAdmin()->request('PUT', sprintf('/employee_and_user/%s', $repairerEmployee->id), [
+            'headers' => ['Content-Type' => 'application/json'],
+            'json' => [
+                'email' => 'michel@test.com',
+                'firstName' => 'Michel',
+                'lastName' => 'Michel',
+                'enabled' => true,
+                'repairer' => sprintf('/repairers/%s', $repairerEmployee->repairer->id),
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertEquals('michel@test.com', $response->toArray()['employee']['email']);
     }
 
     public function testUpdateAsAdmin(): void
