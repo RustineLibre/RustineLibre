@@ -6,6 +6,7 @@ namespace App\Tests\Bike\Security;
 
 use App\Repository\BikeTypeRepository;
 use App\Repository\MediaObjectRepository;
+use App\Repository\UserRepository;
 use App\Tests\AbstractTestCase;
 use App\Tests\Trait\BikeTypeTrait;
 use App\Tests\Trait\MediaTrait;
@@ -24,7 +25,8 @@ class CreateTest extends AbstractTestCase
 
     public function testCreateBikeWithUser(): void
     {
-        $media = $this->getMedia();
+        $user = self::getContainer()->get(UserRepository::class)->findOneBy(['email' => 'user1@test.com']);
+        $media = $this->getMediaOwnedBy($user);
         $bikeType = $this->getBikeType();
 
         $this->createClientAuthAsUser()->request('POST', '/bikes', [
