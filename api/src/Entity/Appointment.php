@@ -41,11 +41,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             validationContext: ['groups' => ['default', 'Default']]
         ),
         new Put(
-            security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)",
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or (object.repairer.owner == user and object.repairer.enabled))",
             securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.customer == previous_object.customer and object.repairer == previous_object.repairer)",
             validationContext: ['groups' => ['default', 'Default']],
         ),
-        new Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)"),
+        new Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or (object.repairer.owner == user and object.repairer.enabled))"),
     ],
     normalizationContext: ['groups' => [self::APPOINTMENT_READ]],
     denormalizationContext: ['groups' => [self::APPOINTMENT_WRITE]],
@@ -90,7 +90,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Model\Operation(
                 summary: 'Update appointment status',
                 description: 'Request body should contains a transition propery which is one of the following transition : validated_by_repairer, validated_by_cyclist, refused, propose_another_slot, cancellation'),
-            security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer) or object.customer == user)",
+            security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or (is_granted('ROLE_BOSS') and object.repairer.owner == user and object.repairer.enabled) or (is_granted('ROLE_EMPLOYEE') and user.repairerEmployee and object.repairer == user.repairerEmployee.repairer and object.repairer.enabled) or object.customer == user)",
             validationContext: ['groups' => ['transition']],
         ),
     ],
