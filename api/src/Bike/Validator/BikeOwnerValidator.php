@@ -25,11 +25,12 @@ final class BikeOwnerValidator extends ConstraintValidator
         /** @var User|null $currentUser */
         $currentUser = $this->security->getUser();
 
-        if (($currentUser && ($currentUser->isAdmin() || $currentUser->isBoss() || $currentUser->isEmployee())) || !$value) {
+        if (!$value || ($currentUser && $currentUser->isAdmin())) {
             return;
         }
 
-        if (!$currentUser || $value->owner->id !== $currentUser->id) {
+        // Repairer staff can only use the bike of one of their customers.
+        if (!$currentUser || ($value->owner->id !== $currentUser->id && !$this->security->isGranted('CUSTOMER_READ', $value->owner))) {
             $this->context->buildViolation((string) $constraint->message)
                 ->addViolation();
         }

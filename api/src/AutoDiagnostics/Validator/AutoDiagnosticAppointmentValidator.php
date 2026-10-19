@@ -38,7 +38,8 @@ class AutoDiagnosticAppointmentValidator extends ConstraintValidator
             return;
         }
 
-        if ($value->customer && $value->customer->id !== $currentUser->id && !$currentUser->isBoss() && !$currentUser->isEmployee() && !$currentUser->isAdmin()) {
+        // Otherwise only an admin or the repairer's own staff can attach an auto-diagnostic to the appointment.
+        if (!$currentUser->isAdmin() && !$currentUser->isAssociatedWithRepairer($value->repairer->id)) {
             $this->context->buildViolation($constraint->messageNotYourAppointment)->addViolation();
         }
     }

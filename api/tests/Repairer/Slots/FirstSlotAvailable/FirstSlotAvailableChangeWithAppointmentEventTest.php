@@ -72,6 +72,8 @@ class FirstSlotAvailableChangeWithAppointmentEventTest extends SlotsTestCase
     public function testFirstSlotAvailableChangeAfterAppointmentRefusalAndSlotBecomesAvailable(): void
     {
         $repairer = $this->getRepairerWithSlotsAvailable(0);
+        // Only the staff of an enabled repairer can refuse its appointments.
+        $this->createClientAuthAsAdmin()->request('PUT', sprintf('/repairers/%d', $repairer->id), ['json' => ['enabled' => true]]);
         $client = $this->createClientWithUser($repairer->owner);
 
         $this->appointmentRepository = self::getContainer()->get(AppointmentRepository::class);
