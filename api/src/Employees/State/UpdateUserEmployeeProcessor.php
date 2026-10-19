@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Repository\RepairerEmployeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -46,14 +47,22 @@ final readonly class UpdateUserEmployeeProcessor implements ProcessorInterface
         }
 
         $currentUser = $this->security->getUser();
+
+        /** @var User $user */
+        $user = $repairerEmployee->employee;
+
+        // The linked account can also be the personal account of a former boss:
+        // only an admin or the account holder can change its credentials.
+        $changesCredentials = (!empty($data->email) && $data->email !== $user->email) || !empty($data->plainPassword);
+        if ($changesCredentials && !($currentUser instanceof User && ($currentUser->isAdmin() || $currentUser === $user))) {
+            throw new AccessDeniedHttpException('Only an admin or the account holder can change the credentials of this account.');
+        }
+
         if ($currentUser instanceof User && ($currentUser->isAdmin() || $currentUser->isAssociatedWithRepairer($data->repairer->id))) {
             $repairerEmployee->repairer = $data->repairer;
         }
         $repairerEmployee->enabled = boolval($data->enabled);
         $this->validator->validate($repairerEmployee);
-
-        /** @var User $user */
-        $user = $repairerEmployee->employee;
 
         foreach (['firstName', 'lastName', 'email', 'plainPassword'] as $property) {
             if (!empty($data->$property)) {
