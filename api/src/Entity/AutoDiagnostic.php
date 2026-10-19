@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'standard_put',
     ]
 )]
-#[Get(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.appointment.customer == user or object.appointment.repairer.owner == user)")]
+#[Get(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.appointment.customer == user or (object.appointment.repairer.owner == user and object.appointment.repairer.enabled))")]
 #[GetCollection(security: "is_granted('ROLE_ADMIN')")]
 #[Post(security: "is_granted('IS_AUTHENTICATED_FULLY')")]
 #[Put(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.appointment.customer == user)")]
