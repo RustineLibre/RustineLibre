@@ -34,6 +34,7 @@ import {useContext, useEffect, useState} from 'react';
 import {Discussion} from '@interfaces/Discussion';
 import {ENTRYPOINT} from '@config/entrypoint';
 import {discussionResource} from '@resources/discussionResource';
+import {mercureResource} from '@resources/mercureResource';
 import Badge from '@mui/material/Badge';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GoogleCalendarSync from '@components/calendar/GoogleCalendarSync';
@@ -62,17 +63,15 @@ const DashboardLayout = ({children}: DashboardLayoutProps) => {
 
   const subscribeMercureDiscussions = async (): Promise<EventSource | null> => {
     if (null === eventSource) {
-      const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-      const hub = new URL(hubUrl);
-      discussions.map((discussion) => {
-        hub.searchParams.append('topic', `${ENTRYPOINT}${discussion['@id']}`);
-      });
-
-      const currentEventSource = new EventSource(hub);
+      const currentEventSource = await mercureResource.subscribe(
+        discussions.map((discussion) => `${ENTRYPOINT}${discussion['@id']}`)
+      );
       currentEventSource.onmessage = (event) => {
         countUnread();
       };
       setEventSource(currentEventSource);
+
+      return currentEventSource;
     }
 
     return eventSource;

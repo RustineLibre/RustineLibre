@@ -2,6 +2,7 @@ import {ENTRYPOINT} from '@config/entrypoint';
 import React, {ChangeEvent, useCallback, useEffect, useState} from 'react';
 import Link from 'next/link';
 import {repairerResource} from '@resources/repairerResource';
+import {mercureResource} from '@resources/mercureResource';
 import ConfirmationModal from '@components/common/ConfirmationModal';
 import {
   Box,
@@ -45,21 +46,19 @@ export const RepairersList = (): JSX.Element => {
   const mercureSubscribe =
     useCallback(async (): Promise<EventSource | null> => {
       if (null === eventSource) {
-        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-        const hub = new URL(hubUrl);
-
-        hub.searchParams.append(
-          'topic',
-          `${ENTRYPOINT}${repairerResource.getEndpoint()}`
-        );
-
-        const currentEventSource = new EventSource(hub);
-        currentEventSource.onmessage = ({data}: {data: string}) => {
-          const newRepairer: Repairer = JSON.parse(data);
+        const currentEventSource = await mercureResource.subscribe([
+          `${ENTRYPOINT}${repairerResource.getEndpoint()}`,
+        ]);
+        currentEventSource.onmessage = async ({data}: {data: string}) => {
+          const newRepairer = await repairerResource.get(
+            JSON.parse(data)['@id']
+          );
 
           setRepairers((repairers) => [newRepairer, ...repairers]);
         };
         setEventSource(currentEventSource);
+
+        return currentEventSource;
       }
 
       return eventSource;

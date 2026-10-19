@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repairers\EventSubscriber;
 
-use ApiPlatform\Api\UrlGeneratorInterface;
+use ApiPlatform\Metadata\UrlGeneratorInterface;
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Repairer;
 use App\Mercure\MercurePublisher;
@@ -36,6 +36,7 @@ final readonly class PublishNewRepairerForListOnRepairerCreatedEventSubscriber i
         }
 
         $url = $this->urlGenerator->generate('_api_/repairers{._format}_get_collection', [], UrlGeneratorInterface::ABS_URL);
-        $this->mercurePublisher->publishUpdate($url, $object, Repairer::REPAIRER_COLLECTION_READ);
+        // Only admins are granted this topic
+        $this->mercurePublisher->publishUpdate([$url], $object);
     }
 }

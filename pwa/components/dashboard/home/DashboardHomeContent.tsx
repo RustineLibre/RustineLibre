@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import DashboardNextAppointments from '@components/dashboard/home/DashboardNextAppointments';
 import DashboardWaitingAppointments from '@components/dashboard/home/DashboardWaitingAppointments';
 import {appointmentResource} from '@resources/appointmentResource';
+import {mercureResource} from '@resources/mercureResource';
 import {Appointment} from '@interfaces/Appointment';
 import {RequestParams} from '@interfaces/Resource';
 import {dateObjectAsString} from '@helpers/dateHelper';
@@ -72,17 +73,13 @@ export const DashboardHomeContent = ({
   const mercureSubscribe =
     useCallback(async (): Promise<EventSource | null> => {
       if (null === eventSource) {
-        const hubUrl = `${ENTRYPOINT}/.well-known/mercure`;
-        const hub = new URL(hubUrl);
-
-        hub.searchParams.append(
-          'topic',
-          `${ENTRYPOINT}${repairerResource.getEndpoint()}/${repairer.id}${appointmentResource.getEndpoint()}`
-        );
-
-        const currentEventSource = new EventSource(hub);
-        currentEventSource.onmessage = ({data}: {data: string}) => {
-          const newWaitingAppointment: Appointment = JSON.parse(data);
+        const currentEventSource = await mercureResource.subscribe([
+          `${ENTRYPOINT}${repairerResource.getEndpoint()}/${repairer.id}${appointmentResource.getEndpoint()}`,
+        ]);
+        currentEventSource.onmessage = async ({data}: {data: string}) => {
+          const newWaitingAppointment = await appointmentResource.get(
+            JSON.parse(data)['@id']
+          );
 
           setAppointmentsWaiting((appointmentsWaiting) => {
             const index = appointmentsWaiting.findIndex(
@@ -100,6 +97,8 @@ export const DashboardHomeContent = ({
         };
 
         setEventSource(currentEventSource);
+
+        return currentEventSource;
       }
 
       return eventSource;

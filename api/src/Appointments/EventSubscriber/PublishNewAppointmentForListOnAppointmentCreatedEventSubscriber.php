@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Appointments\EventSubscriber;
 
-use ApiPlatform\Api\UrlGeneratorInterface;
+use ApiPlatform\Metadata\IriConverterInterface;
+use ApiPlatform\Metadata\UrlGeneratorInterface;
 use ApiPlatform\Symfony\EventListener\EventPriorities;
 use App\Entity\Appointment;
 use App\Mercure\MercurePublisher;
@@ -16,7 +17,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final readonly class PublishNewAppointmentForListOnAppointmentCreatedEventSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private MercurePublisher $mercurePublisher, private UrlGeneratorInterface $urlGenerator, private Security $security)
+    public function __construct(private MercurePublisher $mercurePublisher, private UrlGeneratorInterface $urlGenerator, private IriConverterInterface $iriConverter, private Security $security)
     {
     }
 
@@ -43,6 +44,6 @@ final readonly class PublishNewAppointmentForListOnAppointmentCreatedEventSubscr
         }
 
         $url = $this->urlGenerator->generate('_api_/repairers/{repairer_id}/appointments_get_collection', ['repairer_id' => $object->repairer->id], UrlGeneratorInterface::ABS_URL);
-        $this->mercurePublisher->publishUpdate($url, $object, Appointment::REPAIRER_APPOINTMENT_COLLECTION_READ);
+        $this->mercurePublisher->publishUpdate([$url, (string) $this->iriConverter->getIriFromResource($object->repairer, UrlGeneratorInterface::ABS_URL)], $object);
     }
 }
