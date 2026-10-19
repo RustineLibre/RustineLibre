@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[AsController]
@@ -39,8 +40,10 @@ class SyncGoogleCalendarController extends AbstractController
     #[Route(path: '/google/sync/callback', name: 'google_callback', stateless: false)]
     public function googleCallback(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $requestContent = json_decode($request->getContent(), true);
-        if (!array_key_exists('repairer', $requestContent)) {
+        if (!is_array($requestContent) || !array_key_exists('repairer', $requestContent)) {
             throw new BadRequestHttpException('No repairer provided');
         }
 
@@ -48,13 +51,21 @@ class SyncGoogleCalendarController extends AbstractController
             throw new BadRequestHttpException('No code provided');
         }
 
+        /** @var Repairer|null $repairer */
+        $repairer = $this->repairerRepository->find($requestContent['repairer']);
+        if (null === $repairer) {
+            throw new NotFoundHttpException('Repairer not found');
+        }
+
+        if (!$this->isGranted('ROLE_ADMIN') && !($repairer->owner === $this->getUser() && $repairer->enabled)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $this->client->setClientId($this->googleClientId);
         $this->client->setRedirectUri('postmessage');
 
         $accessToken = $this->client->fetchAccessTokenWithAuthCode($requestContent['code']);
 
-        /** @var Repairer $repairer */
-        $repairer = $this->repairerRepository->find($requestContent['repairer']);
         $repairer->googleAccessToken = $accessToken['access_token'];
         $repairer->googleRefreshToken = $accessToken['refresh_token'];
         $this->entityManager->persist($repairer);
