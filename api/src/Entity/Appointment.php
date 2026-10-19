@@ -42,6 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(
             security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)",
+            securityPostDenormalize: "is_granted('ROLE_ADMIN') or (object.customer == previous_object.customer and object.repairer == previous_object.repairer)",
             validationContext: ['groups' => ['default']],
         ),
         new Delete(security: "is_granted('IS_AUTHENTICATED_FULLY') and (is_granted('ROLE_ADMIN') or object.customer == user or object.repairer.owner == user)"),
