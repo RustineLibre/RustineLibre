@@ -18,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\OpenApi\Model;
 use App\Controller\BuildRepairerSlotsAvailableAction;
+use App\Mercure\MercurePublisher;
 use App\Repairers\Dto\CreateUserRepairerDto;
 use App\Repairers\Dto\UpdateRepairerBossDto;
 use App\Repairers\Filter\AroundFilter;
@@ -40,7 +41,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: RepairerRepository::class)]
 #[ApiResource(
     denormalizationContext: ['groups' => ['admin_only']],
-    mercure: true,
+    mercure: [
+        'private' => true,
+        'normalization_context' => ['groups' => [MercurePublisher::IDENTIFIER_ONLY]],
+    ],
     paginationClientEnabled: true,
     paginationClientItemsPerPage: true,
     extraProperties: [
