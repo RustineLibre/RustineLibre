@@ -7,7 +7,13 @@ Plateforme de mise en relation avec des réparateurs de vélos
 - [Dépôt du projet](https://github.com/RustineLibre/RustineLibre)
 - [Gestionnaire de tâches](https://github.com/RustineLibre/RustineLibre/issues)
 
-## Déploiement en production
+## Déploiements
+
+Le CD ne fait que le build/push  des images , les Image-Updater Argocd  ensuite  à jour l'application
+
+* Préproduction:  le build est lancé sur chaque "push" sur le branche *main*
+* Production : le build est lancé sur un "push" de tag sur *main*
+
 - [via Kubernetes](./DEPLOY.md)
 - [via Docker](./DEPLOY.md#sur-une-machine-virtuelle-en-utilisant-docker)
 
