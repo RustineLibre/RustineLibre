@@ -107,6 +107,7 @@ class Repairer
     public const REPAIRER_WRITE = 'repairer_write';
     public const REPAIRER_COLLECTION_READ = 'repairer_collection_read';
     public const REPAIRER_ADMIN_COLLECTION_READ = 'repairer_admin_collection_read';
+    public const REPAIRER_PRIVATE_READ = 'repairer_private_read';
 
     #[ApiProperty(identifier: true)]
     #[ORM\Id]
@@ -230,7 +231,7 @@ class Repairer
 
     #[Assert\Type('string')]
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups([self::REPAIRER_READ, self::REPAIRER_WRITE])]
+    #[Groups([self::REPAIRER_PRIVATE_READ, self::REPAIRER_WRITE])]
     public ?string $comment = null;
 
     #[ORM\OneToMany(mappedBy: 'repairer', targetEntity: RepairerIntervention::class, orphanRemoval: true)]

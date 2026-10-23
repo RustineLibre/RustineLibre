@@ -6,6 +6,8 @@ namespace App\Repairers\Serializer;
 
 use ApiPlatform\Serializer\SerializerContextBuilderInterface;
 use App\Entity\Repairer;
+use App\Entity\User;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -14,7 +16,7 @@ final class RepairerEnabledContextBuilder implements SerializerContextBuilderInt
     private SerializerContextBuilderInterface $decorated;
     private AuthorizationCheckerInterface $authorizationChecker;
 
-    public function __construct(SerializerContextBuilderInterface $decorated, AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(SerializerContextBuilderInterface $decorated, AuthorizationCheckerInterface $authorizationChecker, private readonly Security $security)
     {
         $this->decorated = $decorated;
         $this->authorizationChecker = $authorizationChecker;
@@ -34,6 +36,24 @@ final class RepairerEnabledContextBuilder implements SerializerContextBuilderInt
             $context['groups'][] = Repairer::REPAIRER_ADMIN_COLLECTION_READ;
         }
 
+        // The application comment is only meant for the admins and the owner of the repairer. Operations without
+        // serialization groups expose every property already.
+        $data = $request->attributes->get('data');
+        if (Repairer::class === $resourceClass && true === $normalization && isset($context['groups']) && $data instanceof Repairer && $this->canReadPrivateFields($data)) {
+            $context['groups'][] = Repairer::REPAIRER_PRIVATE_READ;
+        }
+
         return $context;
+    }
+
+    private function canReadPrivateFields(Repairer $repairer): bool
+    {
+        if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+
+        $user = $this->security->getUser();
+
+        return $user instanceof User && null !== $repairer->owner && $repairer->owner->id === $user->id;
     }
 }
