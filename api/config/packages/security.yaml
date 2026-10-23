@@ -7,6 +7,10 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        users_by_id:
+            entity:
+                class: App\Entity\User
+                property: id
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,9 +25,13 @@ security:
                 password_path: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            jwt: ~
+            jwt:
+                # The JWT carries the user id (lexik user_id_claim), not the e-mail address.
+                provider: users_by_id
             refresh_jwt:
                 check_path: api_refresh_token
+                # Refresh tokens are stored against User::getUserIdentifier(), the user id.
+                provider: users_by_id
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
