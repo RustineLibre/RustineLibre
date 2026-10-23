@@ -21,6 +21,10 @@ readonly class MediaObjectManager
     public function upload(MediaObject $mediaObject, string $prefix): void
     {
         $storage = $this->getOperator($prefix);
+        // Never overwrite a stored object: it belongs to another media object.
+        if ($storage->fileExists($mediaObject->filePath)) {
+            throw new \RuntimeException(sprintf('A stored file already exists at "%s".', $mediaObject->filePath));
+        }
         $storage->write(
             $mediaObject->filePath,
             $mediaObject->file->getContent(),
