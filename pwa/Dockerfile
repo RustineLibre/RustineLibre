@@ -75,7 +75,7 @@ RUN pnpm run build
 
 
 # Production image, copy all the files and run next
-FROM node:24.22.1-alpine AS prod
+FROM node:26.12.0-alpine AS prod
 WORKDIR /srv/app
 
 # Deps stage, preserve dependencies in cache as long as the lockfile isn't changed
