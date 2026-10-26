@@ -13,6 +13,7 @@ describe('Testing the validation of the return path after authentication', () =>
       '/sradmin/boutiques/3/agenda?selectedDate=2024-05-01T10%3A00%3A00',
     ],
     ['/recherche?q=v%C3%A9lo', '/recherche?q=v%C3%A9lo'],
+    ['/a/./b/../c', '/a/c'],
   ])('Should keep the application path %s', (value, expected) => {
     expect(getSafeReturnPath(value)).toBe(expected);
   });
@@ -38,6 +39,11 @@ describe('Testing the validation of the return path after authentication', () =>
     ['%2F%2Fevil.example'],
     ['/%00'],
     ['/%E0%A4%A'],
+    ['/.//evil.example'],
+    ['/..//evil.example'],
+    ['/%2e//evil.example'],
+    ['/a/..//evil.example'],
+    ['/./\\evil.example'],
     ['velos/mes-velos'],
     [''],
   ])('Should reject %j and use the fallback', (value) => {

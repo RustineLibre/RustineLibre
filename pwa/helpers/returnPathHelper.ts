@@ -35,7 +35,10 @@ export const getSafeReturnPath = (
       return fallback;
     }
 
-    return `${url.pathname}${url.search}${url.hash}`;
+    const canonical = `${url.pathname}${url.search}${url.hash}`;
+
+    // La normalisation des segments de points peut produire un chemin protocole-relatif (/.//hote).
+    return isSafeRelativePath(canonical) ? canonical : fallback;
   } catch {
     return fallback;
   }
