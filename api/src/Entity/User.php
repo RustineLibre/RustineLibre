@@ -226,7 +226,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        // The immutable id, not the e-mail address: refresh tokens are stored against this identifier, and an address
+        // can change or be taken over by another account. Logging in still looks the account up by e-mail.
+        return isset($this->id) ? (string) $this->id : '';
     }
 
     /**
