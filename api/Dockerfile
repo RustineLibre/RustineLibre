@@ -110,8 +110,8 @@ RUN xcaddy build \
 # Caddy image
 FROM caddy:2.11.7-alpine AS app_caddy
 
-# needed for security update until base image is updated
-# RUN apk upgrade libcurl curl openssl openssl-dev libressl libcrypto1.1 libssl1.1 libcrypto3 libssl3
+# apk upgrade pulls Alpine fixes published after the base image
+RUN apk upgrade --no-cache
 
 WORKDIR /srv/app
 
