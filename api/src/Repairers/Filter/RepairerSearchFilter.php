@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PropertyInfo\Type;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -19,14 +20,15 @@ final class RepairerSearchFilter extends AbstractFilter
 {
     public const PROPERTY_NAME = 'repairerSearch';
 
-    public function __construct(private readonly TranslatorInterface $translator, ManagerRegistry $managerRegistry, ?LoggerInterface $logger = null, ?array $properties = null, ?NameConverterInterface $nameConverter = null)
+    public function __construct(private readonly TranslatorInterface $translator, private readonly AuthorizationCheckerInterface $authorizationChecker, ManagerRegistry $managerRegistry, ?LoggerInterface $logger = null, ?array $properties = null, ?NameConverterInterface $nameConverter = null)
     {
         parent::__construct($managerRegistry, $logger, $properties, $nameConverter);
     }
 
     protected function filterProperty(string $property, $value, QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, ?Operation $operation = null, array $context = []): void
     {
-        if (self::PROPERTY_NAME !== $property) {
+        // Back-office search: it matches the owner's e-mail address and name, which only admins may read.
+        if (self::PROPERTY_NAME !== $property || !$this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             return;
         }
 
@@ -37,7 +39,7 @@ final class RepairerSearchFilter extends AbstractFilter
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder->innerJoin(sprintf('%s.owner', $rootAlias), 'u');
         $queryBuilder->andWhere(sprintf('LOWER(%s.name) LIKE :searchTerms OR LOWER(u.email) LIKE :searchTerms OR LOWER(u.lastName) LIKE :searchTerms OR LOWER(u.firstName) LIKE :searchTerms', $rootAlias));
-        $queryBuilder->setParameter('searchTerms', '%'.strtolower($value).'%');
+        $queryBuilder->setParameter('searchTerms', '%'.addcslashes(strtolower($value), '%_\\').'%');
     }
 
     public function getDescription(string $resourceClass): array
