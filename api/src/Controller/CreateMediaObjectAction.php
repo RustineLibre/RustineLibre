@@ -47,14 +47,15 @@ final class CreateMediaObjectAction extends AbstractController
     public function addFilePath(MediaObject $mediaObject): MediaObject
     {
         $slugger = new AsciiSlugger();
+        // The storage key must be unique: two uploads must never share the same stored object.
+        $randomString = bin2hex(random_bytes(16));
 
         if (!$mediaObject->file instanceof UploadedFile) {
-            $randomString = bin2hex(random_bytes(16));
             $mediaObject->filePath = $slugger->slug(sprintf('%d-%s.%s', time(), $randomString, $mediaObject->file->guessExtension()))->toString();
         } else {
             $parts = explode('.', $mediaObject->file->getClientOriginalName());
             $slugName = (string) $this->slugger->slug(strtolower($parts[0]));
-            $mediaObject->filePath = $slugger->slug(sprintf('%d-%s.%s', time(), $slugName, $mediaObject->file->getClientOriginalExtension()))->toString();
+            $mediaObject->filePath = $slugger->slug(sprintf('%d-%s-%s.%s', time(), $randomString, $slugName, $mediaObject->file->getClientOriginalExtension()))->toString();
         }
 
         return $mediaObject;
