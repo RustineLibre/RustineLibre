@@ -9,11 +9,14 @@ use ApiPlatform\OpenApi\Model;
 use App\Appointments\State\ExportAppointmentCollectionProvider;
 use Symfony\Component\Serializer\Attribute\Context;
 use Symfony\Component\Serializer\Attribute\SerializedName;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[GetCollection(
     uriTemplate: '/export_appointments_csv',
     outputFormats: ['csv' => ['text/csv']],
+    // Cells come from user input: never let a spreadsheet evaluate them as formulas.
+    normalizationContext: [CsvEncoder::ESCAPE_FORMULAS_KEY => true],
     openapi: new Model\Operation(
         summary: 'Export appointment collection to csv format',
     ),
