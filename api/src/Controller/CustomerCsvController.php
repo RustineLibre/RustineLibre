@@ -26,8 +26,8 @@ class CustomerCsvController
 
     #[Route(path: '/export_customers_csv/{id}', name: 'export_customers_csv', defaults: ['_format' => 'csv'], methods: ['GET'])]
     #[IsGranted(
-        attribute: new Expression('is_granted("ROLE_ADMIN") or user === subject'),
-        subject: new Expression('args["repairer"].owner'),
+        attribute: new Expression('is_granted("ROLE_ADMIN") or (user === subject.owner and subject.enabled)'),
+        subject: new Expression('args["repairer"]'),
     )]
     public function index(Repairer $repairer): Response
     {
