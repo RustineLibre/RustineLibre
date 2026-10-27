@@ -303,7 +303,16 @@ export abstract class AbstractResource<T> {
   }
 
   public getUrl(id?: string, params?: RequestParams): string {
-    const url = new URL(ENTRYPOINT + (undefined !== id ? id : this.endpoint));
+    const path = undefined !== id ? id : this.endpoint;
+    // The token is sent to this URL: only accept an API path of the same origin
+    // (identifiers may come from Mercure updates or route parameters).
+    if ((undefined !== id || '' !== path) && !/^\/(?![\/\\])/.test(path)) {
+      throw new Error(`Invalid API path: ${path}`);
+    }
+    const url = new URL(ENTRYPOINT + path);
+    if (url.origin !== new URL(ENTRYPOINT as string).origin) {
+      throw new Error(`Invalid API path: ${path}`);
+    }
     let queryMultipleMatch: string | null = null;
 
     if (undefined !== params) {
