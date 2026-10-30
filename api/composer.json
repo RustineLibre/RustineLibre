@@ -49,7 +49,7 @@
         "symfony/validator": "^6.4.16",
         "symfony/workflow": "^6.4.13",
         "symfony/yaml": "^6.4.13",
-        "vich/uploader-bundle": "^2.1.1"
+        "vich/uploader-bundle": "^3.0.0"
     },
     "require-dev": {
         "api-platform/schema-generator": "^5.2.2",
