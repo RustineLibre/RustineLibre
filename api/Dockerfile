@@ -98,7 +98,7 @@ RUN set -eux; \
 RUN rm -f .env.local.php
 
 # Build Caddy with the Mercure and Vulcain modules
-FROM caddy:2.11.7-builder-alpine AS app_caddy_builder
+FROM caddy:2.11.8-builder-alpine AS app_caddy_builder
 
 RUN xcaddy build \
 	--with github.com/dunglas/mercure/caddy@v0.24.2 \
@@ -108,7 +108,7 @@ RUN xcaddy build \
 	--replace golang.org/x/net=golang.org/x/net@v0.60.0
 
 # Caddy image
-FROM caddy:2.11.7-alpine AS app_caddy
+FROM caddy:2.11.8-alpine AS app_caddy
 
 # apk upgrade pulls Alpine fixes published after the base image
 RUN apk upgrade --no-cache
