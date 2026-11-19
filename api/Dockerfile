@@ -100,12 +100,16 @@ RUN rm -f .env.local.php
 # Build Caddy with the Mercure and Vulcain modules
 FROM caddy:2.11.8-builder-alpine AS app_caddy_builder
 
+# The builder image ships Go 1.27.3: force 1.27.4 for CVE-2026-97054 (net/http)
+ENV GOTOOLCHAIN=go1.27.4
+
 RUN xcaddy build \
 	--with github.com/dunglas/mercure/caddy@v0.24.2 \
 	--with github.com/dunglas/vulcain/caddy@v1.4.3 \
 	--replace google.golang.org/grpc=google.golang.org/grpc@v1.83.2 \
 	--replace github.com/getkin/kin-openapi=github.com/getkin/kin-openapi@v0.149.0 \
-	--replace golang.org/x/net=golang.org/x/net@v0.60.0
+	--replace golang.org/x/net=golang.org/x/net@v0.62.0 \
+	--replace github.com/go-jose/go-jose/v4=github.com/go-jose/go-jose/v4@v4.1.6
 
 # Caddy image
 FROM caddy:2.11.8-alpine AS app_caddy
