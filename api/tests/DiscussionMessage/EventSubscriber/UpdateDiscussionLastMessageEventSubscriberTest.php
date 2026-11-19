@@ -20,7 +20,7 @@ class UpdateDiscussionLastMessageEventSubscriberTest extends DiscussionMessageAb
     public function testLastMessageIsUpdatedAfterByNewMessage(): void
     {
         $customer = $this->userRepository->getUserWithRole('ROLE_USER');
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $repairer = $this->repairerRepository->findOneBy(['enabled' => true], ['id' => 'ASC']);
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
         $messageResponse = $this->createClientWithUser($customer)->request('POST', '/discussion_messages', [
