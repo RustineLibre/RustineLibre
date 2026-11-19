@@ -29,7 +29,7 @@ class UniqueDiscussionValidatorTest extends AbstractTestCase
 
     public function testCannotCreateTwoDiscussionForSameRepairerAndCustomer(): void
     {
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $repairer = $this->repairerRepository->findOneBy(['enabled' => true], ['id' => 'ASC']);
 
         $queryBuilderIds = $this->userRepository->createQueryBuilder('uid')
             ->select('uid.id')

@@ -11,7 +11,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
     public function testCustomerCanAddMessageInHisDiscussion(): void
     {
         $customer = $this->userRepository->getUserWithRole('ROLE_USER');
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $repairer = $this->repairerRepository->findOneBy(['enabled' => true], ['id' => 'ASC']);
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
         $this->createClientWithUser($customer)->request('POST', '/discussion_messages', [
@@ -26,7 +26,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
     public function testRepairerCanAddMessageInHisDiscussion(): void
     {
         $customer = $this->userRepository->getUserWithRole('ROLE_USER');
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $repairer = $this->repairerRepository->findOneBy(['enabled' => true], ['id' => 'ASC']);
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
         $this->createClientWithUser($repairer->owner)->request('POST', '/discussion_messages', [
@@ -41,7 +41,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
     public function testCustomerCannotAddMessageInOtherDiscussion(): void
     {
         $customer = $this->userRepository->getUsersWithRole('ROLE_USER');
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $repairer = $this->repairerRepository->findOneBy(['enabled' => true], ['id' => 'ASC']);
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer[0]);
 
         $this->createClientWithUser($customer[1])->request('POST', '/discussion_messages', [
@@ -56,7 +56,7 @@ class PostTest extends DiscussionMessageAbstractTestCase
     public function testRepairerCannotAddMessageInOtherDiscussion(): void
     {
         $customer = $this->userRepository->getUserWithRole('ROLE_USER');
-        $repairer = $this->repairerRepository->findOneBy([]);
+        $repairer = $this->repairerRepository->findOneBy(['enabled' => true], ['id' => 'ASC']);
         $discussion = $this->getDiscussionWithRepairerAndCustomer($repairer, $customer);
 
         $this->createClientAuthAsRepairer()->request('POST', '/discussion_messages', [
