@@ -98,7 +98,7 @@ RUN set -eux; \
 RUN rm -f .env.local.php
 
 # Build Caddy with the Mercure and Vulcain modules
-FROM caddy:2.11.8-builder-alpine AS app_caddy_builder
+FROM caddy:2.11.9-builder-alpine AS app_caddy_builder
 
 # The builder image ships Go 1.27.3: force 1.27.4 for CVE-2026-97054 (net/http)
 ENV GOTOOLCHAIN=go1.27.4
@@ -112,7 +112,7 @@ RUN xcaddy build \
 	--replace github.com/go-jose/go-jose/v4=github.com/go-jose/go-jose/v4@v4.1.6
 
 # Caddy image
-FROM caddy:2.11.8-alpine AS app_caddy
+FROM caddy:2.11.9-alpine AS app_caddy
 
 # apk upgrade pulls Alpine fixes published after the base image
 RUN apk upgrade --no-cache
