@@ -8,7 +8,7 @@ import {repairerResource} from '@resources/repairerResource';
 import {appointmentResource} from '@resources/appointmentResource';
 import {openingHoursResource} from '@resources/openingHours';
 import {useAccount} from '@contexts/AuthContext';
-import {Container, Box, Button, Typography} from '@mui/material';
+import {Alert, Container, Box, Button, Typography} from '@mui/material';
 import WebsiteLayout from '@components/layout/WebsiteLayout';
 import SlotsStep from '@components/rendez-vous/SlotsStep';
 const PinMap = dynamic(() => import('@components/rendez-vous/PinMap'), {
@@ -43,6 +43,7 @@ const RepairerSlots: NextPageWithLayout = () => {
   const [longitude, setLongitude] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [choice, setChoice] = useState<string>('workshop');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {id} = router.query;
   const {user, isLoadingFetchUser} = useAccount({
     redirectIfMailNotConfirm: router.asPath,
@@ -179,18 +180,30 @@ const RepairerSlots: NextPageWithLayout = () => {
       return;
     }
     setLoadingAppointmentCreate(true);
+    setErrorMessage(null);
 
-    const newAppointment = await appointmentResource.post({
-      repairer: repairer['@id'],
-      slotTime: slotSelected,
-      latitude: latitude.toString(),
-      longitude: longitude.toString(),
-      address: address,
-    });
+    try {
+      const newAppointment = await appointmentResource.post({
+        repairer: repairer['@id'],
+        slotTime: slotSelected,
+        latitude: latitude.toString(),
+        longitude: longitude.toString(),
+        address: address,
+      });
 
-    if (newAppointment) {
-      router.push(`/rendez-vous/${newAppointment.id}/auto-diagnostic`);
-    } else setLoadingAppointmentCreate(false);
+      if (newAppointment) {
+        router.push(`/rendez-vous/${newAppointment.id}/auto-diagnostic`);
+      } else setLoadingAppointmentCreate(false);
+    } catch (e) {
+      // the slot may have been taken meanwhile: go back to the slots list, refreshed
+      setLoadingAppointmentCreate(false);
+      setSlotSelected(null);
+      setTunnelStep('slots');
+      setErrorMessage(
+        "Le rendez-vous sélectionné n'est plus disponible. Veuillez s'il vous plaît en choisir un autre."
+      );
+      fetchOpeningHours();
+    }
   };
 
   useEffect(() => {
@@ -263,6 +276,14 @@ const RepairerSlots: NextPageWithLayout = () => {
                     }
                   : {flex: 1, alignItems: 'flex-start'}
               }>
+              {tunnelStep == 'slots' && errorMessage && (
+                <Alert
+                  severity="error"
+                  sx={{mb: 2}}
+                  onClose={() => setErrorMessage(null)}>
+                  {errorMessage}
+                </Alert>
+              )}
               {tunnelStep == 'slots' && (
                 <Link
                   legacyBehavior
