@@ -26,6 +26,7 @@
         "oro/doctrine-extensions": "^2.0.2",
         "phpdocumentor/reflection-docblock": "^5.3",
         "qbbr/pgsql-doctrine-random-function": "^1.0.1",
+        "sentry/sentry-symfony": "^5.17",
         "spatie/opening-hours": "^4.2",
         "symfony/asset": "^6.4.13",
         "symfony/console": "^6.4.15",
