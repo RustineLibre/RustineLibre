@@ -36,6 +36,14 @@ php:
     usePathStyleEndpoint: true
     publicKey: ""
     secret: ""
+  # Sentry (project "rustinelibre"), disabled while the DSN is empty.
+  # The front (PWA) DSN is not set here: it is a build arg of the PWA image (see README).
+  sentry:
+    dsn: ""
+    # "production" or "nonprod"; falls back to the Symfony environment when empty
+    environment: ""
+    # falls back to the php image tag when empty
+    release: ""
   firebase: 
     projectID: "!ChangeMe!"
     privateKeyID: "!ChangeMe!"

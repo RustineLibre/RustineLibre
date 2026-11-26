@@ -10,6 +10,9 @@ on:
         required: true
       REGISTRY_PASSWORD:
         required: true
+      SENTRY_AUTH_TOKEN:
+        description: Optional, source maps are uploaded to Sentry only when set
+        required: false
 
 # Memes images que build.yml, mais poussees sur le registry Scaleway, avec un unique tag
 # "prod-sha-xxxxxxx" (tag git) ou "nonprod-sha-xxxxxxx" (main) : l'ArgoCD Image Updater
@@ -82,9 +85,13 @@ jobs:
         if [[ "${{ github.ref }}" == *"tag"* ]]; then
             URL=${{ secrets.domain }}
             SITE_KEY=${{ vars.PROD_CF_TURNSTILE_SITE_KEY }}
+            SENTRY_ENVIRONMENT=production
+            SENTRY_RELEASE=prod-sha-${GITHUB_SHA::7}
         else
           URL=preprod.${{ secrets.domain }}
           SITE_KEY=${{ vars.MAIN_CF_TURNSTILE_SITE_KEY }}
+          SENTRY_ENVIRONMENT=nonprod
+          SENTRY_RELEASE=nonprod-sha-${GITHUB_SHA::7}
         fi
         # Build args partages entre le build local (scan) et le push de l'image pwa
         {
@@ -99,8 +106,17 @@ jobs:
           echo "NEXT_PUBLIC_FIREBASE_APP_ID=${{ vars.FB_APP_ID }}"
           echo "NEXT_PUBLIC_VAPID_KEY=${{ vars.VAPID_KEY }}"
           echo "NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}"
+          echo "NEXT_PUBLIC_SENTRY_DSN=${{ vars.NEXT_PUBLIC_SENTRY_DSN }}"
+          echo "NEXT_PUBLIC_SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT}"
+          echo "NEXT_PUBLIC_SENTRY_RELEASE=${SENTRY_RELEASE}"
           echo "EOF"
         } >> "$GITHUB_ENV"
+
+    # Optional: an empty file when the secret is not defined (no source maps upload then)
+    - name: Prepare Sentry auth token
+      env:
+        SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      run: printf '%s' "$SENTRY_AUTH_TOKEN" > "${{ runner.temp }}/sentry_auth_token"
 
     - name: Docker meta (pwa)
       id: meta-pwa
@@ -120,6 +136,8 @@ jobs:
         tags: ${{ steps.meta-pwa.outputs.tags }}
         labels: ${{ steps.meta-pwa.outputs.labels }}
         build-args: ${{ env.PWA_BUILD_ARGS }}
+        secret-files: |
+          sentry_auth_token=${{ runner.temp }}/sentry_auth_token
         cache-from: |
           type=gha,scope=${{ github.ref }}-pwa
           type=gha,scope=refs/heads/main-pwa
@@ -161,6 +179,8 @@ jobs:
         tags: ${{ steps.meta-pwa.outputs.tags }}
         labels: ${{ steps.meta-pwa.outputs.labels }}
         build-args: ${{ env.PWA_BUILD_ARGS }}
+        secret-files: |
+          sentry_auth_token=${{ runner.temp }}/sentry_auth_token
         cache-from: |
           type=gha,scope=${{ github.ref }}-pwa
           type=gha,scope=refs/heads/main-pwa

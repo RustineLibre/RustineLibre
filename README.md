@@ -188,6 +188,22 @@ Et ajouter dans le .env.local de votre PWA
 NEXT_PUBLIC_ENTRYPOINT=https://<votre ip ngrok>.ngrok-free.app
 ```
 
+## Sentry (suivi des erreurs)
+
+Sentry est optionnel : tant que les DSN sont vides (local, CI, tests, build), il est inactif. Ne jamais committer de DSN : tout passe par des variables d'environnement.
+
+| Variable | Où | Rôle |
+|---|---|---|
+| `SENTRY_DSN` | API (runtime) | DSN du projet Sentry `rustinelibre`. Helm : `php.sentry.dsn` (Secret). |
+| `SENTRY_ENVIRONMENT` | API (runtime) | `production` / `nonprod` (défaut : environnement Symfony). Helm : `php.sentry.environment`. |
+| `SENTRY_RELEASE` | API (runtime) | Release (défaut Helm : tag de l'image php). Helm : `php.sentry.release`. |
+| `SENTRY_TRACES_SAMPLE_RATE` | API (runtime) | Tracing, entre 0 et 1 (défaut : 0). |
+| `NEXT_PUBLIC_SENTRY_DSN` | PWA (**build**) | DSN du projet Sentry `rustinelibre-js`. Variable GitHub Actions `NEXT_PUBLIC_SENTRY_DSN` (build arg de l'image). |
+| `NEXT_PUBLIC_SENTRY_ENVIRONMENT`, `NEXT_PUBLIC_SENTRY_RELEASE` | PWA (**build**) | Renseignées par `build-scaleway.yml` (`production`/`nonprod`, `prod-sha-xxxxxxx`/`nonprod-sha-xxxxxxx`). |
+| `SENTRY_AUTH_TOKEN` | PWA (build, secret) | Optionnel. Secret GitHub Actions `SENTRY_AUTH_TOKEN` : upload des source maps (organisation `cooptilleuls`, projet `rustinelibre-js`, `https://de.sentry.io`). Sans token, le build est inchangé. |
+
+Les variables `NEXT_PUBLIC_*` sont figées au build de l'image : changer le DSN de la PWA demande de reconstruire l'image. Les erreurs 4xx de l'API ne sont pas remontées (`App\Sentry\ClientErrorFilter`), `send_default_pii` est à `false`, pas de replay.
+
 ## Synchro google calendar
 La plateforme permet aux réparateurs de synchroniser l'agenda de leurs RDV rustine libre avec leurs agendas google, pour ce faire
 l'application a besoin de credentials google oauth qu'il faut renseigner dans le fichier .env et lancer la commande suivante

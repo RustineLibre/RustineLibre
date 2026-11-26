@@ -16,6 +16,8 @@ ingress:
         - toset
 
 php:
+  sentry:
+    environment: "production"
   medias:
     persistence:
       storageClass: "standard"

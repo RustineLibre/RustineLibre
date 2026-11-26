@@ -16,6 +16,8 @@ imagePullSecrets:
   - name: regcred
 
 php:
+  sentry:
+    environment: "nonprod"
   medias:
     persistence:
       storageClass: "standard"
