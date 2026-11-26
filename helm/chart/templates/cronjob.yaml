@@ -71,6 +71,24 @@ spec:
                     configMapKeyRef:
                       name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-env
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "rustinelibre.fullname" . }}
+                      key: sentry-dsn
+                      optional: true
+                - name: SENTRY_ENVIRONMENT
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "rustinelibre.fullname" . }}
+                      key: php-sentry-environment
+                      optional: true
+                - name: SENTRY_RELEASE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "rustinelibre.fullname" . }}
+                      key: php-sentry-release
+                      optional: true
                 - name: APP_DEBUG
                   valueFrom:
                     configMapKeyRef:
@@ -267,6 +285,24 @@ spec:
                     configMapKeyRef:
                       name: {{ include "rustinelibre.fullname" . }}
                       key: php-app-env
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "rustinelibre.fullname" . }}
+                      key: sentry-dsn
+                      optional: true
+                - name: SENTRY_ENVIRONMENT
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "rustinelibre.fullname" . }}
+                      key: php-sentry-environment
+                      optional: true
+                - name: SENTRY_RELEASE
+                  valueFrom:
+                    configMapKeyRef:
+                      name: {{ include "rustinelibre.fullname" . }}
+                      key: php-sentry-release
+                      optional: true
                 - name: APP_DEBUG
                   valueFrom:
                     configMapKeyRef:
